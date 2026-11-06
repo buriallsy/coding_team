@@ -1,0 +1,36 @@
+Godot Engine v4.7.1.stable.mono.official.a13da4feb - https://godotengine.org
+
+ERROR: Condition "ret != noErr" is true. Returning: ""
+   at: get_system_ca_certificates (platform/macos/os_macos.mm:1035)
+SCOPE: scene=res://Scenes/TowerSlice.tscn input=InputEventKey through production InputMap, gameplay state read only via physics body
+PASS: Start rests on the actual entrance collider | body=(158.0, 572.9999) grounded=true
+PASS: walk_left uses the project's actual bound key | body=(158.0, 572.9999) grounded=true
+PASS: walk_right uses the project's actual bound key | body=(158.0, 572.9999) grounded=true
+PASS: select_rain uses the project's actual bound key | body=(158.0, 572.9999) grounded=true
+PASS: select_wind uses the project's actual bound key | body=(158.0, 572.9999) grounded=true
+PASS: cast_weather uses the project's actual bound key | body=(158.0, 572.9999) grounded=true
+PASS: recall_weather uses the project's actual bound key | body=(158.0, 572.9999) grounded=true
+PASS: toggle_drain uses the project's actual bound key | body=(158.0, 572.9999) grounded=true
+PASS: reset_slice uses the project's actual bound key | body=(158.0, 572.9999) grounded=true
+PASS: E at the entrance cannot start rain or retract the low bridge | body=(561.3001, 572.9338) grounded=true
+PASS: E while standing in the bridge doorway cannot move the lift | body=(561.3001, 572.9338) grounded=true
+PASS: D reaches the low tower by continuous movement and collision | body=(659.4008, 572.9338) grounded=true
+PASS: Wind at low cannot retract the entry bridge or lift the platform | body=(659.4008, 572.9338) grounded=true
+PASS: Rain actually carries the player partway up on the platform | body=(659.4008, 473.8505) grounded=true
+PASS: Q recalls rain, holds the intermediate deck position and leaves the bridge detached | body=(659.4008, 473.8505) grounded=true
+PASS: F drains stored water and physically lowers and reconnects the low deck | body=(659.4008, 572.9338) grounded=true
+PASS: A full rain cycle physically raises the player to the upper floor while its bridge stays detached | body=(659.4008, 282.9338) grounded=true
+PASS: The upper court cannot be entered at the correct height before Wind docks the bridge | body=(587.3328, 282.9338) grounded=true
+PASS: R resets the player and low deck for a new attempt | body=(158.0, 572.9832) grounded=true
+TRACE after high reset node=(660.0, 590.0) physics=(660.0, 590.0) bridge_disabled=false low_bridge_hit=true high_bridge_hit=false
+PASS: The same D and rain inputs reach the same high stop after reset | body=(659.4008, 282.9338) grounded=true
+PASS: While turning, the bridge collider remains disabled and the deck still supports the player | body=(659.4008, 282.9338) grounded=true
+PASS: Wind docks the bridge at the high stop and activates its collider | body=(659.4008, 282.9338) grounded=true
+PASS: A walks across the real docked bridge into the upper sun court | body=(237.9328, 282.9335) grounded=true
+PASS: Walking into the court remains supported at the same height throughout the crossing | body=(237.9328, 282.9335) grounded=true
+PASS: R from the destination restores the real entrance state | body=(158.0, 572.9999) grounded=true
+PASS: Begin the next ascent before testing an in-motion reset | body=(659.4008, 498.0172) grounded=true
+PASS: R during movement restores the entrance spawn | body=(158.0, 572.9454) grounded=true
+TRACE after in-motion reset node=(660.0, 590.0) physics=(660.0, 590.0) bridge_disabled=false low_bridge_hit=true high_bridge_hit=false
+PASS: The low bridge and deck physically support another traversal after in-motion reset | body=(659.4008, 572.9338) grounded=true
+BORROWING_SUN_2D_INDEPENDENT_QA PASSED assertions=28 failures=0

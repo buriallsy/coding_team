@@ -1,0 +1,178 @@
+extends SceneTree
+
+var player: CharacterBody2D
+var bridge: CollisionShape2D
+var initial_position: Vector2
+var failures: int
+var assertions: int
+
+func _initialize() -> void:
+	call_deferred("_run")
+
+func _run() -> void:
+	var scene_path: String = ProjectSettings.get_setting("application/run/main_scene")
+	if change_scene_to_file(scene_path) != OK:
+		push_error("Could not load production scene " + scene_path)
+		quit(2)
+		return
+	await scene_changed
+	await _frames(10)
+	var candidates := current_scene.find_children("*", "CharacterBody2D", true, false)
+	if candidates.size() != 1:
+		push_error("Expected one real CharacterBody2D, found %s" % candidates.size())
+		quit(2)
+		return
+	player = candidates[0] as CharacterBody2D
+	bridge = current_scene.get_node("Lift/BridgeExtension") as CollisionShape2D
+	initial_position = player.global_position
+	print("SCOPE: scene=", scene_path, " input=InputEventKey through production InputMap, gameplay state read only via physics body")
+	_check(player.is_on_floor(), "Start rests on the actual entrance collider")
+	for mapping: Array in [[KEY_A, &"walk_left"], [KEY_D, &"walk_right"], [KEY_1, &"select_rain"], [KEY_2, &"select_wind"], [KEY_E, &"cast_weather"], [KEY_Q, &"recall_weather"], [KEY_F, &"toggle_drain"], [KEY_R, &"reset_slice"]]:
+		var key := InputEventKey.new()
+		key.keycode = mapping[0]
+		key.physical_keycode = mapping[0]
+		_check(InputMap.event_is_action(key, mapping[1]), "%s uses the project's actual bound key" % mapping[1])
+
+	await _tap(KEY_1)
+	await _tap(KEY_E)
+	await _move_to(KEY_D, 555.0, 175)
+	await _frames(25)
+	_check(_near_y(initial_position.y) and not bridge.disabled, "E at the entrance cannot start rain or retract the low bridge")
+	await _tap(KEY_E)
+	await _frames(38)
+	_check(_near_y(initial_position.y) and not bridge.disabled and player.is_on_floor(), "E while standing in the bridge doorway cannot move the lift")
+	await _move_to(KEY_D, 655.0, 75)
+	_check(player.global_position.x >= 655.0 and player.is_on_floor(), "D reaches the low tower by continuous movement and collision")
+
+	await _tap(KEY_2)
+	await _tap(KEY_E)
+	await _frames(130)
+	_check(_near_y(initial_position.y) and not bridge.disabled, "Wind at low cannot retract the entry bridge or lift the platform")
+
+	await _tap(KEY_1)
+	await _tap(KEY_E)
+	await _frames(74)
+	await _tap(KEY_Q)
+	await _frames(12)
+	var mid_y := player.global_position.y
+	_check(mid_y < initial_position.y - 35 and mid_y > initial_position.y - 245 and player.is_on_floor(), "Rain actually carries the player partway up on the platform")
+	await _frames(48)
+	_check(_near_y(mid_y) and bridge.disabled, "Q recalls rain, holds the intermediate deck position and leaves the bridge detached")
+	await _tap(KEY_F)
+	await _frames(140)
+	_check(_near_y(initial_position.y) and player.is_on_floor() and not bridge.disabled, "F drains stored water and physically lowers and reconnects the low deck")
+
+	await _fill_from_tower()
+	var high_y := player.global_position.y
+	_check(high_y < initial_position.y - 250 and player.is_on_floor() and bridge.disabled, "A full rain cycle physically raises the player to the upper floor while its bridge stays detached")
+	_send_key(KEY_A, true)
+	var crossed_without_wind := false
+	for i in 135:
+		await physics_frame
+		crossed_without_wind = crossed_without_wind or player.global_position.x < 452.0 and _near_y(high_y)
+	_send_key(KEY_A, false)
+	_check(not crossed_without_wind, "The upper court cannot be entered at the correct height before Wind docks the bridge")
+
+	await _tap(KEY_R)
+	await _frames(10)
+	_check(player.global_position.distance_to(initial_position) < 2.0, "R resets the player and low deck for a new attempt")
+	_report_collision("after high reset")
+	await _move_to(KEY_D, 655.0, 190)
+	await _fill_from_tower()
+	_check(_near_y(high_y), "The same D and rain inputs reach the same high stop after reset")
+	await _tap(KEY_2)
+	await _tap(KEY_E)
+	await _frames(45)
+	_check(_near_y(high_y) and bridge.disabled, "While turning, the bridge collider remains disabled and the deck still supports the player")
+	await _frames(90)
+	_check(_near_y(high_y) and not bridge.disabled, "Wind docks the bridge at the high stop and activates its collider")
+
+	_send_key(KEY_A, true)
+	var largest_y_drift := 0.0
+	for i in 170:
+		await physics_frame
+		largest_y_drift = maxf(largest_y_drift, absf(player.global_position.y - high_y))
+		if player.global_position.x <= 245.0:
+			break
+	_send_key(KEY_A, false)
+	await _frames(6)
+	_check(player.global_position.x <= 245.0 and _near_y(high_y) and player.is_on_floor(), "A walks across the real docked bridge into the upper sun court")
+	_check(largest_y_drift < 3.0, "Walking into the court remains supported at the same height throughout the crossing")
+
+	var arguments := OS.get_cmdline_user_args()
+	if failures == 0 and not arguments.is_empty():
+		await process_frame
+		await RenderingServer.frame_post_draw
+		var image := root.get_texture().get_image()
+		var captured := image != null and image.save_png(arguments[0]) == OK
+		_check(captured, "Capture the visible production viewport at the goal")
+		if captured:
+			print("CAPTURE: ", arguments[0], " ", image.get_size())
+
+	await _tap(KEY_R)
+	await _frames(10)
+	_check(player.global_position.distance_to(initial_position) < 2.0 and player.is_on_floor() and not bridge.disabled, "R from the destination restores the real entrance state")
+
+	await _move_to(KEY_D, 655.0, 190)
+	await _tap(KEY_1)
+	await _tap(KEY_E)
+	await _frames(56)
+	_check(player.global_position.y < initial_position.y - 35 and bridge.disabled, "Begin the next ascent before testing an in-motion reset")
+	await _tap(KEY_R)
+	await _frames(10)
+	_check(player.global_position.distance_to(initial_position) < 2.0, "R during movement restores the entrance spawn")
+	_report_collision("after in-motion reset")
+	await _move_to(KEY_D, 655.0, 190)
+	_check(player.global_position.x >= 655.0 and _near_y(initial_position.y) and player.is_on_floor(), "The low bridge and deck physically support another traversal after in-motion reset")
+	print("BORROWING_SUN_2D_INDEPENDENT_QA ", "PASSED" if failures == 0 else "FAILED", " assertions=", assertions, " failures=", failures)
+	quit(0 if failures == 0 else 1)
+
+func _report_collision(stage: String) -> void:
+	var lift := current_scene.get_node("Lift") as AnimatableBody2D
+	var body_transform: Transform2D = PhysicsServer2D.body_get_state(lift.get_rid(), PhysicsServer2D.BODY_STATE_TRANSFORM)
+	var space := lift.get_world_2d().direct_space_state
+	var low_ray := PhysicsRayQueryParameters2D.create(Vector2(495, 550), Vector2(495, 610), 2)
+	var high_ray := PhysicsRayQueryParameters2D.create(Vector2(495, 275), Vector2(495, 325), 2)
+	print("TRACE ", stage, " node=", lift.global_position, " physics=", body_transform.origin,
+		" bridge_disabled=", bridge.disabled, " low_bridge_hit=", not space.intersect_ray(low_ray).is_empty(),
+		" high_bridge_hit=", not space.intersect_ray(high_ray).is_empty())
+
+func _fill_from_tower() -> void:
+	await _tap(KEY_1)
+	await _tap(KEY_E)
+	await _frames(290)
+
+func _move_to(key: int, target_x: float, max_frames: int) -> void:
+	_send_key(key, true)
+	for i in max_frames:
+		await physics_frame
+		if (key == KEY_D and player.global_position.x >= target_x) or (key == KEY_A and player.global_position.x <= target_x):
+			break
+	_send_key(key, false)
+	await _frames(3)
+
+func _near_y(expected_y: float) -> bool:
+	return absf(player.global_position.y - expected_y) < 2.0
+
+func _frames(count: int) -> void:
+	for i in count:
+		await physics_frame
+
+func _tap(key: int) -> void:
+	_send_key(key, true)
+	await _frames(4)
+	_send_key(key, false)
+	await _frames(4)
+
+func _send_key(key: int, pressed: bool) -> void:
+	var event := InputEventKey.new()
+	event.keycode = key
+	event.physical_keycode = key
+	event.pressed = pressed
+	Input.parse_input_event(event)
+
+func _check(passed: bool, description: String) -> void:
+	assertions += 1
+	if not passed:
+		failures += 1
+	print("PASS" if passed else "FAIL", ": ", description, " | body=", player.global_position, " grounded=", player.is_on_floor())

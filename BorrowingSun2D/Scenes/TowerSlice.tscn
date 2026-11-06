@@ -1,0 +1,81 @@
+[gd_scene load_steps=10 format=3]
+
+[ext_resource type="Script" path="res://Scripts/TowerSlice.cs" id="1_slice"]
+[ext_resource type="Script" path="res://Scripts/SlicePlayer.cs" id="2_player"]
+[ext_resource type="Script" path="res://Scripts/TowerView.cs" id="3_view"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_entry"]
+size = Vector2(414, 22)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_court"]
+size = Vector2(398, 22)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_deck"]
+size = Vector2(196, 22)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_stub"]
+size = Vector2(40, 14)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_extension"]
+size = Vector2(78, 14)
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_player"]
+radius = 8.0
+height = 34.0
+
+[node name="TowerSlice" type="Node2D"]
+script = ExtResource("1_slice")
+
+[node name="Entry" type="StaticBody2D" parent="."]
+position = Vector2(263, 590)
+
+[node name="Surface" type="CollisionShape2D" parent="Entry"]
+position = Vector2(0, 11)
+shape = SubResource("RectangleShape2D_entry")
+
+[node name="Spawn" type="Marker2D" parent="Entry"]
+position = Vector2(-105, -0.3)
+
+[node name="SunCourt" type="StaticBody2D" parent="."]
+position = Vector2(271, 300)
+
+[node name="Surface" type="CollisionShape2D" parent="SunCourt"]
+position = Vector2(0, 11)
+shape = SubResource("RectangleShape2D_court")
+
+[node name="Goal" type="Marker2D" parent="SunCourt"]
+position = Vector2(-11, 0)
+
+[node name="Lift" type="AnimatableBody2D" parent="."]
+position = Vector2(660, 590)
+collision_layer = 2
+collision_mask = 0
+
+[node name="Deck" type="CollisionShape2D" parent="Lift"]
+position = Vector2(0, 11)
+shape = SubResource("RectangleShape2D_deck")
+
+[node name="BridgeHinge" type="CollisionShape2D" parent="Lift"]
+position = Vector2(-112, 7)
+shape = SubResource("RectangleShape2D_stub")
+
+[node name="BridgeExtension" type="CollisionShape2D" parent="Lift"]
+position = Vector2(-165, 7)
+shape = SubResource("RectangleShape2D_extension")
+
+[node name="WeatherStation" type="Marker2D" parent="Lift"]
+
+[node name="Player" type="CharacterBody2D" parent="."]
+position = Vector2(158, 572.7)
+collision_layer = 4
+collision_mask = 3
+platform_floor_layers = 2
+platform_on_leave = 2
+floor_snap_length = 4.0
+script = ExtResource("2_player")
+
+[node name="Capsule" type="CollisionShape2D" parent="Player"]
+shape = SubResource("CapsuleShape2D_player")
+
+[node name="View" type="Node2D" parent="."]
+script = ExtResource("3_view")
