@@ -1,0 +1,48 @@
+Godot Engine v4.7.1.stable.mono.official.a13da4feb - https://godotengine.org
+OpenGL API 4.1 Metal - 90.5 - Compatibility - Using Device: Apple - Apple M5
+
+SCOPE: Round 03 default scene, physical InputEventKey through production InputMap, no player placement. Two ordinary deliveries are fixture-free. The distinct blocker scenario temporarily inserts an optical-only StaticBody2D.
+PASS initial state: player and usable low bridge return to the entrance | feet=(158, 589.9999) phase=WaitingForLight
+PASS initial state: tank, ballast, reward, travel and delivery all reset | feet=(158, 589.9999) phase=WaitingForLight
+PASS initial state: mirror and light reset | feet=(158, 589.9999) phase=WaitingForLight
+PASS initial state: the real lift and carrier collision bodies match their reset scene positions | feet=(158, 589.9999) phase=WaitingForLight
+TRACE initial state: phase=WaitingForLight lit=False water=0.000000 ballast=0.000000 height=0.000000 latch=False fruit=False delivered=0 travel=0.000000 deck_y=590.000 lift_body_y=590.000 carrier=(1119, 300) rider=(158, 589.9999)
+PHASE: first fixture-free delivery from the default entrance
+ERROR: ROUND_03_CARGO_QA FAILED after 4 checks: System.InvalidOperationException: walk from west across the physical low bridge to the tower: failed to reach x=660, feet=(626.70056, 589.9338)
+   at BorrowingSun2D.Round03CargoProbe.WalkToX(Single destination, String name) in BorrowingSun2D/VerificationHarness/Round03CargoProbe.cs:line 379
+   at BorrowingSun2D.Round03CargoProbe.ReachLitEast() in BorrowingSun2D/VerificationHarness/Round03CargoProbe.cs:line 142
+   at BorrowingSun2D.Round03CargoProbe.NormalDelivery(Boolean capture) in BorrowingSun2D/VerificationHarness/Round03CargoProbe.cs:line 81
+   at BorrowingSun2D.Round03CargoProbe._Ready() in BorrowingSun2D/VerificationHarness/Round03CargoProbe.cs:line 44
+   at: void BorrowingSun2D.Round03CargoProbe+<_Ready>d__15.MoveNext() (res://VerificationHarness/Round03CargoProbe.cs:44)
+   C# backtrace (most recent call first):
+       [0] void Godot.GD.PushError(string) (/root/godot/modules/mono/glue/GodotSharp/GodotSharp/Core/GD.cs:366)
+       [1] void BorrowingSun2D.Round03CargoProbe+<_Ready>d__15.MoveNext() (BorrowingSun2D/VerificationHarness/Round03CargoProbe.cs:44)
+       [2] void System.Threading.ExecutionContext.RunInternal(System.Threading.ExecutionContext, System.Threading.ContextCallback, object)
+       [3] void System.Threading.Tasks.AwaitTaskContinuation.RunCallback(System.Threading.ContextCallback, object, System.Threading.Tasks.Task&)
+       [4] void System.Threading.Tasks.Task.RunContinuations(object)
+       [5] void System.Threading.Tasks.Task.FinishSlow(bool)
+       [6] bool System.Threading.Tasks.Task.TrySetException(object)
+       [7] void System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.SetException(System.Exception, System.Threading.Tasks.Task`1[TResult]&)
+       [8] void BorrowingSun2D.Round03CargoProbe+<NormalDelivery>d__16.MoveNext() (BorrowingSun2D/VerificationHarness/Round03CargoProbe.cs:81)
+       [9] void System.Threading.ExecutionContext.RunInternal(System.Threading.ExecutionContext, System.Threading.ContextCallback, object)
+       [10] void System.Threading.Tasks.AwaitTaskContinuation.RunCallback(System.Threading.ContextCallback, object, System.Threading.Tasks.Task&)
+       [11] void System.Threading.Tasks.Task.RunContinuations(object)
+       [12] void System.Threading.Tasks.Task.FinishSlow(bool)
+       [13] bool System.Threading.Tasks.Task.TrySetException(object)
+       [14] void System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.SetException(System.Exception, System.Threading.Tasks.Task`1[TResult]&)
+       [15] void BorrowingSun2D.Round03CargoProbe+<ReachLitEast>d__18.MoveNext() (BorrowingSun2D/VerificationHarness/Round03CargoProbe.cs:142)
+       [16] void System.Threading.ExecutionContext.RunInternal(System.Threading.ExecutionContext, System.Threading.ContextCallback, object)
+       [17] void System.Threading.Tasks.AwaitTaskContinuation.RunCallback(System.Threading.ContextCallback, object, System.Threading.Tasks.Task&)
+       [18] void System.Threading.Tasks.Task.RunContinuations(object)
+       [19] void System.Threading.Tasks.Task.FinishSlow(bool)
+       [20] bool System.Threading.Tasks.Task.TrySetException(object)
+       [21] void System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1.SetException(System.Exception, System.Threading.Tasks.Task`1[TResult]&)
+       [22] void BorrowingSun2D.Round03CargoProbe+<WalkToX>d__29.MoveNext() (BorrowingSun2D/VerificationHarness/Round03CargoProbe.cs:379)
+       [23] void System.Threading.ExecutionContext.RunInternal(System.Threading.ExecutionContext, System.Threading.ContextCallback, object)
+       [24] void System.Threading.Tasks.AwaitTaskContinuation.RunCallback(System.Threading.ContextCallback, object, System.Threading.Tasks.Task&)
+       [25] void System.Threading.Tasks.Task.RunContinuations(object)
+       [26] void System.Runtime.CompilerServices.AsyncTaskMethodBuilder.SetResult()
+       [27] void BorrowingSun2D.Round03CargoProbe+<Frames>d__34.MoveNext() (BorrowingSun2D/VerificationHarness/Round03CargoProbe.cs:415)
+       [28] void System.Threading.ExecutionContext.RunInternal(System.Threading.ExecutionContext, System.Threading.ContextCallback, object)
+       [29] void System.Runtime.CompilerServices.AsyncTaskMethodBuilder`1+AsyncStateMachineBox`1.MoveNext()
+       [30] void Godot.SignalAwaiter.SignalCallback(nint, Godot.NativeInterop.godot_variant**, int, Godot.NativeInterop.godot_bool*) (/root/godot/modules/mono/glue/GodotSharp/GodotSharp/Core/SignalAwaiter.cs:65)

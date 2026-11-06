@@ -1,0 +1,22 @@
+PASS rain lifts and stores six units
+PASS wind accepts a Clockwise turn
+PASS wind accepts a Clockwise turn
+PASS locked tower reaches the east dock
+PASS interrupted light restarts the continuous timer before fruit
+PASS continuous light creates one fruit crate
+PASS transfer partitions the original water and the lock holds the height
+PASS darkness pauses transfer and keeps fruit
+PASS light and a rider cannot launch underfilled
+PASS resumed transfer caps the original water at four units of counterweight
+PASS a full counterweight cannot launch in darkness
+PASS the player must board before departure
+PASS launch accepts all present prerequisites
+PASS a launched car travels in darkness
+PASS arrival in darkness still requires delivery
+PASS arrival alone cannot confirm delivery from the wrong place
+PASS the station consumes the crate and records one delivery
+PASS confirmation is idempotent
+PASS wind accepts a Counterclockwise turn
+PASS wind accepts a Counterclockwise turn
+PASS the west drain cannot release a tower with water committed to cargo
+PASS reset restores the empty start

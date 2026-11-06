@@ -59,6 +59,10 @@ toggle_drain={
 "deadzone": 0.2,
 "events": [Object(InputEventKey,"physical_keycode":70)]
 }
+cargo_action={
+"deadzone": 0.2,
+"events": [Object(InputEventKey,"physical_keycode":71)]
+}
 reset_slice={
 "deadzone": 0.2,
 "events": [Object(InputEventKey,"physical_keycode":82)]

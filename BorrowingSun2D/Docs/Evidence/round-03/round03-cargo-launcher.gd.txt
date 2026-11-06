@@ -1,0 +1,18 @@
+extends SceneTree
+
+func _initialize() -> void:
+	call_deferred("_attach")
+
+func _attach() -> void:
+	var main_path: String = ProjectSettings.get_setting("application/run/main_scene")
+	if change_scene_to_file(main_path) != OK:
+		push_error("Could not load the configured production scene")
+		quit(2)
+		return
+	await scene_changed
+	var probe := load("res://VerificationHarness/Round03CargoProbe.cs").new() as Node
+	if probe == null:
+		push_error("Could not instantiate the temporary C# cargo probe")
+		quit(2)
+		return
+	current_scene.add_child(probe)

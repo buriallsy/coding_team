@@ -1,0 +1,167 @@
+Godot Engine v4.7.1.stable.mono.official.a13da4feb - https://godotengine.org
+
+ERROR: Condition "ret != noErr" is true. Returning: ""
+   at: get_system_ca_certificates (platform/macos/os_macos.mm:1035)
+SCOPE: Round 03 default scene, physical InputEventKey through production InputMap, no player placement. Two ordinary deliveries are fixture-free. The distinct blocker scenario temporarily inserts an optical-only StaticBody2D.
+PASS initial state: player and usable low bridge return to the entrance | feet=(158, 589.9999) phase=WaitingForLight
+PASS initial state: tank, ballast, reward, travel and delivery all reset | feet=(158, 589.9999) phase=WaitingForLight
+PASS initial state: mirror and light reset | feet=(158, 589.9999) phase=WaitingForLight
+PASS initial state: the real lift and carrier collision bodies match their reset scene positions | feet=(158, 589.9999) phase=WaitingForLight
+TRACE initial state: phase=WaitingForLight lit=False water=0.000000 ballast=0.000000 height=0.000000 latch=False fruit=False delivered=0 travel=0.000000 deck_y=590.000 lift_body_y=590.000 carrier=(1119, 300) rider=(158, 589.9999)
+PHASE: first fixture-free delivery from the default entrance
+PASS walk from west across the physical low bridge to the tower | feet=(663.0342, 589.9338) phase=WaitingForLight
+PASS rain fills the tower and locks the occupied platform high | feet=(666.66754, 301.14145) phase=WaitingForLight
+PASS the real lift carries the player and all six units begin in the original tank | feet=(666.66754, 299.93378) phase=WaitingForLight
+PASS wind docks the physical north bridge | feet=(666.66754, 299.93378) phase=WaitingForLight
+PASS walk to the actual north flag | feet=(241.56775, 299.93384) phase=WaitingForLight
+PASS walk to the north mirror station | feet=(361.4678, 299.93384) phase=WaitingForLight
+PASS the actual north flag and mirror proximity are reached | feet=(365.10114, 299.93384) phase=WaitingForLight
+PASS actual Wind calibrates the north mirror | feet=(365.10114, 299.93384) phase=WaitingForLight
+PASS actual Sunny reaches the tower via the north mirror | feet=(365.10114, 299.93384) phase=WaitingForLight
+PASS north light follows the first real reflection and cannot award fruit | feet=(365.10114, 299.93384) phase=WaitingForLight
+TRACE north tower hit, east dark: phase=WaitingForLight lit=False water=6.000000 ballast=0.000000 height=6.000000 latch=True fruit=False delivered=0 travel=0.000000 deck_y=300.000 lift_body_y=300.000 carrier=(1119, 300) rider=(365.10114, 299.93384)
+PASS walk back over the real north bridge to the tower | feet=(663.0354, 299.93384) phase=WaitingForLight
+PASS east wind docks the actual east bridge and the unobstructed receiver lights | feet=(666.66876, 299.93384) phase=WaitingForLight
+PASS the east receiver depends on both true reflections | feet=(666.66876, 299.93384) phase=WaitingForLight
+PASS first real east light begins confirmation without an instant fruit reward | feet=(666.66876, 299.93384) phase=WaitingForLight
+TRACE first real east hit: phase=WaitingForLight lit=True water=6.000000 ballast=0.000000 height=6.000000 latch=True fruit=False delivered=0 travel=0.000000 deck_y=300.000 lift_body_y=300.000 carrier=(1119, 300) rider=(666.66876, 299.93384)
+PASS a partial sustained-light interval charges confirmation without spawning fruit or moving water | feet=(666.66876, 299.93384) phase=WaitingForLight
+PASS continuous real light earns the one available crate | feet=(666.66876, 299.93384) phase=Loading
+PASS the earned crate starts a loading phase without counting as delivered | feet=(666.66876, 299.93384) phase=Loading
+TRACE sustained light earns fruit: phase=Loading lit=True water=6.000000 ballast=0.000000 height=6.000000 latch=True fruit=True delivered=0 travel=0.000000 deck_y=300.000 lift_body_y=300.000 carrier=(1119, 300) rider=(666.66876, 299.93384)
+PASS walk from the tower across the east bridge and onto the real carrier | feet=(1120.8364, 299.93384) phase=Loading
+PASS the grounded player occupies the carrier departure position before any travel | feet=(1124.4697, 299.93384) phase=Loading
+PASS with clear light the same original water fills the cargo counterweight | feet=(1124.4697, 299.93384) phase=Ready
+PASS ready cargo has four units in the counterweight, two still in the original tank, and the 6 m lock | feet=(1124.4697, 299.93384) phase=Ready
+TRACE ready: phase=Ready lit=True water=2.000000 ballast=4.000000 height=6.000000 latch=True fruit=True delivered=0 travel=0.000000 deck_y=300.000 lift_body_y=300.000 carrier=(1119, 300) rider=(1124.4697, 299.93384)
+PASS actual G launches the occupied real carrier | feet=(1126.0383, 299.93384) phase=Travelling
+PASS the physical carrier starts translating toward the terminal | feet=(1128.2344, 299.93384) phase=Travelling
+PASS the visual and real physics carrier both arrive at the authored terminal | feet=(1188.4697, 299.93384) phase=Arrived
+PASS the grounded player is physically carried 64.00px (maximum relative drift 0.314px) | feet=(1188.4697, 299.93384) phase=Arrived
+PASS arrival with the crate does not auto-confirm delivery | feet=(1188.4697, 299.93384) phase=Arrived
+TRACE arrived in light: phase=Arrived lit=True water=2.000000 ballast=4.000000 height=6.000000 latch=True fruit=True delivered=0 travel=1.000000 deck_y=300.000 lift_body_y=300.000 carrier=(1183, 300) rider=(1188.4697, 299.93384)
+PASS walk off the arrived carrier onto the real terminal floor | feet=(1239.3365, 299.93384) phase=Arrived
+PASS delivery is still zero on reaching the actual confirmation marker | feet=(1242.9698, 299.93384) phase=Arrived
+PASS actual G at the terminal confirms exactly one crate (1/1) | feet=(1242.9698, 299.93384) phase=Delivered
+PASS repeated actual G cannot count the crate twice | feet=(1242.9698, 299.93384) phase=Delivered
+TRACE delivered 1/1: phase=Delivered lit=True water=2.000000 ballast=4.000000 height=6.000000 latch=True fruit=False delivered=1 travel=1.000000 deck_y=300.000 lift_body_y=300.000 carrier=(1183, 300) rider=(1242.9698, 299.93384)
+PASS R is issued from the actual completed terminal | feet=(1242.9698, 299.93384) phase=Delivered
+PASS after the first normal delivery: player and usable low bridge return to the entrance | feet=(158, 589.9999) phase=WaitingForLight
+PASS after the first normal delivery: tank, ballast, reward, travel and delivery all reset | feet=(158, 589.9999) phase=WaitingForLight
+PASS after the first normal delivery: mirror and light reset | feet=(158, 589.9999) phase=WaitingForLight
+PASS after the first normal delivery: the real lift and carrier collision bodies match their reset scene positions | feet=(158, 589.9999) phase=WaitingForLight
+TRACE after the first normal delivery: phase=WaitingForLight lit=False water=0.000000 ballast=0.000000 height=0.000000 latch=False fruit=False delivered=0 travel=0.000000 deck_y=590.000 lift_body_y=590.000 carrier=(1119, 300) rider=(158, 589.9999)
+PHASE: fixture-only darkness checks during partial transfer, at full load, and while travelling
+PASS walk from west across the physical low bridge to the tower | feet=(663.0342, 589.9338) phase=WaitingForLight
+PASS rain fills the tower and locks the occupied platform high | feet=(666.66754, 301.14145) phase=WaitingForLight
+PASS the real lift carries the player and all six units begin in the original tank | feet=(666.66754, 299.93378) phase=WaitingForLight
+PASS wind docks the physical north bridge | feet=(666.66754, 299.93378) phase=WaitingForLight
+PASS walk to the actual north flag | feet=(241.56607, 299.93384) phase=WaitingForLight
+PASS walk to the north mirror station | feet=(361.4661, 299.93384) phase=WaitingForLight
+PASS the actual north flag and mirror proximity are reached | feet=(365.09943, 299.93384) phase=WaitingForLight
+PASS actual Wind calibrates the north mirror | feet=(365.09943, 299.93384) phase=WaitingForLight
+PASS actual Sunny reaches the tower via the north mirror | feet=(365.09943, 299.93384) phase=WaitingForLight
+PASS north light follows the first real reflection and cannot award fruit | feet=(365.09943, 299.93384) phase=WaitingForLight
+TRACE north tower hit, east dark: phase=WaitingForLight lit=False water=6.000000 ballast=0.000000 height=6.000000 latch=True fruit=False delivered=0 travel=0.000000 deck_y=300.000 lift_body_y=300.000 carrier=(1119, 300) rider=(365.09943, 299.93384)
+PASS walk back over the real north bridge to the tower | feet=(663.0337, 299.93384) phase=WaitingForLight
+PASS east wind docks the actual east bridge and the unobstructed receiver lights | feet=(666.66705, 299.93384) phase=WaitingForLight
+PASS the east receiver depends on both true reflections | feet=(666.66705, 299.93384) phase=WaitingForLight
+PASS first real east light begins confirmation without an instant fruit reward | feet=(666.66705, 299.93384) phase=WaitingForLight
+TRACE first real east hit: phase=WaitingForLight lit=True water=6.000000 ballast=0.000000 height=6.000000 latch=True fruit=False delivered=0 travel=0.000000 deck_y=300.000 lift_body_y=300.000 carrier=(1119, 300) rider=(666.66705, 299.93384)
+PASS a partial sustained-light interval charges confirmation without spawning fruit or moving water | feet=(666.66705, 299.93384) phase=WaitingForLight
+PASS continuous real light earns the one available crate | feet=(666.66705, 299.93384) phase=Loading
+PASS the earned crate starts a loading phase without counting as delivered | feet=(666.66705, 299.93384) phase=Loading
+TRACE sustained light earns fruit: phase=Loading lit=True water=6.000000 ballast=0.000000 height=6.000000 latch=True fruit=True delivered=0 travel=0.000000 deck_y=300.000 lift_body_y=300.000 carrier=(1119, 300) rider=(666.66705, 299.93384)
+PASS walk from the tower across the east bridge and onto the real carrier | feet=(1120.8346, 299.93384) phase=Loading
+PASS the grounded player occupies the carrier departure position before any travel | feet=(1124.4679, 299.93384) phase=Loading
+PASS the actual launch position is reached while lit, with one reward and an underfilled counterweight | feet=(1124.4679, 299.93384) phase=Loading
+PASS actual G refuses underfilled departure even while the receiver is lit | feet=(1124.4679, 299.93384) phase=Loading
+TRACE underfilled G refused: phase=Loading lit=True water=3.716668 ballast=2.283332 height=6.000000 latch=True fruit=True delivered=0 travel=0.000000 deck_y=300.000 lift_body_y=300.000 carrier=(1119, 300) rider=(1124.4679, 299.93384)
+PASS fixture partial transfer starts from a genuinely unobstructed receiver hit | feet=(1124.4679, 299.93384) phase=Loading
+FIXTURE partial transfer: native body center=(852.00024, 203.99988), size=(24, 24), layer=8
+PASS native ray hits the temporary partial transfer blocker | feet=(1124.4679, 299.93384) phase=Loading
+PASS production light stops at the same actual collision point (partial transfer) | feet=(1124.4679, 299.93384) phase=Loading
+PASS the blocker interrupts a genuinely partial transfer | feet=(1124.4679, 299.93384) phase=Loading
+PASS darkness pauses both tanks without undoing transferred water or losing the earned crate | feet=(1124.4679, 299.93384) phase=Loading
+TRACE partial transfer held: phase=Loading lit=False water=3.700001 ballast=2.299999 height=6.000000 latch=True fruit=True delivered=0 travel=0.000000 deck_y=300.000 lift_body_y=300.000 carrier=(1119, 300) rider=(1124.4679, 299.93384)
+PASS removing the temporary collider restores the real second reflection | feet=(1124.4679, 299.93384) phase=Loading
+PASS removing the real blocker lets transfer resume from its previous amount | feet=(1124.4679, 299.93384) phase=Loading
+PASS with clear light the same original water fills the cargo counterweight | feet=(1124.4679, 299.93384) phase=Ready
+PASS ready cargo has four units in the counterweight, two still in the original tank, and the 6 m lock | feet=(1124.4679, 299.93384) phase=Ready
+TRACE ready: phase=Ready lit=True water=2.000000 ballast=4.000000 height=6.000000 latch=True fruit=True delivered=0 travel=0.000000 deck_y=300.000 lift_body_y=300.000 carrier=(1119, 300) rider=(1124.4679, 299.93384)
+PASS fixture full counterweight before launch starts from a genuinely unobstructed receiver hit | feet=(1124.4679, 299.93384) phase=Ready
+FIXTURE full counterweight before launch: native body center=(852.00024, 203.99988), size=(24, 24), layer=8
+PASS native ray hits the temporary full counterweight before launch blocker | feet=(1124.4679, 299.93384) phase=Ready
+PASS production light stops at the same actual collision point (full counterweight before launch) | feet=(1124.4679, 299.93384) phase=Ready
+PASS the counterweight is fully loaded while the receiver is physically dark | feet=(1124.4679, 299.93384) phase=Ready
+PASS actual G refuses dark departure independently of the water requirement | feet=(1124.4679, 299.93384) phase=Ready
+TRACE dark G refused: phase=Ready lit=False water=2.000000 ballast=4.000000 height=6.000000 latch=True fruit=True delivered=0 travel=0.000000 deck_y=300.000 lift_body_y=300.000 carrier=(1119, 300) rider=(1124.4679, 299.93384)
+PASS removing the temporary collider restores the real second reflection | feet=(1124.4679, 299.93384) phase=Ready
+PASS with clear light the same original water fills the cargo counterweight | feet=(1124.4679, 299.93384) phase=Ready
+PASS ready cargo has four units in the counterweight, two still in the original tank, and the 6 m lock | feet=(1124.4679, 299.93384) phase=Ready
+TRACE ready: phase=Ready lit=True water=2.000000 ballast=4.000000 height=6.000000 latch=True fruit=True delivered=0 travel=0.000000 deck_y=300.000 lift_body_y=300.000 carrier=(1119, 300) rider=(1124.4679, 299.93384)
+PASS actual G launches the occupied real carrier | feet=(1126.0365, 299.93384) phase=Travelling
+PASS the physical carrier starts translating toward the terminal | feet=(1128.2325, 299.93384) phase=Travelling
+PASS fixture already in motion starts from a genuinely unobstructed receiver hit | feet=(1128.2325, 299.93384) phase=Travelling
+FIXTURE already in motion: native body center=(852.00024, 203.99988), size=(24, 24), layer=8
+PASS native ray hits the temporary already in motion blocker | feet=(1130.115, 299.93384) phase=Travelling
+PASS production light stops at the same actual collision point (already in motion) | feet=(1130.115, 299.93384) phase=Travelling
+PASS the existing journey continues after the receiver goes dark | feet=(1130.115, 299.93384) phase=Travelling
+PASS the visual and real physics carrier both arrive at the authored terminal | feet=(1188.4679, 299.93384) phase=Arrived
+PASS the grounded player is physically carried 64.00px (maximum relative drift 0.314px) | feet=(1188.4679, 299.93384) phase=Arrived
+PASS arrival with the crate does not auto-confirm delivery | feet=(1188.4679, 299.93384) phase=Arrived
+TRACE arrived in darkness: phase=Arrived lit=False water=2.000000 ballast=4.000000 height=6.000000 latch=True fruit=True delivered=0 travel=1.000000 deck_y=300.000 lift_body_y=300.000 carrier=(1183, 300) rider=(1188.4679, 299.93384)
+PASS walk off the arrived carrier onto the real terminal floor | feet=(1239.3347, 299.93384) phase=Arrived
+PASS delivery is still zero on reaching the actual confirmation marker | feet=(1242.968, 299.93384) phase=Arrived
+PASS actual G at the terminal confirms exactly one crate (1/1) | feet=(1242.968, 299.93384) phase=Delivered
+PASS repeated actual G cannot count the crate twice | feet=(1242.968, 299.93384) phase=Delivered
+TRACE delivered 1/1: phase=Delivered lit=False water=2.000000 ballast=4.000000 height=6.000000 latch=True fruit=False delivered=1 travel=1.000000 deck_y=300.000 lift_body_y=300.000 carrier=(1183, 300) rider=(1242.968, 299.93384)
+PASS light loss during the journey does not prevent arrival or confirmation of the existing crate | feet=(1242.968, 299.93384) phase=Delivered
+PASS removing the temporary collider restores the real second reflection | feet=(1242.968, 299.93384) phase=Delivered
+PASS relighting the receiver after confirmation cannot award a second delivery | feet=(1242.968, 299.93384) phase=Delivered
+PASS R is issued from the actual completed terminal | feet=(1242.968, 299.93384) phase=Delivered
+PASS after delivery with the optical fixture: player and usable low bridge return to the entrance | feet=(158, 589.9999) phase=WaitingForLight
+PASS after delivery with the optical fixture: tank, ballast, reward, travel and delivery all reset | feet=(158, 589.9999) phase=WaitingForLight
+PASS after delivery with the optical fixture: mirror and light reset | feet=(158, 589.9999) phase=WaitingForLight
+PASS after delivery with the optical fixture: the real lift and carrier collision bodies match their reset scene positions | feet=(158, 589.9999) phase=WaitingForLight
+TRACE after delivery with the optical fixture: phase=WaitingForLight lit=False water=0.000000 ballast=0.000000 height=0.000000 latch=False fruit=False delivered=0 travel=0.000000 deck_y=590.000 lift_body_y=590.000 carrier=(1119, 300) rider=(158, 589.9999)
+PHASE: fixture-free replay from reset to one delivery
+PASS walk from west across the physical low bridge to the tower | feet=(663.0342, 589.9338) phase=WaitingForLight
+PASS rain fills the tower and locks the occupied platform high | feet=(666.66754, 301.14145) phase=WaitingForLight
+PASS the real lift carries the player and all six units begin in the original tank | feet=(666.66754, 299.93378) phase=WaitingForLight
+PASS wind docks the physical north bridge | feet=(666.66754, 299.93378) phase=WaitingForLight
+PASS walk to the actual north flag | feet=(241.56607, 299.93384) phase=WaitingForLight
+PASS walk to the north mirror station | feet=(361.4661, 299.93384) phase=WaitingForLight
+PASS the actual north flag and mirror proximity are reached | feet=(365.09943, 299.93384) phase=WaitingForLight
+PASS actual Wind calibrates the north mirror | feet=(365.09943, 299.93384) phase=WaitingForLight
+PASS actual Sunny reaches the tower via the north mirror | feet=(365.09943, 299.93384) phase=WaitingForLight
+PASS north light follows the first real reflection and cannot award fruit | feet=(365.09943, 299.93384) phase=WaitingForLight
+TRACE north tower hit, east dark: phase=WaitingForLight lit=False water=6.000000 ballast=0.000000 height=6.000000 latch=True fruit=False delivered=0 travel=0.000000 deck_y=300.000 lift_body_y=300.000 carrier=(1119, 300) rider=(365.09943, 299.93384)
+PASS walk back over the real north bridge to the tower | feet=(663.0337, 299.93384) phase=WaitingForLight
+PASS east wind docks the actual east bridge and the unobstructed receiver lights | feet=(666.66705, 299.93384) phase=WaitingForLight
+PASS the east receiver depends on both true reflections | feet=(666.66705, 299.93384) phase=WaitingForLight
+PASS first real east light begins confirmation without an instant fruit reward | feet=(666.66705, 299.93384) phase=WaitingForLight
+TRACE first real east hit: phase=WaitingForLight lit=True water=6.000000 ballast=0.000000 height=6.000000 latch=True fruit=False delivered=0 travel=0.000000 deck_y=300.000 lift_body_y=300.000 carrier=(1119, 300) rider=(666.66705, 299.93384)
+PASS a partial sustained-light interval charges confirmation without spawning fruit or moving water | feet=(666.66705, 299.93384) phase=WaitingForLight
+PASS continuous real light earns the one available crate | feet=(666.66705, 299.93384) phase=Loading
+PASS the earned crate starts a loading phase without counting as delivered | feet=(666.66705, 299.93384) phase=Loading
+TRACE sustained light earns fruit: phase=Loading lit=True water=6.000000 ballast=0.000000 height=6.000000 latch=True fruit=True delivered=0 travel=0.000000 deck_y=300.000 lift_body_y=300.000 carrier=(1119, 300) rider=(666.66705, 299.93384)
+PASS walk from the tower across the east bridge and onto the real carrier | feet=(1120.8346, 299.93384) phase=Loading
+PASS the grounded player occupies the carrier departure position before any travel | feet=(1124.4679, 299.93384) phase=Loading
+PASS with clear light the same original water fills the cargo counterweight | feet=(1124.4679, 299.93384) phase=Ready
+PASS ready cargo has four units in the counterweight, two still in the original tank, and the 6 m lock | feet=(1124.4679, 299.93384) phase=Ready
+TRACE ready: phase=Ready lit=True water=2.000000 ballast=4.000000 height=6.000000 latch=True fruit=True delivered=0 travel=0.000000 deck_y=300.000 lift_body_y=300.000 carrier=(1119, 300) rider=(1124.4679, 299.93384)
+PASS actual G launches the occupied real carrier | feet=(1126.0365, 299.93384) phase=Travelling
+PASS the physical carrier starts translating toward the terminal | feet=(1128.2325, 299.93384) phase=Travelling
+PASS the visual and real physics carrier both arrive at the authored terminal | feet=(1188.4679, 299.93384) phase=Arrived
+PASS the grounded player is physically carried 64.00px (maximum relative drift 0.314px) | feet=(1188.4679, 299.93384) phase=Arrived
+PASS arrival with the crate does not auto-confirm delivery | feet=(1188.4679, 299.93384) phase=Arrived
+TRACE arrived in light: phase=Arrived lit=True water=2.000000 ballast=4.000000 height=6.000000 latch=True fruit=True delivered=0 travel=1.000000 deck_y=300.000 lift_body_y=300.000 carrier=(1183, 300) rider=(1188.4679, 299.93384)
+PASS walk off the arrived carrier onto the real terminal floor | feet=(1239.3347, 299.93384) phase=Arrived
+PASS delivery is still zero on reaching the actual confirmation marker | feet=(1242.968, 299.93384) phase=Arrived
+PASS actual G at the terminal confirms exactly one crate (1/1) | feet=(1242.968, 299.93384) phase=Delivered
+PASS repeated actual G cannot count the crate twice | feet=(1242.968, 299.93384) phase=Delivered
+TRACE delivered 1/1: phase=Delivered lit=True water=2.000000 ballast=4.000000 height=6.000000 latch=True fruit=False delivered=1 travel=1.000000 deck_y=300.000 lift_body_y=300.000 carrier=(1183, 300) rider=(1242.968, 299.93384)
+PASS all 3460 audited physics ticks retain six units, the 6 m lock, and the actual high deck and lift position | feet=(1242.968, 299.93384) phase=Delivered
+SUPPLY max_total_error=0.000000 max_height_error=0.000000 max_physics_lift_drift_px=0.000000 max_scene_deck_drift_px=0.000000 samples=3460
+ROUND_03_CARGO_QA PASSED assertions=129 failures=0

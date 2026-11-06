@@ -17,7 +17,7 @@
 
 ## 代码与场景
 
-`TowerSlice` 按玩家所处设备分发操作。`SunCourtOptics2D` 持有北庭的调镜、日照与最新光路，读取场景锚点、台高和朝向，把近处实体遮挡作为物理查询提供给纯 C# `Optics2D.Trace()`。求解器计算有限线段交点和两次镜面反射，返回光段与命中。`TowerView` 使用同一份 `LightPath2D` 画光束、塔镜命中和东盘接光。 [对象关系图](RELATIONSHIP_MAP.svg) · [求解器](../../Scripts/Core/Optics2D.cs) · [作者场景](../../Scenes/TowerSlice.tscn)
+`TowerSlice` 按玩家所处设备分发操作。`SunCourtOptics2D` 持有北庭的调镜、日照与最新光路，读取场景锚点、台高和朝向，把近处实体遮挡作为物理查询提供给纯 C# `Optics2D.Trace()`。求解器计算有限线段交点和两次镜面反射，返回光段与命中。`TowerView` 使用同一份 `LightPath2D` 画光束、塔镜命中和东盘接光。 [第 02 轮对象关系图](https://github.com/buriallsy/coding_team/blob/e8d9b3e1ad1f43349df9b90249dd608c5df7c93e/BorrowingSun2D/Docs/2D-to-3D/RELATIONSHIP_MAP.svg) · [求解器](../../Scripts/Core/Optics2D.cs) · [作者场景](../../Scenes/TowerSlice.tscn)
 
 剖面中的太阳入口、采日镜、塔镜和东盘由场景标记定位。光学查询包含地形、活动塔和挡光层。北向挡光板位于塔下方的光路上，只参与光学遮挡；塔镜的朝向在北、东两套作者姿态之间连续变化。
 

@@ -1,6 +1,6 @@
 # 2026-11-06 · 2D 灰盒测试记录
 
-当前双镜光路见 [第 02 轮验收](2D-to-3D/ROUND_02.md)，三岸与低桥基线见 [第 01 轮验收](2D-to-3D/ROUND_01.md)。下方是第 00 轮的原始测试过程与复位问题，复现时使用 [第 00 轮提交](https://github.com/buriallsy/coding_team/commit/f6900c483680de7f1d21a4768720753b6f1512d7)。
+当前完整货运见 [第 03 轮验收](2D-to-3D/ROUND_03.md)，双镜光路与三岸基线见 [第 02 轮](2D-to-3D/ROUND_02.md) 和 [第 01 轮](2D-to-3D/ROUND_01.md)。下方是第 00 轮的原始测试过程与复位问题，复现时使用 [第 00 轮提交](https://github.com/buriallsy/coding_team/commit/f6900c483680de7f1d21a4768720753b6f1512d7)。
 
 ## 环境与运行方式
 

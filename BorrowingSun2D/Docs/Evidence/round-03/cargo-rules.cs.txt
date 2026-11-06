@@ -1,0 +1,64 @@
+using System;
+using BorrowingSun2D.Core;
+
+var tower = new TowerMechanism();
+var cargo = new CargoJourney();
+tower.Cast(Weather.Rain, false, TurnDirection.Clockwise);
+StepTower(300);
+Check(tower.Latched && tower.Height == 6f && tower.Water == 6f, "rain lifts and stores six units");
+Turn(TurnDirection.Clockwise);
+Turn(TurnDirection.Clockwise);
+Check(tower.DockedPort == Port.East, "locked tower reaches the east dock");
+
+cargo.Tick(.75f, tower, true);
+cargo.Tick(.01f, tower, false);
+cargo.Tick(.75f, tower, true);
+Check(!cargo.HasFruit && cargo.LightProgress == .5f, "interrupted light restarts the continuous timer before fruit");
+cargo.Tick(.75f, tower, true);
+Check(cargo.HasFruit && cargo.Phase == CargoPhase.Loading, "continuous light creates one fruit crate");
+cargo.Tick(1f, tower, true);
+Check(tower.Water == 5f && tower.Counterweight == 1f && tower.Height == 6f && tower.Latched,
+    "transfer partitions the original water and the lock holds the height");
+
+cargo.Tick(10f, tower, false);
+Check(tower.Water == 5f && tower.Counterweight == 1f && cargo.HasFruit, "darkness pauses transfer and keeps fruit");
+Check(cargo.TryLaunch(tower, true, true) == CargoActionResult.NeedCounterweight, "light and a rider cannot launch underfilled");
+cargo.Tick(10f, tower, true);
+Check(tower.Water == 2f && tower.Counterweight == 4f && cargo.Phase == CargoPhase.Ready, "resumed transfer caps the original water at four units of counterweight");
+Check(cargo.TryLaunch(tower, false, true) == CargoActionResult.NeedLight, "a full counterweight cannot launch in darkness");
+Check(cargo.TryLaunch(tower, true, false) == CargoActionResult.NeedBoarding, "the player must board before departure");
+Check(cargo.TryLaunch(tower, true, true) == CargoActionResult.Applied, "launch accepts all present prerequisites");
+cargo.Tick(CargoJourney.TravelSeconds / 2f, tower, false);
+Check(cargo.Phase == CargoPhase.Travelling && cargo.TravelProgress == .5f, "a launched car travels in darkness");
+cargo.Tick(CargoJourney.TravelSeconds, tower, false);
+Check(cargo.Phase == CargoPhase.Arrived && cargo.DeliveredCount == 0, "arrival in darkness still requires delivery");
+Check(cargo.TryDeliver(false) == CargoActionResult.NeedDeliveryStation, "arrival alone cannot confirm delivery from the wrong place");
+Check(cargo.TryDeliver(true) == CargoActionResult.Applied && cargo.DeliveredCount == 1 && !cargo.HasFruit,
+    "the station consumes the crate and records one delivery");
+Check(cargo.TryDeliver(true) == CargoActionResult.AlreadyDelivered && cargo.DeliveredCount == 1, "confirmation is idempotent");
+
+Turn(TurnDirection.Counterclockwise);
+Turn(TurnDirection.Counterclockwise);
+Check(tower.ToggleDrain(false) == MechanismResult.CounterweightCommitted && tower.Latched,
+    "the west drain cannot release a tower with water committed to cargo");
+cargo.Reset();
+tower.Reset();
+Check(cargo.Phase == CargoPhase.WaitingForLight && cargo.DeliveredCount == 0 && cargo.TravelProgress == 0
+    && tower.DockedPort == Port.Entry && tower.Water == 0 && tower.Counterweight == 0, "reset restores the empty start");
+
+void Turn(TurnDirection direction)
+{
+    Check(tower.Cast(Weather.Wind, false, direction) == MechanismResult.Applied, $"wind accepts a {direction} turn");
+    StepTower(135);
+}
+
+void StepTower(int frames)
+{
+    for (int index = 0; index < frames; index++) tower.Tick(1f / 60);
+}
+
+static void Check(bool condition, string message)
+{
+    if (!condition) throw new InvalidOperationException(message);
+    Console.WriteLine($"PASS {message}");
+}
