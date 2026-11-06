@@ -3,8 +3,9 @@ using System;
 namespace BorrowingSun2D.Core;
 
 public enum Weather { None, Rain, Wind }
-public enum Port { None, Entry, SunCourt }
-public enum MechanismResult { Applied, DoorwayOccupied, Moving, NeedHigh, NeedEntryHeading, Empty, Full }
+public enum Port { None, Entry, SunCourt, East }
+public enum TurnDirection { Clockwise, Counterclockwise }
+public enum MechanismResult { Applied, DoorwayOccupied, Moving, NeedHigh, NeedEntryHeading, Empty, Full, TurnLimit }
 public readonly record struct TowerState(float Water, float Height, float Heading, bool Latched,
     bool Draining, bool IsLifting, bool IsTurning, Weather ActiveWeather, Port DockedPort);
 
@@ -13,6 +14,7 @@ public sealed class TowerMechanism
     public const float Capacity = 6f;
     public const float TravelMetres = 6f;
     public const float SunCourtHeading = 90f;
+    public const float EastHeading = 180f;
     private const float WaterRate = 1.5f;
     private const float LiftSpeed = 1.8f;
     private const float TurnSpeed = 45f;
@@ -32,8 +34,9 @@ public sealed class TowerMechanism
         || Draining || ActiveWeather == Weather.Rain && Water < Capacity;
     public bool IsTurning => Math.Abs(Heading - targetHeading) > DockTolerance;
     public Port DockedPort => IsLifting || IsTurning ? Port.None
-        : Height <= DockTolerance && Heading <= DockTolerance ? Port.Entry
-        : Latched && Heading >= SunCourtHeading - DockTolerance ? Port.SunCourt
+        : Height <= DockTolerance && AtHeading(0f) ? Port.Entry
+        : Latched && AtHeading(SunCourtHeading) ? Port.SunCourt
+        : Latched && AtHeading(EastHeading) ? Port.East
         : Port.None;
     public TowerState State => new(Water, Height, Heading, Latched, Draining, IsLifting, IsTurning,
         ActiveWeather, DockedPort);
@@ -57,7 +60,7 @@ public sealed class TowerMechanism
         Heading = MoveTowards(Heading, targetHeading, TurnSpeed * delta);
     }
 
-    public MechanismResult Cast(Weather weather, bool doorwayOccupied)
+    public MechanismResult Cast(Weather weather, bool doorwayOccupied, TurnDirection direction)
     {
         if (doorwayOccupied) return MechanismResult.DoorwayOccupied;
 
@@ -72,9 +75,14 @@ public sealed class TowerMechanism
 
         if (IsLifting || IsTurning) return MechanismResult.Moving;
         if (!Latched) return MechanismResult.NeedHigh;
+
+        float nextHeading = direction == TurnDirection.Clockwise
+            ? Heading < SunCourtHeading - DockTolerance ? SunCourtHeading : EastHeading
+            : Heading > SunCourtHeading + DockTolerance ? SunCourtHeading : 0f;
+        if (AtHeading(nextHeading)) return MechanismResult.TurnLimit;
+
         ActiveWeather = Weather.Wind;
-        // A second cast at the north stop returns the bridge toward the entry heading.
-        targetHeading = DockedPort == Port.SunCourt ? 0f : SunCourtHeading;
+        targetHeading = nextHeading;
         return MechanismResult.Applied;
     }
 
@@ -109,6 +117,8 @@ public sealed class TowerMechanism
         ActiveWeather = Weather.None;
         Latched = Draining = false;
     }
+
+    private bool AtHeading(float angle) => Math.Abs(Heading - angle) <= DockTolerance;
 
     private static float MoveTowards(float value, float target, float step)
     {

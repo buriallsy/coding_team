@@ -1,5 +1,7 @@
 # 2026-11-06 · 2D 灰盒测试记录
 
+当前三岸路线见 [第 01 轮验收](2D-to-3D/ROUND_01.md)。下方是第 00 轮的原始测试过程与复位问题，复现时使用 [第 00 轮提交](https://github.com/buriallsy/coding_team/commit/f6900c483680de7f1d21a4768720753b6f1512d7)。
+
 ## 环境与运行方式
 
 使用 macOS arm64、Godot `4.7.1.stable.mono.official.a13da4feb` 和 .NET 8 SDK `8.0.424`，在实际 Godot 物理运行中测试。工程入口是 `Scenes/TowerSlice.tscn`。两条自动路线分别使用 Input Map 动作与 Godot `InputEventKey`，由生产场景处理。测试代码读取状态和碰撞，玩家的正常步行、随台运动、桥启闭和抵达均由场景执行。

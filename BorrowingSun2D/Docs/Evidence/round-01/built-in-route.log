@@ -1,0 +1,113 @@
+Godot Engine v4.7.1.stable.mono.official.a13da4feb - https://godotengine.org
+
+ERROR: Condition "ret != noErr" is true. Returning: ""
+   at: get_system_ca_certificates (platform/macos/os_macos.mm:1035)
+SCOPE: Round 01, default entrance, production Input Map and Physics2D, no player placement or state injection
+PASS initial state: restore the entrance, zero mechanism state and clear both flags
+PASS initial state: physical bridge probes at Y=590.00, left=True, east=False, dock=Entry
+PASS initial state: the high left bridge has no stale collision
+PASS remote weather from the entrance is refused
+PASS walk across supported surfaces to the station
+PASS reach the station on the deck away from either doorway
+PASS wind at low height is refused
+PASS low wind rejection: physical bridge probes at Y=590.00, left=True, east=False, dock=Entry
+PASS rain raises the physical deck and carries the stationary player
+PASS rain in motion: physical bridge probes at Y=507.83, left=False, east=False, dock=None
+PASS wind is refused while the lift is moving
+PASS recall stops filling and preserves the intermediate height
+PASS draining lowers the deck and carries the player downward
+PASS a second drain interaction stops the rollback
+PASS wait until the full tank latches the deck
+PASS full water holds the occupied deck at the upper height
+PASS high west stop: physical bridge probes at Y=300.00, left=False, east=False, dock=None
+PASS reverse wind at the west end cannot wrap to east
+PASS fall into the real gap by holding walk_left
+PASS a missed bridge returns the player to the deck without granting progress
+PASS fall into the real gap by holding walk_right
+PASS a missed bridge returns the player to the deck without granting progress
+PASS north wind turns while the high lock holds
+PASS turning from west to north: physical bridge probes at Y=300.00, left=False, east=False, dock=None
+PASS recall holds a partial turn
+PASS paused between stops: physical bridge probes at Y=300.00, left=False, east=False, dock=None
+PASS north wind reaches its first stop
+PASS north dock: physical bridge probes at Y=300.00, left=True, east=False, dock=SunCourt
+PASS walk across the supported north bridge to the north flag
+PASS the north flag records a milestone without ending the route
+PASS the north shore cannot turn the tower remotely
+PASS return to the actual north bridge threshold
+PASS the north threshold refuses a turn to east
+PASS north threshold rejection: physical bridge probes at Y=300.00, left=True, east=False, dock=SunCourt
+PASS walk across supported surfaces to the station
+PASS reach the station on the deck away from either doorway
+PASS the north milestone survives walking back to the station
+PASS the next wind cast turns toward east without spending the stored water
+PASS turning from north to east: physical bridge probes at Y=300.00, left=False, east=False, dock=None
+PASS east wind reaches the next stop
+PASS east dock: physical bridge probes at Y=300.00, left=False, east=True, dock=East
+PASS walk across the supported east bridge to the east flag
+PASS completion requires standing on the actual east landing after visiting north
+PASS return to the actual east bridge threshold
+PASS the east threshold refuses reverse wind
+PASS east threshold rejection: physical bridge probes at Y=300.00, left=False, east=True, dock=East
+PASS walk back across the east bridge to the station
+PASS return from the east side clears the doorway
+PASS forward wind at the east end cannot wrap to west
+PASS east end rejection: physical bridge probes at Y=300.00, left=False, east=True, dock=East
+PASS reverse wind starts the return from east to north
+PASS turning from east to north: physical bridge probes at Y=300.00, left=False, east=False, dock=None
+PASS reverse wind docks north again
+PASS north dock after reverse wind: physical bridge probes at Y=300.00, left=True, east=False, dock=SunCourt
+PASS reset after reaching east and returning to the tower: restore the entrance, zero mechanism state and clear both flags
+PASS reset after reaching east and returning to the tower: physical bridge probes at Y=590.00, left=True, east=False, dock=Entry
+PASS reset after reaching east and returning to the tower: the high left bridge has no stale collision
+PASS walk across supported surfaces to the station
+PASS reach the station on the deck away from either doorway
+PASS wait until the full tank latches the deck
+PASS full water holds the occupied deck at the upper height
+PASS high west stop: physical bridge probes at Y=300.00, left=False, east=False, dock=None
+PASS north wind turns while the high lock holds
+PASS turning from west to north: physical bridge probes at Y=300.00, left=False, east=False, dock=None
+PASS north wind reaches its first stop
+PASS north dock: physical bridge probes at Y=300.00, left=True, east=False, dock=SunCourt
+PASS walk across the supported north bridge to the north flag
+PASS the north flag records a milestone without ending the route
+PASS walk across supported surfaces to the station
+PASS reach the station on the deck away from either doorway
+PASS the north milestone survives walking back to the station
+PASS the next wind cast turns toward east without spending the stored water
+PASS turning from north to east: physical bridge probes at Y=300.00, left=False, east=False, dock=None
+PASS east wind reaches the next stop
+PASS east dock: physical bridge probes at Y=300.00, left=False, east=True, dock=East
+PASS walk across the supported east bridge to the east flag
+PASS completion requires standing on the actual east landing after visiting north
+PASS the complete route works again after reset without recovery
+PASS reset from the east flag: restore the entrance, zero mechanism state and clear both flags
+PASS reset from the east flag: physical bridge probes at Y=590.00, left=True, east=False, dock=Entry
+PASS reset from the east flag: the high left bridge has no stale collision
+PASS walk across supported surfaces to the station
+PASS reach the station on the deck away from either doorway
+PASS wait until the full tank latches the deck
+PASS full water holds the occupied deck at the upper height
+PASS high west stop: physical bridge probes at Y=300.00, left=False, east=False, dock=None
+PASS north wind turns while the high lock holds
+PASS turning from west to north: physical bridge probes at Y=300.00, left=False, east=False, dock=None
+PASS north wind reaches its first stop
+PASS north dock: physical bridge probes at Y=300.00, left=True, east=False, dock=SunCourt
+PASS the next wind cast turns toward east without spending the stored water
+PASS turning from north to east: physical bridge probes at Y=300.00, left=False, east=False, dock=None
+PASS east wind reaches the next stop
+PASS east dock: physical bridge probes at Y=300.00, left=False, east=True, dock=East
+PASS walk to east without visiting north
+PASS the east flag alone does not complete the route
+PASS reset after the out-of-order visit: restore the entrance, zero mechanism state and clear both flags
+PASS reset after the out-of-order visit: physical bridge probes at Y=590.00, left=True, east=False, dock=Entry
+PASS reset after the out-of-order visit: the high left bridge has no stale collision
+PASS walk across supported surfaces to the station
+PASS reach the station on the deck away from either doorway
+PASS the player rides another ascent before the in-motion reset
+PASS reset while the lift is moving: restore the entrance, zero mechanism state and clear both flags
+PASS reset while the lift is moving: physical bridge probes at Y=590.00, left=True, east=False, dock=Entry
+PASS reset while the lift is moving: the high left bridge has no stale collision
+PASS walk across supported surfaces to the station
+PASS reach the station on the deck away from either doorway
+TOWER_ROUTE PASSED

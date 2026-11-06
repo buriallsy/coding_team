@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3]
+[gd_scene load_steps=11 format=3]
 
 [ext_resource type="Script" path="res://Scripts/TowerSlice.cs" id="1_slice"]
 [ext_resource type="Script" path="res://Scripts/SlicePlayer.cs" id="2_player"]
@@ -9,6 +9,9 @@ size = Vector2(414, 22)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_court"]
 size = Vector2(398, 22)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_east"]
+size = Vector2(374, 22)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_deck"]
 size = Vector2(196, 22)
@@ -43,8 +46,18 @@ position = Vector2(271, 300)
 position = Vector2(0, 11)
 shape = SubResource("RectangleShape2D_court")
 
-[node name="Goal" type="Marker2D" parent="SunCourt"]
+[node name="Milestone" type="Marker2D" parent="SunCourt"]
 position = Vector2(-11, 0)
+
+[node name="East" type="StaticBody2D" parent="."]
+position = Vector2(1037, 300)
+
+[node name="Surface" type="CollisionShape2D" parent="East"]
+position = Vector2(0, 11)
+shape = SubResource("RectangleShape2D_east")
+
+[node name="Goal" type="Marker2D" parent="East"]
+position = Vector2(23, 0)
 
 [node name="Lift" type="AnimatableBody2D" parent="."]
 position = Vector2(660, 590)
@@ -62,6 +75,15 @@ shape = SubResource("RectangleShape2D_stub")
 [node name="BridgeExtension" type="CollisionShape2D" parent="Lift"]
 position = Vector2(-165, 7)
 shape = SubResource("RectangleShape2D_extension")
+
+[node name="EastBridgeHinge" type="CollisionShape2D" parent="Lift"]
+position = Vector2(112, 7)
+shape = SubResource("RectangleShape2D_stub")
+
+[node name="EastBridgeExtension" type="CollisionShape2D" parent="Lift"]
+position = Vector2(165, 7)
+shape = SubResource("RectangleShape2D_extension")
+disabled = true
 
 [node name="WeatherStation" type="Marker2D" parent="Lift"]
 

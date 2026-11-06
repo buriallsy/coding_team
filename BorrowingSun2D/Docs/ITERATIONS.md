@@ -36,3 +36,7 @@
 
 - 复位保持 `AnimatableBody2D` 的物理同步开启，走升降平时使用的 `UpdateLiftGeometry()`，再把玩家送回起点。重置与正常升降共享同一处桥舌碰撞更新入口。[复位实现](../Scripts/TowerSlice.cs) · [Godot 物理同步说明](https://docs.godotengine.org/en/stable/classes/class_animatablebody2d.html#class-animatablebody2d-property-sync-to-physics)
 - 内置路线增加 R 后重新走上塔、再次起升、运动中 R、再走上塔的断言。独立键码脚本分别检查高位及运动中的 R，实测节点和物理刚体回到同一低位，低桥可走，并在复位后继续走完整段抵达采光庭。[内置复测](Evidence/03-built-in-route-pass.log) · [独立复测](Evidence/04-independent-route-pass.log)
+
+## 2026-11-06 · 第 01 轮三岸接驳
+
+东岸从画面预留变成实际可落脚的高岸。新增第三停点以及左右分开的桥碰撞，玩家先走到北庭，再回塔转接东岸。沿用实际走过低桥的复位用例，补测两侧门槛和高位接岸。 [设计取舍与测试证据](2D-to-3D/ROUND_01.md)

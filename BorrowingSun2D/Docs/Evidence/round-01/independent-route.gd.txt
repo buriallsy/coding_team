@@ -1,0 +1,251 @@
+extends SceneTree
+
+var player: CharacterBody2D
+var lift: AnimatableBody2D
+var left_bridge: CollisionShape2D
+var east_bridge: CollisionShape2D
+var station: Marker2D
+var north_marker: Marker2D
+var east_goal: Marker2D
+var start: Vector2
+var assertions: int
+var failures: int
+
+func _initialize() -> void:
+	call_deferred("_run")
+
+func _run() -> void:
+	var scene_path: String = ProjectSettings.get_setting("application/run/main_scene")
+	if change_scene_to_file(scene_path) != OK:
+		push_error("Could not load the configured main scene")
+		quit(2)
+		return
+	await scene_changed
+	root.focus_entered.connect(func(): print("TRACE native viewport focused"))
+	root.focus_exited.connect(func(): print("TRACE native viewport lost focus"))
+	await _frames(10)
+	player = current_scene.get_node("Player")
+	lift = current_scene.get_node("Lift")
+	left_bridge = current_scene.get_node("Lift/BridgeExtension")
+	east_bridge = current_scene.get_node("Lift/EastBridgeExtension")
+	station = current_scene.get_node("Lift/WeatherStation")
+	north_marker = current_scene.get_node("SunCourt/Milestone")
+	east_goal = current_scene.get_node("East/Goal")
+	start = player.global_position
+	print("SCOPE: Round 01, ", scene_path, ", physical InputEventKey via production InputMap; no state injection or player placement.")
+	var keys := [
+		[KEY_A, &"walk_left", false], [KEY_D, &"walk_right", false],
+		[KEY_1, &"select_rain", false], [KEY_2, &"select_wind", false],
+		[KEY_E, &"cast_weather", false], [KEY_E, &"cast_weather_reverse", true],
+		[KEY_R, &"reset_slice", false],
+	]
+	for entry: Array in keys:
+		_check(InputMap.event_is_action(_event(entry[0], true, entry[2]), entry[1], true),
+			"physical key maps exactly to %s" % entry[1])
+	_check(not InputMap.event_is_action(_event(KEY_E, true, true), &"cast_weather", true),
+		"Shift+E is not the ordinary E action under exact matching")
+	_check_reset_collision("initial state")
+
+	var captures := OS.get_cmdline_user_args()
+	await _complete_route(captures, true)
+	await _walk_to(KEY_A, east_bridge.global_position.x, "walk back from the east flag to the right threshold", true)
+	await _tap(KEY_E, true)
+	await _frames(125)
+	_check_bridges(east_goal.global_position.y, false, true, "right threshold rejects actual Shift+E")
+	await _walk_to(KEY_A, station.global_position.x, "walk from east back to the central device", true)
+	await _tap(KEY_E)
+	await _frames(125)
+	_check_bridges(east_goal.global_position.y, false, true, "E at the east limit cannot wrap to west")
+	await _tap(KEY_E, true)
+	await _frames(30)
+	_check_bridges(east_goal.global_position.y, false, false, "actual Shift+E disconnects east before north is ready")
+	await _await_bridges(north_marker.global_position.y, true, false)
+	_check_bridges(north_marker.global_position.y, true, false, "actual Shift+E restores the north bridge")
+	await _reset("high stop")
+	await _complete_route(PackedStringArray(), false)
+
+	await _reset("east flag")
+	await _walk_to(KEY_D, station.global_position.x, "walk onto the low deck again", true)
+	await _fill_to_high()
+	await _fall_and_recover(KEY_A, "left")
+	await _fall_and_recover(KEY_D, "right")
+	await _reset("after both unbridged falls")
+	await _walk_to(KEY_D, station.global_position.x, "walk across the low bridge before in-motion reset", true)
+	await _tap(KEY_1)
+	await _tap(KEY_E)
+	await _frames(55)
+	_check(player.is_on_floor() and player.global_position.y < start.y - 35.0,
+		"the player is supported by the moving lift before R")
+	await _reset("during the lift motion")
+	await _walk_to(KEY_D, station.global_position.x, "walk across the actual low bridge after in-motion R", true)
+
+	print("ROUND_01_INDEPENDENT_QA ", "PASSED" if failures == 0 else "FAILED", " assertions=", assertions, " failures=", failures)
+	quit(0 if failures == 0 else 1)
+
+func _complete_route(captures: PackedStringArray, try_invalid_inputs: bool) -> void:
+	var north_y := north_marker.global_position.y
+	var east_y := east_goal.global_position.y
+	await _walk_to(KEY_D, station.global_position.x, "walk from west across the low bridge to the station", true)
+	await _fill_to_high()
+	await _tap(KEY_2)
+	await _tap(KEY_E)
+	await _frames(30)
+	_check_bridges(north_y, false, false, "west-to-north turn leaves both bridge gaps unsupported")
+	await _await_bridges(north_y, true, false)
+	_check_bridges(north_y, true, false, "north stop connects only the left extension")
+	await _walk_to(KEY_A, north_marker.global_position.x - 15.0, "walk supported to the north milestone", true)
+	_check(player.global_position.x <= north_marker.global_position.x and absf(player.global_position.y + 17.0 - north_y) < 2.0,
+		"feet stand on the real north landing")
+	if captures.size() == 2 and failures == 0:
+		await _capture(captures[0], "north milestone")
+
+	if try_invalid_inputs:
+		await _tap(KEY_E)
+		await _frames(125)
+		_check_bridges(north_y, true, false, "remote E from north cannot turn the tower")
+		await _walk_to(KEY_D, left_bridge.global_position.x, "return to the left threshold", true)
+		await _tap(KEY_E)
+		await _frames(125)
+		_check_bridges(north_y, true, false, "left threshold rejects actual E")
+	await _walk_to(KEY_D, station.global_position.x, "walk supported from north back to the station", true)
+	await _tap(KEY_E)
+	await _frames(30)
+	_check_bridges(east_y, false, false, "north-to-east turn removes the left bridge before the right one connects")
+	await _await_bridges(east_y, false, true)
+	_check_bridges(east_y, false, true, "east stop connects only the right extension")
+	await _walk_to(KEY_D, east_goal.global_position.x + 18.0, "walk supported to the east flag", true)
+	_check(player.global_position.x >= east_goal.global_position.x and absf(player.global_position.y + 17.0 - east_y) < 2.0,
+		"feet stand on the real east landing")
+	if captures.size() == 2 and failures == 0:
+		await _capture(captures[1], "east finish")
+
+func _fill_to_high() -> void:
+	await _tap(KEY_1)
+	await _tap(KEY_E)
+	var high_y := north_marker.global_position.y
+	for i in 300:
+		await physics_frame
+		if absf(lift.global_position.y - high_y) < 0.05:
+			break
+	await _frames(10)
+	_check(player.is_on_floor() and absf(player.global_position.y + 17.0 - high_y) < 2.0,
+		"rain physically carries the player to the high stop")
+	_check_bridges(high_y, false, false, "high west leaves both extensions disconnected")
+
+func _fall_and_recover(key: int, side: String) -> void:
+	var fell := false
+	var returned := false
+	var before := player.global_position
+	_send(key, true)
+	for i in 160:
+		await physics_frame
+		if not player.is_on_floor() and player.global_position.y > before.y + 6.0:
+			fell = true
+		if fell and absf(player.global_position.x - station.global_position.x) < 20.0:
+			returned = true
+			break
+	_send(key, false)
+	await _frames(6)
+	_check(fell and returned and player.is_on_floor(), "a real %s gap fall returns to the safe deck" % side)
+	_check_bridges(north_marker.global_position.y, false, false, "%s gap recovery keeps the high stop disconnected" % side)
+
+func _reset(context: String) -> void:
+	await _tap(KEY_R)
+	await _frames(10)
+	_check_reset_collision("R " + context)
+
+func _check_reset_collision(context: String) -> void:
+	_check(player.global_position.distance_to(start) < 2.0 and player.is_on_floor(), context + " restores the real entrance")
+	var physical: Transform2D = PhysicsServer2D.body_get_state(lift.get_rid(), PhysicsServer2D.BODY_STATE_TRANSFORM)
+	_check(physical.origin.distance_to(lift.global_position) < 0.02 and absf(physical.origin.y - (start.y + 17.0)) < 2.0,
+		context + " syncs the lift node and actual physics body at low height")
+	_check_bridges(start.y + 17.0, true, false, context + " reconnects only the physical low bridge")
+	_check(not _hit(left_bridge, north_marker.global_position.y) and not _hit(east_bridge, east_goal.global_position.y),
+		context + " leaves no stale high bridge")
+	print("TRACE ", context, " node=", lift.global_position, " physics=", physical.origin,
+		" low_left_hit=", _hit(left_bridge, start.y + 17.0),
+		" high_left_hit=", _hit(left_bridge, north_marker.global_position.y),
+		" high_right_hit=", _hit(east_bridge, east_goal.global_position.y))
+
+func _check_bridges(y: float, left: bool, right: bool, name: String) -> void:
+	var left_hit := _hit(left_bridge, y)
+	var right_hit := _hit(east_bridge, y)
+	_check(left_hit == left and right_hit == right and left_bridge.disabled != left and east_bridge.disabled != right,
+		"%s [Y=%.2f, left=%s, right=%s]" % [name, y, left_hit, right_hit])
+
+func _await_bridges(y: float, left: bool, right: bool) -> void:
+	for i in 155:
+		await physics_frame
+		if _hit(left_bridge, y) == left and _hit(east_bridge, y) == right:
+			break
+
+func _hit(bridge: CollisionShape2D, y: float) -> bool:
+	var x := bridge.global_position.x
+	var ray := PhysicsRayQueryParameters2D.create(Vector2(x, y - 10.0), Vector2(x, y + 16.0), 2)
+	return not lift.get_world_2d().direct_space_state.intersect_ray(ray).is_empty()
+
+func _walk_to(key: int, x: float, name: String, expect_support: bool) -> void:
+	var hit := false
+	var supported := true
+	var inactive_frames := 0
+	var action := &"walk_right" if key == KEY_D else &"walk_left"
+	_send(key, true)
+	for i in 300:
+		await physics_frame
+		supported = supported and player.is_on_floor()
+		if not Input.is_action_pressed(action):
+			inactive_frames += 1
+		if (key == KEY_D and player.global_position.x >= x) or (key == KEY_A and player.global_position.x <= x):
+			hit = true
+			break
+	if not hit:
+		var normals: Array[Vector2] = []
+		for i in player.get_slide_collision_count():
+			normals.append(player.get_slide_collision(i).get_normal())
+		print("TRACE walk timeout x=", player.global_position.x, " expected=", x,
+			" inactive_frames=", inactive_frames, " velocity=", player.velocity, " contacts=", normals)
+	_send(key, false)
+	await _frames(3)
+	_check(hit and (supported or not expect_support), name)
+
+func _capture(path: String, phase: String) -> void:
+	await process_frame
+	await RenderingServer.frame_post_draw
+	var frame := root.get_texture().get_image()
+	var saved := frame != null and frame.save_png(path) == OK
+	_check(saved, "capture the rendered " + phase + " viewport")
+	if saved:
+		print("CAPTURE ", phase, " ", frame.get_size(), " ", path.get_file())
+
+func _frames(count: int) -> void:
+	for i in count:
+		await physics_frame
+
+func _tap(key: int, shifted: bool = false) -> void:
+	if shifted:
+		_send(KEY_SHIFT, true, true)
+		await _frames(2)
+	_send(key, true, shifted)
+	await _frames(4)
+	_send(key, false, shifted)
+	await _frames(4)
+	if shifted:
+		_send(KEY_SHIFT, false)
+		await _frames(2)
+
+func _event(key: int, pressed: bool, shifted: bool) -> InputEventKey:
+	var event := InputEventKey.new()
+	event.keycode = key
+	event.physical_keycode = key
+	event.pressed = pressed
+	event.shift_pressed = shifted
+	return event
+
+func _send(key: int, pressed: bool, shifted: bool = false) -> void:
+	Input.parse_input_event(_event(key, pressed, shifted))
+
+func _check(passed: bool, name: String) -> void:
+	assertions += 1
+	if not passed:
+		failures += 1
+	print("PASS" if passed else "FAIL", ": ", name, " | body=", player.global_position, " grounded=", player.is_on_floor())

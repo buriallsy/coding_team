@@ -1,0 +1,82 @@
+Godot Engine v4.7.1.stable.mono.official.a13da4feb - https://godotengine.org
+
+ERROR: Condition "ret != noErr" is true. Returning: ""
+   at: get_system_ca_certificates (platform/macos/os_macos.mm:1035)
+SCOPE: Round 01, res://Scenes/TowerSlice.tscn, physical InputEventKey via production InputMap; no state injection or player placement.
+PASS: physical key maps exactly to walk_left | body=(158.0, 572.9999) grounded=true
+PASS: physical key maps exactly to walk_right | body=(158.0, 572.9999) grounded=true
+PASS: physical key maps exactly to select_rain | body=(158.0, 572.9999) grounded=true
+PASS: physical key maps exactly to select_wind | body=(158.0, 572.9999) grounded=true
+PASS: physical key maps exactly to cast_weather | body=(158.0, 572.9999) grounded=true
+PASS: physical key maps exactly to cast_weather_reverse | body=(158.0, 572.9999) grounded=true
+PASS: physical key maps exactly to reset_slice | body=(158.0, 572.9999) grounded=true
+PASS: Shift+E is not the ordinary E action under exact matching | body=(158.0, 572.9999) grounded=true
+PASS: initial state restores the real entrance | body=(158.0, 572.9999) grounded=true
+PASS: initial state syncs the lift node and actual physics body at low height | body=(158.0, 572.9999) grounded=true
+PASS: initial state reconnects only the physical low bridge [Y=590.00, left=true, right=false] | body=(158.0, 572.9999) grounded=true
+PASS: initial state leaves no stale high bridge | body=(158.0, 572.9999) grounded=true
+TRACE initial state node=(660.0, 590.0) physics=(660.0, 590.0) low_left_hit=true high_left_hit=false high_right_hit=false
+PASS: walk from west across the low bridge to the station | body=(666.6675, 572.9338) grounded=true
+PASS: rain physically carries the player to the high stop | body=(666.6675, 282.9338) grounded=true
+PASS: high west leaves both extensions disconnected [Y=300.00, left=false, right=false] | body=(666.6675, 282.9338) grounded=true
+PASS: west-to-north turn leaves both bridge gaps unsupported [Y=300.00, left=false, right=false] | body=(666.6675, 282.9338) grounded=true
+PASS: north stop connects only the left extension [Y=300.00, left=true, right=false] | body=(666.6675, 282.9338) grounded=true
+PASS: walk supported to the north milestone | body=(237.9342, 282.9338) grounded=true
+PASS: feet stand on the real north landing | body=(237.9342, 282.9338) grounded=true
+PASS: remote E from north cannot turn the tower [Y=300.00, left=true, right=false] | body=(237.9342, 282.9338) grounded=true
+PASS: return to the left threshold | body=(499.534, 282.9338) grounded=true
+PASS: left threshold rejects actual E [Y=300.00, left=true, right=false] | body=(499.534, 282.9338) grounded=true
+PASS: walk supported from north back to the station | body=(666.6684, 282.9338) grounded=true
+PASS: north-to-east turn removes the left bridge before the right one connects [Y=300.00, left=false, right=false] | body=(666.6684, 282.9338) grounded=true
+PASS: east stop connects only the right extension [Y=300.00, left=false, right=true] | body=(666.6684, 282.9338) grounded=true
+PASS: walk supported to the east flag | body=(1084.503, 282.9338) grounded=true
+PASS: feet stand on the real east landing | body=(1084.503, 282.9338) grounded=true
+PASS: walk back from the east flag to the right threshold | body=(819.2689, 282.9338) grounded=true
+PASS: right threshold rejects actual Shift+E [Y=300.00, left=false, right=true] | body=(819.2689, 282.9338) grounded=true
+PASS: walk from east back to the central device | body=(655.7678, 282.9338) grounded=true
+PASS: E at the east limit cannot wrap to west [Y=300.00, left=false, right=true] | body=(655.7678, 282.9338) grounded=true
+PASS: actual Shift+E disconnects east before north is ready [Y=300.00, left=false, right=false] | body=(655.7678, 282.9338) grounded=true
+PASS: actual Shift+E restores the north bridge [Y=300.00, left=true, right=false] | body=(655.7678, 282.9338) grounded=true
+PASS: R high stop restores the real entrance | body=(158.0, 572.9832) grounded=true
+PASS: R high stop syncs the lift node and actual physics body at low height | body=(158.0, 572.9832) grounded=true
+PASS: R high stop reconnects only the physical low bridge [Y=590.00, left=true, right=false] | body=(158.0, 572.9832) grounded=true
+PASS: R high stop leaves no stale high bridge | body=(158.0, 572.9832) grounded=true
+TRACE R high stop node=(660.0, 590.0) physics=(660.0, 590.0) low_left_hit=true high_left_hit=false high_right_hit=false
+PASS: walk from west across the low bridge to the station | body=(666.6675, 572.9338) grounded=true
+PASS: rain physically carries the player to the high stop | body=(666.6675, 282.9338) grounded=true
+PASS: high west leaves both extensions disconnected [Y=300.00, left=false, right=false] | body=(666.6675, 282.9338) grounded=true
+PASS: west-to-north turn leaves both bridge gaps unsupported [Y=300.00, left=false, right=false] | body=(666.6675, 282.9338) grounded=true
+PASS: north stop connects only the left extension [Y=300.00, left=true, right=false] | body=(666.6675, 282.9338) grounded=true
+PASS: walk supported to the north milestone | body=(237.9344, 282.9338) grounded=true
+PASS: feet stand on the real north landing | body=(237.9344, 282.9338) grounded=true
+PASS: walk supported from north back to the station | body=(666.6688, 282.9338) grounded=true
+PASS: north-to-east turn removes the left bridge before the right one connects [Y=300.00, left=false, right=false] | body=(666.6688, 282.9338) grounded=true
+PASS: east stop connects only the right extension [Y=300.00, left=false, right=true] | body=(666.6688, 282.9338) grounded=true
+PASS: walk supported to the east flag | body=(1084.504, 282.9338) grounded=true
+PASS: feet stand on the real east landing | body=(1084.504, 282.9338) grounded=true
+PASS: R east flag restores the real entrance | body=(158.0, 572.9999) grounded=true
+PASS: R east flag syncs the lift node and actual physics body at low height | body=(158.0, 572.9999) grounded=true
+PASS: R east flag reconnects only the physical low bridge [Y=590.00, left=true, right=false] | body=(158.0, 572.9999) grounded=true
+PASS: R east flag leaves no stale high bridge | body=(158.0, 572.9999) grounded=true
+TRACE R east flag node=(660.0, 590.0) physics=(660.0, 590.0) low_left_hit=true high_left_hit=false high_right_hit=false
+PASS: walk onto the low deck again | body=(666.6675, 572.9338) grounded=true
+PASS: rain physically carries the player to the high stop | body=(666.6675, 282.9338) grounded=true
+PASS: high west leaves both extensions disconnected [Y=300.00, left=false, right=false] | body=(666.6675, 282.9338) grounded=true
+PASS: a real left gap fall returns to the safe deck | body=(656.3666, 282.9333) grounded=true
+PASS: left gap recovery keeps the high stop disconnected [Y=300.00, left=false, right=false] | body=(656.3666, 282.9333) grounded=true
+PASS: a real right gap fall returns to the safe deck | body=(663.6334, 282.9333) grounded=true
+PASS: right gap recovery keeps the high stop disconnected [Y=300.00, left=false, right=false] | body=(663.6334, 282.9333) grounded=true
+PASS: R after both unbridged falls restores the real entrance | body=(158.0, 572.9832) grounded=true
+PASS: R after both unbridged falls syncs the lift node and actual physics body at low height | body=(158.0, 572.9832) grounded=true
+PASS: R after both unbridged falls reconnects only the physical low bridge [Y=590.00, left=true, right=false] | body=(158.0, 572.9832) grounded=true
+PASS: R after both unbridged falls leaves no stale high bridge | body=(158.0, 572.9832) grounded=true
+TRACE R after both unbridged falls node=(660.0, 590.0) physics=(660.0, 590.0) low_left_hit=true high_left_hit=false high_right_hit=false
+PASS: walk across the low bridge before in-motion reset | body=(666.6675, 572.9338) grounded=true
+PASS: the player is supported by the moving lift before R | body=(666.6675, 499.2255) grounded=true
+PASS: R during the lift motion restores the real entrance | body=(158.0, 572.9974) grounded=true
+PASS: R during the lift motion syncs the lift node and actual physics body at low height | body=(158.0, 572.9974) grounded=true
+PASS: R during the lift motion reconnects only the physical low bridge [Y=590.00, left=true, right=false] | body=(158.0, 572.9974) grounded=true
+PASS: R during the lift motion leaves no stale high bridge | body=(158.0, 572.9974) grounded=true
+TRACE R during the lift motion node=(660.0, 590.0) physics=(660.0, 590.0) low_left_hit=true high_left_hit=false high_right_hit=false
+PASS: walk across the actual low bridge after in-motion R | body=(666.6675, 572.9338) grounded=true
+ROUND_01_INDEPENDENT_QA PASSED assertions=71 failures=0

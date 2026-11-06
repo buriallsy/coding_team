@@ -57,28 +57,29 @@ public partial class TowerView : Node2D
 
         DrawLine(new Vector2(56, 137), new Vector2(1224, 137), Line);
         Write("借晴  /  塔台灰盒", 56, 74, 33, Ink);
-        Write("01   从西侧低岸登上塔台，升高并转向，步行抵达采光庭。", 57, 109, 18, Muted);
+        Write("第 01 轮   西侧登塔 · 北庭到访 · 回塔转向 · 东岸抵达", 57, 109, 18, Muted);
         Write("侧视剖面   /   机械与接岸", 966, 74, 18, Muted);
 
         DrawGuide(slice.CourtFloor.Position.Y, "+6 m");
         DrawGuide(slice.EntryFloor.Position.Y, "0 m");
-        DrawBank(slice.EntryFloor, "西侧低岸", "起点", slice.State.DockedPort == Port.Entry);
-        DrawBank(slice.CourtFloor, "北侧高岸 · 采光庭", "步行到标记处", slice.State.DockedPort == Port.SunCourt);
-        DrawGoal();
-        DrawReservedShore();
+        DrawBank(slice.EntryFloor, "西侧低岸", "起点", state.DockedPort == Port.Entry);
+        DrawBank(slice.CourtFloor, "北侧高岸 · 采光庭", "途中站", state.DockedPort == Port.SunCourt);
+        DrawBank(slice.EastFloor, "东侧高岸 · 货轨", "本轮终点", state.DockedPort == Port.East);
+        DrawFlag(slice.SunCourtMarker, slice.ReachedSunCourt);
+        DrawFlag(slice.Goal, slice.Completed);
         DrawTower(state);
         DrawPerson(slice.Player);
         DrawReadout(state);
 
         DrawLine(new Vector2(56, 637), new Vector2(1224, 637), Line);
         Write(slice.Status, 56, 670, 23, slice.Completed ? Wind : Ink);
-        Write("A / D 或 ← / →  行走     1 雨 / 2 风  选令     E  施令     Q  收令     F  放水     R  重置", 56, 699, 17, Muted);
+        Write("A / D 或 ← / →  行走     1 雨 / 2 风     E  施令 / 风顺转     Shift + E  风逆转     Q  收令     F  放水     R  重置", 56, 699, 17, Muted);
     }
 
     private void DrawGuide(float y, string text)
     {
         DrawDashedLine(new Vector2(486, y), new Vector2(1218, y), Line, 1f, 7f);
-        Write(text, 872, y - 9f, 16, Muted);
+        Write(text, 806, y - 9f, 16, Muted);
     }
 
     private void DrawBank(Rect2 surface, string title, string subtitle, bool connected)
@@ -97,22 +98,13 @@ public partial class TowerView : Node2D
         Write(subtitle, corner.X + 16f, corner.Y - 23f, 15, Muted);
     }
 
-    private void DrawGoal()
+    private void DrawFlag(Vector2 mark, bool reached)
     {
-        Vector2 mark = slice.Goal;
         DrawLine(mark, mark + new Vector2(0, -38), Wind, 2f);
         DrawColoredPolygon(new[] { mark + new Vector2(0, -38), mark + new Vector2(19, -32), mark + new Vector2(0, -25) },
-            slice.Completed ? PlayerColor : Wind);
+            reached ? PlayerColor : Wind);
         DrawLine(mark + new Vector2(-12, -1), mark + new Vector2(12, -1), Wind, 3f);
-        if (slice.Completed) Write("已抵达", mark.X + 27f, mark.Y - 22f, 17, Wind);
-    }
-
-    private void DrawReservedShore()
-    {
-        const float y = 300f;
-        DrawRect(new Rect2(963, y, 257, 23), new Color("223134"));
-        DrawDashedLine(new Vector2(963, y), new Vector2(1220, y), Line, 2f, 10f);
-        Write("东岸 · 后续场地", 974, y - 16f, 17, Muted);
+        if (reached) Write("已抵达", mark.X + 42f, mark.Y - 22f, 17, Wind);
     }
 
     private void DrawTower(TowerState state)
@@ -146,12 +138,15 @@ public partial class TowerView : Node2D
         }
 
         DrawBridge(slice.BridgeHinge, slice.BridgeCollisionEnabled);
+        DrawBridge(slice.EastBridgeHinge, slice.EastBridgeCollisionEnabled);
         if (slice.BridgeCollisionEnabled) DrawBridge(slice.BridgeExtension, true);
+        if (slice.EastBridgeCollisionEnabled) DrawBridge(slice.EastBridgeExtension, true);
         if (state.IsTurning)
         {
-            float reach = 22f + 36f * Mathf.Sin(Mathf.Pi * state.Heading / TowerMechanism.SunCourtHeading);
-            Vector2 joint = new(deck.Position.X - 8f, top - 6f);
-            DrawDashedLine(joint, joint + new Vector2(-reach, -12f), Wind, 1.5f, 5f);
+            float eastProgress = Mathf.InverseLerp(TowerMechanism.SunCourtHeading, TowerMechanism.EastHeading, state.Heading);
+            float side = Mathf.Lerp(-1f, 1f, Mathf.Clamp(eastProgress, 0f, 1f));
+            Vector2 joint = new(deck.GetCenter().X + side * 106f, top - 7f);
+            DrawDashedLine(joint, joint + new Vector2(side * 46f, -12f), Wind, 1.5f, 5f);
         }
 
         Vector2 station = new(deck.GetCenter().X + 43f, top - 37f);
@@ -194,12 +189,14 @@ public partial class TowerView : Node2D
         Write($"存水   {state.Water:0.0} / {TowerMechanism.Capacity:0}", 975, 426, 17, Rain);
         Write($"台高   +{state.Height:0.0} m", 975, 455, 17, Ink);
         Write(state.Latched ? "高位锁 · 已扣合" : "高位锁 · 待升高", 975, 484, 17, state.Latched ? PlayerColor : Muted);
+        Write(slice.ReachedSunCourt ? "采光庭 · 已到访" : "采光庭 · 待到访", 975, 514, 17, slice.ReachedSunCourt ? Wind : Muted);
         Write(state.DockedPort switch
         {
             Port.Entry => "接岸   西侧低岸",
             Port.SunCourt => "接岸   北侧采光庭",
+            Port.East => "接岸   东侧货轨",
             _ => "接岸   未接通",
-        }, 975, 553, 17, slice.BridgeCollisionEnabled ? Wind : Muted);
+        }, 975, 553, 17, state.DockedPort != Port.None ? Wind : Muted);
 
         Vector2 pivot = new(1161, 460);
         DrawCircle(pivot, 33f, Line, false, 1.5f, true);
@@ -209,6 +206,7 @@ public partial class TowerView : Node2D
         DrawCircle(tip, 4f, Wind);
         Write("北", pivot.X - 7f, pivot.Y - 41f, 14, Muted);
         Write("西", pivot.X - 50f, pivot.Y + 5f, 14, Muted);
+        Write("东", pivot.X + 38f, pivot.Y + 5f, 14, Muted);
     }
 
     private void Write(string text, float x, float y, int size, Color color) =>

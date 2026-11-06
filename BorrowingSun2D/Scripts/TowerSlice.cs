@@ -14,16 +14,20 @@ public partial class TowerSlice : Node2D
     private AnimatableBody2D lift = null!;
     private CollisionShape2D entry = null!;
     private CollisionShape2D sunCourt = null!;
+    private CollisionShape2D east = null!;
     private CollisionShape2D deck = null!;
     private CollisionShape2D bridgeHinge = null!;
     private CollisionShape2D bridgeExtension = null!;
+    private CollisionShape2D eastBridgeHinge = null!;
+    private CollisionShape2D eastBridgeExtension = null!;
     private Marker2D station = null!;
     private Marker2D spawn = null!;
+    private Marker2D sunCourtMarker = null!;
     private Marker2D goal = null!;
     private float lowTop;
     private float highTop;
     private float lastGroundY;
-    private bool bridgeConnected;
+    private Port projectedPort = Port.Entry;
     private bool deckCheckpoint;
     private float time;
     private float messageUntil;
@@ -32,21 +36,35 @@ public partial class TowerSlice : Node2D
     internal SlicePlayer Player { get; private set; } = null!;
     internal TowerState State => mechanism.State;
     internal Weather SelectedWeather { get; private set; } = Weather.Rain;
+    internal bool ReachedSunCourt { get; private set; }
     internal bool Completed { get; private set; }
     internal int Recoveries { get; private set; }
-    internal bool BridgeConnected => bridgeConnected;
     internal bool BridgeCollisionEnabled => !bridgeExtension.Disabled;
+    internal bool EastBridgeCollisionEnabled => !eastBridgeExtension.Disabled;
     internal MechanismResult? LastResult { get; private set; }
     internal Rect2 EntryFloor => Surface(entry);
     internal Rect2 CourtFloor => Surface(sunCourt);
+    internal Rect2 EastFloor => Surface(east);
     internal Rect2 Deck => Surface(deck);
     internal Rect2 BridgeHinge => Surface(bridgeHinge);
     internal Rect2 BridgeExtension => Surface(bridgeExtension);
-    internal Vector2 Goal => goal.Position + goal.GetParent<Node2D>().Position;
+    internal Rect2 EastBridgeHinge => Surface(eastBridgeHinge);
+    internal Rect2 EastBridgeExtension => Surface(eastBridgeExtension);
+    internal Vector2 SunCourtMarker => sunCourtMarker.GlobalPosition;
+    internal Vector2 Goal => goal.GlobalPosition;
     internal bool AtStation => Player.IsOnFloor() && OnLiftHeight
         && Mathf.Abs(Player.Feet.X - station.GlobalPosition.X) <= StationRange;
-    internal bool DoorwayOccupied => Player.IsOnFloor() && OnLiftHeight
-        && Player.Feet.X >= BridgeExtension.Position.X - 8f && Player.Feet.X <= Deck.Position.X + 40f;
+    internal bool DoorwayOccupied
+    {
+        get
+        {
+            if (!Player.IsOnFloor() || !OnLiftHeight) return false;
+            float x = Player.Feet.X;
+            bool leftThreshold = x >= BridgeExtension.Position.X - 8f && x <= Deck.Position.X + 40f;
+            bool rightThreshold = x >= Deck.End.X - 40f && x <= EastBridgeExtension.End.X + 8f;
+            return leftThreshold || rightThreshold;
+        }
+    }
 
     private bool OnLiftHeight => Mathf.Abs(Player.Feet.Y - Deck.Position.Y) <= SurfaceTolerance;
 
@@ -55,12 +73,15 @@ public partial class TowerSlice : Node2D
         get
         {
             if (time < messageUntil) return message;
-            if (Completed) return "已抵达采光庭 · R 重新开始";
+            if (Completed) return "已抵达东岸 · 三岸路线完成 · R 重新开始";
             if (mechanism.IsTurning) return "风正在转动桥舌 · 等待停稳";
             if (mechanism.Draining) return "排水下降 · F 停止排水";
             if (mechanism.IsLifting) return "集雨升塔 · Q 收回雨令";
-            if (mechanism.DockedPort == Port.SunCourt) return "高位已接桥 · 向左走到采光庭";
-            if (mechanism.Latched) return "机械锁已扣合 · 选风，向塔台施令";
+            if (mechanism.DockedPort == Port.East) return ReachedSunCourt
+                ? "东桥已接通 · 向右走到东岸旗标" : "先到采光庭 · 回塔用 Shift + E 逆转接北桥";
+            if (mechanism.DockedPort == Port.SunCourt) return ReachedSunCourt
+                ? "采光庭已到达 · 回塔选风，按 E 顺转接东桥" : "北桥已接通 · 向左走到采光庭旗标";
+            if (mechanism.Latched) return "机械锁已扣合 · 选风，按 E 顺转一档";
             if (AtStation) return "对塔台施雨，升至采光庭的高度";
             if (mechanism.Height > 0f) return "塔台停在当前水位 · 可继续施雨";
             return "向右走过低位接桥，靠近塔台设备";
@@ -73,16 +94,19 @@ public partial class TowerSlice : Node2D
         lift = GetNode<AnimatableBody2D>("Lift");
         entry = GetNode<CollisionShape2D>("Entry/Surface");
         sunCourt = GetNode<CollisionShape2D>("SunCourt/Surface");
+        east = GetNode<CollisionShape2D>("East/Surface");
         deck = GetNode<CollisionShape2D>("Lift/Deck");
         bridgeHinge = GetNode<CollisionShape2D>("Lift/BridgeHinge");
         bridgeExtension = GetNode<CollisionShape2D>("Lift/BridgeExtension");
+        eastBridgeHinge = GetNode<CollisionShape2D>("Lift/EastBridgeHinge");
+        eastBridgeExtension = GetNode<CollisionShape2D>("Lift/EastBridgeExtension");
         station = GetNode<Marker2D>("Lift/WeatherStation");
         spawn = GetNode<Marker2D>("Entry/Spawn");
-        goal = GetNode<Marker2D>("SunCourt/Goal");
+        sunCourtMarker = GetNode<Marker2D>("SunCourt/Milestone");
+        goal = GetNode<Marker2D>("East/Goal");
         lowTop = EntryFloor.Position.Y;
         highTop = CourtFloor.Position.Y;
         lastGroundY = lowTop;
-        bridgeConnected = true;
 
         if (Array.IndexOf(OS.GetCmdlineUserArgs(), "--verify") >= 0)
             new TowerRouteCheck(this).Run();
@@ -115,7 +139,8 @@ public partial class TowerSlice : Node2D
             Say("天气令已收回 · 已存水和当前朝向保留");
         }
 
-        bool cast = Input.IsActionJustPressed("cast_weather");
+        bool reverseCast = Input.IsActionJustPressed("cast_weather_reverse", exactMatch: true);
+        bool cast = reverseCast || Input.IsActionJustPressed("cast_weather", exactMatch: true);
         bool drain = Input.IsActionJustPressed("toggle_drain");
         if (!cast && !drain) return;
         if (!AtStation && !DoorwayOccupied)
@@ -125,7 +150,15 @@ public partial class TowerSlice : Node2D
             return;
         }
 
-        LastResult = cast ? mechanism.Cast(SelectedWeather, DoorwayOccupied)
+        if (reverseCast && SelectedWeather != Weather.Wind)
+        {
+            LastResult = null;
+            Say("先按 2 选风令，再逆转塔台");
+            return;
+        }
+
+        TurnDirection direction = reverseCast ? TurnDirection.Counterclockwise : TurnDirection.Clockwise;
+        LastResult = cast ? mechanism.Cast(SelectedWeather, DoorwayOccupied, direction)
             : mechanism.ToggleDrain(DoorwayOccupied);
         if (LastResult == MechanismResult.Applied)
         {
@@ -140,6 +173,7 @@ public partial class TowerSlice : Node2D
             MechanismResult.NeedHigh => "先用雨把塔台升至高位",
             MechanismResult.NeedEntryHeading => "先用风转回入口朝向，再放水",
             MechanismResult.Empty => "水箱已空",
+            MechanismResult.TurnLimit => reverseCast ? "已到西向限位 · 按 E 顺转" : "已到东向限位 · 用 Shift + E 逆转",
             _ => "水箱已满 · 可以换风",
         });
     }
@@ -150,10 +184,11 @@ public partial class TowerSlice : Node2D
         if (!Mathf.IsEqualApprox(lift.Position.Y, top))
             lift.Position = new Vector2(lift.Position.X, top);
 
-        bool connected = mechanism.DockedPort != Port.None;
-        if (connected == bridgeConnected) return;
-        bridgeConnected = connected;
-        bridgeExtension.SetDeferred(CollisionShape2D.PropertyName.Disabled, !connected);
+        Port port = mechanism.DockedPort;
+        if (port == projectedPort) return;
+        projectedPort = port;
+        bridgeExtension.SetDeferred(CollisionShape2D.PropertyName.Disabled, port is not (Port.Entry or Port.SunCourt));
+        eastBridgeExtension.SetDeferred(CollisionShape2D.PropertyName.Disabled, port != Port.East);
     }
 
     private void TrackPlayer()
@@ -162,8 +197,15 @@ public partial class TowerSlice : Node2D
         {
             lastGroundY = Player.Feet.Y;
             if (AtStation && !DoorwayOccupied) deckCheckpoint = true;
-            if (!Completed && mechanism.DockedPort == Port.SunCourt && Player.Feet.X <= Goal.X
-                && Mathf.Abs(Player.Feet.Y - highTop) <= SurfaceTolerance)
+            if (!ReachedSunCourt && mechanism.DockedPort == Port.SunCourt && Player.Feet.X <= SunCourtMarker.X
+                && Mathf.Abs(Player.Feet.Y - SunCourtMarker.Y) <= SurfaceTolerance)
+            {
+                ReachedSunCourt = true;
+                messageUntil = 0f;
+            }
+
+            if (ReachedSunCourt && !Completed && mechanism.DockedPort == Port.East && Player.Feet.X >= Goal.X
+                && Mathf.Abs(Player.Feet.Y - Goal.Y) <= SurfaceTolerance)
             {
                 Completed = true;
                 messageUntil = 0f;
@@ -185,7 +227,7 @@ public partial class TowerSlice : Node2D
         UpdateLiftGeometry();
         Player.Respawn(spawn.GlobalPosition);
         lastGroundY = lowTop;
-        deckCheckpoint = Completed = false;
+        deckCheckpoint = ReachedSunCourt = Completed = false;
         Recoveries = 0;
         SelectedWeather = Weather.Rain;
         LastResult = null;
