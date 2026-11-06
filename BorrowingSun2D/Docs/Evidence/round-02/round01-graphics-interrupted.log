@@ -1,0 +1,37 @@
+Godot Engine v4.7.1.stable.mono.official.a13da4feb - https://godotengine.org
+OpenGL API 4.1 Metal - 90.5 - Compatibility - Using Device: Apple - Apple M5
+
+TRACE native viewport focused
+SCOPE: Round 01, res://Scenes/TowerSlice.tscn, physical InputEventKey via production InputMap; no state injection or player placement.
+PASS: physical key maps exactly to walk_left | body=(158.0, 572.9999) grounded=true
+PASS: physical key maps exactly to walk_right | body=(158.0, 572.9999) grounded=true
+PASS: physical key maps exactly to select_rain | body=(158.0, 572.9999) grounded=true
+PASS: physical key maps exactly to select_wind | body=(158.0, 572.9999) grounded=true
+PASS: physical key maps exactly to cast_weather | body=(158.0, 572.9999) grounded=true
+PASS: physical key maps exactly to cast_weather_reverse | body=(158.0, 572.9999) grounded=true
+PASS: physical key maps exactly to reset_slice | body=(158.0, 572.9999) grounded=true
+PASS: Shift+E is not the ordinary E action under exact matching | body=(158.0, 572.9999) grounded=true
+PASS: initial state restores the real entrance | body=(158.0, 572.9999) grounded=true
+PASS: initial state syncs the lift node and actual physics body at low height | body=(158.0, 572.9999) grounded=true
+PASS: initial state reconnects only the physical low bridge [Y=590.00, left=true, right=false] | body=(158.0, 572.9999) grounded=true
+PASS: initial state leaves no stale high bridge | body=(158.0, 572.9999) grounded=true
+TRACE initial state node=(660.0, 590.0) physics=(660.0, 590.0) low_left_hit=true high_left_hit=false high_right_hit=false
+PASS: walk from west across the low bridge to the station | body=(666.6675, 572.9338) grounded=true
+PASS: rain physically carries the player to the high stop | body=(666.6675, 282.9338) grounded=true
+PASS: high west leaves both extensions disconnected [Y=300.00, left=false, right=false] | body=(666.6675, 282.9338) grounded=true
+PASS: west-to-north turn leaves both bridge gaps unsupported [Y=300.00, left=false, right=false] | body=(666.6675, 282.9338) grounded=true
+PASS: north stop connects only the left extension [Y=300.00, left=true, right=false] | body=(666.6675, 282.9338) grounded=true
+PASS: walk supported to the north milestone | body=(237.9344, 282.9338) grounded=true
+PASS: feet stand on the real north landing | body=(237.9344, 282.9338) grounded=true
+PASS: capture the rendered north milestone viewport | body=(237.9344, 282.9338) grounded=true
+CAPTURE north milestone (1280, 720) round01-north.png
+PASS: remote E from north cannot turn the tower [Y=300.00, left=true, right=false] | body=(237.9344, 282.9338) grounded=true
+PASS: return to the left threshold | body=(499.5344, 282.9338) grounded=true
+PASS: left threshold rejects actual E [Y=300.00, left=true, right=false] | body=(499.5344, 282.9338) grounded=true
+PASS: walk supported from north back to the station | body=(666.6688, 282.9338) grounded=true
+PASS: north-to-east turn removes the left bridge before the right one connects [Y=300.00, left=false, right=false] | body=(666.6688, 282.9338) grounded=true
+TRACE native viewport lost focus
+TRACE native viewport lost focus
+PASS: east stop connects only the right extension [Y=300.00, left=false, right=true] | body=(666.6688, 282.9338) grounded=true
+PASS: walk supported to the east flag | body=(1084.503, 282.9338) grounded=true
+PASS: feet stand on the real east landing | body=(1084.503, 282.9338) grounded=true

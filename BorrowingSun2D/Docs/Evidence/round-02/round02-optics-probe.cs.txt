@@ -1,0 +1,320 @@
+using System;
+using System.Threading.Tasks;
+using BorrowingSun2D.Core;
+using Godot;
+using NumericsVector2 = System.Numerics.Vector2;
+
+namespace BorrowingSun2D;
+
+// This node is compiled only into an independent test copy. No scene or gameplay field is written.
+public partial class Round02OpticsProbe : Node
+{
+    private const uint OpticalOnlyLayer = 8;
+    private const float PointTolerance = 1f;
+
+    private TowerSlice scene = null!;
+    private Vector2 initialFeet;
+    private int assertions;
+
+    public override async void _Ready()
+    {
+        try
+        {
+            scene = GetParent<TowerSlice>();
+            GD.Print("SCOPE: Round 02 default scene, physical InputEventKey through the production InputMap. "
+                + "The normal route and parked-mirror check use no fixtures. The separate blocker check inserts one temporary StaticBody2D.");
+            await Frames(8);
+            initialFeet = scene.Player.Feet;
+            CheckEntrance("initial state");
+
+            await RunNormalRoute();
+            await CheckPhysicalBlocker();
+            await ResetAndCheckLowBridge();
+            await CheckParkedMirror();
+
+            GD.Print($"ROUND_02_OPTICS_QA PASSED assertions={assertions} failures=0");
+            GetTree().Quit();
+        }
+        catch (Exception error)
+        {
+            GD.PushError($"ROUND_02_OPTICS_QA FAILED after {assertions} checks: {error}");
+            GetTree().Quit(1);
+        }
+    }
+
+    private async Task RunNormalRoute()
+    {
+        GD.Print("PHASE: fixture-free west → tower → north mirror → tower → east");
+        await WalkToX(scene.Rig.Station.X, "west low bridge supports continuous walking to the tower");
+        await Tap(Key.Key3);
+        await Tap(Key.E);
+        Require(!scene.Optics.IsSunny && !scene.Optics.Path.Incoming.HasValue,
+            "sunny at the tower cannot activate the remote north collector");
+
+        await ReachNorthMirror();
+        await ChooseAndCast(Key.Key2);
+        await Until(() => scene.Optics.IsCalibrated, 160, "mirror-side Wind calibrates the actual north mirror");
+        Require(!scene.Optics.IsSunny && !scene.Optics.TowerHit, "wind alone does not create the solar beam");
+
+        await ChooseAndCast(Key.Key3);
+        await Until(() => scene.Optics.IsSunny && scene.Optics.TowerHit, 100, "mirror-side Sunny reaches the tower relay");
+        LightPath2D north = scene.Optics.Path;
+        CheckSourceAndTower(north, "north");
+        Require(scene.State.DockedPort == Port.SunCourt && !north.ReceiverLit && !scene.Optics.ReceiverLit,
+            "the tower receives real light while facing north and the east receiver stays dark");
+        PrintPath("north", north);
+        await Capture(0, "north solar relay");
+
+        await WalkToX(scene.Rig.Station.X, "walk back to the tower on the physical north bridge");
+        Require(scene.Optics.IsSunny && scene.Optics.TowerHit && !scene.Optics.ReceiverLit,
+            "the north collector stays sunny after the player returns to the tower");
+        await ChooseAndCast(Key.Key2);
+        await Until(() => scene.State.DockedPort == Port.East && scene.Rig.EastBridgeCollisionEnabled,
+            170, "tower-side Wind docks the physical east bridge");
+        await Until(() => scene.Optics.ReceiverLit, 100, "the unobstructed east-facing relay physically lights the receiver");
+
+        LightPath2D east = scene.Optics.Path;
+        CheckSourceAndTower(east, "east");
+        LightSegment2D second = east.SecondReflection ?? throw new InvalidOperationException("Missing reflected segment to east");
+        Require(east.ReceiverLit && second.Hit == LightHit2D.Receiver
+            && Near(second.To, Marker("East/Receiver")), "the second reflection ends at the authored east receiver");
+        Require(Near(east.FirstReflection!.Value.To, second.From), "the second reflection starts at the real tower hit");
+        Require(scene.State.Water == TowerMechanism.Capacity && scene.State.Latched,
+            "solar routing leaves the rain water and high latch intact");
+        PrintPath("east clear", east);
+
+        await WalkToX(scene.Rig.Goal.X + 18f, "walk on the physical east bridge to the east flag");
+        Require(scene.Optics.ReceiverLit && scene.Player.IsOnFloor(), "the east landing is reached while the receiver is lit");
+        await Capture(1, "east receiver");
+    }
+
+    private async Task CheckPhysicalBlocker()
+    {
+        GD.Print("PHASE: temporary real Physics2D blocker at the midpoint of the solved second reflection");
+        LightSegment2D before = scene.Optics.Path.SecondReflection
+            ?? throw new InvalidOperationException("Expected an unobstructed second reflection before inserting fixture");
+        Vector2 from = ToGodot(before.From);
+        Vector2 to = ToGodot(before.To);
+        Vector2 midpoint = from.Lerp(to, .5f);
+        var blocker = new StaticBody2D
+        {
+            Name = "Round02TemporaryBeamBlocker",
+            CollisionLayer = OpticalOnlyLayer,
+            CollisionMask = 0,
+        };
+        blocker.AddChild(new CollisionShape2D { Shape = new RectangleShape2D { Size = new Vector2(24f, 24f) } });
+        scene.AddChild(blocker);
+        blocker.GlobalPosition = midpoint;
+        GD.Print($"FIXTURE: center={midpoint} size=(24, 24) physics_layer_mask={OpticalOnlyLayer}, player stays on east landing");
+
+        try
+        {
+            await Frames(6);
+            var query = PhysicsRayQueryParameters2D.Create(from, to, OpticalOnlyLayer);
+            var hit = scene.GetWorld2D().DirectSpaceState.IntersectRay(query);
+            Require(hit.TryGetValue("collider", out Variant body) && body.AsGodotObject() == blocker,
+                "native Physics2D ray hits the inserted blocker between relay and receiver");
+            Vector2 hitPoint = hit["position"].AsVector2();
+            LightPath2D blocked = scene.Optics.Path;
+            Require(blocked.TowerHit && !blocked.ReceiverLit && !scene.Optics.ReceiverLit,
+                "blocking only the second leg preserves the real tower hit and darkens the receiver");
+            Require(blocked.SecondReflection is { Hit: LightHit2D.Obstacle } stopped && Near(stopped.To, hitPoint),
+                "the production second segment terminates at the same native collision point");
+            Require(scene.Player.IsOnFloor() && scene.Player.Feet.X >= scene.Rig.Goal.X,
+                "the optical-only fixture never moves or dislodges the player");
+            PrintPath("east blocked", blocked);
+        }
+        finally
+        {
+            blocker.QueueFree();
+            await Frames(6);
+        }
+
+        Require(scene.Optics.Path.SecondReflection is { Hit: LightHit2D.Receiver } restored
+            && scene.Optics.ReceiverLit && Near(restored.To, to),
+            "removing the fixture restores the same physical receiver hit without reapplying weather");
+        PrintPath("east restored", scene.Optics.Path);
+    }
+
+    private async Task ResetAndCheckLowBridge()
+    {
+        GD.Print("PHASE: R from the actual east landing, then walk the low bridge again");
+        await Tap(Key.R);
+        await Frames(8);
+        CheckEntrance("R");
+        await WalkToX(scene.Rig.Station.X, "R restores the actual low bridge and the player crosses it again");
+        Require(scene.AtStation && scene.Recoveries == 0, "the player reaches the real tower station after R");
+    }
+
+    private async Task CheckParkedMirror()
+    {
+        GD.Print("PHASE: fixture-free wrong angle via the playable reverse-wind input");
+        await ReachNorthMirror();
+        await ChooseAndCast(Key.Key2);
+        await Until(() => scene.Optics.IsCalibrated, 160, "wind sets the calibration before the wrong-angle check");
+        await Tap(Key.E, shifted: true);
+        await Until(() => !scene.Optics.IsCalibrated, 160, "actual Shift+E parks the mirror at its wrong angle");
+        await ChooseAndCast(Key.Key3);
+        await Until(() => scene.Optics.IsSunny, 80, "the parked mirror can still receive local Sunny");
+
+        LightPath2D wrong = scene.Optics.Path;
+        Require(wrong.Incoming is { Hit: LightHit2D.Collector } && wrong.FirstReflection.HasValue,
+            "actual sunlight reaches and reflects off the parked mirror");
+        Require(!scene.Optics.IsCalibrated && !wrong.TowerHit && !wrong.ReceiverLit
+            && wrong.FirstReflection is { Hit: not LightHit2D.TowerMirror },
+            "the wrong mirror angle physically misses the tower and the east receiver remains dark");
+        PrintPath("north wrong angle", wrong);
+
+        await ChooseAndCast(Key.Key2);
+        await Until(() => scene.Optics.IsCalibrated, 160, "normal Wind returns the mirror to its calibrated pose");
+        await ChooseAndCast(Key.Key3);
+        await Until(() => scene.Optics.IsSunny && scene.Optics.TowerHit, 100,
+            "the same real sunlight reaches the tower after correcting the mirror angle");
+        Require(!scene.Optics.ReceiverLit, "correcting the collector alone cannot light east while the tower faces north");
+        PrintPath("north corrected", scene.Optics.Path);
+
+        await Tap(Key.Q);
+        await Frames(6);
+        Require(scene.Optics.IsCalibrated && !scene.Optics.IsSunny && !scene.Optics.Path.Incoming.HasValue
+            && !scene.Optics.TowerHit && !scene.Optics.ReceiverLit,
+            "Q at the mirror clears local sunlight while preserving the calibrated pose");
+    }
+
+    private async Task ReachNorthMirror()
+    {
+        await ChooseAndCast(Key.Key1);
+        await Until(() => scene.State.Latched, 320, "rain fills the tower and latches the occupied deck high");
+        Require(scene.Player.IsOnFloor() && Math.Abs(scene.Player.Feet.Y - scene.Rig.Deck.Position.Y) < 2f,
+            "the physics body carries the player to the high platform");
+        await ChooseAndCast(Key.Key2);
+        await Until(() => scene.State.DockedPort == Port.SunCourt && scene.Rig.BridgeCollisionEnabled,
+            170, "wind reaches north and enables the actual north bridge");
+        await WalkToX(scene.Rig.SunCourtMarker.X - 15f, "walk across the north bridge to the real north flag");
+        await WalkToX(Marker("SunCourt/SolarStation").X, "walk back to the authored north mirror station");
+        Require(scene.ReachedSunCourt && scene.AtSolarStation, "north flag and actual mirror proximity are reached by walking");
+    }
+
+    private void CheckEntrance(string label)
+    {
+        Require(scene.Player.Feet.DistanceTo(initialFeet) < 2f && scene.Player.IsOnFloor()
+            && scene.State.DockedPort == Port.Entry && scene.State.Water == 0f && !scene.State.Latched,
+            $"{label} restores the entrance and empty lift");
+        Require(!scene.Optics.IsCalibrated && !scene.Optics.IsSunny && !scene.Optics.Path.Incoming.HasValue
+            && !scene.Optics.TowerHit && !scene.Optics.ReceiverLit, $"{label} clears the optical state");
+        Require(scene.Rig.BridgeCollisionEnabled && !scene.Rig.EastBridgeCollisionEnabled, $"{label} enables only the left extension");
+        var lift = scene.GetNode<AnimatableBody2D>("Lift");
+        Transform2D physicsTransform = PhysicsServer2D.BodyGetState(lift.GetRid(), PhysicsServer2D.BodyState.Transform).AsTransform2D();
+        Require(physicsTransform.Origin.DistanceTo(lift.GlobalPosition) < .1f && Math.Abs(lift.GlobalPosition.Y - 590f) < 1f,
+            $"{label} synchronizes the visible lift and actual collision body at low height");
+        GD.Print($"TRACE {label} node={lift.GlobalPosition} physics={physicsTransform.Origin}");
+    }
+
+    private void CheckSourceAndTower(LightPath2D path, string label)
+    {
+        LightSegment2D incoming = path.Incoming ?? throw new InvalidOperationException($"{label}: missing incoming segment");
+        LightSegment2D first = path.FirstReflection ?? throw new InvalidOperationException($"{label}: missing first reflection");
+        Require(incoming.Hit == LightHit2D.Collector && Near(incoming.From, Marker("SunCourt/SunOrigin"))
+            && Near(incoming.To, Marker("SunCourt/Collector")), $"{label}: incoming ray uses the authored sun and collector");
+        Require(path.TowerHit && first.Hit == LightHit2D.TowerMirror
+            && Near(first.To, Marker("Lift/Relay")), $"{label}: the first reflection ends at the authored tower mirror");
+        Require(Near(incoming.To, first.From), $"{label}: the first reflection starts where the incoming ray hits");
+    }
+
+    private async Task WalkToX(float destination, string name)
+    {
+        bool movingRight = scene.Player.Feet.X < destination;
+        Key key = movingRight ? Key.D : Key.A;
+        int recoveries = scene.Recoveries;
+        Send(key, true);
+        try
+        {
+            for (int frame = 0; frame < 320; frame++)
+            {
+                await Frames(1);
+                if (!scene.Player.IsOnFloor() || scene.Recoveries != recoveries)
+                    throw new InvalidOperationException($"{name}: player lost support, feet={scene.Player.Feet}");
+                if (movingRight ? scene.Player.Feet.X >= destination : scene.Player.Feet.X <= destination)
+                {
+                    Require(true, name);
+                    return;
+                }
+            }
+        }
+        finally
+        {
+            Send(key, false);
+            await Frames(3);
+        }
+        throw new InvalidOperationException($"{name}: input did not reach x={destination}, feet={scene.Player.Feet}");
+    }
+
+    private async Task ChooseAndCast(Key weather)
+    {
+        await Tap(weather);
+        await Tap(Key.E);
+    }
+
+    private async Task Tap(Key key, bool shifted = false)
+    {
+        if (shifted)
+        {
+            Send(Key.Shift, true, true);
+            await Frames(2);
+        }
+        Send(key, true, shifted);
+        await Frames(4);
+        Send(key, false, shifted);
+        await Frames(4);
+        if (shifted)
+        {
+            Send(Key.Shift, false);
+            await Frames(2);
+        }
+    }
+
+    private static void Send(Key key, bool pressed, bool shifted = false)
+    {
+        using var input = new InputEventKey { Keycode = key, PhysicalKeycode = key, Pressed = pressed, ShiftPressed = shifted };
+        Input.ParseInputEvent(input);
+    }
+
+    private async Task Until(Func<bool> reached, int maxFrames, string name)
+    {
+        for (int frame = 0; frame < maxFrames && !reached(); frame++) await Frames(1);
+        Require(reached(), name);
+    }
+
+    private async Task Frames(int count)
+    {
+        for (int frame = 0; frame < count; frame++)
+            await ToSignal(GetTree(), SceneTree.SignalName.PhysicsFrame);
+    }
+
+    private async Task Capture(int index, string label)
+    {
+        string[] captures = OS.GetCmdlineUserArgs();
+        if (captures.Length != 2) return;
+        await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
+        await ToSignal(RenderingServer.Singleton, RenderingServer.SignalName.FramePostDraw);
+        using Image image = GetViewport().GetTexture().GetImage();
+        Require(image.SavePng(captures[index]) == Error.Ok, $"capture the production viewport at {label}");
+        GD.Print($"CAPTURE {label}: {image.GetSize()} {System.IO.Path.GetFileName(captures[index])}");
+    }
+
+    private Vector2 Marker(string path) => scene.GetNode<Node2D>(path).GlobalPosition;
+    private static Vector2 ToGodot(NumericsVector2 point) => new(point.X, point.Y);
+    private static bool Near(NumericsVector2 left, Vector2 right) => ToGodot(left).DistanceTo(right) < PointTolerance;
+    private static bool Near(NumericsVector2 left, NumericsVector2 right) => NumericsVector2.Distance(left, right) < PointTolerance;
+
+    private static void PrintPath(string label, LightPath2D path) =>
+        GD.Print($"TRACE {label}: incoming={path.Incoming}; first={path.FirstReflection}; second={path.SecondReflection}; "
+            + $"tower={path.TowerHit}; receiver={path.ReceiverLit}");
+
+    private void Require(bool passed, string name)
+    {
+        if (!passed) throw new InvalidOperationException($"{name} | feet={scene.Player.Feet} "
+            + $"dock={scene.State.DockedPort} sunny={scene.Optics.IsSunny} calibration={scene.Optics.IsCalibrated} path={scene.Optics.Path}");
+        assertions++;
+        GD.Print($"PASS {name} | feet={scene.Player.Feet} dock={scene.State.DockedPort}");
+    }
+}

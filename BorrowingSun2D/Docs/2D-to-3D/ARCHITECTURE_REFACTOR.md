@@ -4,7 +4,7 @@
 
 ## Relationship Map
 
-![对象关系图。TowerSlice 持有塔机、路线进度、二维场景适配器和玩家。图中标出东岸完成条件的扩展点和物理帧顺序。](RELATIONSHIP_MAP.svg)
+[第 01 轮对象关系图](https://github.com/buriallsy/coding_team/blob/5248bfd08085ec5a18285dad3c779aecbb804aa4/BorrowingSun2D/Docs/2D-to-3D/RELATIONSHIP_MAP.svg) · [当前对象关系图](RELATIONSHIP_MAP.svg)
 
 ## 拆分依据
 

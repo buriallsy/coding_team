@@ -5,6 +5,7 @@ namespace BorrowingSun2D;
 
 public partial class TowerView : Node2D
 {
+    private static readonly Color Background = new("142023");
     private static readonly Color Ink = new("eaf0ee");
     private static readonly Color Muted = new("98aeb1");
     private static readonly Color Line = new("40565a");
@@ -12,6 +13,7 @@ public partial class TowerView : Node2D
     private static readonly Color Rain = new("77bad9");
     private static readonly Color Wind = new("91d1bf");
     private static readonly Color PlayerColor = new("ffd88b");
+    private static readonly Color Sunny = new("f3bd62");
 
     private TowerSlice slice = null!;
     private Font font = null!;
@@ -49,31 +51,33 @@ public partial class TowerView : Node2D
         if (font == null) return;
         TowerState state = slice.State;
 
-        DrawRect(new Rect2(0, 0, 1280, 720), new Color("142023"));
+        DrawRect(new Rect2(0, 0, 1280, 720), Background);
         for (int x = 56; x <= 1224; x += 32)
             DrawLine(new Vector2(x, 147), new Vector2(x, 637), new Color("1c2a2c"));
         for (int y = 157; y <= 637; y += 24)
             DrawLine(new Vector2(56, y), new Vector2(1224, y), new Color("1c2a2c"));
 
-        DrawLine(new Vector2(56, 137), new Vector2(1224, 137), Line);
-        Write("借晴  /  塔台灰盒", 56, 74, 33, Ink);
-        Write("第 01 轮   西侧登塔 · 北庭到访 · 回塔转向 · 东岸抵达", 57, 109, 18, Muted);
-        Write("侧视剖面   /   机械与接岸", 966, 74, 18, Muted);
-
         DrawGuide(slice.Rig.CourtFloor.Position.Y, "+6 m");
         DrawGuide(slice.Rig.EntryFloor.Position.Y, "0 m");
         DrawBank(slice.Rig.EntryFloor, "西侧低岸", "起点", state.DockedPort == Port.Entry);
         DrawBank(slice.Rig.CourtFloor, "北侧高岸 · 采光庭", "途中站", state.DockedPort == Port.SunCourt);
-        DrawBank(slice.Rig.EastFloor, "东侧高岸 · 货轨", "本轮终点", state.DockedPort == Port.East);
+        DrawBank(slice.Rig.EastFloor, "东侧高岸 · 货轨", "东岸旗标", state.DockedPort == Port.East);
         DrawFlag(slice.Rig.SunCourtMarker, slice.ReachedSunCourt);
         DrawFlag(slice.Rig.Goal, slice.Completed);
         DrawTower(state);
+        DrawOptics();
         DrawPerson(slice.Player);
         DrawReadout(state);
 
+        DrawRect(new Rect2(0, 0, 1280, 137), Background);
+        DrawLine(new Vector2(56, 137), new Vector2(1224, 137), Line);
+        Write("借晴  /  塔台灰盒", 56, 74, 33, Ink);
+        Write("第 02 轮   北庭校镜 · 施晴借光 · 回塔转东 · 村落接光", 57, 109, 18, Muted);
+        Write("侧视剖面   /   机械与光路", 966, 74, 18, Muted);
+
         DrawLine(new Vector2(56, 637), new Vector2(1224, 637), Line);
         Write(slice.Status, 56, 670, 23, slice.Completed ? Wind : Ink);
-        Write("A / D 或 ← / →  行走     1 雨 / 2 风     E  施令 / 风顺转     Shift + E  风逆转     Q  收令     F  放水     R  重置", 56, 699, 17, Muted);
+        Write("A/D 或 ←/→  行走    1 雨 / 2 风 / 3 晴    E  施令    Shift+E  风反向    Q  收令    F  放水    R  重置", 56, 699, 17, Muted);
     }
 
     private void DrawGuide(float y, string text)
@@ -150,7 +154,7 @@ public partial class TowerView : Node2D
         }
 
         Vector2 station = new(deck.GetCenter().X + 43f, top - 37f);
-        Color token = slice.SelectedWeather == Weather.Rain ? Rain : Wind;
+        Color token = slice.SelectedWeather switch { Weather.Rain => Rain, Weather.Wind => Wind, _ => Sunny };
         DrawLine(station, station + new Vector2(0, 35f), Muted, 2f);
         DrawCircle(station, 16f, new Color("213135"));
         DrawCircle(station, 16f, token, false, slice.AtStation ? 3f : 1f, true);
@@ -171,6 +175,55 @@ public partial class TowerView : Node2D
         DrawLine(bridge.Position, new Vector2(bridge.End.X, bridge.Position.Y), connected ? Wind : Muted, 2f);
     }
 
+    private void DrawOptics()
+    {
+        SunCourtOptics2D optics = slice.Optics;
+        Rect2 stop = optics.BeamStopBounds;
+        DrawRect(stop, new Color("303539"));
+        DrawRect(stop, Line, false, 1.5f);
+        Write("遮光岩", stop.Position.X - 2f, stop.End.Y + 17f, 14, Muted);
+
+        LightPath2D path = optics.Path;
+        DrawLight(path.Incoming);
+        DrawLight(path.FirstReflection);
+        DrawLight(path.SecondReflection);
+
+        DrawCircle(optics.SunOrigin, 6f, optics.IsSunny ? Sunny : Line);
+        Vector2 collector = SunCourtOptics2D.ToScene(optics.Collector.Center);
+        Vector2 relay = SunCourtOptics2D.ToScene(optics.Relay.Center);
+        Vector2 receiver = SunCourtOptics2D.ToScene(optics.Receiver.Center);
+        DrawLine(collector, optics.StationPosition, Line, 3f);
+        DrawLine(relay, new Vector2(relay.X, slice.Rig.Deck.Position.Y), Line, 2f);
+        DrawLine(receiver, new Vector2(receiver.X, slice.Rig.EastFloor.Position.Y), Line, 3f);
+        DrawCircle(receiver, 22f, optics.ReceiverLit ? Sunny : Line, false, 1.5f, true);
+        DrawSurface(optics.Collector, optics.IsCalibrated ? Wind : Muted);
+        DrawSurface(optics.Relay, optics.TowerHit ? Sunny : Muted);
+        DrawSurface(optics.Receiver, optics.ReceiverLit ? Sunny : Muted);
+        Write("采日镜", collector.X - 27f, collector.Y - 20f, 16, Ink);
+        if (slice.AtSolarStation) Write("E 施令", collector.X - 22f, collector.Y + 29f, 15, Wind);
+        Write("塔镜", relay.X - 15f, relay.Y - 16f, 15, Muted);
+        Write("接光盘", receiver.X - 28f, receiver.Y - 28f, 16, Ink);
+    }
+
+    private void DrawLight(LightSegment2D? segment)
+    {
+        if (segment is not { } ray) return;
+        Vector2 from = SunCourtOptics2D.ToScene(ray.From);
+        Vector2 to = SunCourtOptics2D.ToScene(ray.To);
+        DrawLine(from, to, new Color(Sunny, .24f), 8f, true);
+        DrawLine(from, to, Sunny, 2f, true);
+        if (ray.Hit == LightHit2D.Obstacle) DrawCircle(to, 4f, Sunny, false, 1.5f, true);
+    }
+
+    private void DrawSurface(OpticalSurface2D surface, Color color)
+    {
+        Vector2 center = SunCourtOptics2D.ToScene(surface.Center);
+        Vector2 normal = SunCourtOptics2D.ToScene(surface.Normal);
+        Vector2 halfSpan = new Vector2(-normal.Y, normal.X) * surface.HalfLength;
+        DrawLine(center - halfSpan, center + halfSpan, color, 4f, true);
+        DrawCircle(center, 3f, Ink);
+    }
+
     private void DrawPerson(SlicePlayer player)
     {
         Vector2 feet = player.Feet;
@@ -183,7 +236,7 @@ public partial class TowerView : Node2D
 
     private void DrawReadout(TowerState state)
     {
-        DrawRect(new Rect2(956, 359, 268, 223), new Color("1b2a2d"));
+        DrawRect(new Rect2(956, 359, 268, 248), new Color("1b2a2d"));
         DrawLine(new Vector2(956, 359), new Vector2(1224, 359), Line);
         Write("塔台状态", 975, 391, 20, Ink);
         Write($"存水   {state.Water:0.0} / {TowerMechanism.Capacity:0}", 975, 426, 17, Rain);
@@ -197,6 +250,12 @@ public partial class TowerView : Node2D
             Port.East => "接岸   东侧货轨",
             _ => "接岸   未接通",
         }, 975, 553, 17, state.DockedPort != Port.None ? Wind : Muted);
+
+        SunCourtOptics2D optics = slice.Optics;
+        string light = optics.ReceiverLit ? "接光盘已亮"
+            : optics.TowerHit ? "已到塔镜 · 接光盘仍暗"
+            : optics.IsSunny ? "未到塔镜" : "未借日光";
+        Write($"光路   {light}", 975, 583, 17, optics.IsSunny ? Sunny : Muted);
 
         Vector2 pivot = new(1161, 460);
         DrawCircle(pivot, 33f, Line, false, 1.5f, true);

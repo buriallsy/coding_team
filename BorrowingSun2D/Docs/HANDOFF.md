@@ -1,8 +1,8 @@
 # 交接 · 2026-11-06
 
-当前第 01 轮覆盖「西岸上塔 → 雨升 → 北庭 → 回塔 → 东岸」。打开 [project.godot](../project.godot) 或读 [运行说明](../README.md)。课程报告可从 [第 01 轮记录](2D-to-3D/ROUND_01.md) 和 [迭代记录](ITERATIONS.md) 引用本轮用例与日志。下一轮制作实际反射光路，正式 2D 基线在整条主线完成后冻结。
+当前第 02 轮覆盖「西岸上塔 → 雨升 → 北庭调镜施晴 → 回塔转东 → 东盘接光」。课程报告可从本轮记录引用玩法取舍、有限镜面求交、实际遮挡与回归用例。下一轮从接光结果接货车交付，正式 2D 基线在整条主线完成后冻结。 [运行说明](../README.md) · [第 02 轮记录](2D-to-3D/ROUND_02.md) · [迭代记录](ITERATIONS.md)
 
-第 01 轮续把桥与升降同步提取到 `TowerRig2D`，旗标顺序提取到 `RouteProgress`。`TowerSlice` 是后续接入采光交互的协调入口。 [SOLID 整理与回归](2D-to-3D/ARCHITECTURE_REFACTOR.md) · [对象关系图](2D-to-3D/RELATIONSHIP_MAP.svg)
+第 01 轮续把桥与升降同步提取到 `TowerRig2D`，旗标顺序提取到 `RouteProgress`。本轮由 `TowerSlice` 协调采光交互。 [SOLID 整理与回归](2D-to-3D/ARCHITECTURE_REFACTOR.md) · [对象关系图](2D-to-3D/RELATIONSHIP_MAP.svg)
 
 ## 第 00 轮归档
 

@@ -1,8 +1,9 @@
-[gd_scene load_steps=11 format=3]
+[gd_scene load_steps=13 format=3]
 
 [ext_resource type="Script" path="res://Scripts/TowerSlice.cs" id="1_slice"]
 [ext_resource type="Script" path="res://Scripts/SlicePlayer.cs" id="2_player"]
 [ext_resource type="Script" path="res://Scripts/TowerView.cs" id="3_view"]
+[ext_resource type="Script" path="res://Scripts/SunCourtOptics2D.cs" id="4_optics"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_entry"]
 size = Vector2(414, 22)
@@ -21,6 +22,9 @@ size = Vector2(40, 14)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_extension"]
 size = Vector2(78, 14)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_beam_stop"]
+size = Vector2(40, 36)
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_player"]
 radius = 8.0
@@ -49,6 +53,20 @@ shape = SubResource("RectangleShape2D_court")
 [node name="Milestone" type="Marker2D" parent="SunCourt"]
 position = Vector2(-11, 0)
 
+[node name="SolarStation" type="Marker2D" parent="SunCourt"]
+position = Vector2(89, 0)
+
+[node name="SunOrigin" type="Marker2D" parent="SunCourt"]
+position = Vector2(41, -158)
+rotation = 1.1071487
+
+[node name="Collector" type="Marker2D" parent="SunCourt"]
+position = Vector2(89, -62)
+rotation = -1.3103414
+
+[node name="RelayAim" type="Marker2D" parent="SunCourt/Collector"]
+rotation = 0.1912207
+
 [node name="East" type="StaticBody2D" parent="."]
 position = Vector2(1037, 300)
 
@@ -58,6 +76,18 @@ shape = SubResource("RectangleShape2D_east")
 
 [node name="Goal" type="Marker2D" parent="East"]
 position = Vector2(23, 0)
+
+[node name="Receiver" type="Marker2D" parent="East"]
+position = Vector2(7, -68)
+rotation = 3.1415927
+
+[node name="BeamStop" type="StaticBody2D" parent="."]
+position = Vector2(875, 365)
+collision_layer = 8
+collision_mask = 0
+
+[node name="Surface" type="CollisionShape2D" parent="BeamStop"]
+shape = SubResource("RectangleShape2D_beam_stop")
 
 [node name="Lift" type="AnimatableBody2D" parent="."]
 position = Vector2(660, 590)
@@ -87,6 +117,15 @@ disabled = true
 
 [node name="WeatherStation" type="Marker2D" parent="Lift"]
 
+[node name="Relay" type="Marker2D" parent="Lift"]
+position = Vector2(0, -124)
+
+[node name="NorthPose" type="Marker2D" parent="Lift/Relay"]
+rotation = 1.8294628
+
+[node name="EastPose" type="Marker2D" parent="Lift/Relay"]
+rotation = 1.5413038
+
 [node name="Player" type="CharacterBody2D" parent="."]
 position = Vector2(158, 572.7)
 collision_layer = 4
@@ -98,6 +137,9 @@ script = ExtResource("2_player")
 
 [node name="Capsule" type="CollisionShape2D" parent="Player"]
 shape = SubResource("CapsuleShape2D_player")
+
+[node name="Optics" type="Node2D" parent="."]
+script = ExtResource("4_optics")
 
 [node name="View" type="Node2D" parent="."]
 script = ExtResource("3_view")

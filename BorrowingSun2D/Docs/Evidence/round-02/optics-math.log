@@ -1,0 +1,8 @@
+PASS two reflections hit all three finite surfaces
+PASS the reflection endpoints are physical intersections
+PASS another mirror normal still hits the tower and reflects away from the receiver
+PASS a wrong collector normal reflects away from the relay
+PASS crossing the receiver's infinite line outside the finite aperture stays dark
+PASS hitting the back of the receiver stays dark
+PASS nearest geometry truncates the second reflection
+PASS a blocker before the first mirror ends the entire path

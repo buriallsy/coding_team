@@ -1,0 +1,76 @@
+Godot Engine v4.7.1.stable.mono.official.a13da4feb - https://godotengine.org
+
+ERROR: Condition "ret != noErr" is true. Returning: ""
+   at: get_system_ca_certificates (platform/macos/os_macos.mm:1035)
+SCOPE: Round 02 default scene, physical InputEventKey through the production InputMap. The normal route and parked-mirror check use no fixtures. The separate blocker check inserts one temporary StaticBody2D.
+PASS initial state restores the entrance and empty lift | feet=(158, 589.9999) dock=Entry
+PASS initial state clears the optical state | feet=(158, 589.9999) dock=Entry
+PASS initial state enables only the left extension | feet=(158, 589.9999) dock=Entry
+PASS initial state synchronizes the visible lift and actual collision body at low height | feet=(158, 589.9999) dock=Entry
+TRACE initial state node=(660, 590) physics=(660, 590)
+PHASE: fixture-free west → tower → north mirror → tower → east
+PASS west low bridge supports continuous walking to the tower | feet=(663.0342, 589.9338) dock=Entry
+PASS sunny at the tower cannot activate the remote north collector | feet=(666.66754, 589.9338) dock=Entry
+PASS rain fills the tower and latches the occupied deck high | feet=(666.66754, 301.14145) dock=None
+PASS the physics body carries the player to the high platform | feet=(666.66754, 301.14145) dock=None
+PASS wind reaches north and enables the actual north bridge | feet=(666.66754, 299.93378) dock=SunCourt
+PASS walk across the north bridge to the real north flag | feet=(241.56775, 299.93384) dock=SunCourt
+PASS walk back to the authored north mirror station | feet=(361.4678, 299.93384) dock=SunCourt
+PASS north flag and actual mirror proximity are reached by walking | feet=(365.10114, 299.93384) dock=SunCourt
+PASS mirror-side Wind calibrates the actual north mirror | feet=(365.10114, 299.93384) dock=SunCourt
+PASS wind alone does not create the solar beam | feet=(365.10114, 299.93384) dock=SunCourt
+PASS mirror-side Sunny reaches the tower relay | feet=(365.10114, 299.93384) dock=SunCourt
+PASS north: incoming ray uses the authored sun and collector | feet=(365.10114, 299.93384) dock=SunCourt
+PASS north: the first reflection ends at the authored tower mirror | feet=(365.10114, 299.93384) dock=SunCourt
+PASS north: the first reflection starts where the incoming ray hits | feet=(365.10114, 299.93384) dock=SunCourt
+PASS the tower receives real light while facing north and the east receiver stays dark | feet=(365.10114, 299.93384) dock=SunCourt
+TRACE north: incoming=LightSegment2D { From = <312, 142>, To = <360, 238>, Hit = Collector }; first=LightSegment2D { From = <360, 238>, To = <660.0002, 176.00005>, Hit = TowerMirror }; second=LightSegment2D { From = <660.0002, 176.00005>, To = <855, 347.4184>, Hit = Obstacle }; tower=True; receiver=False
+PASS walk back to the tower on the physical north bridge | feet=(663.0354, 299.93384) dock=SunCourt
+PASS the north collector stays sunny after the player returns to the tower | feet=(666.66876, 299.93384) dock=SunCourt
+PASS tower-side Wind docks the physical east bridge | feet=(666.66876, 299.93384) dock=East
+PASS the unobstructed east-facing relay physically lights the receiver | feet=(666.66876, 299.93384) dock=East
+PASS east: incoming ray uses the authored sun and collector | feet=(666.66876, 299.93384) dock=East
+PASS east: the first reflection ends at the authored tower mirror | feet=(666.66876, 299.93384) dock=East
+PASS east: the first reflection starts where the incoming ray hits | feet=(666.66876, 299.93384) dock=East
+PASS the second reflection ends at the authored east receiver | feet=(666.66876, 299.93384) dock=East
+PASS the second reflection starts at the real tower hit | feet=(666.66876, 299.93384) dock=East
+PASS solar routing leaves the rain water and high latch intact | feet=(666.66876, 299.93384) dock=East
+TRACE east clear: incoming=LightSegment2D { From = <312, 142>, To = <360, 238>, Hit = Collector }; first=LightSegment2D { From = <360, 238>, To = <660.0005, 175.99998>, Hit = TowerMirror }; second=LightSegment2D { From = <660.0005, 175.99998>, To = <1044, 231.99976>, Hit = Receiver }; tower=True; receiver=True
+PASS walk on the physical east bridge to the east flag | feet=(1080.8685, 299.93384) dock=East
+PASS the east landing is reached while the receiver is lit | feet=(1084.5018, 299.93384) dock=East
+PHASE: temporary real Physics2D blocker at the midpoint of the solved second reflection
+FIXTURE: center=(852.00024, 203.99988) size=(24, 24) physics_layer_mask=8, player stays on east landing
+PASS native Physics2D ray hits the inserted blocker between relay and receiver | feet=(1084.5018, 299.93384) dock=East
+PASS blocking only the second leg preserves the real tower hit and darkens the receiver | feet=(1084.5018, 299.93384) dock=East
+PASS the production second segment terminates at the same native collision point | feet=(1084.5018, 299.93384) dock=East
+PASS the optical-only fixture never moves or dislodges the player | feet=(1084.5018, 299.93384) dock=East
+TRACE east blocked: incoming=LightSegment2D { From = <312, 142>, To = <360, 238>, Hit = Collector }; first=LightSegment2D { From = <360, 238>, To = <660.0005, 175.99998>, Hit = TowerMirror }; second=LightSegment2D { From = <660.0005, 175.99998>, To = <840.00024, 202.24988>, Hit = Obstacle }; tower=True; receiver=False
+PASS removing the fixture restores the same physical receiver hit without reapplying weather | feet=(1084.5018, 299.93384) dock=East
+TRACE east restored: incoming=LightSegment2D { From = <312, 142>, To = <360, 238>, Hit = Collector }; first=LightSegment2D { From = <360, 238>, To = <660.0005, 175.99998>, Hit = TowerMirror }; second=LightSegment2D { From = <660.0005, 175.99998>, To = <1044, 231.99976>, Hit = Receiver }; tower=True; receiver=True
+PHASE: R from the actual east landing, then walk the low bridge again
+PASS R restores the entrance and empty lift | feet=(158, 589.9999) dock=Entry
+PASS R clears the optical state | feet=(158, 589.9999) dock=Entry
+PASS R enables only the left extension | feet=(158, 589.9999) dock=Entry
+PASS R synchronizes the visible lift and actual collision body at low height | feet=(158, 589.9999) dock=Entry
+TRACE R node=(660, 590) physics=(660, 590)
+PASS R restores the actual low bridge and the player crosses it again | feet=(663.0342, 589.9338) dock=Entry
+PASS the player reaches the real tower station after R | feet=(666.66754, 589.9338) dock=Entry
+PHASE: fixture-free wrong angle via the playable reverse-wind input
+PASS rain fills the tower and latches the occupied deck high | feet=(666.66754, 301.14145) dock=None
+PASS the physics body carries the player to the high platform | feet=(666.66754, 301.14145) dock=None
+PASS wind reaches north and enables the actual north bridge | feet=(666.66754, 299.93378) dock=SunCourt
+PASS walk across the north bridge to the real north flag | feet=(241.56607, 299.93384) dock=SunCourt
+PASS walk back to the authored north mirror station | feet=(361.4661, 299.93384) dock=SunCourt
+PASS north flag and actual mirror proximity are reached by walking | feet=(365.09943, 299.93384) dock=SunCourt
+PASS wind sets the calibration before the wrong-angle check | feet=(365.09943, 299.93384) dock=SunCourt
+PASS actual Shift+E parks the mirror at its wrong angle | feet=(365.09943, 299.93384) dock=SunCourt
+PASS the parked mirror can still receive local Sunny | feet=(365.09943, 299.93384) dock=SunCourt
+PASS actual sunlight reaches and reflects off the parked mirror | feet=(365.09943, 299.93384) dock=SunCourt
+PASS the wrong mirror angle physically misses the tower and the east receiver remains dark | feet=(365.09943, 299.93384) dock=SunCourt
+TRACE north wrong angle: incoming=LightSegment2D { From = <312, 142>, To = <360, 238>, Hit = Collector }; first=LightSegment2D { From = <360, 238>, To = <1609.5413, -591.8478>, Hit = None }; second=; tower=False; receiver=False
+PASS normal Wind returns the mirror to its calibrated pose | feet=(365.09943, 299.93384) dock=SunCourt
+PASS the same real sunlight reaches the tower after correcting the mirror angle | feet=(365.09943, 299.93384) dock=SunCourt
+PASS correcting the collector alone cannot light east while the tower faces north | feet=(365.09943, 299.93384) dock=SunCourt
+TRACE north corrected: incoming=LightSegment2D { From = <312, 142>, To = <360, 238>, Hit = Collector }; first=LightSegment2D { From = <360, 238>, To = <660.0002, 176.00005>, Hit = TowerMirror }; second=LightSegment2D { From = <660.0002, 176.00005>, To = <855, 347.4184>, Hit = Obstacle }; tower=True; receiver=False
+PASS Q at the mirror clears local sunlight while preserving the calibrated pose | feet=(365.09943, 299.93384) dock=SunCourt
+ROUND_02_OPTICS_QA PASSED assertions=57 failures=0

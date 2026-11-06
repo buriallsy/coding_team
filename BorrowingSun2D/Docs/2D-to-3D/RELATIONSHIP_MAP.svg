@@ -1,15 +1,15 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1520" height="1060" viewBox="0 0 1520 1060" role="img" aria-labelledby="map-title map-description">
+<svg xmlns="http://www.w3.org/2000/svg" width="1520" height="1350" viewBox="0 0 1520 1350" role="img" aria-labelledby="map-title map-description">
   <title id="map-title">Borrowing Sun / Relationship Map · 借晴对象关系图</title>
-  <desc id="map-description">TowerSlice coordinates the frame and holds TowerMechanism, RouteProgress, TowerRig2D and SlicePlayer. TowerView reads its parent TowerSlice and its rig. TowerRig2D reads the TowerState snapshot. RouteProgress owns route state and requires a north visit. Its protected virtual MeetsEastFinishCondition method defaults to true and can later add an east finish requirement. The physics frame runs input, mechanism tick, geometry synchronization, player step, then route and recovery. Reset reuses the geometry synchronization.</desc>
-  <rect width="1520" height="1060" fill="#F0F6F3"/>
-  <rect x="30" y="26" width="1460" height="1008" rx="22" fill="#FFFFFF" stroke="#CADBD5"/>
+  <desc id="map-description">TowerSlice coordinates the frame, the tower mechanism, route progress, physical geometry, player and its SunCourtOptics2D child. The optics adapter calls the pure Optics2D.Trace solver with finite surfaces and a Godot obstacle query, then exposes a LightPath2D for TowerView to draw. TowerHit reports the first reflection reaching the relay. ReceiverLit reports the second reflection reaching the east receiver. RouteProgress records flag visits separately. The physics frame runs input, mechanism tick, geometry synchronization, player step, optics tick, then route and recovery. Reset resynchronizes the tower and clears optics.</desc>
+  <rect width="1520" height="1350" fill="#F0F6F3"/>
+  <rect x="30" y="26" width="1460" height="1298" rx="22" fill="#FFFFFF" stroke="#CADBD5"/>
   <g font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Noto Sans CJK SC', sans-serif" fill="#17332E">
     <g id="header">
       <text x="70" y="72" fill="#17685E" font-size="17" font-weight="700" letter-spacing="2">BORROWING SUN  /  AP6412  /  GODOT C#</text>
       <text x="68" y="136" font-size="54" font-weight="760">Relationship Map</text>
       <text x="561" y="134" fill="#17685E" font-size="33" font-weight="650">对象关系图</text>
       <rect x="1191" y="64" width="260" height="42" rx="21" fill="#E7F5F0"/>
-      <text x="1321" y="91" text-anchor="middle" fill="#17685E" font-size="16" font-weight="700" letter-spacing="1">ROUND 01 · 2D</text>
+      <text x="1321" y="91" text-anchor="middle" fill="#17685E" font-size="16" font-weight="700" letter-spacing="1">ROUND 02 · 2D</text>
       <path d="M 70 160 H 1450" fill="none" stroke="#D4E2DD"/>
     </g>
 
@@ -17,37 +17,41 @@
       <rect x="70" y="182" width="1380" height="48" rx="8" fill="#F3F8F6" stroke="#D4E2DD"/>
       <text x="87" y="212" fill="#17685E" font-size="15" font-weight="700" letter-spacing="1">SCENE</text>
       <text x="169" y="212" font-size="19" font-weight="700">TowerSlice.tscn</text>
-      <text x="344" y="212" fill="#435D55" font-size="18">原有场景 · 保存塔台、岸口、桥的实体碰撞、角色和旗标</text>
+      <text x="344" y="212" fill="#435D55" font-size="18">保存塔台、桥碰撞与旗标，也挂载光学节点、镜面与接光盘标记</text>
     </g>
 
     <g id="top-relationships">
       <path d="M 416 340 H 503" fill="none" stroke="#654BA4" stroke-width="2.2" stroke-dasharray="7 5"/>
       <path d="M 501 336 L 509 340 L 501 344 Z" fill="#654BA4"/>
+      <path d="M 1010 340 H 1097" fill="none" stroke="#A2650D" stroke-width="2.2"/>
+      <path d="M 1095 336 L 1103 340 L 1095 344 Z" fill="#A2650D"/>
     </g>
     <g id="top-labels" fill="#654BA4" font-size="15" font-weight="700" text-anchor="middle">
       <text x="461" y="325">reads</text>
+      <text x="1058" y="325" fill="#855109">has-a</text>
     </g>
 
     <g id="tower-view">
       <rect x="70" y="257" width="346" height="174" rx="14" fill="#FAF8FE" stroke="#D9D0EB" stroke-width="1.3"/>
       <text x="90" y="287" fill="#654BA4" font-size="14" font-weight="700" letter-spacing="1.2">READ-ONLY VIEW</text>
       <text x="90" y="322" font-size="29" font-weight="730">TowerView</text>
-      <text x="90" y="359" fill="#43534F" font-size="19">从父节点读取画面状态</text>
-      <text x="90" y="389" fill="#43534F" font-size="19">经 slice.Rig 读取实体几何</text>
+      <text x="90" y="359" fill="#43534F" font-size="19">读取塔台、实体几何与路线状态</text>
+      <text x="90" y="389" fill="#43534F" font-size="19">按同一份 LightPath2D 绘制光段</text>
     </g>
     <g id="tower-slice">
       <rect x="510" y="245" width="500" height="204" rx="15" fill="#E5F3EE" stroke="#208175" stroke-width="2"/>
       <text x="535" y="279" fill="#17685E" font-size="15" font-weight="740" letter-spacing="1.2">GODOT FRAME ORCHESTRATION</text>
       <text x="534" y="326" font-size="41" font-weight="760">TowerSlice</text>
-      <text x="535" y="369" fill="#2D5148" font-size="20">读输入与施令范围，协调门槛保护</text>
-      <text x="535" y="403" fill="#2D5148" font-size="20">推进物理帧、路线恢复与反馈</text>
+      <text x="535" y="369" fill="#2D5148" font-size="20">按就近装置分发施令与收令</text>
+      <text x="535" y="403" fill="#2D5148" font-size="20">协调物理帧、光路、路线与恢复</text>
     </g>
-    <g id="extension-note">
-      <rect x="1104" y="257" width="346" height="174" rx="14" fill="#F3F8F6" stroke="#C8DBD3" stroke-width="1.3" stroke-dasharray="6 4"/>
-      <text x="1124" y="287" fill="#17685E" font-size="14" font-weight="700" letter-spacing="1.2">ROUTE EXTENSION</text>
-      <text x="1124" y="322" font-size="25" font-weight="730">东岸完成条件</text>
-      <text x="1124" y="359" fill="#43534F" font-size="19">当前扩展检查默认通过</text>
-      <text x="1124" y="389" fill="#43534F" font-size="19">后续可在此读取光路结果</text>
+    <g id="sun-court-optics">
+      <rect x="1104" y="257" width="346" height="174" rx="14" fill="#F8FCFA" stroke="#C8DBD3" stroke-width="1.3"/>
+      <text x="1124" y="287" fill="#17685E" font-size="14" font-weight="700" letter-spacing="1.2">GODOT CHILD · OPTICS</text>
+      <text x="1124" y="322" font-size="27" font-weight="730">SunCourtOptics2D</text>
+      <text x="1124" y="359" fill="#43534F" font-size="19">持有北镜校准、局部晴和 Path</text>
+      <text x="1124" y="389" fill="#43534F" font-size="19">读取场景标记与塔朝向，查询遮挡</text>
+      <text x="1124" y="414" fill="#17685E" font-size="15">离开北庭后，局部晴继续生效</text>
     </g>
 
     <g id="has-a-links">
@@ -74,12 +78,10 @@
       <rect x="440" y="556" width="111" height="27" rx="13" fill="#FFF1CD"/>
       <text x="495" y="575" text-anchor="middle" fill="#855109" font-size="14" font-weight="750" letter-spacing="1">PURE C#</text>
       <text x="441" y="620" font-size="27" font-weight="750">RouteProgress</text>
-      <text x="441" y="650" fill="#43534F" font-size="19">持有到访与完成状态</text>
-      <text x="441" y="675" fill="#43534F" font-size="19">北庭到访是固定前置</text>
-      <path d="M 441 688 H 727" stroke="#E7D6AA"/>
-      <text x="441" y="709" fill="#855109" font-size="16" font-weight="650">Visit(Port) · Reset()</text>
-      <text x="441" y="730" fill="#855109" font-size="14" font-weight="650">protected virtual bool</text>
-      <text x="441" y="751" fill="#855109" font-size="17" font-weight="650">MeetsEastFinishCondition()</text>
+      <text x="441" y="658" fill="#43534F" font-size="19">先记北庭到访，再记东旗完成</text>
+      <text x="441" y="688" fill="#43534F" font-size="19">旗标进度与实时接光分别保存</text>
+      <path d="M 441 708 H 727" stroke="#E7D6AA"/>
+      <text x="441" y="740" fill="#855109" font-size="18" font-weight="650">Visit(Port) · Reset()</text>
     </g>
     <g id="tower-rig">
       <rect x="774" y="537" width="324" height="228" rx="14" fill="#F8FCFA" stroke="#C8DBD3" stroke-width="1.3"/>
@@ -111,28 +113,68 @@
       <text x="446" y="804" fill="#654BA4">uses / reads · 调用或读取</text>
     </g>
 
-    <g id="physics-frame">
+    <g id="optics-data-flow">
+      <rect x="70" y="833" width="1380" height="272" rx="14" fill="#F3F8F6" stroke="#D4E2DD"/>
+      <text x="89" y="865" fill="#17685E" font-size="16" font-weight="740" letter-spacing="1">OPTICS DATA FLOW</text>
+      <text x="290" y="865" fill="#435D55" font-size="17">光学数据流</text>
+      <path d="M 1058 859 H 1097" fill="none" stroke="#654BA4" stroke-width="2" stroke-dasharray="6 4"/>
+      <path d="M 1095 855 L 1103 859 L 1095 863 Z" fill="#654BA4"/>
+      <text x="1115" y="865" fill="#654BA4" font-size="15">SunCourtOptics2D 调用纯求解器</text>
+
+      <g fill="#FFFFFF" stroke="#C8DBD3">
+        <rect x="89" y="881" width="410" height="117" rx="8"/>
+        <rect x="555" y="881" width="410" height="117" rx="8"/>
+        <rect x="1021" y="881" width="408" height="117" rx="8"/>
+      </g>
+      <path d="M 505 939 H 544 M 971 939 H 1010" fill="none" stroke="#137C72" stroke-width="1.8"/>
+      <path d="M 541 935 L 549 939 L 541 943 Z M 1007 935 L 1015 939 L 1007 943 Z" fill="#137C72"/>
+      <g font-weight="700" font-size="20">
+        <text x="107" y="912">场景输入</text>
+        <text x="573" y="912">Optics2D.Trace</text>
+        <text x="1039" y="912">LightPath2D</text>
+      </g>
+      <g fill="#43534F" font-size="17">
+        <text x="107" y="945">太阳方向、两面镜与接光盘标记</text>
+        <text x="107" y="973">按塔台 Heading 更新塔镜法线</text>
+        <text x="573" y="945">纯 C# 求最近有限镜面、正面与反射</text>
+        <text x="573" y="973">Godot Physics2D 回调查询遮挡</text>
+        <text x="1039" y="945">TowerHit · 第一段反射到塔镜</text>
+        <text x="1039" y="973">ReceiverLit · 第二段反射到东盘</text>
+      </g>
+
+      <text x="89" y="1028" fill="#17685E" font-size="17" font-weight="750">光线路径</text>
+      <text x="193" y="1028" fill="#234E45" font-size="19" font-weight="650">太阳 → 北庭采日镜 → 中央塔镜 → 东岸接光盘</text>
+      <text x="829" y="1028" fill="#435D55" font-size="16">北庭 · 2/E 校准 · 2/Shift+E 回待机位 · 3/E 施晴 · Q 收令</text>
+      <rect x="89" y="1047" width="536" height="38" rx="7" fill="#FFF3D9"/>
+      <text x="105" y="1072" fill="#855109" font-size="17">北向 · 塔镜反射打到仅拦光的挡板</text>
+      <rect x="641" y="1047" width="788" height="38" rx="7" fill="#E4F3EE"/>
+      <text x="657" y="1072" fill="#17685E" font-size="17">东向 · 光路畅通时，塔镜反射命中接光盘正面</text>
+    </g>
+
+    <g id="physics-frame" transform="translate(0 290)">
       <rect x="70" y="833" width="1380" height="161" rx="14" fill="#F3F8F6" stroke="#D4E2DD"/>
       <text x="89" y="865" fill="#17685E" font-size="16" font-weight="740" letter-spacing="1">PHYSICS FRAME</text>
       <text x="250" y="865" fill="#435D55" font-size="17">物理帧顺序</text>
       <g fill="#FFFFFF" stroke="#C8DBD3">
-        <rect x="89" y="882" width="221" height="45" rx="7"/>
-        <rect x="354" y="882" width="221" height="45" rx="7"/>
-        <rect x="619" y="882" width="280" height="45" rx="7"/>
-        <rect x="943" y="882" width="221" height="45" rx="7"/>
-        <rect x="1208" y="882" width="221" height="45" rx="7"/>
+        <rect x="89" y="882" width="189" height="45" rx="7"/>
+        <rect x="317" y="882" width="189" height="45" rx="7"/>
+        <rect x="545" y="882" width="204" height="45" rx="7"/>
+        <rect x="788" y="882" width="189" height="45" rx="7"/>
+        <rect x="1016" y="882" width="189" height="45" rx="7"/>
+        <rect x="1244" y="882" width="185" height="45" rx="7"/>
       </g>
-      <path d="M 315 905 H 343 M 580 905 H 608 M 904 905 H 932 M 1169 905 H 1197" fill="none" stroke="#137C72" stroke-width="1.8"/>
-      <path d="M 340 901 L 348 905 L 340 909 Z M 605 901 L 613 905 L 605 909 Z M 929 901 L 937 905 L 929 909 Z M 1194 901 L 1202 905 L 1194 909 Z" fill="#137C72"/>
+      <path d="M 283 905 H 306 M 511 905 H 534 M 754 905 H 777 M 982 905 H 1005 M 1210 905 H 1233" fill="none" stroke="#137C72" stroke-width="1.8"/>
+      <path d="M 303 901 L 311 905 L 303 909 Z M 531 901 L 539 905 L 531 909 Z M 774 901 L 782 905 L 774 909 Z M 1002 901 L 1010 905 L 1002 909 Z M 1230 901 L 1238 905 L 1230 909 Z" fill="#137C72"/>
       <g fill="#234E45" font-size="18" font-weight="650" text-anchor="middle">
-        <text x="199" y="911">输入 · Input</text>
-        <text x="464" y="911">mechanism.Tick</text>
-        <text x="759" y="911">rig.Synchronize</text>
-        <text x="1053" y="911">player.Step</text>
-        <text x="1318" y="911">路线与恢复</text>
+        <text x="184" y="911">输入 · Input</text>
+        <text x="411" y="911">mechanism.Tick</text>
+        <text x="647" y="911">Rig.Synchronize</text>
+        <text x="882" y="911">Player.Step</text>
+        <text x="1110" y="911">Optics.Tick</text>
+        <text x="1336" y="911">路线与恢复</text>
       </g>
       <text x="89" y="964" fill="#17685E" font-size="17" font-weight="750">R · RESET</text>
-      <text x="192" y="964" fill="#435D55" font-size="17">复位与正常升降共用 rig.Synchronize，随后让玩家回到入口。</text>
+      <text x="192" y="964" fill="#435D55" font-size="17">复位共用 Rig.Synchronize，由 Optics.Reset 清除局部天气、镜向与光路，再把玩家送回入口。</text>
     </g>
   </g>
 </svg>

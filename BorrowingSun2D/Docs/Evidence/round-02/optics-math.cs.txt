@@ -1,0 +1,42 @@
+using System;
+using System.Numerics;
+using BorrowingSun2D.Core;
+
+Vector2 sun = new(0, -10);
+Vector2 beam = Vector2.UnitY;
+OpticalSurface2D collector = new(Vector2.Zero, new Vector2(1, -1), 2);
+OpticalSurface2D relay = new(new Vector2(10, 0), new Vector2(-1, 1), 2);
+OpticalSurface2D plate = new(new Vector2(10, 10), -Vector2.UnitY, 1);
+
+var aligned = Optics2D.Trace(sun, beam, collector, relay, plate, (_, _) => null);
+Check(aligned.Incoming?.Hit == LightHit2D.Collector && aligned.TowerHit && aligned.ReceiverLit, "two reflections hit all three finite surfaces");
+Check(Vector2.Distance(aligned.FirstReflection!.Value.To, relay.Center) < 0.001f
+    && Vector2.Distance(aligned.SecondReflection!.Value.To, plate.Center) < 0.001f, "the reflection endpoints are physical intersections");
+
+var north = Optics2D.Trace(sun, beam, collector, relay with { Normal = new Vector2(-1, -1) }, plate, (_, _) => null);
+Check(north.TowerHit && !north.ReceiverLit && north.SecondReflection is { Hit: LightHit2D.None }, "another mirror normal still hits the tower and reflects away from the receiver");
+
+var parked = Optics2D.Trace(sun, beam, collector with { Normal = -Vector2.UnitY }, relay, plate, (_, _) => null);
+Check(parked.Incoming?.Hit == LightHit2D.Collector && !parked.TowerHit, "a wrong collector normal reflects away from the relay");
+
+var offEdge = Optics2D.Trace(sun, beam, collector, relay, plate with { Center = new Vector2(12, 10) }, (_, _) => null);
+Check(offEdge.TowerHit && !offEdge.ReceiverLit, "crossing the receiver's infinite line outside the finite aperture stays dark");
+
+var back = Optics2D.Trace(sun, beam, collector, relay, plate with { Normal = Vector2.UnitY }, (_, _) => null);
+Check(back.SecondReflection?.Hit == LightHit2D.Obstacle && !back.ReceiverLit, "hitting the back of the receiver stays dark");
+
+var blocked = Optics2D.Trace(sun, beam, collector, relay, plate,
+    (from, _) => from.X > 9.9f ? new Vector2(10, 5) : null);
+Check(blocked.TowerHit && !blocked.ReceiverLit && blocked.SecondReflection?.Hit == LightHit2D.Obstacle
+    && blocked.SecondReflection?.To == new Vector2(10, 5), "nearest geometry truncates the second reflection");
+
+var blockerBeforeCollector = Optics2D.Trace(sun, beam, collector, relay, plate,
+    (from, _) => from.Y < -5 ? new Vector2(0, -5) : null);
+Check(blockerBeforeCollector.Incoming?.Hit == LightHit2D.Obstacle && blockerBeforeCollector.FirstReflection is null,
+    "a blocker before the first mirror ends the entire path");
+
+static void Check(bool condition, string name)
+{
+    if (!condition) throw new InvalidOperationException(name);
+    Console.WriteLine($"PASS {name}");
+}

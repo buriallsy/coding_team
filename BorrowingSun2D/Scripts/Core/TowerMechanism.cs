@@ -2,10 +2,10 @@ using System;
 
 namespace BorrowingSun2D.Core;
 
-public enum Weather { None, Rain, Wind }
+public enum Weather { None, Rain, Wind, Sunny }
 public enum Port { None, Entry, SunCourt, East }
 public enum TurnDirection { Clockwise, Counterclockwise }
-public enum MechanismResult { Applied, DoorwayOccupied, Moving, NeedHigh, NeedEntryHeading, Empty, Full, TurnLimit }
+public enum MechanismResult { Applied, DoorwayOccupied, Moving, NeedHigh, NeedEntryHeading, Empty, Full, TurnLimit, UnsupportedWeather }
 public readonly record struct TowerState(float Water, float Height, float Heading, bool Latched,
     bool Draining, bool IsLifting, bool IsTurning, Weather ActiveWeather, Port DockedPort);
 
@@ -62,6 +62,7 @@ public sealed class TowerMechanism
 
     public MechanismResult Cast(Weather weather, bool doorwayOccupied, TurnDirection direction)
     {
+        if (weather is not (Weather.Rain or Weather.Wind)) return MechanismResult.UnsupportedWeather;
         if (doorwayOccupied) return MechanismResult.DoorwayOccupied;
 
         if (weather == Weather.Rain)
