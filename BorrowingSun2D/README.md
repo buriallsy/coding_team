@@ -23,11 +23,13 @@
 | 位置 | 职责 |
 | --- | --- |
 | `Scripts/Core/TowerMechanism.cs` | 纯 C# 的蓄雨、升降、锁扣、朝向、停靠和天气规则。`TowerState` 是只读快照。 |
-| `Scripts/TowerSlice.cs` | 组装关卡。读输入，调用规则，移动平台并切换桥的实体碰撞，处理抵达与重置。 |
+| `Scripts/Core/RouteProgress.cs` | 纯 C# 的北庭到访与东岸完成状态，提供东岸附加条件扩展点。 |
+| `Scripts/TowerSlice.cs` | 组装关卡，读输入并协调规则、场景同步、玩家、恢复与重置。 |
+| `Scripts/TowerRig2D.cs` | 绑定场景节点、提供几何查询，按塔机状态同步升降和实体桥碰撞。 |
 | `Scripts/SlicePlayer.cs` | `CharacterBody2D` 行走与落地，随活动平台移动。 |
 | `Scripts/TowerView.cs` | 读取关卡状态，画水箱、桥舌、朝向和操作提示。 |
 | `Scenes/TowerSlice.tscn` | 保存岸、塔台、接桥、设备、角色与终点的位置和碰撞。 |
 
 [项目构思](Docs/2D-to-3D/DESIGN.md) · [制作计划](Docs/2D-to-3D/PRODUCTION_PLAN.md) · [项目规范](Docs/2D-to-3D/PROJECT_CONVENTIONS.md) · [当前版本](Docs/2D-to-3D/CURRENT_STATUS.md) · [第 01 轮设计与复测](Docs/2D-to-3D/ROUND_01.md)
 
-[制作记录](Docs/ITERATIONS.md) · [第 00 轮测试归档](Docs/TESTING.md) · [第 00 轮 Figma 过程画板](https://www.figma.com/design/UINwS4sIWy2BFhFRFcJ0pB/ntu?node-id=471-55)
+[SOLID 整理记录](Docs/2D-to-3D/ARCHITECTURE_REFACTOR.md) · [对象关系图](Docs/2D-to-3D/RELATIONSHIP_MAP.svg) · [制作记录](Docs/ITERATIONS.md) · [第 00 轮测试归档](Docs/TESTING.md) · [第 00 轮 Figma 过程画板](https://www.figma.com/design/UINwS4sIWy2BFhFRFcJ0pB/ntu?node-id=471-55)

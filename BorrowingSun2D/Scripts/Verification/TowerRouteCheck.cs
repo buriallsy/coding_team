@@ -15,6 +15,7 @@ internal sealed class TowerRouteCheck(TowerSlice scene)
         try
         {
             GD.Print("SCOPE: Round 01, default entrance, production Input Map and Physics2D, no player placement or state injection");
+            CheckFinishExtension();
             await Frames(5);
             RequireEntrance("initial state");
             await Pulse("cast_weather");
@@ -50,7 +51,7 @@ internal sealed class TowerRouteCheck(TowerSlice scene)
             await FillTower();
             await DockNorth();
             await DockEast();
-            await Walk("walk_right", () => scene.Player.Feet.X >= scene.Goal.X, "walk to east without visiting north", keepSupport: true);
+            await Walk("walk_right", () => scene.Player.Feet.X >= scene.Rig.Goal.X, "walk to east without visiting north", keepSupport: true);
             Require(!scene.ReachedSunCourt && !scene.Completed, "the east flag alone does not complete the route");
 
             await ResetToEntrance("after the out-of-order visit");
@@ -67,10 +68,35 @@ internal sealed class TowerRouteCheck(TowerSlice scene)
         catch (Exception failure)
         {
             GD.PushError($"TOWER_ROUTE FAILED: {failure.Message}; state={scene.State}, feet={scene.Player.Feet}, "
-                + $"deck={scene.Deck.Position}, floor={scene.Player.IsOnFloor()}, left={scene.BridgeCollisionEnabled}, "
-                + $"east={scene.EastBridgeCollisionEnabled}, northVisited={scene.ReachedSunCourt}, lastResult={scene.LastResult}");
+                + $"deck={scene.Rig.Deck.Position}, floor={scene.Player.IsOnFloor()}, left={scene.Rig.BridgeCollisionEnabled}, "
+                + $"east={scene.Rig.EastBridgeCollisionEnabled}, northVisited={scene.ReachedSunCourt}, lastResult={scene.LastResult}");
             scene.GetTree().Quit(1);
         }
+    }
+
+    private static void CheckFinishExtension()
+    {
+        var route = new GatedRouteProgress { EastFinishAllowed = true };
+        Require(!route.Visit(Port.East) && !route.Completed,
+            "route extension: an open gate still requires the north visit");
+        Require(route.Visit(Port.SunCourt) && route.ReachedSunCourt && !route.Completed,
+            "route extension: visiting north records the milestone");
+        route.EastFinishAllowed = false;
+        Require(!route.Visit(Port.East) && !route.Completed && route.ReachedSunCourt,
+            "route extension: a closed gate preserves the milestone and blocks east completion");
+        route.EastFinishAllowed = true;
+        Require(route.Visit(Port.East) && route.Completed && !route.Visit(Port.East),
+            "route extension: reopening the gate permits completion once");
+        route.Reset();
+        Require(!route.Completed && !route.ReachedSunCourt && !route.Visit(Port.East),
+            "route extension: reset restores the north prerequisite");
+    }
+
+    private sealed class GatedRouteProgress : RouteProgress
+    {
+        internal bool EastFinishAllowed { get; set; }
+
+        protected override bool MeetsEastFinishCondition() => EastFinishAllowed;
     }
 
     private async Task CheckRainControls()
@@ -141,14 +167,14 @@ internal sealed class TowerRouteCheck(TowerSlice scene)
             await Pulse("cast_weather");
         }
 
-        await Until(() => scene.State.DockedPort == Port.SunCourt && scene.BridgeCollisionEnabled, 150,
+        await Until(() => scene.State.DockedPort == Port.SunCourt && scene.Rig.BridgeCollisionEnabled, 150,
             "north wind reaches its first stop");
         RequireBridges(Port.SunCourt, "north dock");
     }
 
     private async Task VisitNorthAndEast(bool checkDoorways = false)
     {
-        await Walk("walk_left", () => scene.Player.Feet.X <= scene.SunCourtMarker.X,
+        await Walk("walk_left", () => scene.Player.Feet.X <= scene.Rig.SunCourtMarker.X,
             "walk across the supported north bridge to the north flag", keepSupport: true);
         Require(scene.ReachedSunCourt && !scene.Completed, "the north flag records a milestone without ending the route");
 
@@ -167,7 +193,7 @@ internal sealed class TowerRouteCheck(TowerSlice scene)
         Require(scene.ReachedSunCourt && !scene.Completed, "the north milestone survives walking back to the station");
         await DockEast();
         await Walk("walk_right", () => scene.Completed, "walk across the supported east bridge to the east flag", keepSupport: true);
-        Require(scene.Player.Feet.X >= scene.Goal.X && scene.Player.IsOnFloor() && scene.ReachedSunCourt,
+        Require(scene.Player.Feet.X >= scene.Rig.Goal.X && scene.Player.IsOnFloor() && scene.ReachedSunCourt,
             "completion requires standing on the actual east landing after visiting north");
     }
 
@@ -177,7 +203,7 @@ internal sealed class TowerRouteCheck(TowerSlice scene)
         Require(scene.State.IsTurning && scene.State.Latched && scene.State.Water == TowerMechanism.Capacity,
             "the next wind cast turns toward east without spending the stored water");
         RequireBridges(Port.None, "turning from north to east");
-        await Until(() => scene.State.DockedPort == Port.East && scene.EastBridgeCollisionEnabled, 150,
+        await Until(() => scene.State.DockedPort == Port.East && scene.Rig.EastBridgeCollisionEnabled, 150,
             "east wind reaches the next stop");
         RequireBridges(Port.East, "east dock");
     }
@@ -198,7 +224,7 @@ internal sealed class TowerRouteCheck(TowerSlice scene)
         await Pulse("cast_weather_reverse");
         Require(scene.State.IsTurning, "reverse wind starts the return from east to north");
         RequireBridges(Port.None, "turning from east to north");
-        await Until(() => scene.State.DockedPort == Port.SunCourt && scene.BridgeCollisionEnabled, 150,
+        await Until(() => scene.State.DockedPort == Port.SunCourt && scene.Rig.BridgeCollisionEnabled, 150,
             "reverse wind docks north again");
         RequireBridges(Port.SunCourt, "north dock after reverse wind");
     }
@@ -217,7 +243,7 @@ internal sealed class TowerRouteCheck(TowerSlice scene)
             && !scene.ReachedSunCourt && scene.Recoveries == 0 && scene.Player.IsOnFloor() && scene.Player.Feet.X < 200f,
             $"{context}: restore the entrance, zero mechanism state and clear both flags");
         RequireBridges(Port.Entry, context);
-        Require(!HasBridgeCollision(scene.BridgeExtension.GetCenter().X, scene.CourtFloor.Position.Y),
+        Require(!HasBridgeCollision(scene.Rig.BridgeExtension.GetCenter().X, scene.Rig.CourtFloor.Position.Y),
             $"{context}: the high left bridge has no stale collision");
     }
 
@@ -225,13 +251,13 @@ internal sealed class TowerRouteCheck(TowerSlice scene)
     {
         bool left = port is Port.Entry or Port.SunCourt;
         bool east = port == Port.East;
-        float deckY = scene.Deck.Position.Y;
-        float leftX = scene.BridgeExtension.GetCenter().X;
-        float eastX = scene.EastBridgeExtension.GetCenter().X;
+        float deckY = scene.Rig.Deck.Position.Y;
+        float leftX = scene.Rig.BridgeExtension.GetCenter().X;
+        float eastX = scene.Rig.EastBridgeExtension.GetCenter().X;
         bool hitLeft = HasBridgeCollision(leftX, deckY);
         bool hitEast = HasBridgeCollision(eastX, deckY);
-        Require(scene.State.DockedPort == port && scene.BridgeCollisionEnabled == left
-            && scene.EastBridgeCollisionEnabled == east && hitLeft == left && hitEast == east,
+        Require(scene.State.DockedPort == port && scene.Rig.BridgeCollisionEnabled == left
+            && scene.Rig.EastBridgeCollisionEnabled == east && hitLeft == left && hitEast == east,
             $"{context}: physical bridge probes at Y={deckY:0.00}, left={hitLeft}, east={hitEast}, dock={scene.State.DockedPort}");
     }
 
@@ -242,7 +268,7 @@ internal sealed class TowerRouteCheck(TowerSlice scene)
     }
 
     private bool IsSupportedByDeck() => scene.Player.IsOnFloor()
-        && Mathf.Abs(scene.Player.Feet.Y - scene.Deck.Position.Y) < 3f;
+        && Mathf.Abs(scene.Player.Feet.Y - scene.Rig.Deck.Position.Y) < 3f;
 
     private async Task WalkToStation()
     {

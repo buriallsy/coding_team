@@ -2,6 +2,8 @@
 
 当前第 01 轮覆盖「西岸上塔 → 雨升 → 北庭 → 回塔 → 东岸」。打开 [project.godot](../project.godot) 或读 [运行说明](../README.md)。课程报告可从 [第 01 轮记录](2D-to-3D/ROUND_01.md) 和 [迭代记录](ITERATIONS.md) 引用本轮用例与日志。下一轮制作实际反射光路，正式 2D 基线在整条主线完成后冻结。
 
+第 01 轮续把桥与升降同步提取到 `TowerRig2D`，旗标顺序提取到 `RouteProgress`。`TowerSlice` 是后续接入采光交互的协调入口。 [SOLID 整理与回归](2D-to-3D/ARCHITECTURE_REFACTOR.md) · [对象关系图](2D-to-3D/RELATIONSHIP_MAP.svg)
+
 ## 第 00 轮归档
 
 - **首轮实现**。2D 行走与活动平台使用真实碰撞。雨让 6 单位储水抬高塔台 6 m，机械锁保高。风转到北侧停点后桥舌才承托玩家。当时以北庭旗标为终点。

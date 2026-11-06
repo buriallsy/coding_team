@@ -1,0 +1,138 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1520" height="1060" viewBox="0 0 1520 1060" role="img" aria-labelledby="map-title map-description">
+  <title id="map-title">Borrowing Sun / Relationship Map · 借晴对象关系图</title>
+  <desc id="map-description">TowerSlice coordinates the frame and holds TowerMechanism, RouteProgress, TowerRig2D and SlicePlayer. TowerView reads its parent TowerSlice and its rig. TowerRig2D reads the TowerState snapshot. RouteProgress owns route state and requires a north visit. Its protected virtual MeetsEastFinishCondition method defaults to true and can later add an east finish requirement. The physics frame runs input, mechanism tick, geometry synchronization, player step, then route and recovery. Reset reuses the geometry synchronization.</desc>
+  <rect width="1520" height="1060" fill="#F0F6F3"/>
+  <rect x="30" y="26" width="1460" height="1008" rx="22" fill="#FFFFFF" stroke="#CADBD5"/>
+  <g font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Noto Sans CJK SC', sans-serif" fill="#17332E">
+    <g id="header">
+      <text x="70" y="72" fill="#17685E" font-size="17" font-weight="700" letter-spacing="2">BORROWING SUN  /  AP6412  /  GODOT C#</text>
+      <text x="68" y="136" font-size="54" font-weight="760">Relationship Map</text>
+      <text x="561" y="134" fill="#17685E" font-size="33" font-weight="650">对象关系图</text>
+      <rect x="1191" y="64" width="260" height="42" rx="21" fill="#E7F5F0"/>
+      <text x="1321" y="91" text-anchor="middle" fill="#17685E" font-size="16" font-weight="700" letter-spacing="1">ROUND 01 · 2D</text>
+      <path d="M 70 160 H 1450" fill="none" stroke="#D4E2DD"/>
+    </g>
+
+    <g id="scene-source">
+      <rect x="70" y="182" width="1380" height="48" rx="8" fill="#F3F8F6" stroke="#D4E2DD"/>
+      <text x="87" y="212" fill="#17685E" font-size="15" font-weight="700" letter-spacing="1">SCENE</text>
+      <text x="169" y="212" font-size="19" font-weight="700">TowerSlice.tscn</text>
+      <text x="344" y="212" fill="#435D55" font-size="18">原有场景 · 保存塔台、岸口、桥的实体碰撞、角色和旗标</text>
+    </g>
+
+    <g id="top-relationships">
+      <path d="M 416 340 H 503" fill="none" stroke="#654BA4" stroke-width="2.2" stroke-dasharray="7 5"/>
+      <path d="M 501 336 L 509 340 L 501 344 Z" fill="#654BA4"/>
+    </g>
+    <g id="top-labels" fill="#654BA4" font-size="15" font-weight="700" text-anchor="middle">
+      <text x="461" y="325">reads</text>
+    </g>
+
+    <g id="tower-view">
+      <rect x="70" y="257" width="346" height="174" rx="14" fill="#FAF8FE" stroke="#D9D0EB" stroke-width="1.3"/>
+      <text x="90" y="287" fill="#654BA4" font-size="14" font-weight="700" letter-spacing="1.2">READ-ONLY VIEW</text>
+      <text x="90" y="322" font-size="29" font-weight="730">TowerView</text>
+      <text x="90" y="359" fill="#43534F" font-size="19">从父节点读取画面状态</text>
+      <text x="90" y="389" fill="#43534F" font-size="19">经 slice.Rig 读取实体几何</text>
+    </g>
+    <g id="tower-slice">
+      <rect x="510" y="245" width="500" height="204" rx="15" fill="#E5F3EE" stroke="#208175" stroke-width="2"/>
+      <text x="535" y="279" fill="#17685E" font-size="15" font-weight="740" letter-spacing="1.2">GODOT FRAME ORCHESTRATION</text>
+      <text x="534" y="326" font-size="41" font-weight="760">TowerSlice</text>
+      <text x="535" y="369" fill="#2D5148" font-size="20">读输入与施令范围，协调门槛保护</text>
+      <text x="535" y="403" fill="#2D5148" font-size="20">推进物理帧、路线恢复与反馈</text>
+    </g>
+    <g id="extension-note">
+      <rect x="1104" y="257" width="346" height="174" rx="14" fill="#F3F8F6" stroke="#C8DBD3" stroke-width="1.3" stroke-dasharray="6 4"/>
+      <text x="1124" y="287" fill="#17685E" font-size="14" font-weight="700" letter-spacing="1.2">ROUTE EXTENSION</text>
+      <text x="1124" y="322" font-size="25" font-weight="730">东岸完成条件</text>
+      <text x="1124" y="359" fill="#43534F" font-size="19">当前扩展检查默认通过</text>
+      <text x="1124" y="389" fill="#43534F" font-size="19">后续可在此读取光路结果</text>
+    </g>
+
+    <g id="has-a-links">
+      <path d="M 760 449 V 491 M 232 491 H 1288 M 232 491 V 532 M 584 491 V 532 M 936 491 V 532 M 1288 491 V 532" fill="none" stroke="#A2650D" stroke-width="2.2" stroke-linejoin="round"/>
+      <path d="M 228 528 L 236 528 L 232 536 Z M 580 528 L 588 528 L 584 536 Z M 932 528 L 940 528 L 936 536 Z M 1284 528 L 1292 528 L 1288 536 Z" fill="#A2650D"/>
+    </g>
+    <g id="has-a-label">
+      <rect x="781" y="458" width="147" height="28" rx="14" fill="#FFF4DA"/>
+      <text x="855" y="478" text-anchor="middle" fill="#855109" font-size="15" font-weight="700">has-a · 持有引用</text>
+    </g>
+
+    <g id="tower-mechanism">
+      <rect x="70" y="537" width="324" height="228" rx="14" fill="#FFFDF8" stroke="#E7D6AA" stroke-width="1.3"/>
+      <rect x="88" y="556" width="111" height="27" rx="13" fill="#FFF1CD"/>
+      <text x="143" y="575" text-anchor="middle" fill="#855109" font-size="14" font-weight="750" letter-spacing="1">PURE C#</text>
+      <text x="89" y="620" font-size="27" font-weight="750">TowerMechanism</text>
+      <text x="89" y="658" fill="#43534F" font-size="19">持有水量、台高和机械锁</text>
+      <text x="89" y="688" fill="#43534F" font-size="19">计算朝向、运动与停靠</text>
+      <path d="M 89 708 H 375" stroke="#E7D6AA"/>
+      <text x="89" y="740" fill="#855109" font-size="18" font-weight="650">TowerState · 只读快照</text>
+    </g>
+    <g id="route-progress">
+      <rect x="422" y="537" width="324" height="228" rx="14" fill="#FFFDF8" stroke="#E7D6AA" stroke-width="1.3"/>
+      <rect x="440" y="556" width="111" height="27" rx="13" fill="#FFF1CD"/>
+      <text x="495" y="575" text-anchor="middle" fill="#855109" font-size="14" font-weight="750" letter-spacing="1">PURE C#</text>
+      <text x="441" y="620" font-size="27" font-weight="750">RouteProgress</text>
+      <text x="441" y="650" fill="#43534F" font-size="19">持有到访与完成状态</text>
+      <text x="441" y="675" fill="#43534F" font-size="19">北庭到访是固定前置</text>
+      <path d="M 441 688 H 727" stroke="#E7D6AA"/>
+      <text x="441" y="709" fill="#855109" font-size="16" font-weight="650">Visit(Port) · Reset()</text>
+      <text x="441" y="730" fill="#855109" font-size="14" font-weight="650">protected virtual bool</text>
+      <text x="441" y="751" fill="#855109" font-size="17" font-weight="650">MeetsEastFinishCondition()</text>
+    </g>
+    <g id="tower-rig">
+      <rect x="774" y="537" width="324" height="228" rx="14" fill="#F8FCFA" stroke="#C8DBD3" stroke-width="1.3"/>
+      <rect x="792" y="556" width="160" height="27" rx="13" fill="#E7F5F0"/>
+      <text x="872" y="575" text-anchor="middle" fill="#17685E" font-size="14" font-weight="750" letter-spacing="1">GODOT ADAPTER</text>
+      <text x="793" y="620" font-size="27" font-weight="750">TowerRig2D</text>
+      <text x="793" y="658" fill="#43534F" font-size="19">绑定节点，查询实体几何</text>
+      <text x="793" y="688" fill="#43534F" font-size="19">按快照更新升降台与桥碰撞</text>
+      <path d="M 793 708 H 1079" stroke="#C8DBD3"/>
+      <text x="793" y="740" fill="#17685E" font-size="18" font-weight="650">Synchronize(TowerState)</text>
+    </g>
+    <g id="slice-player">
+      <rect x="1126" y="537" width="324" height="228" rx="14" fill="#F8FCFA" stroke="#C8DBD3" stroke-width="1.3"/>
+      <rect x="1144" y="556" width="167" height="27" rx="13" fill="#E7F5F0"/>
+      <text x="1227" y="575" text-anchor="middle" fill="#17685E" font-size="14" font-weight="750" letter-spacing="1">GODOT CHARACTER</text>
+      <text x="1145" y="620" font-size="27" font-weight="750">SlicePlayer</text>
+      <text x="1145" y="658" fill="#43534F" font-size="19">处理行走、落地和随台移动</text>
+      <text x="1145" y="688" fill="#43534F" font-size="19">使用传入的移动轴</text>
+      <path d="M 1145 708 H 1431" stroke="#C8DBD3"/>
+      <text x="1145" y="740" fill="#17685E" font-size="18" font-weight="650">Step(float axis, float delta)</text>
+    </g>
+
+    <g id="legend" font-size="16">
+      <path d="M 70 798 H 106" fill="none" stroke="#A2650D" stroke-width="2.2"/>
+      <path d="M 104 794 L 112 798 L 104 802 Z" fill="#A2650D"/>
+      <text x="124" y="804" fill="#855109">has-a · 持有对象或场景引用</text>
+      <path d="M 392 798 H 428" fill="none" stroke="#654BA4" stroke-width="2.2" stroke-dasharray="7 5"/>
+      <path d="M 426 794 L 434 798 L 426 802 Z" fill="#654BA4"/>
+      <text x="446" y="804" fill="#654BA4">uses / reads · 调用或读取</text>
+    </g>
+
+    <g id="physics-frame">
+      <rect x="70" y="833" width="1380" height="161" rx="14" fill="#F3F8F6" stroke="#D4E2DD"/>
+      <text x="89" y="865" fill="#17685E" font-size="16" font-weight="740" letter-spacing="1">PHYSICS FRAME</text>
+      <text x="250" y="865" fill="#435D55" font-size="17">物理帧顺序</text>
+      <g fill="#FFFFFF" stroke="#C8DBD3">
+        <rect x="89" y="882" width="221" height="45" rx="7"/>
+        <rect x="354" y="882" width="221" height="45" rx="7"/>
+        <rect x="619" y="882" width="280" height="45" rx="7"/>
+        <rect x="943" y="882" width="221" height="45" rx="7"/>
+        <rect x="1208" y="882" width="221" height="45" rx="7"/>
+      </g>
+      <path d="M 315 905 H 343 M 580 905 H 608 M 904 905 H 932 M 1169 905 H 1197" fill="none" stroke="#137C72" stroke-width="1.8"/>
+      <path d="M 340 901 L 348 905 L 340 909 Z M 605 901 L 613 905 L 605 909 Z M 929 901 L 937 905 L 929 909 Z M 1194 901 L 1202 905 L 1194 909 Z" fill="#137C72"/>
+      <g fill="#234E45" font-size="18" font-weight="650" text-anchor="middle">
+        <text x="199" y="911">输入 · Input</text>
+        <text x="464" y="911">mechanism.Tick</text>
+        <text x="759" y="911">rig.Synchronize</text>
+        <text x="1053" y="911">player.Step</text>
+        <text x="1318" y="911">路线与恢复</text>
+      </g>
+      <text x="89" y="964" fill="#17685E" font-size="17" font-weight="750">R · RESET</text>
+      <text x="192" y="964" fill="#435D55" font-size="17">复位与正常升降共用 rig.Synchronize，随后让玩家回到入口。</text>
+    </g>
+  </g>
+</svg>

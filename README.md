@@ -14,13 +14,13 @@ Borrowing Sun is a puzzle game about using weather to change how a mountain towe
 
 ## Verification
 
-On macOS arm64, the fresh project built with zero warnings and zero errors. The built-in route passed 107 checks. The independent keyboard run passed 71 checks, including two complete trips, walking across the low bridge again after `R`, and returning the tower from the east dock to the north dock. The windowed run passed the same checks plus two screenshot captures. [Reproduction steps and logs](BorrowingSun2D/Docs/2D-to-3D/ROUND_01.md)
+On macOS arm64, the refactored project built with zero warnings and zero errors. The built-in run passed the original 107 route checks plus five checks for the optional east-shore finish condition. The independent keyboard run passed all 71 checks again, including two complete trips and crossing the low bridge again after `R`. The windowed run passed 73 checks and reproduced both baseline screenshots byte for byte. [Current regression results](BorrowingSun2D/Docs/2D-to-3D/ARCHITECTURE_REFACTOR.md) · [Reproduction steps](BorrowingSun2D/Docs/2D-to-3D/ROUND_01.md#复跑)
 
 ![Round 01 in Godot. The player has reached the east flag, the east bridge is connected, and the left bridge has retracted.](BorrowingSun2D/Docs/Evidence/round-01/east-shore.png)
 
 ## Design and development
 
-The tower's water, lift, lock and docking rules live in the pure C# `TowerMechanism`. Godot handles character movement, collision and the scene presentation. The full 2D game will add the two-mirror light puzzle and a cargo delivery powered by the water collected for the lift. Once the complete 2D game is frozen as `2d-baseline`, Route B moves to the matching 3D version. The earlier Unity L5 prototype is the design reference.
+The tower's water, lift, lock and docking rules live in the pure C# `TowerMechanism`. `RouteProgress` tracks the order of shore visits, while `TowerRig2D` turns the tower state into Godot platform motion and bridge collision. The full 2D game will add the two-mirror light puzzle and a cargo delivery powered by the water collected for the lift. Once the complete 2D game is frozen as `2d-baseline`, Route B moves to the matching 3D version. The earlier Unity L5 prototype is the design reference.
 
 | Project documents | What to look for |
 | --- | --- |
@@ -29,4 +29,6 @@ The tower's water, lift, lock and docking rules live in the pure C# `TowerMechan
 | [Project conventions / 项目规范](BorrowingSun2D/Docs/2D-to-3D/PROJECT_CONVENTIONS.md) | Code responsibilities, scene editing, testing and Git workflow |
 | [Current status / 当前版本](BorrowingSun2D/Docs/2D-to-3D/CURRENT_STATUS.md) | What is playable now, the reset regression, and the next milestone |
 | [Milestone 01 / 三岸接驳](BorrowingSun2D/Docs/2D-to-3D/ROUND_01.md) | Docking design decisions, the three-shore route, and reset checks |
+| [SOLID refactor / 框架整理](BorrowingSun2D/Docs/2D-to-3D/ARCHITECTURE_REFACTOR.md) | Why the rules and Godot adapter were separated, with regression evidence |
+| [Relationship Map / 对象关系图](BorrowingSun2D/Docs/2D-to-3D/RELATIONSHIP_MAP.svg) | Implemented class relationships and the physics frame order |
 | [Iteration record / 制作记录](BorrowingSun2D/Docs/ITERATIONS.md) | The early reset failure, its retest, and the three-shore extension |

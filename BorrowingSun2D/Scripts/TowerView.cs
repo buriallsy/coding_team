@@ -60,13 +60,13 @@ public partial class TowerView : Node2D
         Write("第 01 轮   西侧登塔 · 北庭到访 · 回塔转向 · 东岸抵达", 57, 109, 18, Muted);
         Write("侧视剖面   /   机械与接岸", 966, 74, 18, Muted);
 
-        DrawGuide(slice.CourtFloor.Position.Y, "+6 m");
-        DrawGuide(slice.EntryFloor.Position.Y, "0 m");
-        DrawBank(slice.EntryFloor, "西侧低岸", "起点", state.DockedPort == Port.Entry);
-        DrawBank(slice.CourtFloor, "北侧高岸 · 采光庭", "途中站", state.DockedPort == Port.SunCourt);
-        DrawBank(slice.EastFloor, "东侧高岸 · 货轨", "本轮终点", state.DockedPort == Port.East);
-        DrawFlag(slice.SunCourtMarker, slice.ReachedSunCourt);
-        DrawFlag(slice.Goal, slice.Completed);
+        DrawGuide(slice.Rig.CourtFloor.Position.Y, "+6 m");
+        DrawGuide(slice.Rig.EntryFloor.Position.Y, "0 m");
+        DrawBank(slice.Rig.EntryFloor, "西侧低岸", "起点", state.DockedPort == Port.Entry);
+        DrawBank(slice.Rig.CourtFloor, "北侧高岸 · 采光庭", "途中站", state.DockedPort == Port.SunCourt);
+        DrawBank(slice.Rig.EastFloor, "东侧高岸 · 货轨", "本轮终点", state.DockedPort == Port.East);
+        DrawFlag(slice.Rig.SunCourtMarker, slice.ReachedSunCourt);
+        DrawFlag(slice.Rig.Goal, slice.Completed);
         DrawTower(state);
         DrawPerson(slice.Player);
         DrawReadout(state);
@@ -109,7 +109,7 @@ public partial class TowerView : Node2D
 
     private void DrawTower(TowerState state)
     {
-        Rect2 deck = slice.Deck;
+        Rect2 deck = slice.Rig.Deck;
         float top = deck.Position.Y;
         DrawRect(new Rect2(630, 257, 61, 356), new Color("243336"));
         DrawLine(new Vector2(644, 253), new Vector2(644, 613), Line, 3f);
@@ -137,10 +137,10 @@ public partial class TowerView : Node2D
             DrawRect(new Rect2(677, top + 16f, 17f, 8f), PlayerColor);
         }
 
-        DrawBridge(slice.BridgeHinge, slice.BridgeCollisionEnabled);
-        DrawBridge(slice.EastBridgeHinge, slice.EastBridgeCollisionEnabled);
-        if (slice.BridgeCollisionEnabled) DrawBridge(slice.BridgeExtension, true);
-        if (slice.EastBridgeCollisionEnabled) DrawBridge(slice.EastBridgeExtension, true);
+        DrawBridge(slice.Rig.BridgeHinge, slice.Rig.BridgeCollisionEnabled);
+        DrawBridge(slice.Rig.EastBridgeHinge, slice.Rig.EastBridgeCollisionEnabled);
+        if (slice.Rig.BridgeCollisionEnabled) DrawBridge(slice.Rig.BridgeExtension, true);
+        if (slice.Rig.EastBridgeCollisionEnabled) DrawBridge(slice.Rig.EastBridgeExtension, true);
         if (state.IsTurning)
         {
             float eastProgress = Mathf.InverseLerp(TowerMechanism.SunCourtHeading, TowerMechanism.EastHeading, state.Heading);

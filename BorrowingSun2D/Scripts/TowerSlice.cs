@@ -6,67 +6,26 @@ namespace BorrowingSun2D;
 
 public partial class TowerSlice : Node2D
 {
-    private const float SurfaceTolerance = 8f;
-    private const float StationRange = 82f;
     private const float FallDistance = 64f;
 
     private readonly TowerMechanism mechanism = new();
-    private AnimatableBody2D lift = null!;
-    private CollisionShape2D entry = null!;
-    private CollisionShape2D sunCourt = null!;
-    private CollisionShape2D east = null!;
-    private CollisionShape2D deck = null!;
-    private CollisionShape2D bridgeHinge = null!;
-    private CollisionShape2D bridgeExtension = null!;
-    private CollisionShape2D eastBridgeHinge = null!;
-    private CollisionShape2D eastBridgeExtension = null!;
-    private Marker2D station = null!;
-    private Marker2D spawn = null!;
-    private Marker2D sunCourtMarker = null!;
-    private Marker2D goal = null!;
-    private float lowTop;
-    private float highTop;
+    private readonly RouteProgress route = new();
     private float lastGroundY;
-    private Port projectedPort = Port.Entry;
     private bool deckCheckpoint;
     private float time;
     private float messageUntil;
     private string message = "";
 
     internal SlicePlayer Player { get; private set; } = null!;
+    internal TowerRig2D Rig { get; private set; } = null!;
     internal TowerState State => mechanism.State;
     internal Weather SelectedWeather { get; private set; } = Weather.Rain;
-    internal bool ReachedSunCourt { get; private set; }
-    internal bool Completed { get; private set; }
+    internal bool ReachedSunCourt => route.ReachedSunCourt;
+    internal bool Completed => route.Completed;
     internal int Recoveries { get; private set; }
-    internal bool BridgeCollisionEnabled => !bridgeExtension.Disabled;
-    internal bool EastBridgeCollisionEnabled => !eastBridgeExtension.Disabled;
     internal MechanismResult? LastResult { get; private set; }
-    internal Rect2 EntryFloor => Surface(entry);
-    internal Rect2 CourtFloor => Surface(sunCourt);
-    internal Rect2 EastFloor => Surface(east);
-    internal Rect2 Deck => Surface(deck);
-    internal Rect2 BridgeHinge => Surface(bridgeHinge);
-    internal Rect2 BridgeExtension => Surface(bridgeExtension);
-    internal Rect2 EastBridgeHinge => Surface(eastBridgeHinge);
-    internal Rect2 EastBridgeExtension => Surface(eastBridgeExtension);
-    internal Vector2 SunCourtMarker => sunCourtMarker.GlobalPosition;
-    internal Vector2 Goal => goal.GlobalPosition;
-    internal bool AtStation => Player.IsOnFloor() && OnLiftHeight
-        && Mathf.Abs(Player.Feet.X - station.GlobalPosition.X) <= StationRange;
-    internal bool DoorwayOccupied
-    {
-        get
-        {
-            if (!Player.IsOnFloor() || !OnLiftHeight) return false;
-            float x = Player.Feet.X;
-            bool leftThreshold = x >= BridgeExtension.Position.X - 8f && x <= Deck.Position.X + 40f;
-            bool rightThreshold = x >= Deck.End.X - 40f && x <= EastBridgeExtension.End.X + 8f;
-            return leftThreshold || rightThreshold;
-        }
-    }
-
-    private bool OnLiftHeight => Mathf.Abs(Player.Feet.Y - Deck.Position.Y) <= SurfaceTolerance;
+    internal bool AtStation => Player.IsOnFloor() && Rig.IsAtStation(Player.Feet);
+    internal bool DoorwayOccupied => Player.IsOnFloor() && Rig.IsAtDoorway(Player.Feet);
 
     internal string Status
     {
@@ -91,22 +50,8 @@ public partial class TowerSlice : Node2D
     public override void _Ready()
     {
         Player = GetNode<SlicePlayer>("Player");
-        lift = GetNode<AnimatableBody2D>("Lift");
-        entry = GetNode<CollisionShape2D>("Entry/Surface");
-        sunCourt = GetNode<CollisionShape2D>("SunCourt/Surface");
-        east = GetNode<CollisionShape2D>("East/Surface");
-        deck = GetNode<CollisionShape2D>("Lift/Deck");
-        bridgeHinge = GetNode<CollisionShape2D>("Lift/BridgeHinge");
-        bridgeExtension = GetNode<CollisionShape2D>("Lift/BridgeExtension");
-        eastBridgeHinge = GetNode<CollisionShape2D>("Lift/EastBridgeHinge");
-        eastBridgeExtension = GetNode<CollisionShape2D>("Lift/EastBridgeExtension");
-        station = GetNode<Marker2D>("Lift/WeatherStation");
-        spawn = GetNode<Marker2D>("Entry/Spawn");
-        sunCourtMarker = GetNode<Marker2D>("SunCourt/Milestone");
-        goal = GetNode<Marker2D>("East/Goal");
-        lowTop = EntryFloor.Position.Y;
-        highTop = CourtFloor.Position.Y;
-        lastGroundY = lowTop;
+        Rig = new TowerRig2D(this);
+        lastGroundY = Rig.EntryFloor.Position.Y;
 
         if (Array.IndexOf(OS.GetCmdlineUserArgs(), "--verify") >= 0)
             new TowerRouteCheck(this).Run();
@@ -124,8 +69,8 @@ public partial class TowerSlice : Node2D
 
         ReadCommands();
         mechanism.Tick(step);
-        UpdateLiftGeometry();
-        Player.Step(step);
+        Rig.Synchronize(mechanism.State);
+        Player.Step(Input.GetAxis("walk_left", "walk_right"), step);
         TrackPlayer();
     }
 
@@ -178,43 +123,20 @@ public partial class TowerSlice : Node2D
         });
     }
 
-    private void UpdateLiftGeometry()
-    {
-        float top = Mathf.Lerp(lowTop, highTop, mechanism.Height / TowerMechanism.TravelMetres);
-        if (!Mathf.IsEqualApprox(lift.Position.Y, top))
-            lift.Position = new Vector2(lift.Position.X, top);
-
-        Port port = mechanism.DockedPort;
-        if (port == projectedPort) return;
-        projectedPort = port;
-        bridgeExtension.SetDeferred(CollisionShape2D.PropertyName.Disabled, port is not (Port.Entry or Port.SunCourt));
-        eastBridgeExtension.SetDeferred(CollisionShape2D.PropertyName.Disabled, port != Port.East);
-    }
-
     private void TrackPlayer()
     {
+        Vector2 feet = Player.Feet;
         if (Player.IsOnFloor())
         {
-            lastGroundY = Player.Feet.Y;
+            lastGroundY = feet.Y;
             if (AtStation && !DoorwayOccupied) deckCheckpoint = true;
-            if (!ReachedSunCourt && mechanism.DockedPort == Port.SunCourt && Player.Feet.X <= SunCourtMarker.X
-                && Mathf.Abs(Player.Feet.Y - SunCourtMarker.Y) <= SurfaceTolerance)
-            {
-                ReachedSunCourt = true;
-                messageUntil = 0f;
-            }
-
-            if (ReachedSunCourt && !Completed && mechanism.DockedPort == Port.East && Player.Feet.X >= Goal.X
-                && Mathf.Abs(Player.Feet.Y - Goal.Y) <= SurfaceTolerance)
-            {
-                Completed = true;
-                messageUntil = 0f;
-            }
+            Port port = mechanism.DockedPort;
+            if (Rig.IsAtShoreFlag(port, feet) && route.Visit(port)) messageUntil = 0f;
             return;
         }
 
-        if (Player.Feet.Y - lastGroundY <= FallDistance && Player.Feet.Y <= 690f) return;
-        Player.Respawn(deckCheckpoint ? station.GlobalPosition + Vector2.Up : spawn.GlobalPosition);
+        if (feet.Y - lastGroundY <= FallDistance && feet.Y <= 690f) return;
+        Player.Respawn(deckCheckpoint ? Rig.Station + Vector2.Up : Rig.Spawn);
         lastGroundY = Player.Feet.Y;
         Recoveries++;
         Say("失足 · 已回到最近到达的安全平台");
@@ -223,11 +145,11 @@ public partial class TowerSlice : Node2D
     private void ResetSlice()
     {
         mechanism.Reset();
-        // Keep the animatable body's physics synchronization active through the reset.
-        UpdateLiftGeometry();
-        Player.Respawn(spawn.GlobalPosition);
-        lastGroundY = lowTop;
-        deckCheckpoint = ReachedSunCourt = Completed = false;
+        Rig.Synchronize(mechanism.State);
+        Player.Respawn(Rig.Spawn);
+        lastGroundY = Rig.EntryFloor.Position.Y;
+        deckCheckpoint = false;
+        route.Reset();
         Recoveries = 0;
         SelectedWeather = Weather.Rain;
         LastResult = null;
@@ -238,11 +160,5 @@ public partial class TowerSlice : Node2D
     {
         message = text;
         messageUntil = time + 2f;
-    }
-
-    private static Rect2 Surface(CollisionShape2D collider)
-    {
-        Vector2 size = ((RectangleShape2D)collider.Shape).Size;
-        return new Rect2(collider.GlobalPosition - size * .5f, size);
     }
 }

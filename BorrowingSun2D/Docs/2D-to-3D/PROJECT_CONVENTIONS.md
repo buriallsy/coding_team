@@ -11,7 +11,9 @@
 | 当前入口 | 负责的事 |
 | --- | --- |
 | [`Scripts/Core/TowerMechanism.cs`](../../Scripts/Core/TowerMechanism.cs) | 纯 C# 持有存水、台高、锁扣、风向、天气与停靠。外部用 `Cast`、`Recall`、`ToggleDrain`、`Tick` 和 `Reset` 变更状态，读取 `TowerState` 快照。 |
-| [`Scenes/TowerSlice.tscn`](../../Scenes/TowerSlice.tscn) 与 [`TowerSlice.cs`](../../Scripts/TowerSlice.cs) | 场景保存岸、台面、桥舌、设备、角色和旗标的实际位置与碰撞。`TowerSlice` 读取输入和站位，调用机关规则，更新实体、检查抵达并协调复位。 |
+| [`RouteProgress.cs`](../../Scripts/Core/RouteProgress.cs) | 纯 C# 持有北庭到访与东岸完成，通过 `Visit` 和 `Reset` 更新。 |
+| [`TowerSlice.cs`](../../Scripts/TowerSlice.cs) | 读取输入和玩家落脚，协调机关、实体同步、到访、恢复与复位。 |
+| [`TowerRig2D.cs`](../../Scripts/TowerRig2D.cs) 与 [`TowerSlice.tscn`](../../Scenes/TowerSlice.tscn) | 场景保存岸、塔台、桥舌和旗标；适配器绑定几何，把机关状态同步成真实台高和桥碰撞。 |
 | [`SlicePlayer.cs`](../../Scripts/SlicePlayer.cs) | `CharacterBody2D` 负责走路、落地和随活动台面移动。正常路线通过玩家输入和物理运动完成。 |
 | [`TowerView.cs`](../../Scripts/TowerView.cs) | 读取快照和场景几何，绘制水箱、桥舌、朝向和操作反馈。 |
 | [`TowerRouteCheck.cs`](../../Scripts/Verification/TowerRouteCheck.cs) | 用 Input Map 驱动生产场景，观察路径、碰撞、结果和重置。 |
@@ -29,7 +31,7 @@
 
 - **接岸由真实承托决定。** 只在台面停稳、高度和朝向都对上时启用对应桥的碰撞。门槛占用要挡住转向，升降中拒绝风令。用实体路面验证通过和缺口。收令保留已有水量和朝向，到高位由机械锁保高。
 - **光路由实际求交决定。** 后续光路按镜面位置、有限孔径、法线与遮挡算出每段射线，再由接光盘确认有效命中。停靠和镜面角度只改变几何或发车条件。画面使用求解结果，持续接光与发车分别读取各自的条件。
-- **`R` 走统一复位入口。** 重置天气、机关、真实碰撞、玩家、安全点和完成状态，扩展后把光路、奖励、配重及载具一并纳入。同一处平台更新用于平时升降和复位。既有问题曾使节点看似回到低位，物理桥仍在高位，因此复位后必须重新走过实体低桥。 [复位实现](../../Scripts/TowerSlice.cs) · [碰撞诊断和回归](../TESTING.md)
+- **`R` 走统一复位入口。** 重置天气、机关、真实碰撞、玩家、安全点和完成状态，扩展后把光路、奖励、配重及载具一并纳入。平时升降和复位共用 `TowerRig2D.Synchronize()`。既有问题曾使节点看似回到低位，物理桥仍在高位，因此复位后必须重新走过实体低桥。 [复位实现](../../Scripts/TowerSlice.cs) · [碰撞诊断和回归](../TESTING.md)
 
 ## 每次交付给组员前
 
