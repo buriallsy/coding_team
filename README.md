@@ -2,6 +2,8 @@
 
 **AP6412 · Route B · Milestone 00 · Playable 2D MVP**
 
+**明确了具体边界和数值（2026-11-07）：** [本轮完整数值决策表](BorrowingSun2D/Docs/2D-to-3D/NUMERIC_DECISIONS.md) 汇总范围、玩法参数、180 秒流程预算、输入与复位、CCR 口径及验证结果；明确区分已实现规则、待接场景和未来 3D 初值。
+
 **Architecture branch update (2026-11-07):** the playable scene remains the tower MVP. The complete 2D scope, decisions, class maps, change/CCR policy and executable domain/optics framework are in [Scope & Architecture / 范围与架构](BorrowingSun2D/Docs/2D-to-3D/FRAMEWORK.md). New rules have not yet been wired into the full Godot level; no `2d-baseline` or `3d-final` tag is claimed.
 
 Borrowing Sun is a puzzle game about using weather to change how a mountain tower connects its shores. This milestone covers the tower and bridge. Walk onto the low platform, use rain to lift it, then use wind to connect the upper bridge. Reaching the flag in the Sun Court completes the current build.
