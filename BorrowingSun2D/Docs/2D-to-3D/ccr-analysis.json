@@ -1,0 +1,16 @@
+{
+  "schema": 1,
+  "baseline": null,
+  "final_ref": null,
+  "candidates": [
+    {"id":"TowerMechanism","path":"BorrowingSun2D/Scripts/Core/TowerMechanism.cs","reason":"Tower, docking and conserved water rules"},
+    {"id":"SunMirror","path":"BorrowingSun2D/Scripts/Core/SunMirror.cs","reason":"Local weather and mirror detent rules"},
+    {"id":"LightReceiver","path":"BorrowingSun2D/Scripts/Core/LightReceiver.cs","reason":"Continuous illumination and one-time reward"},
+    {"id":"DeliveryState","path":"BorrowingSun2D/Scripts/Core/DeliveryState.cs","reason":"Departure, journey and delivery rules"},
+    {"id":"GameSession","path":"BorrowingSun2D/Scripts/Core/GameSession.cs","reason":"Rule orchestration, transfer prerequisites and reset"},
+    {"id":"Optics2D","path":"BorrowingSun2D/Scripts/Core/Optics2D.cs","reason":"Gameplay-critical reflection and occlusion algorithm"}
+  ],
+  "reviews": [],
+  "new_core_classes": [],
+  "note": "Candidate inventory only. Do not freeze until full 2D acceptance and TowerSlice responsibility audit are complete."
+}

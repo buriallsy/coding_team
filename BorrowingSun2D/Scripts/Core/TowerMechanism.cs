@@ -2,9 +2,9 @@ using System;
 
 namespace BorrowingSun2D.Core;
 
-public enum Weather { None, Rain, Wind }
-public enum Port { None, Entry, SunCourt }
-public enum MechanismResult { Applied, DoorwayOccupied, Moving, NeedHigh, NeedEntryHeading, Empty, Full }
+public enum Weather { None, Rain, Wind, Sun }
+public enum Port { None, Entry, SunCourt, Cargo }
+public enum MechanismResult { Applied, DoorwayOccupied, Moving, NeedHigh, NeedEntryHeading, Empty, Full, Unsupported, ConditionsNotMet }
 public readonly record struct TowerState(float Water, float Height, float Heading, bool Latched,
     bool Draining, bool IsLifting, bool IsTurning, Weather ActiveWeather, Port DockedPort);
 
@@ -21,6 +21,7 @@ public sealed class TowerMechanism
     private float targetHeading;
 
     public float Water { get; private set; }
+    public float Ballast { get; private set; }
     public float Height { get; private set; }
     public float Heading { get; private set; }
     public bool Latched { get; private set; }
@@ -33,13 +34,15 @@ public sealed class TowerMechanism
     public bool IsTurning => Math.Abs(Heading - targetHeading) > DockTolerance;
     public Port DockedPort => IsLifting || IsTurning ? Port.None
         : Height <= DockTolerance && Heading <= DockTolerance ? Port.Entry
-        : Latched && Heading >= SunCourtHeading - DockTolerance ? Port.SunCourt
+        : Latched && Math.Abs(Heading - SunCourtHeading) <= DockTolerance ? Port.SunCourt
+        : Latched && Math.Abs(Heading - GameTuning.CargoHeading) <= DockTolerance ? Port.Cargo
         : Port.None;
     public TowerState State => new(Water, Height, Heading, Latched, Draining, IsLifting, IsTurning,
         ActiveWeather, DockedPort);
 
     public void Tick(float delta)
     {
+        GameTuning.ValidateDelta(delta);
         if (Draining)
         {
             Water = Math.Max(0f, Water - WaterRate * delta);
@@ -63,6 +66,7 @@ public sealed class TowerMechanism
 
         if (weather == Weather.Rain)
         {
+            if (Ballast > 0f) return MechanismResult.ConditionsNotMet;
             if (IsTurning) return MechanismResult.Moving;
             if (Water >= Capacity) return MechanismResult.Full;
             Draining = false;
@@ -70,12 +74,38 @@ public sealed class TowerMechanism
             return MechanismResult.Applied;
         }
 
+        if (weather != Weather.Wind) return MechanismResult.Unsupported;
         if (IsLifting || IsTurning) return MechanismResult.Moving;
         if (!Latched) return MechanismResult.NeedHigh;
         ActiveWeather = Weather.Wind;
         // A second cast at the north stop returns the bridge toward the entry heading.
         targetHeading = DockedPort == Port.SunCourt ? 0f : SunCourtHeading;
         return MechanismResult.Applied;
+    }
+
+    // Explicit target selection for the complete level; Cast(Wind) preserves the original MVP route.
+    public MechanismResult RequestDock(Port target, bool doorwayOccupied)
+    {
+        if (target != Port.Entry && target != Port.SunCourt && target != Port.Cargo)
+            return MechanismResult.Unsupported;
+        if (doorwayOccupied) return MechanismResult.DoorwayOccupied;
+        if (IsLifting || IsTurning) return MechanismResult.Moving;
+        if (!Latched) return MechanismResult.NeedHigh;
+        targetHeading = target == Port.Entry ? 0f : target == Port.SunCourt ? SunCourtHeading : GameTuning.CargoHeading;
+        ActiveWeather = Weather.Wind;
+        return MechanismResult.Applied;
+    }
+
+    // Owns both quantities so transfer cannot create water. Session gates light/cargo prerequisites.
+    public float TransferToBallast(float delta)
+    {
+        GameTuning.ValidateDelta(delta);
+        if (!Latched || DockedPort != Port.Cargo) return 0f;
+        float amount = Math.Min(Water, Math.Min(Capacity - Ballast, GameTuning.TransferUnitsPerSecond * delta));
+        Water -= amount;
+        Ballast += amount;
+        ActiveWeather = Weather.None;
+        return amount;
     }
 
     public void Recall()
@@ -93,6 +123,7 @@ public sealed class TowerMechanism
         }
 
         if (doorwayOccupied) return MechanismResult.DoorwayOccupied;
+        if (Ballast > 0f) return MechanismResult.ConditionsNotMet;
         if (IsTurning) return MechanismResult.Moving;
         if (Heading > DockTolerance) return MechanismResult.NeedEntryHeading;
         if (Water <= 0f) return MechanismResult.Empty;
@@ -105,7 +136,7 @@ public sealed class TowerMechanism
 
     public void Reset()
     {
-        Water = Height = Heading = targetHeading = 0f;
+        Water = Ballast = Height = Heading = targetHeading = 0f;
         ActiveWeather = Weather.None;
         Latched = Draining = false;
     }
