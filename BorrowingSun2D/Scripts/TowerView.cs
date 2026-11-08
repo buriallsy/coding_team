@@ -28,20 +28,7 @@ public partial class TowerView : Node2D
             return;
         }
 
-        if (System.OperatingSystem.IsMacOS())
-        {
-            var localFont = new FontFile();
-            if (localFont.LoadDynamicFont("/System/Library/Fonts/STHeiti Medium.ttc") == Error.Ok)
-            {
-                font = localFont;
-                return;
-            }
-        }
-
-        font = new SystemFont
-        {
-            FontNames = new[] { "Noto Sans CJK SC", "Microsoft YaHei", "PingFang SC", "Arial" },
-        };
+        font = TowerUiFont.Load();
     }
 
     public override void _Process(double delta) => QueueRedraw();
@@ -73,7 +60,7 @@ public partial class TowerView : Node2D
         DrawRect(new Rect2(0, 0, 1280, 137), Background);
         DrawLine(new Vector2(56, 137), new Vector2(1224, 137), Line);
         Write("借晴  /  塔台灰盒", 56, 74, 33, Ink);
-        Write("第 03 轮   北庭借光 · 雨水转作配重 · 登车送水果到花庭", 57, 109, 18, Muted);
+        Write("北庭借光 · 雨水转作配重 · 登车送水果到花庭", 57, 109, 18, Muted);
         Write("侧视剖面   /   借光与交付", 966, 74, 18, Muted);
 
         DrawLine(new Vector2(56, 637), new Vector2(1224, 637), Line);
@@ -232,7 +219,7 @@ public partial class TowerView : Node2D
         Rect2 delivery = track.DeliveryFloor;
         float center = carrier.GetCenter().X;
         bool settled = slice.CargoPhase is CargoPhase.Arrived or CargoPhase.Delivered;
-        bool ready = slice.CargoPhase == CargoPhase.Ready && slice.Optics.ReceiverLit;
+        bool ready = slice.CargoReadyToLaunch;
         Color dock = ready || settled || slice.CargoPhase == CargoPhase.Travelling ? Wind : Muted;
 
         Vector2 rail = track.Departure + new Vector2(-22f, 21f);
@@ -243,7 +230,7 @@ public partial class TowerView : Node2D
         DrawLine(delivery.Position, new Vector2(delivery.End.X, delivery.Position.Y), settled ? Wind : Muted, 2f);
         DrawFlag(track.Goal, slice.DeliveredCount > 0, showReachedLabel: false);
         Write("花庭", track.Goal.X - 17f, track.Goal.Y - 73f, 17, Ink);
-        if (slice.CargoPhase == CargoPhase.Arrived)
+        if (slice.CargoPhase == CargoPhase.Arrived && slice.AtDeliveryStation)
             Write("G 交付", track.Goal.X - 22f, track.Goal.Y - 53f, 15, Wind);
 
         DrawRect(carrier, new Color("436464"));
@@ -317,7 +304,8 @@ public partial class TowerView : Node2D
         {
             CargoPhase.WaitingForLight => $"受光确认 {slice.CargoLightProgress:P0}",
             CargoPhase.Loading => optics.ReceiverLit && state.DockedPort == Port.East ? "水果 1 箱 · 正在转水" : "水果 1 箱 · 转水暂停",
-            CargoPhase.Ready => optics.ReceiverLit && state.DockedPort == Port.East ? "水果 1 箱 · 等待发车" : "水果 1 箱 · 等待来光",
+            CargoPhase.Ready when slice.CargoReadyToLaunch => "水果 1 箱 · 等待发车",
+            CargoPhase.Ready => optics.ReceiverLit ? "水果 1 箱 · 等待接轨" : "水果 1 箱 · 等待来光",
             CargoPhase.Travelling => $"水果 1 箱 · 跨谷 {slice.CargoTravelProgress:P0}",
             CargoPhase.Arrived => "水果 1 箱 · 已到花庭",
             _ => "花庭 · 已签收",

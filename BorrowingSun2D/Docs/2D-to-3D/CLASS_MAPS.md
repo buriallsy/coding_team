@@ -1,12 +1,19 @@
 # Class Map 与职责边界
 
-## Round 03 · 当前可玩实现
+## Round 04 · 2D 验收候选
 
-[对象关系图](RELATIONSHIP_MAP.svg) 对应 Round 03 的 Godot C# 生产场景。它与下方类图一起记录状态归属、调用和物理帧顺序。 [当前运行入口](CURRENT_STATUS.md)
+[对象关系图](RELATIONSHIP_MAP.svg) 对应 Round 04 的 Godot C# 生产场景，保留 Round 03 的主线规则并补上会话界面。Windows 验收待完成，`2d-baseline` 待冻结。 [当前运行入口](CURRENT_STATUS.md) · [Round 04 验收](ROUND_04.md)
 
 ```mermaid
 classDiagram
 direction TB
+class TowerSlice {
+  ~Screen
+}
+class TowerSessionOverlay {
+  ~Accepted
+  ~Present()
+}
 class TowerMechanism {
   +Water
   +Counterweight
@@ -53,6 +60,9 @@ TowerSlice --> TowerRig2D : synchronizes lift and bridges
 TowerSlice --> SunCourtOptics2D : drives child node
 TowerSlice --> CargoTrack2D : synchronizes carrier
 TowerSlice --> SlicePlayer : steps and respawns
+TowerSlice --> TowerSessionOverlay : presents screen and receives Accepted
+TowerView ..> TowerUiFont : shares font helper
+TowerSessionOverlay ..> TowerUiFont : shares font helper
 TowerView ..> TowerSlice : reads state and geometry
 SunCourtOptics2D ..> Optics2D : traces rays
 Optics2D ..> LightPath2D : returns
@@ -60,6 +70,8 @@ CargoJourney ..> TowerMechanism : checks dock and transfers water
 ```
 
 `TowerSlice` 把 `SunCourtOptics2D.ReceiverLit` 作为当帧输入交给 `CargoJourney`，将规则输出 `TravelProgress` 交给 `CargoTrack2D`，并把物理站位反馈给发车、交付入口。`RouteProgress` 的东岸旗标记录步行里程碑，`CargoJourney` 持有最终交付。 [调用与复位顺序](INTEGRATION.md)
+
+`TowerSlice.Screen` 持有 `Intro`、`Playing`、`Finished`。`TowerSessionOverlay` 由 `Present(screen, DeliveredCount)` 更新显示，并用 `Accepted` 回报按钮确认。`TowerSlice` 也处理键盘 `ui_accept`。开场和结束显示时由 `TowerSlice` 隔离玩法输入和物理推进；结束确认与 `R` 共用复位并回到 `Playing`。
 
 | 类或数据 | 实际职责 | 冻结前分类 |
 |---|---|---|
@@ -71,6 +83,7 @@ CargoJourney ..> TowerMechanism : checks dock and transfers water
 | [`TowerSlice`](../../Scripts/TowerSlice.cs) | 输入分发、物理帧顺序、空间条件、安全点与统一重开。 | 场景协调，冻结时复查 |
 | [`TowerRig2D`](../../Scripts/TowerRig2D.cs) / [`CargoTrack2D`](../../Scripts/CargoTrack2D.cs) | 将规则结果映射到活动平台、桥、车台和实体站点。 | Godot 空间适配 |
 | [`SlicePlayer`](../../Scripts/SlicePlayer.cs) / [`TowerView`](../../Scripts/TowerView.cs) | 角色移动和碰撞；读取状态、实体几何与实际光段绘制。 | 引擎角色与表现 |
+| [`TowerSessionOverlay`](../../Scripts/TowerSessionOverlay.cs) / [`TowerUiFont`](../../Scripts/TowerUiFont.cs) | 开场、结束和重玩显示，及两处表现层共用的字体辅助。 | 界面与表现 |
 | `TowerState`、`LightPath2D` 等 / `TowerRouteCheck`、`DomainChecks` | 只读值和枚举 / 测试与取证。 | 辅助数据与验证 |
 
 核心候选随 Round 04 的实际源码核对。两版共享规则与各自的空间适配在 Round 05 实现后逐类比较。 [变化与 CCR](CHANGE_AND_CCR.md)

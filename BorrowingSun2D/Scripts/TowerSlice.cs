@@ -21,6 +21,8 @@ public partial class TowerSlice : Node2D
     internal TowerRig2D Rig { get; private set; } = null!;
     internal SunCourtOptics2D Optics { get; private set; } = null!;
     internal CargoTrack2D CargoTrack { get; private set; } = null!;
+    internal TowerSessionOverlay Overlay { get; private set; } = null!;
+    internal TowerScreen Screen { get; private set; }
     internal TowerState State => mechanism.State;
     internal Weather SelectedWeather { get; private set; } = Weather.Rain;
     internal bool ReachedSunCourt => route.ReachedSunCourt;
@@ -32,6 +34,8 @@ public partial class TowerSlice : Node2D
     internal float CargoLightProgress => cargo.LightProgress;
     internal float CargoTravelProgress => cargo.TravelProgress;
     internal bool HasFruit => cargo.HasFruit;
+    internal bool CargoReadyToLaunch => cargo.Phase == CargoPhase.Ready && Optics.ReceiverLit
+        && mechanism.DockedPort == Port.East;
     internal int DeliveredCount => cargo.DeliveredCount;
     internal bool AtStation => Player.IsOnFloor() && Rig.IsAtStation(Player.Feet);
     internal bool AtSolarStation => Player.IsOnFloor() && Optics.IsAtStation(Player.Feet);
@@ -46,7 +50,8 @@ public partial class TowerSlice : Node2D
             if (time < messageUntil) return message;
             if (cargo.Phase == CargoPhase.Delivered) return "花庭已收货 · 交付 1/1 · R 重新开始";
             if (cargo.Phase == CargoPhase.Travelling) return "货车跨谷中 · 站稳等到站";
-            if (cargo.Phase == CargoPhase.Arrived) return "货车已到站 · 向右走到花庭旗标，按 G 交付";
+            if (cargo.Phase == CargoPhase.Arrived) return AtDeliveryStation
+                ? "已到花庭旗标 · G 交付这箱水果" : "货车已到站 · 向右下车走到花庭旗标";
             if (mechanism.IsTurning) return "风正在转动桥舌 · 等待停稳";
             if (mechanism.Draining) return "排水下降 · F 停止排水";
             if (mechanism.IsLifting) return "集雨升塔 · Q 收回雨令";
@@ -73,27 +78,39 @@ public partial class TowerSlice : Node2D
         Optics = GetNode<SunCourtOptics2D>("Optics");
         CargoTrack = new CargoTrack2D(this);
         lastGroundY = Rig.EntryFloor.Position.Y;
+        Overlay = GetNode<TowerSessionOverlay>("OverlayLayer/SessionOverlay");
+        Overlay.Accepted += AcceptScreen;
 
-        if (Array.IndexOf(OS.GetCmdlineUserArgs(), "--verify") >= 0)
+        string[] arguments = OS.GetCmdlineUserArgs();
+        SetScreen(Array.IndexOf(arguments, "--skip-intro") >= 0 ? TowerScreen.Playing : TowerScreen.Intro);
+        if (Array.IndexOf(arguments, "--verify") >= 0)
             new TowerRouteCheck(this).Run();
     }
 
     public override void _PhysicsProcess(double delta)
     {
-        float step = (float)delta;
-        time += step;
-        if (Input.IsActionJustPressed("reset_slice"))
+        if (Screen != TowerScreen.Intro && Input.IsActionJustPressed("reset_slice"))
         {
             ResetSlice();
             return;
         }
 
+        if (Screen != TowerScreen.Playing)
+        {
+            if (Input.IsActionJustPressed("ui_accept")) AcceptScreen();
+            return;
+        }
+
+        float step = (float)delta;
+        time += step;
         ReadCommands();
         mechanism.Tick(step);
         Rig.Synchronize(mechanism.State);
         Optics.Tick(mechanism.Heading);
         cargo.Tick(step, mechanism, Optics.ReceiverLit);
         ReadCargoCommand();
+        if (Screen == TowerScreen.Finished) return;
+
         CargoTrack.Synchronize(cargo.TravelProgress);
         float walkAxis = cargo.Phase == CargoPhase.Travelling ? 0f : Input.GetAxis("walk_left", "walk_right");
         Player.Step(walkAxis, step);
@@ -163,6 +180,7 @@ public partial class TowerSlice : Node2D
         if (LastCargoResult == CargoActionResult.Applied)
         {
             messageUntil = 0f;
+            if (cargo.Phase == CargoPhase.Delivered) SetScreen(TowerScreen.Finished);
             return;
         }
 
@@ -220,10 +238,12 @@ public partial class TowerSlice : Node2D
     private string CargoHint()
     {
         if (!Optics.ReceiverLit) return HasFruit
-            ? "接光盘失光 · 水果和配重保留，恢复来光才可发车" : "东岸已到访 · 接光盘仍暗，可回采光庭检查";
-        if (cargo.Phase == CargoPhase.Ready) return IsAboardCargo
-            ? "水果已装车 · 配重已满 · G 发车" : "水果已装车 · 向右走上货车，按 G 发车";
-        return HasFruit ? "水果已装车 · 塔箱的雨水正在转入货车配重" : "村庄正在接光 · 等待水果装车";
+            ? "接光盘失光 · 配重保留，恢复来光后可继续发车准备" : "接光盘仍暗 · 回北庭检查采日镜与晴天";
+        if (CargoReadyToLaunch) return IsAboardCargo
+            ? "水果已装车 · 配重已满 · G 发车" : "水果已装车 · 配重已满，向右走上货车";
+        return HasFruit
+            ? $"水果已装车 · 原雨水正在转入配重 {mechanism.Counterweight:0.0}/{CargoJourney.CounterweightRequired:0}"
+            : $"村庄持续接光 {CargoLightProgress:P0} · 等待水果装车";
     }
 
     private void TrackPlayer()
@@ -263,6 +283,19 @@ public partial class TowerSlice : Node2D
         LastResult = null;
         LastCargoResult = null;
         messageUntil = 0f;
+        SetScreen(TowerScreen.Playing);
+    }
+
+    private void AcceptScreen()
+    {
+        if (Screen == TowerScreen.Intro) SetScreen(TowerScreen.Playing);
+        else if (Screen == TowerScreen.Finished) ResetSlice();
+    }
+
+    private void SetScreen(TowerScreen screen)
+    {
+        Screen = screen;
+        Overlay.Present(screen, DeliveredCount);
     }
 
     private void Say(string text)

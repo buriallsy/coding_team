@@ -8,7 +8,7 @@ if ($GodotBin) { $GodotBin = (Resolve-Path -LiteralPath $GodotBin).Path }
 $gameProject = Join-Path $repoRoot 'BorrowingSun2D'
 $domainProject = Join-Path $repoRoot 'Tests/DomainChecks/DomainChecks.csproj'
 $logs = Join-Path $repoRoot 'artifacts/verification'
-$evidence = Join-Path $gameProject 'Docs/Evidence/round-03'
+$evidence = Join-Path $gameProject 'Docs/Evidence/round-04'
 $qaDir = $null
 Push-Location $repoRoot
 $savedEnvironment = @{}
@@ -58,32 +58,32 @@ try {
 
     $routeLog = Join-Path $logs 'three-shore-route.log'
     & $GodotBin --headless --path $gameProject --fixed-fps 60 --quit-after 14000 `
-        --log-file (Join-Path $logs 'three-shore-engine.log') -- --verify 2>&1 | Tee-Object $routeLog
+        --log-file (Join-Path $logs 'three-shore-engine.log') -- --verify --skip-intro 2>&1 | Tee-Object $routeLog
     if ($LASTEXITCODE -ne 0 -or -not (Select-String -LiteralPath $routeLog -Pattern '^TOWER_ROUTE PASSED$' -Quiet)) {
         throw 'Three-shore route did not report success.'
     }
 
-    $qaDir = Join-Path ([System.IO.Path]::GetTempPath()) ('borrowingsun-round03-' + [Guid]::NewGuid().ToString('N'))
+    $qaDir = Join-Path ([System.IO.Path]::GetTempPath()) ('borrowingsun-round04-' + [Guid]::NewGuid().ToString('N'))
     $qaProject = Join-Path $qaDir 'project'
     $qaHarness = Join-Path $qaProject 'VerificationHarness'
     New-Item -ItemType Directory -Path $qaHarness -Force | Out-Null
     foreach ($item in @('BorrowingSun2D.csproj', 'project.godot', 'Scenes', 'Scripts')) {
         Copy-Item -LiteralPath (Join-Path $gameProject $item) -Destination $qaProject -Recurse
     }
-    Copy-Item -LiteralPath (Join-Path $evidence 'round03-cargo-probe.cs.txt') `
-        -Destination (Join-Path $qaHarness 'Round03CargoProbe.cs')
-    $qaLauncher = Join-Path $qaDir 'round03-cargo-launcher.gd'
-    Copy-Item -LiteralPath (Join-Path $evidence 'round03-cargo-launcher.gd.txt') -Destination $qaLauncher
+    Copy-Item -LiteralPath (Join-Path $evidence 'round04-acceptance-probe.cs.txt') `
+        -Destination (Join-Path $qaHarness 'Round04AcceptanceProbe.cs')
+    $qaLauncher = Join-Path $qaDir 'round04-acceptance-launcher.gd'
+    Copy-Item -LiteralPath (Join-Path $evidence 'round04-acceptance-launcher.gd.txt') -Destination $qaLauncher
 
-    & dotnet build (Join-Path $qaProject 'BorrowingSun2D.csproj') @buildArgs 2>&1 | Tee-Object (Join-Path $logs 'round03-probe-build.log')
-    if ($LASTEXITCODE -ne 0) { throw 'Round 03 probe build failed.' }
-    $cargoLog = Join-Path $logs 'round03-cargo.log'
+    & dotnet build (Join-Path $qaProject 'BorrowingSun2D.csproj') @buildArgs 2>&1 | Tee-Object (Join-Path $logs 'round04-probe-build.log')
+    if ($LASTEXITCODE -ne 0) { throw 'Round 04 probe build failed.' }
+    $acceptanceLog = Join-Path $logs 'round04-acceptance.log'
     & $GodotBin --headless --path $qaProject --fixed-fps 60 --quit-after 14000 `
-        --log-file (Join-Path $logs 'round03-cargo-engine.log') --script $qaLauncher 2>&1 | Tee-Object $cargoLog
-    if ($LASTEXITCODE -ne 0 -or -not (Select-String -LiteralPath $cargoLog -Pattern '^ROUND_03_CARGO_QA PASSED' -Quiet)) {
-        throw 'Round 03 cargo route did not report success.'
+        --log-file (Join-Path $logs 'round04-acceptance-engine.log') --script $qaLauncher 2>&1 | Tee-Object $acceptanceLog
+    if ($LASTEXITCODE -ne 0 -or -not (Select-String -LiteralPath $acceptanceLog -Pattern '^ROUND_04_ACCEPTANCE PASSED' -Quiet)) {
+        throw 'Round 04 first-run and replay did not report success.'
     }
-    Write-Output 'VERIFICATION PASSED: domain, three-shore route, and Round 03 cargo route.'
+    Write-Output 'VERIFICATION PASSED: domain, three-shore route, and Round 04 first-run and replay.'
 }
 finally {
     if ($qaDir -and (Test-Path -LiteralPath $qaDir)) { Remove-Item -LiteralPath $qaDir -Recurse -Force }

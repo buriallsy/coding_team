@@ -1,0 +1,15 @@
+UTC: 2026-11-08T07:59:53Z
+SDK: 8.0.424
+CSSM_ModuleLoad(): One or more parameters passed to a function were not valid.
+  Determining projects to restore...
+  Restored <isolated-project>/BorrowingSun2D.csproj (in 282 ms).
+  BorrowingSun2D -> <isolated-project>/.godot/mono/temp/bin/Debug/BorrowingSun2D.dll
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:03.99
+real 4.71
+user 5.44
+sys 0.71

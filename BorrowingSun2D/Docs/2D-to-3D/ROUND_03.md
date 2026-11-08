@@ -14,7 +14,7 @@
 - **连续受光才装货。** 直接读取第 02 轮实际光路的 `ReceiverLit`。装货前连续受光 1.5 秒才出现水果，中途断光重计。一箱已经装车的水果会保留到交付。
 - **塔和配重共用一份水。** `TowerMechanism` 持有总量与配重份额。从蓄好的 6 格水中以每秒 1 格转出，至配重满 4 格时留下 2 格在水箱。机械锁在整个转水期间维持高位。断光时保留已转入的水，恢复受光后从原进度继续。
 - **发车与到站用不同条件。** `CargoJourney` 用东岸停靠、实时受光、配重满和玩家已经登车决定发车。已发车的货车按行程继续到站。确认交付还需要站到交付旗标旁，重复操作只记录一次。
-- **跨谷由实体载具完成。** `CargoTrack2D` 把行程进度投影为 Godot 活动平台的位置；角色经物理碰撞登车、随车移动、到站再步行。`TowerSlice` 负责交互与统一重开，`TowerView` 显示雨水、配重、货车和交付状态。 [对象关系图](RELATIONSHIP_MAP.svg) · [运输规则](../../Scripts/Core/CargoJourney.cs) · [雨水与机械锁](../../Scripts/Core/TowerMechanism.cs)
+- **跨谷由实体载具完成。** `CargoTrack2D` 把行程进度投影为 Godot 活动平台的位置；角色经物理碰撞登车、随车移动、到站再步行。`TowerSlice` 负责交互与统一重开，`TowerView` 显示雨水、配重、货车和交付状态。 [第 03 轮对象关系图](https://github.com/buriallsy/coding_team/blob/de74962dd467c18b173495a2b1eaff87d8719d01/BorrowingSun2D/Docs/2D-to-3D/RELATIONSHIP_MAP.svg) · [运输规则](../../Scripts/Core/CargoJourney.cs) · [雨水与机械锁](../../Scripts/Core/TowerMechanism.cs)
 
 转水后锁住原排水口，避免已有配重的塔在西向主动排空并释放机械锁。`R` 同时复位水箱、配重、灯光、货车和玩家。
 
@@ -40,6 +40,8 @@
 窗口首跑在低桥后的步行输入中断。重跑时记录原生窗口焦点，失焦释放键位后可在测试脚本内重新送出同一个行走按键。正常路线的窗口复跑通过 36 项，其中两项保存了行车与交付原帧。断光和复位重跑的证据来自完整无头专项。 [窗口首跑](../Evidence/round-03/round03-graphics-first-attempt.log) · [窗口复跑](../Evidence/round-03/round03-graphics.log) · [行车原帧](../Evidence/round-03/travelling.png) · [交付原帧](../Evidence/round-03/delivered.png)
 
 ## 复跑方式
+
+以下命令对应 [第 03 轮归档提交](https://github.com/buriallsy/coding_team/commit/de74962dd467c18b173495a2b1eaff87d8719d01)。第 04 轮接入签收页后，用 [本轮验收入口](ROUND_04.md) 复跑。
 
 在 `BorrowingSun2D` 项目目录运行。`BORROWINGSUN_GODOT_BIN` 指向 Godot .NET 可执行文件。独立测试在临时项目中编译和挂载，玩家仍从正式场景默认入口开始。
 

@@ -1,0 +1,4 @@
+DOMAIN_CHECKS PASSED: 80 assertions; domain and geometry fixtures.
+TOWER_ROUTE PASSED
+ROUND_04_ACCEPTANCE PASSED assertions=154 failures=0
+VERIFICATION PASSED: domain, three-shore route, and Round 04 first-run and replay.

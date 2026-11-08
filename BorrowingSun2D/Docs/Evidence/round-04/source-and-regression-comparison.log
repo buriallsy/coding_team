@@ -1,0 +1,8 @@
+30 production/config files byte-identical between worktree, harness-free copy, and instrumented copy.
+round01-builtin.log: 113 assertion/trace lines, exactly matches integrated Round03.
+round01-independent.log: 77 assertion/trace lines, exactly matches integrated Round03.
+round02-optics.log: 70 assertion/trace lines, exactly matches integrated Round03.
+TRACE partial transfer held: phase=Loading lit=False water=3.700001 ballast=2.299999 height=6.000000 latch=True fruit=True delivered=0 travel=0.000000 deck_y=300.000 lift_body_y=300.000 carrier=(1119, 300) rider=(1124.4679, 299.93384)
+TRACE arrived in darkness: phase=Arrived lit=False water=2.000000 ballast=4.000000 height=6.000000 latch=True fruit=True delivered=0 travel=1.000000 deck_y=300.000 lift_body_y=300.000 carrier=(1183, 300) rider=(1188.4679, 299.93384)
+SUPPLY max_total_error=0.000000 max_height_error=0.000000 max_physics_lift_drift_px=0.000000 max_scene_deck_drift_px=0.000000 samples=3617
+ROUND_04_ACCEPTANCE PASSED assertions=154 failures=0

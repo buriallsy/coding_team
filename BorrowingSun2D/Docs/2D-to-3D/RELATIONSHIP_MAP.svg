@@ -1,15 +1,15 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1520" height="1660" viewBox="0 0 1520 1660" role="img" aria-labelledby="map-title map-description">
+<svg xmlns="http://www.w3.org/2000/svg" width="1520" height="1790" viewBox="0 0 1520 1790" role="img" aria-labelledby="map-title map-description">
   <title id="map-title">Borrowing Sun / Relationship Map · 借晴对象关系图</title>
-  <desc id="map-description">TowerSlice coordinates the tower, the route, the player, optics, cargo rules, and physical cargo track. The pure optics solver reports relay hit and receiver light as distinct results. CargoJourney uses sustained receiver light to earn one fruit crate. TowerMechanism transfers the same stored rainwater into the counterweight while the tower remains locked. A rider can launch while the dock, fruit, receiver and counterweight are ready. After launch, the physical carrier follows time-based progress. A separate terminal action confirms one delivery. Reset restores the tower, optics, cargo, and player.</desc>
-  <rect width="1520" height="1660" fill="#F0F6F3"/>
-  <rect x="30" y="26" width="1460" height="1608" rx="22" fill="#FFFFFF" stroke="#CADBD5"/>
+  <desc id="map-description">Round 04 acceptance candidate. TowerSlice owns Intro, Playing and Finished screen state and presents it through TowerSessionOverlay. The overlay reports acceptance through an event. Replay uses the same reset as the R key and returns to Playing. TowerSlice also coordinates the tower, the route, the player, optics, cargo rules, and physical cargo track. The pure optics solver reports relay hit and receiver light as distinct results. CargoJourney uses sustained receiver light to earn one fruit crate. TowerMechanism transfers the same stored rainwater into the counterweight while the tower remains locked. A rider can launch while the dock, fruit, receiver and counterweight are ready. After launch, the physical carrier follows time-based progress. A separate terminal action confirms one delivery. Reset restores the tower, optics, cargo, and player.</desc>
+  <rect width="1520" height="1790" fill="#F0F6F3"/>
+  <rect x="30" y="26" width="1460" height="1738" rx="22" fill="#FFFFFF" stroke="#CADBD5"/>
   <g font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Noto Sans CJK SC', sans-serif" fill="#17332E">
     <g id="header">
       <text x="70" y="72" fill="#17685E" font-size="17" font-weight="700" letter-spacing="2">BORROWING SUN  /  AP6412  /  GODOT C#</text>
       <text x="68" y="136" font-size="54" font-weight="760">Relationship Map</text>
       <text x="561" y="134" fill="#17685E" font-size="33" font-weight="650">对象关系图</text>
       <rect x="1191" y="64" width="260" height="42" rx="21" fill="#E7F5F0"/>
-      <text x="1321" y="91" text-anchor="middle" fill="#17685E" font-size="16" font-weight="700" letter-spacing="1">ROUND 03 · 2D</text>
+      <text x="1321" y="91" text-anchor="middle" fill="#17685E" font-size="16" font-weight="700" letter-spacing="1">ROUND 04 · 2D CANDIDATE</text>
       <path d="M 70 160 H 1450" fill="none" stroke="#D4E2DD"/>
     </g>
 
@@ -17,7 +17,7 @@
       <rect x="70" y="182" width="1380" height="48" rx="8" fill="#F3F8F6" stroke="#D4E2DD"/>
       <text x="87" y="212" fill="#17685E" font-size="15" font-weight="700" letter-spacing="1">SCENE</text>
       <text x="169" y="212" font-size="19" font-weight="700">TowerSlice.tscn</text>
-      <text x="344" y="212" fill="#435D55" font-size="18">保存塔台与两桥碰撞、镜面与接光盘，以及实体货车、轨道锚点和交付站</text>
+      <text x="344" y="212" fill="#435D55" font-size="18">保存塔台与两桥碰撞、镜面与接光盘，以及实体货车、交付站和会话覆盖层</text>
     </g>
 
     <g id="top-relationships">
@@ -43,7 +43,7 @@
       <text x="535" y="279" fill="#17685E" font-size="15" font-weight="740" letter-spacing="1.2">GODOT FRAME ORCHESTRATION</text>
       <text x="534" y="326" font-size="41" font-weight="760">TowerSlice</text>
       <text x="535" y="365" fill="#2D5148" font-size="20">分发装置指令与 G 交互，协调物理帧</text>
-      <text x="535" y="393" fill="#2D5148" font-size="20">同步光路、货运、路线与恢复</text>
+      <text x="535" y="393" fill="#2D5148" font-size="20">同步光路、货运、路线与会话状态</text>
       <text x="535" y="423" fill="#855109" font-size="16" font-weight="650">has-a · CargoJourney 与 CargoTrack2D 见运输区</text>
     </g>
     <g id="sun-court-optics">
@@ -114,7 +114,26 @@
       <text x="446" y="804" fill="#654BA4">uses / reads · 调用或读取</text>
     </g>
 
-    <g id="optics-data-flow">
+    <g id="session-ui">
+      <rect x="70" y="833" width="1380" height="112" rx="14" fill="#F3F8F6" stroke="#D4E2DD"/>
+      <text x="89" y="860" fill="#17685E" font-size="16" font-weight="740" letter-spacing="1">SESSION UI</text>
+      <text x="220" y="860" fill="#435D55" font-size="17">开场、交付结束与重玩</text>
+      <text x="1174" y="860" fill="#855109" font-size="15">验收候选 · Windows 待验收</text>
+      <path d="M 470 890 H 519 M 923 890 H 976" fill="none" stroke="#654BA4" stroke-width="1.8" stroke-dasharray="5 4"/>
+      <path d="M 516 886 L 524 890 L 516 894 Z M 973 886 L 981 890 L 973 894 Z" fill="#654BA4"/>
+      <g font-size="19" font-weight="700">
+        <text x="89" y="897">TowerSlice · TowerScreen</text>
+        <text x="538" y="897">TowerSessionOverlay</text>
+        <text x="996" y="897">Accepted / ui_accept · 确认</text>
+      </g>
+      <g fill="#43534F" font-size="16">
+        <text x="89" y="924">Intro / Playing / Finished · 控制游戏推进</text>
+        <text x="538" y="924">Present(screen, DeliveredCount) · 切换界面</text>
+        <text x="996" y="924">按钮回调或键盘确认 · 重玩共用 R 的复位</text>
+      </g>
+    </g>
+
+    <g id="optics-data-flow" transform="translate(0 130)">
       <rect x="70" y="833" width="1380" height="272" rx="14" fill="#F3F8F6" stroke="#D4E2DD"/>
       <text x="89" y="865" fill="#17685E" font-size="16" font-weight="740" letter-spacing="1">OPTICS DATA FLOW</text>
       <text x="290" y="865" fill="#435D55" font-size="17">光学数据流</text>
@@ -152,7 +171,7 @@
       <text x="657" y="1072" fill="#17685E" font-size="17">东向 · 光路畅通时，塔镜反射命中接光盘正面</text>
     </g>
 
-    <g id="delivery-data-flow">
+    <g id="delivery-data-flow" transform="translate(0 130)">
       <rect x="70" y="1123" width="1380" height="297" rx="14" fill="#F3F8F6" stroke="#D4E2DD"/>
       <text x="89" y="1155" fill="#17685E" font-size="16" font-weight="740" letter-spacing="1">DELIVERY DATA FLOW</text>
       <text x="314" y="1155" fill="#435D55" font-size="17">交付规则与实体货轨</text>
@@ -185,7 +204,7 @@
       <text x="105" y="1395" fill="#17685E" font-size="17">发车后 · 即使失光，货车仍按时间沿实体货轨运行。抵达后走到交付标记处按 G，DeliveredCount 记为 1。</text>
     </g>
 
-    <g id="physics-frame" transform="translate(0 605)">
+    <g id="physics-frame" transform="translate(0 735)">
       <rect x="70" y="833" width="1380" height="161" rx="14" fill="#F3F8F6" stroke="#D4E2DD"/>
       <text x="89" y="865" fill="#17685E" font-size="16" font-weight="740" letter-spacing="1">PHYSICS FRAME</text>
       <text x="250" y="865" fill="#435D55" font-size="17">物理帧顺序</text>
@@ -219,7 +238,7 @@
         <text x="1347" y="924">Step → TrackPlayer</text>
       </g>
       <text x="89" y="964" fill="#17685E" font-size="17" font-weight="750">R · RESET</text>
-      <text x="192" y="964" fill="#435D55" font-size="17">清除光路、雨水、配重、奖励和路线；共用实体同步入口，货车回轨头，玩家回入口。</text>
+      <text x="192" y="964" fill="#435D55" font-size="17">清除光路、雨水、配重、奖励和路线；共用实体同步入口，货车回轨头，玩家回入口并直接继续游玩。</text>
     </g>
   </g>
 </svg>

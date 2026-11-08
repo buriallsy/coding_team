@@ -1,9 +1,10 @@
-[gd_scene load_steps=15 format=3]
+[gd_scene load_steps=20 format=3]
 
 [ext_resource type="Script" path="res://Scripts/TowerSlice.cs" id="1_slice"]
 [ext_resource type="Script" path="res://Scripts/SlicePlayer.cs" id="2_player"]
 [ext_resource type="Script" path="res://Scripts/TowerView.cs" id="3_view"]
 [ext_resource type="Script" path="res://Scripts/SunCourtOptics2D.cs" id="4_optics"]
+[ext_resource type="Script" path="res://Scripts/TowerSessionOverlay.cs" id="5_overlay"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_entry"]
 size = Vector2(414, 22)
@@ -35,6 +36,52 @@ size = Vector2(40, 36)
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_player"]
 radius = 8.0
 height = 34.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_session_card"]
+content_margin_left = 34.0
+content_margin_top = 28.0
+content_margin_right = 34.0
+content_margin_bottom = 28.0
+bg_color = Color(0.086, 0.145, 0.157, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.36, 0.51, 0.49, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_left = 10
+corner_radius_bottom_right = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_session_button"]
+bg_color = Color(0.57, 0.82, 0.75, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_left = 6
+corner_radius_bottom_right = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_session_hover"]
+bg_color = Color(0.70, 0.91, 0.84, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_left = 6
+corner_radius_bottom_right = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_session_focus"]
+draw_center = false
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.98, 0.90, 0.72, 1)
+corner_radius_top_left = 9
+corner_radius_top_right = 9
+corner_radius_bottom_left = 9
+corner_radius_bottom_right = 9
+expand_margin_left = 4.0
+expand_margin_top = 4.0
+expand_margin_right = 4.0
+expand_margin_bottom = 4.0
 
 [node name="TowerSlice" type="Node2D"]
 script = ExtResource("1_slice")
@@ -174,3 +221,107 @@ script = ExtResource("4_optics")
 
 [node name="View" type="Node2D" parent="."]
 script = ExtResource("3_view")
+
+[node name="OverlayLayer" type="CanvasLayer" parent="."]
+layer = 5
+
+[node name="SessionOverlay" type="Control" parent="OverlayLayer"]
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("5_overlay")
+
+[node name="Scrim" type="ColorRect" parent="OverlayLayer/SessionOverlay"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.035, 0.061, 0.067, 0.74)
+
+[node name="SafeArea" type="MarginContainer" parent="OverlayLayer/SessionOverlay"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 40
+theme_override_constants/margin_top = 36
+theme_override_constants/margin_right = 40
+theme_override_constants/margin_bottom = 36
+
+[node name="Center" type="CenterContainer" parent="OverlayLayer/SessionOverlay/SafeArea"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Card" type="PanelContainer" parent="OverlayLayer/SessionOverlay/SafeArea/Center"]
+custom_minimum_size = Vector2(590, 0)
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_session_card")
+
+[node name="Content" type="VBoxContainer" parent="OverlayLayer/SessionOverlay/SafeArea/Center/Card"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 12
+
+[node name="Kicker" type="Label" parent="OverlayLayer/SessionOverlay/SafeArea/Center/Card/Content"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.60, 0.84, 0.77, 1)
+theme_override_font_sizes/font_size = 16
+horizontal_alignment = 1
+
+[node name="Title" type="Label" parent="OverlayLayer/SessionOverlay/SafeArea/Center/Card/Content"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.93, 0.96, 0.95, 1)
+theme_override_font_sizes/font_size = 46
+horizontal_alignment = 1
+
+[node name="Summary" type="Label" parent="OverlayLayer/SessionOverlay/SafeArea/Center/Card/Content"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.98, 0.85, 0.62, 1)
+theme_override_font_sizes/font_size = 24
+horizontal_alignment = 1
+
+[node name="Instructions" type="Label" parent="OverlayLayer/SessionOverlay/SafeArea/Center/Card/Content"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.80, 0.87, 0.87, 1)
+theme_override_font_sizes/font_size = 18
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Controls" type="Label" parent="OverlayLayer/SessionOverlay/SafeArea/Center/Card/Content"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.74, 0.83, 0.83, 1)
+theme_override_font_sizes/font_size = 16
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Action" type="Button" parent="OverlayLayer/SessionOverlay/SafeArea/Center/Card/Content"]
+custom_minimum_size = Vector2(220, 48)
+layout_mode = 2
+size_flags_horizontal = 4
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(0.09, 0.17, 0.17, 1)
+theme_override_colors/font_focus_color = Color(0.09, 0.17, 0.17, 1)
+theme_override_colors/font_hover_color = Color(0.09, 0.17, 0.17, 1)
+theme_override_colors/font_pressed_color = Color(0.09, 0.17, 0.17, 1)
+theme_override_font_sizes/font_size = 21
+theme_override_styles/normal = SubResource("StyleBoxFlat_session_button")
+theme_override_styles/hover = SubResource("StyleBoxFlat_session_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_session_hover")
+theme_override_styles/focus = SubResource("StyleBoxFlat_session_focus")
+
+[node name="ConfirmHint" type="Label" parent="OverlayLayer/SessionOverlay/SafeArea/Center/Card/Content"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.74, 0.83, 0.83, 1)
+theme_override_font_sizes/font_size = 16
+horizontal_alignment = 1

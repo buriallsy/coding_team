@@ -1,6 +1,6 @@
 # Borrowing Sun (借晴)
 
-**AP6412 · Route B · Milestone 03 · One Crate Across the Valley**
+**AP6412 · Route B · Milestone 04 · 2D Acceptance Candidate**
 
 Borrowing Sun is a weather puzzle set around a mountain tower. Rain lifts the tower and wind connects its bridges. Aim the Sun Court mirror, borrow sunlight, and turn the tower east to light the receiver. Sustained light earns one fruit crate. The same rainwater fills the cargo counterweight so you can ride across the valley and deliver the crate.
 
@@ -9,17 +9,19 @@ The Round 03 integration adds automated domain checks, a Windows and macOS CI ma
 ## Run and play
 
 1. Clone or download this repository. Install **Godot 4.7.1 .NET** and the **.NET 8 SDK**.
-2. In the Godot Project Manager, import `BorrowingSun2D/project.godot`. Open the project and press **F5** to run the main scene. [Project file](BorrowingSun2D/project.godot)
+2. In the Godot Project Manager, import `BorrowingSun2D/project.godot`. Press **F5**, then press **Enter** or click Start on the opening card. [Project file](BorrowingSun2D/project.godot)
 3. Press `D` or `→` to cross the low bridge and approach the device on the tower. Press `1` to select rain, then `E` to apply it. Wait for the lift to reach the upper level and lock.
 4. Press `2` then `E` to turn north and walk left to the Sun Court mirror. Press `2` then `E` beside the mirror to aim it, then `3` and `E` to open local sunlight. The tower mirror is now hit while the east receiver remains dark.
 5. Walk back to the tower device and press `2` then `E` to turn east. Cross the east bridge and walk onto the cargo car. Wait for the crate and the `4/4` counterweight, then press `G` to depart while the receiver is lit.
-6. When the car stops, walk right to the delivery flag and press `G` to record `1/1`. Press `R` to restart from the west low bridge. [Full controls and scene entry](BorrowingSun2D/README.md)
+6. When the car stops, walk right to the delivery flag and press `G` to record `1/1`. The delivery card confirms `1/1`. Press `R` to replay from the west low bridge. [Full controls and scene entry](BorrowingSun2D/README.md)
 
 ## Verification
 
-The clean macOS arm64 build passed without warnings or errors. The cargo route passed 129 checks, including both departure blocks, a dark crossing after departure, and a full delivery replay after `R`. Across 3,460 physics ticks, the tank and counterweight total stayed at six units and the physical lift held its height. The earlier three-shore and optics checks also passed. [Milestone 03 design, logs and reproduction steps](BorrowingSun2D/Docs/2D-to-3D/ROUND_03.md)
+For the current acceptance candidate, follow the Windows and macOS instructions and report the commit you tested. [Round 04 acceptance and replay](BorrowingSun2D/Docs/2D-to-3D/ROUND_04.md)
 
-![Godot 2D after one successful delivery. The player stands at the garden flag and the HUD reads delivery 1/1.](BorrowingSun2D/Docs/Evidence/round-03/delivered.png)
+The macOS arm64 acceptance run passed 154 checks, including opening the game, both launch refusals, delivery, and a full replay after `R`. The earlier shore and optics checks also passed. The windowed run passed 46 checks and captured the opening, ready-to-launch and delivery screens. Windows acceptance is pending.
+
+![Round 04 delivery screen. The player has signed for one crate and the replay button is focused.](BorrowingSun2D/Docs/Evidence/round-04/finished.png)
 
 From the repository root, run the standalone rule checks and the CCR tool tests.
 
@@ -44,6 +46,7 @@ The CCR command reports the current baseline status. The CI matrix runs the doma
 | [Current status / 当前版本](BorrowingSun2D/Docs/2D-to-3D/CURRENT_STATUS.md) | What is playable now, the reset regression, and the next milestone |
 | [Milestone 01 / 三岸接驳](BorrowingSun2D/Docs/2D-to-3D/ROUND_01.md) | Docking design decisions, the three-shore route, and reset checks |
 | [Milestone 02 / 借光](BorrowingSun2D/Docs/2D-to-3D/ROUND_02.md) | Two reflections, the north and east outcomes, and replayable tests |
+| [Milestone 04 / 首玩与验收](BorrowingSun2D/Docs/2D-to-3D/ROUND_04.md) | Opening, delivery and replay checks, including the Windows handoff |
 | [Milestone 03 / 一箱水果](BorrowingSun2D/Docs/2D-to-3D/ROUND_03.md) | Shared rainwater, departure rules, physical ride, and delivery |
 | [SOLID refactor / 框架整理](BorrowingSun2D/Docs/2D-to-3D/ARCHITECTURE_REFACTOR.md) | Why the rules and Godot adapter were separated, with regression evidence |
 | [Relationship Map / 对象关系图](BorrowingSun2D/Docs/2D-to-3D/RELATIONSHIP_MAP.svg) | Implemented class relationships and the physics frame order |
