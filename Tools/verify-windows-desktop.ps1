@@ -167,8 +167,10 @@ $before
         }
         $width = [Convert]::ToUInt32([Convert]::ToHexString($png, 16, 4), 16)
         $height = [Convert]::ToUInt32([Convert]::ToHexString($png, 20, 4), 16)
-        if ($width -lt 960 -or $height -lt 540 -or $width * 9 -ne $height * 16) {
-            throw "Expected a 16:9 viewport of at least 960x540. ${file}: ${width}x${height}"
+        # The desktop rounds the viewport to whole physical pixels.
+        $heightError = [Math]::Abs($width * 9.0 / 16 - $height)
+        if ($width -lt 960 -or $height -lt 540 -or $heightError -gt 1) {
+            throw "Expected a 16:9 viewport within one pixel and at least 960x540. ${file}: ${width}x${height}"
         }
         "capture=$file ${width}x${height}" | Add-Content -LiteralPath $metadata -Encoding utf8
     }
