@@ -10,6 +10,8 @@ Round 05D brings the frozen 2D introduction and delivery screen to the complete 
 
 The 3D project compiles shared rules from its sibling `BorrowingSun2D` directory. Keep both directories in the same checkout. [Start here](START_HERE.md) · [Round 06 submission preparation](BorrowingSun3D/Docs/ROUND_06_PREP.md)
 
+The course report draft follows the game from the frozen 2D baseline to the 3D candidate. The live demo outline includes the controls, evidence, and cues for both runs. [Report PDF](BorrowingSun3D/Docs/output/pdf/AP6412_Borrowing_Sun_Draft.pdf) · [Editable draft](BorrowingSun3D/Docs/AP6412_REPORT_DRAFT.md) · [15-minute demo](BorrowingSun3D/Docs/DEMO_15_MIN.md)
+
 ## Run and play 2D
 
 1. Clone or download this repository. Install **Godot 4.7.1 .NET** and the **.NET 8 SDK**.

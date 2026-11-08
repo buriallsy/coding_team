@@ -2,6 +2,8 @@
 
 AP6412 · 路线 B · 小组报告工作稿。报告、演示和打包均以可追溯的游戏版本为依据。成员签名、首玩观察、Windows 验收和课程提交信息由小组据实补齐。 [课程项目计划](../../BorrowingSun2D/Docs/2D-to-3D/PRODUCTION_PLAN.md)
 
+当前审阅与彩排入口在独立文档，本页保留原工作稿和交付清单。 [报告 PDF 初稿](output/pdf/AP6412_Borrowing_Sun_Draft.pdf) · [可编辑源稿](AP6412_REPORT_DRAFT.md) · [15 分钟演示提纲](DEMO_15_MIN.md)
+
 ## 版本与范围
 
 | 版本 | 对照代码 | 状态 |
