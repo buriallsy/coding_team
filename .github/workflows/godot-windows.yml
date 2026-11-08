@@ -1,0 +1,133 @@
+name: Godot Windows headless
+
+on:
+  push:
+    branches:
+      - buriallsy/3d-graybox
+    paths-ignore:
+      - '**/*.md'
+      - '**/Docs/Evidence/**'
+
+permissions:
+  contents: read
+
+defaults:
+  run:
+    shell: pwsh
+
+jobs:
+  windows-headless:
+    runs-on: windows-2025
+    timeout-minutes: 15
+    env:
+      DOTNET_SDK: 8.0.424
+      GODOT_ZIP: Godot_v4.7.1-stable_mono_win64.zip
+      GODOT_SHA256: 764a089809fb1a6f745686ce9f6d3ca83adce8fb60fb9a4e2324b63baaebaa45
+
+    steps:
+      - name: Record runner metadata
+        run: |
+          New-Item -ItemType Directory -Path windows-evidence -Force | Out-Null
+          @(
+            "utc=$([DateTimeOffset]::UtcNow.ToString('o'))"
+            "os=$([System.Runtime.InteropServices.RuntimeInformation]::OSDescription)"
+            "architecture=$env:RUNNER_ARCH"
+            "runner_image=$env:ImageOS $env:ImageVersion"
+            "run_id=$env:GITHUB_RUN_ID"
+            "run_attempt=$env:GITHUB_RUN_ATTEMPT"
+            "checkout_sha=$env:GITHUB_SHA"
+          ) | Set-Content windows-evidence/metadata.txt -Encoding utf8
+
+      - name: Check out 3D candidate
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          path: candidate
+          persist-credentials: false
+
+      - name: Check out frozen 2D baseline
+        uses: actions/checkout@v4
+        with:
+          ref: refs/tags/2d-baseline
+          path: baseline
+          persist-credentials: false
+
+      - name: Verify candidate and baseline source refs
+        run: |
+          $manifest = Get-Content candidate/BorrowingSun3D/Docs/ccr-analysis.json -Raw | ConvertFrom-Json
+          $baseline = & git -C baseline rev-parse HEAD
+          if ($LASTEXITCODE -ne 0 -or $manifest.baseline.tag -ne '2d-baseline' -or $baseline -ne $manifest.baseline.commit) {
+            throw 'The 2D checkout does not match the frozen tag and CCR manifest.'
+          }
+          $final = & git -C candidate rev-parse --verify --end-of-options "$($manifest.final_ref)^{commit}"
+          if ($LASTEXITCODE -ne 0) { throw 'The CCR candidate ref does not resolve.' }
+          "baseline_sha=$baseline", "ccr_candidate_sha=$final" |
+            Add-Content windows-evidence/metadata.txt -Encoding utf8
+
+          $inputs = @('BorrowingSun3D', ':(exclude)BorrowingSun3D/Docs',
+            ':(exclude)BorrowingSun3D/README.md', 'BorrowingSun2D/Scripts/Core',
+            'BorrowingSun2D/Scripts/TowerUiFont.cs', 'Directory.Build.props',
+            'Directory.Build.targets', 'Directory.Packages.props', 'NuGet.Config', 'global.json')
+          & git -C candidate diff --exit-code $final HEAD -- @inputs
+          if ($LASTEXITCODE -ne 0) { throw 'The checked-out 3D build inputs differ from the CCR candidate.' }
+
+      - name: Install .NET 8
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_SDK }}
+
+      - name: Select .NET 8 for both checkouts
+        run: |
+          @{ sdk = @{ version = $env:DOTNET_SDK; rollForward = 'disable' } } |
+            ConvertTo-Json | Set-Content global.json -Encoding utf8
+          $sdk = & dotnet --version
+          if ($LASTEXITCODE -ne 0 -or $sdk -ne $env:DOTNET_SDK) { throw 'The pinned SDK is unavailable.' }
+          "dotnet=$sdk" | Add-Content windows-evidence/metadata.txt -Encoding utf8
+
+      - name: Install pinned Godot .NET
+        id: godot
+        run: |
+          $zip = Join-Path $env:RUNNER_TEMP $env:GODOT_ZIP
+          $url = "https://github.com/godotengine/godot-builds/releases/download/4.7.1-stable/$env:GODOT_ZIP"
+          Invoke-WebRequest -Uri $url -OutFile $zip
+          $sha = (Get-FileHash -LiteralPath $zip -Algorithm SHA256).Hash.ToLowerInvariant()
+          "godot_zip_sha256=$sha" | Add-Content windows-evidence/metadata.txt -Encoding utf8
+          if ($sha -ne $env:GODOT_SHA256) { throw 'Godot archive SHA-256 mismatch.' }
+
+          $folder = Join-Path $env:RUNNER_TEMP 'godot-mono'
+          Expand-Archive -LiteralPath $zip -DestinationPath $folder
+          $godot = Get-ChildItem -LiteralPath $folder -Recurse -File -Filter 'Godot_v4.7.1-stable_mono_win64_console.exe' |
+            Select-Object -First 1
+          if (-not $godot) { throw 'Godot console executable not found.' }
+          $version = & $godot.FullName --version
+          if ($LASTEXITCODE -ne 0 -or $version -notmatch '^4\.7\.1\.stable\.mono(?:\.|$)') {
+            throw "Unexpected Godot version: $version"
+          }
+          "godot=$version" | Add-Content windows-evidence/metadata.txt -Encoding utf8
+          "BORROWINGSUN_GODOT_BIN=$($godot.FullName)" | Add-Content -LiteralPath $env:GITHUB_ENV -Encoding utf8
+
+      - name: Run frozen 2D baseline headless
+        working-directory: baseline
+        run: |
+          # The frozen wrapper builds its instrumented project in the system temp directory.
+          # Keep that copy under the shared SDK pin for the MSBuild resolver too.
+          $temp = (New-Item -ItemType Directory -Path (Join-Path $env:GITHUB_WORKSPACE 'qa-temp') -Force).FullName
+          $env:TMP = $env:TEMP = $env:SystemTemp = $temp
+          ./Tools/verify.ps1 -GodotBin $env:BORROWINGSUN_GODOT_BIN
+
+      - name: Run matching 3D candidate headless
+        if: ${{ !cancelled() && steps.godot.outcome == 'success' }}
+        working-directory: candidate
+        run: |
+          ./Tools/verify-windows-3d.ps1 -GodotBin $env:BORROWINGSUN_GODOT_BIN
+
+      - name: Upload Windows headless logs
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-godot-headless-${{ github.run_attempt }}
+          path: |
+            windows-evidence/
+            baseline/artifacts/verification/
+            candidate/artifacts/verification/windows-3d/
+          if-no-files-found: warn

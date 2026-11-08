@@ -34,4 +34,4 @@ python3 Tools/ccr.py --analysis BorrowingSun3D/Docs/ccr-analysis.json
 git diff --exit-code 2d-baseline fb4cbb451c028234dd093576fa8c0e6e72bb457e -- BorrowingSun2D/Scripts/Core/
 ```
 
-当前工具核验标签指向、冻结 blob、原类映射和候选路径，审阅者负责行为归类。本轮结果和清单对应到同一份代码。 [CCR 输出](Evidence/round-05d/ccr.log)玩法同等性和双平台签收由实际游戏验收记录。 [CCR 工具](../../Tools/ccr.py) · [3D 类关系](RELATIONSHIP_MAP.md)
+当前工具核验标签指向、冻结 blob、原类映射和候选路径，审阅者负责行为归类。本轮结果和清单对应到同一份代码。玩法同等性和双平台签收由实际游戏验收记录。 [CCR 输出](Evidence/round-05d/ccr.log) [CCR 工具](../../Tools/ccr.py) · [3D 类关系](RELATIONSHIP_MAP.md)
