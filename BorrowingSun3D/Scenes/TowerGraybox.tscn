@@ -1,0 +1,324 @@
+[gd_scene load_steps=28 format=3]
+
+[ext_resource type="Script" path="res://Scripts/TowerGraybox.cs" id="1_graybox"]
+[ext_resource type="Script" path="res://Scripts/GrayboxPlayer.cs" id="2_player"]
+
+[sub_resource type="Environment" id="Environment_valley"]
+background_mode = 1
+background_color = Color(0.47, 0.56, 0.58, 1)
+ambient_light_source = 2
+ambient_light_color = Color(0.77, 0.86, 0.91, 1)
+ambient_light_energy = 0.83
+reflected_light_source = 1
+
+[sub_resource type="StandardMaterial3D" id="Material_stone"]
+albedo_color = Color(0.37, 0.43, 0.43, 1)
+roughness = 0.94
+
+[sub_resource type="StandardMaterial3D" id="Material_support"]
+albedo_color = Color(0.25, 0.32, 0.33, 1)
+roughness = 0.96
+
+[sub_resource type="StandardMaterial3D" id="Material_deck"]
+albedo_color = Color(0.56, 0.63, 0.62, 1)
+roughness = 0.81
+
+[sub_resource type="StandardMaterial3D" id="Material_copper"]
+albedo_color = Color(0.78, 0.55, 0.28, 1)
+roughness = 0.72
+
+[sub_resource type="StandardMaterial3D" id="Material_guide"]
+shading_mode = 0
+albedo_color = Color(0.56, 0.83, 0.80, 1)
+
+[sub_resource type="StandardMaterial3D" id="Material_player"]
+albedo_color = Color(1, 0.67, 0.37, 1)
+roughness = 0.74
+
+[sub_resource type="StandardMaterial3D" id="Material_water"]
+albedo_color = Color(0.25, 0.39, 0.41, 1)
+roughness = 0.89
+
+[sub_resource type="BoxShape3D" id="Shape_entry"]
+size = Vector3(7.7, 0.64, 4.9)
+
+[sub_resource type="BoxMesh" id="Mesh_entry"]
+material = SubResource("Material_stone")
+size = Vector3(7.7, 0.64, 4.9)
+
+[sub_resource type="BoxShape3D" id="Shape_court"]
+size = Vector3(4.9, 0.64, 7.7)
+
+[sub_resource type="BoxMesh" id="Mesh_court"]
+material = SubResource("Material_stone")
+size = Vector3(4.9, 0.64, 7.7)
+
+[sub_resource type="BoxMesh" id="Mesh_bank_support"]
+material = SubResource("Material_support")
+size = Vector3(7.35, 1, 4.55)
+
+[sub_resource type="CylinderShape3D" id="Shape_deck"]
+height = 0.38
+radius = 2.5
+
+[sub_resource type="CylinderMesh" id="Mesh_deck"]
+material = SubResource("Material_deck")
+top_radius = 2.5
+bottom_radius = 2.5
+height = 0.38
+radial_segments = 40
+rings = 1
+
+[sub_resource type="CylinderMesh" id="Mesh_base"]
+material = SubResource("Material_support")
+top_radius = 1.7
+bottom_radius = 2.05
+height = 1
+radial_segments = 28
+rings = 1
+
+[sub_resource type="BoxShape3D" id="Shape_bridge"]
+size = Vector3(2.02, 0.24, 1.72)
+
+[sub_resource type="BoxMesh" id="Mesh_bridge"]
+material = SubResource("Material_copper")
+size = Vector3(2.02, 0.24, 1.72)
+
+[sub_resource type="BoxMesh" id="Mesh_stowed"]
+material = SubResource("Material_copper")
+size = Vector3(0.39, 0.16, 1.72)
+
+[sub_resource type="BoxMesh" id="Mesh_column"]
+material = SubResource("Material_support")
+size = Vector3(0.26, 7.4, 0.26)
+
+[sub_resource type="BoxMesh" id="Mesh_gap_edge"]
+material = SubResource("Material_copper")
+size = Vector3(0.075, 0.022, 4.82)
+
+[sub_resource type="CylinderMesh" id="Mesh_station"]
+material = SubResource("Material_guide")
+top_radius = 0.13
+bottom_radius = 0.19
+height = 0.45
+radial_segments = 16
+rings = 1
+
+[sub_resource type="CapsuleShape3D" id="Shape_player"]
+radius = 0.33
+height = 1.5
+
+[sub_resource type="CapsuleMesh" id="Mesh_player"]
+material = SubResource("Material_player")
+radius = 0.33
+height = 1.5
+radial_segments = 24
+rings = 8
+
+[sub_resource type="PlaneMesh" id="Mesh_water"]
+material = SubResource("Material_water")
+size = Vector2(84, 84)
+
+[node name="TowerGraybox" type="Node3D"]
+script = ExtResource("1_graybox")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_valley")
+
+[node name="KeyLight" type="DirectionalLight3D" parent="."]
+rotation = Vector3(-0.94, -0.52, 0)
+light_color = Color(1, 0.91, 0.78, 1)
+light_energy = 1.38
+shadow_enabled = true
+
+[node name="Camera3D" type="Camera3D" parent="."]
+position = Vector3(6, 16, 23)
+rotation = Vector3(-0.437163, 0.32175055, 0)
+projection = 1
+current = true
+size = 16.2
+near = 0.1
+far = 120.0
+
+[node name="Entry" type="StaticBody3D" parent="."]
+collision_mask = 0
+
+[node name="Surface" type="CollisionShape3D" parent="Entry"]
+position = Vector3(-8.05, -0.32, 0)
+shape = SubResource("Shape_entry")
+
+[node name="Top" type="MeshInstance3D" parent="Entry"]
+position = Vector3(-8.05, -0.32, 0)
+mesh = SubResource("Mesh_entry")
+
+[node name="Foundation" type="MeshInstance3D" parent="Entry"]
+position = Vector3(-8.15, -1.77, 0)
+scale = Vector3(1, 2.45, 1)
+mesh = SubResource("Mesh_bank_support")
+
+[node name="GapEdge" type="MeshInstance3D" parent="Entry"]
+position = Vector3(-4.27, 0.012, 0)
+mesh = SubResource("Mesh_gap_edge")
+
+[node name="Spawn" type="Marker3D" parent="Entry"]
+position = Vector3(-8.8, 0, 0)
+
+[node name="Label" type="Label3D" parent="Entry"]
+position = Vector3(-8.9, 1.15, -1.68)
+billboard = 1
+pixel_size = 0.009
+modulate = Color(0.92, 0.97, 0.94, 1)
+outline_modulate = Color(0.13, 0.21, 0.22, 1)
+text = "01  WEST BANK"
+font_size = 38
+outline_size = 7
+
+[node name="Arrow" type="Label3D" parent="Entry"]
+position = Vector3(-6.65, 0.023, 0)
+rotation = Vector3(-1.5707963, 0, 0)
+pixel_size = 0.014
+modulate = Color(0.55, 0.84, 0.81, 1)
+text = "→"
+font_size = 72
+outline_size = 0
+
+[node name="SunCourt" type="StaticBody3D" parent="."]
+collision_mask = 0
+
+[node name="Surface" type="CollisionShape3D" parent="SunCourt"]
+position = Vector3(0, 5.68, -8.05)
+shape = SubResource("Shape_court")
+
+[node name="Top" type="MeshInstance3D" parent="SunCourt"]
+position = Vector3(0, 5.68, -8.05)
+mesh = SubResource("Mesh_court")
+
+[node name="Foundation" type="MeshInstance3D" parent="SunCourt"]
+position = Vector3(0, 1.26, -8.15)
+rotation = Vector3(0, 1.5707963, 0)
+scale = Vector3(1, 8.3, 1)
+mesh = SubResource("Mesh_bank_support")
+
+[node name="GapEdge" type="MeshInstance3D" parent="SunCourt"]
+position = Vector3(0, 6.012, -4.27)
+rotation = Vector3(0, 1.5707963, 0)
+mesh = SubResource("Mesh_gap_edge")
+
+[node name="Marker" type="Marker3D" parent="SunCourt"]
+position = Vector3(0, 6, -8.5)
+
+[node name="Label" type="Label3D" parent="SunCourt"]
+position = Vector3(0, 7.12, -10.68)
+billboard = 1
+pixel_size = 0.009
+modulate = Color(0.92, 0.97, 0.94, 1)
+outline_modulate = Color(0.13, 0.21, 0.22, 1)
+text = "03  NORTH COURT"
+font_size = 38
+outline_size = 7
+
+[node name="MarkerPlate" type="Label3D" parent="SunCourt"]
+position = Vector3(0, 6.028, -8.5)
+rotation = Vector3(-1.5707963, 0, 0)
+pixel_size = 0.011
+modulate = Color(0.56, 0.83, 0.80, 1)
+text = "◎"
+font_size = 74
+outline_size = 0
+
+[node name="Arrow" type="Label3D" parent="SunCourt"]
+position = Vector3(0, 6.024, -6.0)
+rotation = Vector3(-1.5707963, 0, 0)
+pixel_size = 0.014
+modulate = Color(0.55, 0.84, 0.81, 1)
+text = "↑"
+font_size = 72
+outline_size = 0
+
+[node name="TowerBase" type="MeshInstance3D" parent="."]
+position = Vector3(0, -2.03, 0)
+scale = Vector3(1, 2.68, 1)
+mesh = SubResource("Mesh_base")
+
+[node name="GuideColumnOuter" type="MeshInstance3D" parent="."]
+position = Vector3(2.76, 0.91, 1.13)
+mesh = SubResource("Mesh_column")
+
+[node name="GuideColumnInner" type="MeshInstance3D" parent="."]
+position = Vector3(2.76, 0.91, -1.13)
+mesh = SubResource("Mesh_column")
+
+[node name="Lift" type="AnimatableBody3D" parent="."]
+collision_layer = 2
+collision_mask = 0
+sync_to_physics = true
+
+[node name="DeckCollision" type="CollisionShape3D" parent="Lift"]
+position = Vector3(0, -0.19, 0)
+shape = SubResource("Shape_deck")
+
+[node name="DeckVisual" type="MeshInstance3D" parent="Lift"]
+position = Vector3(0, -0.19, 0)
+mesh = SubResource("Mesh_deck")
+
+[node name="BridgeCollision" type="CollisionShape3D" parent="Lift"]
+position = Vector3(-3.21, -0.12, 0)
+shape = SubResource("Shape_bridge")
+
+[node name="BridgeVisual" type="MeshInstance3D" parent="Lift"]
+position = Vector3(-3.21, -0.12, 0)
+mesh = SubResource("Mesh_bridge")
+
+[node name="BridgeStowed" type="MeshInstance3D" parent="Lift"]
+visible = false
+position = Vector3(-2.29, -0.07, 0)
+mesh = SubResource("Mesh_stowed")
+
+[node name="Station" type="Marker3D" parent="Lift"]
+
+[node name="StationLamp" type="MeshInstance3D" parent="Lift"]
+position = Vector3(0.85, 0.225, -0.72)
+mesh = SubResource("Mesh_station")
+
+[node name="StationLabel" type="Label3D" parent="Lift"]
+position = Vector3(0.85, 0.88, -0.72)
+billboard = 1
+pixel_size = 0.007
+modulate = Color(0.90, 1, 0.97, 1)
+outline_modulate = Color(0.14, 0.25, 0.25, 1)
+text = "02  TOWER"
+font_size = 40
+outline_size = 7
+
+[node name="Valley" type="MeshInstance3D" parent="."]
+position = Vector3(-2, -3.4, -5)
+mesh = SubResource("Mesh_water")
+
+[node name="HazardLabel" type="Label3D" parent="."]
+position = Vector3(-2.82, -1.86, -2.82)
+billboard = 1
+pixel_size = 0.008
+modulate = Color(1, 0.79, 0.53, 1)
+outline_modulate = Color(0.16, 0.24, 0.25, 1)
+text = "VALLEY GAP"
+font_size = 36
+outline_size = 6
+
+[node name="Player" type="CharacterBody3D" parent="."]
+position = Vector3(-8.8, 0, 0)
+collision_layer = 4
+collision_mask = 3
+floor_snap_length = 0.25
+platform_floor_layers = 2
+platform_on_leave = 2
+script = ExtResource("2_player")
+
+[node name="BodyCollision" type="CollisionShape3D" parent="Player"]
+position = Vector3(0, 0.75, 0)
+shape = SubResource("Shape_player")
+
+[node name="BodyVisual" type="MeshInstance3D" parent="Player"]
+position = Vector3(0, 0.75, 0)
+mesh = SubResource("Mesh_player")
+
+[node name="Interface" type="CanvasLayer" parent="."]

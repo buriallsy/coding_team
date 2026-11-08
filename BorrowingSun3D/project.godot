@@ -1,0 +1,75 @@
+config_version=5
+
+[application]
+
+config/name="Borrowing Sun - 3D Graybox"
+run/main_scene="res://Scenes/TowerGraybox.tscn"
+config/features=PackedStringArray("4.7", "C#", "GL Compatibility")
+
+[debug]
+
+file_logging/enable_file_logging=false
+
+[display]
+
+window/size/viewport_width=1280
+window/size/viewport_height=720
+window/stretch/mode="canvas_items"
+window/stretch/aspect="keep"
+
+[dotnet]
+
+project/assembly_name="BorrowingSun3D"
+
+[input]
+
+walk_west={
+"deadzone": 0.2,
+"events": [Object(InputEventKey,"physical_keycode":65), Object(InputEventKey,"keycode":4194319)]
+}
+walk_east={
+"deadzone": 0.2,
+"events": [Object(InputEventKey,"physical_keycode":68), Object(InputEventKey,"keycode":4194321)]
+}
+walk_north={
+"deadzone": 0.2,
+"events": [Object(InputEventKey,"physical_keycode":87), Object(InputEventKey,"keycode":4194320)]
+}
+walk_south={
+"deadzone": 0.2,
+"events": [Object(InputEventKey,"physical_keycode":83), Object(InputEventKey,"keycode":4194322)]
+}
+select_rain={
+"deadzone": 0.2,
+"events": [Object(InputEventKey,"physical_keycode":49)]
+}
+select_wind={
+"deadzone": 0.2,
+"events": [Object(InputEventKey,"physical_keycode":50)]
+}
+cast_weather={
+"deadzone": 0.2,
+"events": [Object(InputEventKey,"physical_keycode":69)]
+}
+cast_weather_reverse={
+"deadzone": 0.2,
+"events": [Object(InputEventKey,"shift_pressed":true,"physical_keycode":69)]
+}
+recall_weather={
+"deadzone": 0.2,
+"events": [Object(InputEventKey,"physical_keycode":81)]
+}
+toggle_drain={
+"deadzone": 0.2,
+"events": [Object(InputEventKey,"physical_keycode":70)]
+}
+reset_slice={
+"deadzone": 0.2,
+"events": [Object(InputEventKey,"physical_keycode":82)]
+}
+
+[rendering]
+
+renderer/rendering_method="gl_compatibility"
+renderer/rendering_method.mobile="gl_compatibility"
+environment/defaults/default_clear_color=Color(0.12, 0.16, 0.18, 1)

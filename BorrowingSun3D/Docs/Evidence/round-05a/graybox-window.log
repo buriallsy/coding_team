@@ -1,0 +1,48 @@
+Godot Engine v4.7.1.stable.mono.official.a13da4feb - https://godotengine.org
+OpenGL API 4.1 Metal - 90.5 - Compatibility - Using Device: Apple - Apple M5
+
+SCOPE: 3D graybox, configured main scene, production Input Map and Physics3D; no player placement or state injection.
+PASS initial state: restore the west spawn, zero mechanism state and clear the milestone | feet=(-8.8, 0, 0), lift=(0, 0, 0), dock=Entry
+PASS initial state: expected dock=Entry, bridge flag=True, native bridge hit=True | feet=(-8.8, 0, 0), lift=(0, 0, 0), dock=Entry
+CAPTURE west-entrance.png (1280, 720)
+PASS walk from the west low shore to the supported doorway | feet=(-4.390001, 0.0007994863, 0), lift=(0, 0, 0), dock=Entry
+PASS wind is refused while the player is standing in the actual doorway | feet=(-4.390001, 0.0007994863, 0), lift=(0, 0, 0), dock=Entry
+PASS low doorway refusal: expected dock=Entry, bridge flag=True, native bridge hit=True | feet=(-4.390001, 0.0007994863, 0), lift=(0, 0, 0), dock=Entry
+PASS walk east across supported surfaces to the centre of the tower | feet=(-0.04999946, 0.0008340883, 0), lift=(0, 0, 0), dock=Entry
+PASS the player stands on the real deck clear of the doorway | feet=(-0.04999946, 0.0008340883, 0), lift=(0, 0, 0), dock=Entry
+PASS wind at the low station is refused | feet=(-0.04999946, 0.0008340883, 0), lift=(0, 0, 0), dock=Entry
+PASS low wind refusal: expected dock=Entry, bridge flag=True, native bridge hit=True | feet=(-0.04999946, 0.0008340883, 0), lift=(0, 0, 0), dock=Entry
+PASS rain starts raising the occupied lift | feet=(-0.04999946, 1.0008336, 0), lift=(0, 1.0249996, 0), dock=None
+PASS the real moving lift carries the stationary player upward | feet=(-0.04999946, 1.0008336, 0), lift=(0, 1.0249996, 0), dock=None
+PASS while rising: expected dock=None, bridge flag=False, native bridge hit=False | feet=(-0.04999946, 1.0008336, 0), lift=(0, 1.0249996, 0), dock=None
+PASS rain fills the tower and latches the high deck | feet=(-0.04999946, 5.9758477, 0), lift=(0, 6, 0), dock=None
+PASS six units of rain hold both the actual lift and grounded rider six metres higher | feet=(-0.04999946, 6.000834, 0), lift=(0, 6, 0), dock=None
+PASS high but still west-facing: expected dock=None, bridge flag=False, native bridge hit=False | feet=(-0.04999946, 6.000834, 0), lift=(0, 6, 0), dock=None
+PASS wind starts a turn while the high deck stays locked under the player | feet=(-0.049871065, 6.000834, -0.0039233263), lift=(0, 6, 0), dock=None
+PASS while turning north: expected dock=None, bridge flag=False, native bridge hit=False | feet=(-0.049871065, 6.000834, -0.0039233263), lift=(0, 6, 0), dock=None
+PASS the wind turn docks north | feet=(-0.0006937322, 6.000834, -0.050506663), lift=(0, 6, 0), dock=SunCourt
+PASS the lift is stopped at 90 degrees and the player remains supported | feet=(-3.2910903E-05, 6.000834, -0.05051574), lift=(0, 6, 0), dock=SunCourt
+PASS at the north dock: expected dock=SunCourt, bridge flag=True, native bridge hit=True | feet=(-3.2910903E-05, 6.000834, -0.05051574), lift=(0, 6, 0), dock=SunCourt
+PASS walk north over the supported bridge to the actual marker | feet=(-3.2888838E-05, 6.000831, -8.450521), lift=(0, 6, 0), dock=SunCourt
+PASS the north milestone is recorded at the authored marker | feet=(-3.2888838E-05, 6.000831, -8.450521), lift=(0, 6, 0), dock=SunCourt
+CAPTURE north-marker.png (1280, 720)
+PASS R from the north marker: restore the west spawn, zero mechanism state and clear the milestone | feet=(-8.8, 0, 0), lift=(0, 0, 0), dock=Entry
+PASS R from the north marker: expected dock=Entry, bridge flag=True, native bridge hit=True | feet=(-8.8, 0, 0), lift=(0, 0, 0), dock=Entry
+PASS walk east across supported surfaces to the centre of the tower | feet=(-0.04999946, 0.0008340915, 0), lift=(0, 0, 0), dock=Entry
+PASS the player stands on the real deck clear of the doorway | feet=(-0.04999946, 0.0008340915, 0), lift=(0, 0, 0), dock=Entry
+PASS rain starts raising the occupied lift | feet=(-0.04999946, 1.0008336, 0), lift=(0, 1.0249996, 0), dock=None
+PASS the real moving lift carries the stationary player upward | feet=(-0.04999946, 1.0008336, 0), lift=(0, 1.0249996, 0), dock=None
+PASS while rising: expected dock=None, bridge flag=False, native bridge hit=False | feet=(-0.04999946, 1.0008336, 0), lift=(0, 1.0249996, 0), dock=None
+PASS rain fills the tower and latches the high deck | feet=(-0.04999946, 5.9758477, 0), lift=(0, 6, 0), dock=None
+PASS six units of rain hold both the actual lift and grounded rider six metres higher | feet=(-0.04999946, 6.000834, 0), lift=(0, 6, 0), dock=None
+PASS high but still west-facing: expected dock=None, bridge flag=False, native bridge hit=False | feet=(-0.04999946, 6.000834, 0), lift=(0, 6, 0), dock=None
+PASS wind starts a turn while the high deck stays locked under the player | feet=(-0.049871065, 6.000834, -0.0039233263), lift=(0, 6, 0), dock=None
+PASS while turning north: expected dock=None, bridge flag=False, native bridge hit=False | feet=(-0.049871065, 6.000834, -0.0039233263), lift=(0, 6, 0), dock=None
+PASS the wind turn docks north | feet=(-0.0006937322, 6.000834, -0.050506663), lift=(0, 6, 0), dock=SunCourt
+PASS the lift is stopped at 90 degrees and the player remains supported | feet=(-3.2910903E-05, 6.000834, -0.05051574), lift=(0, 6, 0), dock=SunCourt
+PASS at the north dock: expected dock=SunCourt, bridge flag=True, native bridge hit=True | feet=(-3.2910903E-05, 6.000834, -0.05051574), lift=(0, 6, 0), dock=SunCourt
+PASS walk north over the supported bridge to the actual marker | feet=(-3.2888838E-05, 6.000831, -8.450521), lift=(0, 6, 0), dock=SunCourt
+PASS the north milestone is recorded at the authored marker | feet=(-3.2888838E-05, 6.000831, -8.450521), lift=(0, 6, 0), dock=SunCourt
+PASS the player physically reaches the north marker again after R | feet=(-3.2888838E-05, 6.000831, -8.450521), lift=(0, 6, 0), dock=SunCourt
+PASS walking off the real north shore returns the airborne player to the live deck and preserves the milestone | feet=(0.07, 6.0001364, 0), lift=(0, 6, 0), dock=SunCourt
+GRAYBOX_ROUTE PASSED assertions=41 failures=0
