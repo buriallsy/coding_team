@@ -1,0 +1,94 @@
+Godot Engine v4.7.1.stable.mono.official.a13da4feb - https://godotengine.org
+OpenGL API 4.1 Metal - 90.5 - Compatibility - Using Device: Apple - Apple M5
+
+SCOPE: 3D graybox with production Input Map and Physics3D; no player placement or state injection. The sole fixture is an optical-only StaticBody3D, inserted after the first clean east crossing.
+PASS initial state: restore the west spawn, zero mechanism state and clear both milestones | feet=(-8.8, 0, 0), lift=(0, 0, 0), dock=Entry
+PASS initial state: clear the collector pose, local sunshine and optical hits | feet=(-8.8, 0, 0), lift=(0, 0, 0), dock=Entry
+PASS initial state: expected dock=Entry, bridge flag=True, native bridge hit=True | feet=(-8.8, 0, 0), lift=(0, 0, 0), dock=Entry
+CAPTURE west-entrance.png (1280, 720)
+PASS walk from the west low shore to the supported doorway | feet=(-4.390001, 0.0007994863, 0), lift=(0, 0, 0), dock=Entry
+PASS wind is refused while the player is standing in the actual doorway | feet=(-4.390001, 0.0007994863, 0), lift=(0, 0, 0), dock=Entry
+PASS low doorway refusal: expected dock=Entry, bridge flag=True, native bridge hit=True | feet=(-4.390001, 0.0007994863, 0), lift=(0, 0, 0), dock=Entry
+PASS walk east across supported surfaces to the centre of the tower | feet=(-0.04999946, 0.0008340883, 0), lift=(0, 0, 0), dock=Entry
+PASS the player stands on the real deck clear of the doorway | feet=(-0.04999946, 0.0008340883, 0), lift=(0, 0, 0), dock=Entry
+PASS wind at the low station is refused | feet=(-0.04999946, 0.0008340883, 0), lift=(0, 0, 0), dock=Entry
+PASS low wind refusal: expected dock=Entry, bridge flag=True, native bridge hit=True | feet=(-0.04999946, 0.0008340883, 0), lift=(0, 0, 0), dock=Entry
+PASS rain starts raising the occupied lift | feet=(-0.04999946, 1.0008336, 0), lift=(0, 1.0249996, 0), dock=None
+PASS the real moving lift carries the stationary player upward | feet=(-0.04999946, 1.0008336, 0), lift=(0, 1.0249996, 0), dock=None
+PASS while rising: expected dock=None, bridge flag=False, native bridge hit=False | feet=(-0.04999946, 1.0008336, 0), lift=(0, 1.0249996, 0), dock=None
+PASS rain fills the tower and latches the high deck | feet=(-0.04999946, 5.9758477, 0), lift=(0, 6, 0), dock=None
+PASS six units of rain hold both the actual lift and grounded rider six metres higher | feet=(-0.04999946, 6.000834, 0), lift=(0, 6, 0), dock=None
+PASS high but still west-facing: expected dock=None, bridge flag=False, native bridge hit=False | feet=(-0.04999946, 6.000834, 0), lift=(0, 6, 0), dock=None
+PASS wind starts a turn while the high deck stays locked under the player | feet=(-0.049871065, 6.000834, -0.0039233263), lift=(0, 6, 0), dock=None
+PASS while turning north: expected dock=None, bridge flag=False, native bridge hit=False | feet=(-0.049871065, 6.000834, -0.0039233263), lift=(0, 6, 0), dock=None
+PASS the wind turn docks north | feet=(-0.0006937322, 6.000834, -0.050506663), lift=(0, 6, 0), dock=SunCourt
+PASS the lift is stopped at 90 degrees and the player remains supported | feet=(-3.2910903E-05, 6.000834, -0.05051574), lift=(0, 6, 0), dock=SunCourt
+PASS at the north dock: expected dock=SunCourt, bridge flag=True, native bridge hit=True | feet=(-3.2910903E-05, 6.000834, -0.05051574), lift=(0, 6, 0), dock=SunCourt
+PASS walk north over the supported bridge to the actual marker | feet=(-3.291096E-05, 6.000831, -8.450522), lift=(0, 6, 0), dock=SunCourt
+PASS the north milestone is recorded at the authored marker | feet=(-3.291096E-05, 6.000831, -8.450522), lift=(0, 6, 0), dock=SunCourt
+PASS sunny weather at the parked collector does not light the tower or the east receiver | feet=(-3.291096E-05, 6.000831, -8.450522), lift=(0, 6, 0), dock=SunCourt
+PASS actual 2 and E at the north station calibrate the collector | feet=(-3.291096E-05, 6.000831, -8.450522), lift=(0, 6, 0), dock=SunCourt
+PASS actual 3 and E clear the sky and send light to the tower | feet=(-3.291096E-05, 6.000831, -8.450522), lift=(0, 6, 0), dock=SunCourt
+PASS at north, the collector reaches the tower and the second reflection points west, leaving the east receiver dark | feet=(-3.291096E-05, 6.000831, -8.450522), lift=(0, 6, 0), dock=SunCourt
+PASS Q recalls sunshine at the north station while keeping its calibrated aim | feet=(-3.291096E-05, 6.000831, -8.450522), lift=(0, 6, 0), dock=SunCourt
+PASS at north, the collector reaches the tower and the second reflection points west, leaving the east receiver dark | feet=(-3.291096E-05, 6.000831, -8.450522), lift=(0, 6, 0), dock=SunCourt
+CAPTURE north-marker.png (1280, 720)
+PASS walk south across the north bridge back to the tower console | feet=(-3.2848155E-05, 6.00084, 0.01948569), lift=(0, 6, 0), dock=SunCourt
+PASS the north beam persists when leaving the solar station, with the east receiver still dark | feet=(-3.2848155E-05, 6.00084, 0.01948569), lift=(0, 6, 0), dock=SunCourt
+PASS the east turn begins under the grounded player and the receiver remains dark while misaligned | feet=(-0.0015617546, 6.00084, 0.019433072), lift=(0, 6, 0), dock=None
+PASS while turning east: expected dock=None, bridge flag=False, native bridge hit=False | feet=(-0.0015617546, 6.00084, 0.019433072), lift=(0, 6, 0), dock=None
+PASS the east turn reaches its midpoint | feet=(-0.013685667, 6.00084, 0.014008968), lift=(0, 6, 0), dock=None
+PASS at 135 degrees the reflected light still misses the east receiver | feet=(-0.013685667, 6.00084, 0.014008968), lift=(0, 6, 0), dock=None
+PASS halfway through the east turn: expected dock=None, bridge flag=False, native bridge hit=False | feet=(-0.013685667, 6.00084, 0.014008968), lift=(0, 6, 0), dock=None
+PASS the wind turn docks east | feet=(-0.019683842, 6.00084, 0.00023575083), lift=(0, 6, 0), dock=East
+PASS the lift stops at 180 degrees with the player still supported | feet=(-0.019686926, 6.00084, -2.1789485E-05), lift=(0, 6, 0), dock=East
+PASS at the east dock: expected dock=East, bridge flag=True, native bridge hit=True | feet=(-0.019686926, 6.00084, -2.1789485E-05), lift=(0, 6, 0), dock=East
+PASS at east, one continuous ray hits the collector, tower mirror and receiver in that order | feet=(-0.019686926, 6.00084, -2.1789485E-05), lift=(0, 6, 0), dock=East
+PASS lighting the receiver from the tower does not count as reaching east | feet=(-0.019686926, 6.00084, -2.1789485E-05), lift=(0, 6, 0), dock=East
+PASS walk east over the supported bridge to the actual east marker | feet=(8.520312, 6.0008373, -2.189376E-05), lift=(0, 6, 0), dock=East
+PASS the east milestone requires the physical crossing and the clear reflected beam stays on | feet=(8.520312, 6.0008373, -2.189376E-05), lift=(0, 6, 0), dock=East
+CAPTURE east-receiver.png (1280, 720)
+FIXTURE layer=8, centre=(4.3, 7.4500003, 2.597845E-06), ray=(6.8629936E-07, 7.7, 1.9073486E-06) -> (8.6, 7.200001, 3.2883413E-06)
+PASS the native 3D ray hits the temporary optical-only collider | feet=(8.520312, 6.0008373, -2.189376E-05), lift=(0, 6, 0), dock=East
+PASS the real second reflection stops at the same collision point and extinguishes the receiver | feet=(8.520312, 6.0008373, -2.189376E-05), lift=(0, 6, 0), dock=East
+TRACE blocked second reflection at (4.1000004, 7.461628, 2.5657287E-06)
+PASS removing the fixture clears the native optical ray again | feet=(8.520312, 6.0008373, -2.189376E-05), lift=(0, 6, 0), dock=East
+PASS at east, one continuous ray hits the collector, tower mirror and receiver in that order | feet=(8.520312, 6.0008373, -2.189376E-05), lift=(0, 6, 0), dock=East
+PASS R from the east marker: restore the west spawn, zero mechanism state and clear both milestones | feet=(-8.8, 0, 0), lift=(0, 0, 0), dock=Entry
+PASS R from the east marker: clear the collector pose, local sunshine and optical hits | feet=(-8.8, 0, 0), lift=(0, 0, 0), dock=Entry
+PASS R from the east marker: expected dock=Entry, bridge flag=True, native bridge hit=True | feet=(-8.8, 0, 0), lift=(0, 0, 0), dock=Entry
+PASS walk east across supported surfaces to the centre of the tower | feet=(-0.04999946, 0.0008340915, 0), lift=(0, 0, 0), dock=Entry
+PASS the player stands on the real deck clear of the doorway | feet=(-0.04999946, 0.0008340915, 0), lift=(0, 0, 0), dock=Entry
+PASS rain starts raising the occupied lift | feet=(-0.04999946, 1.0008336, 0), lift=(0, 1.0249996, 0), dock=None
+PASS the real moving lift carries the stationary player upward | feet=(-0.04999946, 1.0008336, 0), lift=(0, 1.0249996, 0), dock=None
+PASS while rising: expected dock=None, bridge flag=False, native bridge hit=False | feet=(-0.04999946, 1.0008336, 0), lift=(0, 1.0249996, 0), dock=None
+PASS rain fills the tower and latches the high deck | feet=(-0.04999946, 5.9758477, 0), lift=(0, 6, 0), dock=None
+PASS six units of rain hold both the actual lift and grounded rider six metres higher | feet=(-0.04999946, 6.000834, 0), lift=(0, 6, 0), dock=None
+PASS high but still west-facing: expected dock=None, bridge flag=False, native bridge hit=False | feet=(-0.04999946, 6.000834, 0), lift=(0, 6, 0), dock=None
+PASS wind starts a turn while the high deck stays locked under the player | feet=(-0.049871065, 6.000834, -0.0039233263), lift=(0, 6, 0), dock=None
+PASS while turning north: expected dock=None, bridge flag=False, native bridge hit=False | feet=(-0.049871065, 6.000834, -0.0039233263), lift=(0, 6, 0), dock=None
+PASS the wind turn docks north | feet=(-0.0006937322, 6.000834, -0.050506663), lift=(0, 6, 0), dock=SunCourt
+PASS the lift is stopped at 90 degrees and the player remains supported | feet=(-3.2910903E-05, 6.000834, -0.05051574), lift=(0, 6, 0), dock=SunCourt
+PASS at the north dock: expected dock=SunCourt, bridge flag=True, native bridge hit=True | feet=(-3.2910903E-05, 6.000834, -0.05051574), lift=(0, 6, 0), dock=SunCourt
+PASS walk north over the supported bridge to the actual marker | feet=(-3.291096E-05, 6.000831, -8.450522), lift=(0, 6, 0), dock=SunCourt
+PASS the north milestone is recorded at the authored marker | feet=(-3.291096E-05, 6.000831, -8.450522), lift=(0, 6, 0), dock=SunCourt
+PASS actual 2 and E at the north station calibrate the collector | feet=(-3.291096E-05, 6.000831, -8.450522), lift=(0, 6, 0), dock=SunCourt
+PASS actual 3 and E clear the sky and send light to the tower | feet=(-3.291096E-05, 6.000831, -8.450522), lift=(0, 6, 0), dock=SunCourt
+PASS at north, the collector reaches the tower and the second reflection points west, leaving the east receiver dark | feet=(-3.291096E-05, 6.000831, -8.450522), lift=(0, 6, 0), dock=SunCourt
+PASS walk south across the north bridge back to the tower console | feet=(-3.2909553E-05, 6.000837, 0.019473597), lift=(0, 6, 0), dock=SunCourt
+PASS the north beam persists when leaving the solar station, with the east receiver still dark | feet=(-3.2909553E-05, 6.000837, 0.019473597), lift=(0, 6, 0), dock=SunCourt
+PASS the east turn begins under the grounded player and the receiver remains dark while misaligned | feet=(-0.001560867, 6.000837, 0.019421006), lift=(0, 6, 0), dock=None
+PASS while turning east: expected dock=None, bridge flag=False, native bridge hit=False | feet=(-0.001560867, 6.000837, 0.019421006), lift=(0, 6, 0), dock=None
+PASS the east turn reaches its midpoint | feet=(-0.013677234, 6.000837, 0.014000214), lift=(0, 6, 0), dock=None
+PASS at 135 degrees the reflected light still misses the east receiver | feet=(-0.013677234, 6.000837, 0.014000214), lift=(0, 6, 0), dock=None
+PASS halfway through the east turn: expected dock=None, bridge flag=False, native bridge hit=False | feet=(-0.013677234, 6.000837, 0.014000214), lift=(0, 6, 0), dock=None
+PASS the wind turn docks east | feet=(-0.01967162, 6.000837, 0.00023551882), lift=(0, 6, 0), dock=East
+PASS the lift stops at 180 degrees with the player still supported | feet=(-0.019674702, 6.000837, -2.1861604E-05), lift=(0, 6, 0), dock=East
+PASS at the east dock: expected dock=East, bridge flag=True, native bridge hit=True | feet=(-0.019674702, 6.000837, -2.1861604E-05), lift=(0, 6, 0), dock=East
+PASS at east, one continuous ray hits the collector, tower mirror and receiver in that order | feet=(-0.019674702, 6.000837, -2.1861604E-05), lift=(0, 6, 0), dock=East
+PASS lighting the receiver from the tower does not count as reaching east | feet=(-0.019674702, 6.000837, -2.1861604E-05), lift=(0, 6, 0), dock=East
+PASS walk east over the supported bridge to the actual east marker | feet=(8.520323, 6.00084, -2.1914098E-05), lift=(0, 6, 0), dock=East
+PASS the east milestone requires the physical crossing and the clear reflected beam stays on | feet=(8.520323, 6.00084, -2.1914098E-05), lift=(0, 6, 0), dock=East
+PASS the full route again reaches the east marker with a clear reflected beam after R | feet=(8.520323, 6.00084, -2.1914098E-05), lift=(0, 6, 0), dock=East
+PASS walking off the real east shore returns the airborne player to the live deck and preserves both milestones | feet=(0, 6.0001364, -0.07), lift=(0, 6, 0), dock=East
+GRAYBOX_ROUTE PASSED assertions=84 failures=0

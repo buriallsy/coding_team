@@ -126,17 +126,17 @@ script = ExtResource("1_graybox")
 environment = SubResource("Environment_valley")
 
 [node name="KeyLight" type="DirectionalLight3D" parent="."]
-rotation = Vector3(-0.94, -0.52, 0)
+rotation = Vector3(-0.711385633, -2.515331216, 0)
 light_color = Color(1, 0.91, 0.78, 1)
 light_energy = 1.38
 shadow_enabled = true
 
 [node name="Camera3D" type="Camera3D" parent="."]
 position = Vector3(6, 16, 23)
-rotation = Vector3(-0.437163, 0.32175055, 0)
+rotation = Vector3(-0.433115745, 0.281500042, 0)
 projection = 1
 current = true
-size = 16.2
+size = 17.4
 near = 0.1
 far = 120.0
 
@@ -235,6 +235,76 @@ text = "↑"
 font_size = 72
 outline_size = 0
 
+[node name="SolarStation" type="Marker3D" parent="SunCourt"]
+position = Vector3(0, 6, -8.5)
+
+[node name="SunOrigin" type="Marker3D" parent="SunCourt"]
+position = Vector3(-3.4, 12.45, -13.3)
+rotation = Vector3(0.711385633, 0.626261438, 0)
+
+[node name="Collector" type="Marker3D" parent="SunCourt"]
+position = Vector3(0, 7.45, -8.6)
+rotation = Vector3(-1.244505129, 1.369364195, 0)
+
+[node name="CollectorAim" type="Marker3D" parent="SunCourt"]
+position = Vector3(0, 7.45, -8.6)
+rotation = Vector3(-0.859057521, -0.855291734, 0)
+
+[node name="East" type="StaticBody3D" parent="."]
+collision_mask = 0
+
+[node name="Surface" type="CollisionShape3D" parent="East"]
+position = Vector3(8.05, 5.68, 0)
+shape = SubResource("Shape_entry")
+
+[node name="Top" type="MeshInstance3D" parent="East"]
+position = Vector3(8.05, 5.68, 0)
+mesh = SubResource("Mesh_entry")
+
+[node name="Foundation" type="MeshInstance3D" parent="East"]
+position = Vector3(8.15, 1.26, 0)
+scale = Vector3(1, 8.3, 1)
+mesh = SubResource("Mesh_bank_support")
+
+[node name="GapEdge" type="MeshInstance3D" parent="East"]
+position = Vector3(4.27, 6.012, 0)
+mesh = SubResource("Mesh_gap_edge")
+
+[node name="Marker" type="Marker3D" parent="East"]
+position = Vector3(8.6, 6, 0)
+
+[node name="Label" type="Label3D" parent="East"]
+position = Vector3(9.35, 7.17, -1.65)
+billboard = 1
+pixel_size = 0.009
+modulate = Color(0.92, 0.97, 0.94, 1)
+outline_modulate = Color(0.13, 0.21, 0.22, 1)
+text = "04  EAST SHORE"
+font_size = 38
+outline_size = 7
+
+[node name="MarkerPlate" type="Label3D" parent="East"]
+position = Vector3(8.6, 6.028, 0)
+rotation = Vector3(-1.5707963, 0, 0)
+pixel_size = 0.011
+modulate = Color(0.56, 0.83, 0.80, 1)
+text = "◎"
+font_size = 74
+outline_size = 0
+
+[node name="Arrow" type="Label3D" parent="East"]
+position = Vector3(6.1, 6.024, 0)
+rotation = Vector3(-1.5707963, 0, 0)
+pixel_size = 0.014
+modulate = Color(0.55, 0.84, 0.81, 1)
+text = "→"
+font_size = 72
+outline_size = 0
+
+[node name="Receiver" type="Marker3D" parent="East"]
+position = Vector3(8.6, 7.2, 0)
+rotation = Vector3(0, -1.570796327, 0)
+
 [node name="TowerBase" type="MeshInstance3D" parent="."]
 position = Vector3(0, -2.03, 0)
 scale = Vector3(1, 2.68, 1)
@@ -273,6 +343,10 @@ mesh = SubResource("Mesh_bridge")
 visible = false
 position = Vector3(-2.29, -0.07, 0)
 mesh = SubResource("Mesh_stowed")
+
+[node name="Relay" type="Marker3D" parent="Lift"]
+position = Vector3(0, 1.7, 0)
+rotation = Vector3(0.061575336, -0.784765711, 0)
 
 [node name="Station" type="Marker3D" parent="Lift"]
 

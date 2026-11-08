@@ -6,10 +6,11 @@ using Godot;
 
 namespace BorrowingSun3D;
 
-// Drives the production scene through real key events. Physics queries only observe collision.
+// Drives the production scene through real key events. The only fixture is a temporary optical blocker.
 internal sealed class GrayboxRouteCheck(TowerGraybox scene)
 {
     private const float PositionTolerance = .12f;
+    private const uint OpticalOnlyLayer = 8;
     private const string CaptureOption = "--capture-dir=";
 
     private AnimatableBody3D lift = null!;
@@ -33,7 +34,8 @@ internal sealed class GrayboxRouteCheck(TowerGraybox scene)
                     throw new InvalidOperationException("Viewport capture requires a graphical Godot run");
                 Directory.CreateDirectory(captureDirectory);
             }
-            GD.Print("SCOPE: 3D graybox, configured main scene, production Input Map and Physics3D; no player placement or state injection.");
+            GD.Print("SCOPE: 3D graybox with production Input Map and Physics3D; no player placement or state injection. "
+                + "The sole fixture is an optical-only StaticBody3D, inserted after the first clean east crossing.");
             await Frames(8);
             RequireEntrance("initial state");
             await Capture("west-entrance.png");
@@ -52,12 +54,19 @@ internal sealed class GrayboxRouteCheck(TowerGraybox scene)
             RequireBridge(Port.Entry, "low wind refusal");
 
             await RiseAndVisitNorth();
+            await CalibrateAndLightNorth(checkParkedAim: true);
             await Capture("north-marker.png");
-            await ResetToEntrance("from the north marker");
+            await ReturnAndVisitEast();
+            await Capture("east-receiver.png");
+            await CheckBlockedReceiver();
+
+            await ResetToEntrance("from the east marker");
             await WalkToStation();
             await RiseAndVisitNorth();
-            Require(scene.ReachedSunCourt && scene.Recoveries == 0,
-                "the player physically reaches the north marker again after R");
+            await CalibrateAndLightNorth();
+            await ReturnAndVisitEast();
+            Require(scene.ReachedEast && scene.Optics.ReceiverLit && scene.Recoveries == 0,
+                "the full route again reaches the east marker with a clear reflected beam after R");
             await FallAndRecover();
 
             GD.Print($"GRAYBOX_ROUTE PASSED assertions={assertions} failures=0");
@@ -68,6 +77,7 @@ internal sealed class GrayboxRouteCheck(TowerGraybox scene)
             GD.PushError($"GRAYBOX_ROUTE FAILED after {assertions} checks: {failure.Message}; "
                 + $"state={scene.State}, feet={scene.Player?.GlobalPosition}, floor={scene.Player?.IsOnFloor()}, "
                 + $"bridge={scene.Rig?.BridgeCollisionEnabled}, northVisited={scene.ReachedSunCourt}, "
+                + $"eastVisited={scene.ReachedEast}, towerHit={scene.Optics?.TowerHit}, receiverLit={scene.Optics?.ReceiverLit}, "
                 + $"recoveries={scene.Recoveries}, lastResult={scene.LastResult}");
             scene.GetTree().Quit(1);
         }
@@ -119,6 +129,128 @@ internal sealed class GrayboxRouteCheck(TowerGraybox scene)
             && IsSupportedByDeck(), "the player stands on the real deck clear of the doorway");
     }
 
+    private async Task CalibrateAndLightNorth(bool checkParkedAim = false)
+    {
+        if (checkParkedAim)
+        {
+            await Cast(Key.Key3);
+            Require(scene.Optics.IsSunny && !scene.Optics.IsCalibrated && !scene.Optics.TowerHit && !scene.Optics.ReceiverLit,
+                "sunny weather at the parked collector does not light the tower or the east receiver");
+        }
+
+        await Cast(Key.Key2);
+        Require(scene.Optics.IsCalibrated, "actual 2 and E at the north station calibrate the collector");
+        await Cast(Key.Key3);
+        await Until(() => scene.Optics.IsSunny && scene.Optics.TowerHit, 60,
+            "actual 3 and E clear the sky and send light to the tower");
+        RequireNorthPath();
+
+        if (checkParkedAim)
+        {
+            await Tap(Key.Q);
+            Require(scene.Optics.IsCalibrated && !scene.Optics.IsSunny && !scene.Optics.Path.Incoming.HasValue,
+                "Q recalls sunshine at the north station while keeping its calibrated aim");
+            await Cast(Key.Key3);
+            RequireNorthPath();
+        }
+    }
+
+    private void RequireNorthPath()
+    {
+        var path = scene.Optics.Path;
+        Require(scene.Optics.TowerHit && !scene.Optics.ReceiverLit
+            && path.Incoming is { Hit: LightHit3D.Collector } incoming
+            && path.FirstReflection is { Hit: LightHit3D.TowerMirror } first
+            && path.SecondReflection is { } second && second.To.X < second.From.X
+            && ToGodot(incoming.To).DistanceTo(ToGodot(first.From)) < .02f,
+            "at north, the collector reaches the tower and the second reflection points west, leaving the east receiver dark");
+    }
+
+    private void RequireEastPath()
+    {
+        var path = scene.Optics.Path;
+        Require(scene.Optics.ReceiverLit && scene.Optics.TowerHit
+            && path.Incoming is { Hit: LightHit3D.Collector } incoming
+            && path.FirstReflection is { Hit: LightHit3D.TowerMirror } first
+            && path.SecondReflection is { Hit: LightHit3D.Receiver } second
+            && ToGodot(incoming.To).DistanceTo(ToGodot(first.From)) < .02f
+            && ToGodot(first.To).DistanceTo(ToGodot(second.From)) < .02f
+            && ToGodot(second.To).DistanceTo(scene.GetNode<Marker3D>("East/Receiver").GlobalPosition) < .55f,
+            "at east, one continuous ray hits the collector, tower mirror and receiver in that order");
+    }
+
+    private async Task CheckBlockedReceiver()
+    {
+        var clear = scene.Optics.Path.SecondReflection
+            ?? throw new InvalidOperationException("The fixture requires an existing clear second reflection");
+        Vector3 from = ToGodot(clear.From);
+        Vector3 to = ToGodot(clear.To);
+        Vector3 midpoint = from.Lerp(to, .5f);
+        var blocker = new StaticBody3D { Name = "TemporaryOpticalBlocker", CollisionLayer = OpticalOnlyLayer, CollisionMask = 0 };
+        blocker.AddChild(new CollisionShape3D { Shape = new BoxShape3D { Size = Vector3.One * .4f } });
+        scene.AddChild(blocker);
+        blocker.GlobalPosition = midpoint;
+        GD.Print($"FIXTURE layer={OpticalOnlyLayer}, centre={midpoint}, ray={from} -> {to}");
+
+        var ray = PhysicsRayQueryParameters3D.Create(from, to, OpticalOnlyLayer);
+        try
+        {
+            await Frames(6);
+            var hit = scene.GetWorld3D().DirectSpaceState.IntersectRay(ray);
+            Require(hit.TryGetValue("collider", out Variant collider) && collider.AsGodotObject() == blocker,
+                "the native 3D ray hits the temporary optical-only collider");
+            Vector3 impact = hit["position"].AsVector3();
+            Require(scene.Optics.TowerHit && !scene.Optics.ReceiverLit && scene.ReachedEast
+                && scene.Optics.Path.SecondReflection is { Hit: LightHit3D.Obstacle } blocked
+                && ToGodot(blocked.To).DistanceTo(impact) < .02f,
+                "the real second reflection stops at the same collision point and extinguishes the receiver");
+            GD.Print($"TRACE blocked second reflection at {impact}");
+        }
+        finally
+        {
+            blocker.QueueFree();
+        }
+
+        await Frames(6);
+        Require(scene.GetWorld3D().DirectSpaceState.IntersectRay(ray).Count == 0,
+            "removing the fixture clears the native optical ray again");
+        RequireEastPath();
+    }
+
+    private async Task ReturnAndVisitEast()
+    {
+        await Walk(Key.S, () => scene.Player.GlobalPosition.Z >= scene.Rig.Station.Z - .12f,
+            "walk south across the north bridge back to the tower console");
+        Require(scene.Rig.IsAtStation(scene.Player.GlobalPosition) && !scene.Rig.IsAtDoorway(scene.Player.GlobalPosition)
+            && IsSupportedByDeck() && scene.Optics.IsSunny && scene.Optics.TowerHit && !scene.Optics.ReceiverLit,
+            "the north beam persists when leaving the solar station, with the east receiver still dark");
+
+        await Cast(Key.Key2);
+        Require(scene.State.IsTurning && scene.State.Heading > TowerMechanism.SunCourtHeading
+            && scene.State.Heading < TowerMechanism.EastHeading && scene.State.Latched
+            && IsSupportedByDeck() && !scene.Optics.ReceiverLit,
+            "the east turn begins under the grounded player and the receiver remains dark while misaligned");
+        RequireBridge(Port.None, "while turning east");
+
+        await Until(() => scene.State.Heading >= 135f, 100, "the east turn reaches its midpoint");
+        Require(scene.State.IsTurning && !scene.Optics.ReceiverLit,
+            "at 135 degrees the reflected light still misses the east receiver");
+        RequireBridge(Port.None, "halfway through the east turn");
+        await Until(() => scene.State.DockedPort == Port.East, 160, "the wind turn docks east");
+        await Frames(4);
+        Require(Mathf.IsEqualApprox(scene.State.Heading, TowerMechanism.EastHeading) && IsSupportedByDeck(),
+            "the lift stops at 180 degrees with the player still supported");
+        RequireBridge(Port.East, "at the east dock");
+        RequireEastPath();
+        Require(!scene.ReachedEast, "lighting the receiver from the tower does not count as reaching east");
+
+        await Walk(Key.D, () => scene.Player.GlobalPosition.X >= scene.Rig.EastMarker.X - .15f,
+            "walk east over the supported bridge to the actual east marker");
+        Require(scene.ReachedSunCourt && scene.ReachedEast && scene.Rig.IsAtEastMarker(scene.Player.GlobalPosition)
+            && scene.Optics.ReceiverLit,
+            "the east milestone requires the physical crossing and the clear reflected beam stays on");
+    }
+
     private async Task ResetToEntrance(string context)
     {
         await Tap(Key.R);
@@ -134,20 +266,20 @@ internal sealed class GrayboxRouteCheck(TowerGraybox scene)
         {
             for (int frame = 0; frame < 240 && scene.Recoveries == recoveries; frame++)
             {
-                KeepHeld(Key.D);
+                KeepHeld(Key.W);
                 await Frames(1);
                 wasAirborne |= !scene.Player.IsOnFloor();
             }
         }
         finally
         {
-            Send(Key.D, false);
+            Send(Key.W, false);
         }
 
         await Frames(15);
         Require(wasAirborne && scene.Recoveries == recoveries + 1 && IsSupportedByDeck()
-            && scene.ReachedSunCourt && scene.State.DockedPort == Port.SunCourt,
-            "walking off the real north shore returns the airborne player to the live deck and preserves the milestone");
+            && scene.ReachedSunCourt && scene.ReachedEast && scene.State.DockedPort == Port.East,
+            "walking off the real east shore returns the airborne player to the live deck and preserves both milestones");
     }
 
     private void RequireEntrance(string context)
@@ -155,15 +287,18 @@ internal sealed class GrayboxRouteCheck(TowerGraybox scene)
         TowerState state = scene.State;
         Require(scene.Player.IsOnFloor() && scene.Player.GlobalPosition.DistanceTo(scene.Rig.Spawn) < PositionTolerance
             && state.Water == 0f && state.Height == 0f && state.Heading == 0f && !state.Latched
-            && state.ActiveWeather == Weather.None && !scene.ReachedSunCourt && scene.Recoveries == 0
+            && state.ActiveWeather == Weather.None && !scene.ReachedSunCourt && !scene.ReachedEast && scene.Recoveries == 0
             && scene.LastResult == null && Mathf.Abs(PhysicsLiftPosition().Y - scene.Rig.Station.Y) < PositionTolerance,
-            $"{context}: restore the west spawn, zero mechanism state and clear the milestone");
+            $"{context}: restore the west spawn, zero mechanism state and clear both milestones");
+        Require(!scene.Optics.IsSunny && !scene.Optics.IsCalibrated && !scene.Optics.TowerHit && !scene.Optics.ReceiverLit
+            && !scene.Optics.Path.Incoming.HasValue,
+            $"{context}: clear the collector pose, local sunshine and optical hits");
         RequireBridge(Port.Entry, context);
     }
 
     private void RequireBridge(Port expected, string context)
     {
-        bool connected = expected is Port.Entry or Port.SunCourt;
+        bool connected = expected is Port.Entry or Port.SunCourt or Port.East;
         Vector3 centre = bridge.GlobalPosition;
         var ray = PhysicsRayQueryParameters3D.Create(centre + Vector3.Up, centre + Vector3.Down, bridgeBody.CollisionLayer);
         var hit = scene.GetWorld3D().DirectSpaceState.IntersectRay(ray);
@@ -179,6 +314,8 @@ internal sealed class GrayboxRouteCheck(TowerGraybox scene)
 
     private Vector3 PhysicsLiftPosition()
         => PhysicsServer3D.BodyGetState(lift.GetRid(), PhysicsServer3D.BodyState.Transform).AsTransform3D().Origin;
+
+    private static Vector3 ToGodot(System.Numerics.Vector3 point) => new(point.X, point.Y, point.Z);
 
     private async Task Walk(Key key, Func<bool> reached, string context)
     {

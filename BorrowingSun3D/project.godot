@@ -47,6 +47,10 @@ select_wind={
 "deadzone": 0.2,
 "events": [Object(InputEventKey,"physical_keycode":50)]
 }
+select_sunny={
+"deadzone": 0.2,
+"events": [Object(InputEventKey,"physical_keycode":51)]
+}
 cast_weather={
 "deadzone": 0.2,
 "events": [Object(InputEventKey,"physical_keycode":69)]
@@ -67,6 +71,13 @@ reset_slice={
 "deadzone": 0.2,
 "events": [Object(InputEventKey,"physical_keycode":82)]
 }
+
+[layer_names]
+
+3d_physics/layer_1="Shore solids"
+3d_physics/layer_2="Lift and bridge"
+3d_physics/layer_3="Player"
+3d_physics/layer_4="Optical occluders"
 
 [rendering]
 

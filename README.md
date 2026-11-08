@@ -1,14 +1,12 @@
 # Borrowing Sun (借晴)
 
-**AP6412 · Route B · 2D baseline and 3D graybox 05A**
+**AP6412 · Route B · 2D baseline and 3D graybox 05B**
 
 Borrowing Sun is a weather puzzle set around a mountain tower. Rain lifts the tower and wind connects its bridges. Aim the Sun Court mirror, borrow sunlight, and turn the tower east to light the receiver. Sustained light earns one fruit crate. The same rainwater fills the cargo counterweight so you can ride across the valley and deliver the crate.
 
 ## 3D graybox
 
-Round 05A starts from `2d-baseline` (`6175db9`) on `buriallsy/3d-graybox`. In the separate Godot project, walk from the west shore onto the tower, lift it 6 m with rain, and turn the physical bridge north with wind. This slice ends at the Sun Court milestone. [3D project file](BorrowingSun3D/project.godot) · [Controls](BorrowingSun3D/README.md) · [Round 05A scope and verification](BorrowingSun3D/Docs/ROUND_05A.md)
-
-The macOS 3D run passed 41 checks in both headless and windowed modes, including walking the route again after `R`. [North court capture](BorrowingSun3D/Docs/Evidence/round-05a/north-marker.png)
+Round 05B continues from `2d-baseline` (`6175db9`) on `buriallsy/3d-graybox`. Walk from the west bank onto the lift, turn north to aim the collector and open sunlight, then return to the tower and turn east. The same moving bridge reaches all three banks. The east receiver lights when the two physical reflections reach it. Cargo follows in the next round. [3D project file](BorrowingSun3D/project.godot) · [Controls](BorrowingSun3D/README.md) · [Round 05B verification](BorrowingSun3D/Docs/ROUND_05B.md) · [3D relationship map](BorrowingSun3D/Docs/RELATIONSHIP_MAP.md)
 
 The complete 2D route and its verification remain documented below. The Round 03 integration adds automated domain checks, a Windows and macOS CI matrix, and CCR tooling linked to the current game rules. [Architecture and verification index](START_HERE.md)
 
