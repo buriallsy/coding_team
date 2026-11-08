@@ -10,20 +10,29 @@ namespace BorrowingSun3D;
 internal sealed class GrayboxRouteCheck(TowerGraybox scene)
 {
     private const float PositionTolerance = .12f;
+    private const float WaterTolerance = .003f;
+    private const float LiftTolerance = .03f;
     private const uint OpticalOnlyLayer = 8;
     private const string CaptureOption = "--capture-dir=";
 
     private AnimatableBody3D lift = null!;
+    private AnimatableBody3D carrier = null!;
     private CollisionShape3D bridge = null!;
     private CollisionObject3D bridgeBody = null!;
+    private (StaticBody3D Body, PhysicsRayQueryParameters3D Ray)? blocker;
     private string? captureDirectory;
     private int assertions;
+    private bool auditSupply;
+    private int supplySamples;
+    private float maxWaterDrift;
+    private float maxLiftDrift;
 
     internal async void Run()
     {
         try
         {
             lift = scene.GetNode<AnimatableBody3D>("Lift");
+            carrier = scene.GetNode<AnimatableBody3D>("CargoCarrier");
             bridge = scene.GetNode<CollisionShape3D>("Lift/BridgeCollision");
             bridgeBody = bridge.GetParent<CollisionObject3D>();
             string? captureArgument = Array.Find(OS.GetCmdlineUserArgs(), arg => arg.StartsWith(CaptureOption, StringComparison.Ordinal));
@@ -35,7 +44,7 @@ internal sealed class GrayboxRouteCheck(TowerGraybox scene)
                 Directory.CreateDirectory(captureDirectory);
             }
             GD.Print("SCOPE: 3D graybox with production Input Map and Physics3D; no player placement or state injection. "
-                + "The sole fixture is an optical-only StaticBody3D, inserted after the first clean east crossing.");
+                + "One optical-only StaticBody3D at a time is the only fixture. The replay is fixture-free.");
             await Frames(8);
             RequireEntrance("initial state");
             await Capture("west-entrance.png");
@@ -58,16 +67,28 @@ internal sealed class GrayboxRouteCheck(TowerGraybox scene)
             await Capture("north-marker.png");
             await ReturnAndVisitEast();
             await Capture("east-receiver.png");
-            await CheckBlockedReceiver();
+            await BoardCarrier();
+            await CheckLaunchGates();
+            await Capture("cargo-ready.png");
+            await LaunchAndRide(blockAfterLaunch: true);
+            await ConfirmDelivery();
 
-            await ResetToEntrance("from the east marker");
+            await ResetToEntrance("from the delivery marker");
             await WalkToStation();
             await RiseAndVisitNorth();
             await CalibrateAndLightNorth();
             await ReturnAndVisitEast();
-            Require(scene.ReachedEast && scene.Optics.ReceiverLit && scene.Recoveries == 0,
-                "the full route again reaches the east marker with a clear reflected beam after R");
             await FallAndRecover();
+            await BoardCarrier();
+            await WaitReady();
+            await LaunchAndRide();
+            await ConfirmDelivery();
+            Require(scene.Cargo.DeliveredCount == 1 && scene.Optics.ReceiverLit,
+                "the fixture-free route from the reset low bridge delivers 1/1 again");
+            await Capture("cargo-delivered.png");
+
+            Require(supplySamples > 0, "the cargo route audited conserved water and the actual high lift every physics step");
+            GD.Print($"SUPPLY samples={supplySamples}, max_water_drift={maxWaterDrift:0.000000}, max_lift_drift_m={maxLiftDrift:0.000000}");
 
             GD.Print($"GRAYBOX_ROUTE PASSED assertions={assertions} failures=0");
             scene.GetTree().Quit();
@@ -78,8 +99,13 @@ internal sealed class GrayboxRouteCheck(TowerGraybox scene)
                 + $"state={scene.State}, feet={scene.Player?.GlobalPosition}, floor={scene.Player?.IsOnFloor()}, "
                 + $"bridge={scene.Rig?.BridgeCollisionEnabled}, northVisited={scene.ReachedSunCourt}, "
                 + $"eastVisited={scene.ReachedEast}, towerHit={scene.Optics?.TowerHit}, receiverLit={scene.Optics?.ReceiverLit}, "
+                + $"cargo={scene.Cargo?.Phase}, lastCargoResult={scene.LastCargoResult}, "
                 + $"recoveries={scene.Recoveries}, lastResult={scene.LastResult}");
             scene.GetTree().Quit(1);
+        }
+        finally
+        {
+            if (blocker is { } fixture) fixture.Body.QueueFree();
         }
     }
 
@@ -159,6 +185,7 @@ internal sealed class GrayboxRouteCheck(TowerGraybox scene)
     {
         var path = scene.Optics.Path;
         Require(scene.Optics.TowerHit && !scene.Optics.ReceiverLit
+            && !scene.Cargo.HasFruit && scene.Cargo.LightProgress == 0f
             && path.Incoming is { Hit: LightHit3D.Collector } incoming
             && path.FirstReflection is { Hit: LightHit3D.TowerMirror } first
             && path.SecondReflection is { } second && second.To.X < second.From.X
@@ -179,41 +206,43 @@ internal sealed class GrayboxRouteCheck(TowerGraybox scene)
             "at east, one continuous ray hits the collector, tower mirror and receiver in that order");
     }
 
-    private async Task CheckBlockedReceiver()
+    private async Task BlockSecondReflection(string context)
     {
+        if (blocker.HasValue) throw new InvalidOperationException("The previous optical fixture is still active");
         var clear = scene.Optics.Path.SecondReflection
             ?? throw new InvalidOperationException("The fixture requires an existing clear second reflection");
+        Require(clear.Hit == LightHit3D.Receiver, $"{context}: start from an actual unobstructed receiver hit");
         Vector3 from = ToGodot(clear.From);
         Vector3 to = ToGodot(clear.To);
         Vector3 midpoint = from.Lerp(to, .5f);
-        var blocker = new StaticBody3D { Name = "TemporaryOpticalBlocker", CollisionLayer = OpticalOnlyLayer, CollisionMask = 0 };
-        blocker.AddChild(new CollisionShape3D { Shape = new BoxShape3D { Size = Vector3.One * .4f } });
-        scene.AddChild(blocker);
-        blocker.GlobalPosition = midpoint;
-        GD.Print($"FIXTURE layer={OpticalOnlyLayer}, centre={midpoint}, ray={from} -> {to}");
-
+        var body = new StaticBody3D { Name = "TemporaryOpticalBlocker", CollisionLayer = OpticalOnlyLayer, CollisionMask = 0 };
+        body.AddChild(new CollisionShape3D { Shape = new BoxShape3D { Size = Vector3.One * .4f } });
+        scene.AddChild(body);
+        body.GlobalPosition = midpoint;
         var ray = PhysicsRayQueryParameters3D.Create(from, to, OpticalOnlyLayer);
-        try
-        {
-            await Frames(6);
-            var hit = scene.GetWorld3D().DirectSpaceState.IntersectRay(ray);
-            Require(hit.TryGetValue("collider", out Variant collider) && collider.AsGodotObject() == blocker,
-                "the native 3D ray hits the temporary optical-only collider");
-            Vector3 impact = hit["position"].AsVector3();
-            Require(scene.Optics.TowerHit && !scene.Optics.ReceiverLit && scene.ReachedEast
-                && scene.Optics.Path.SecondReflection is { Hit: LightHit3D.Obstacle } blocked
-                && ToGodot(blocked.To).DistanceTo(impact) < .02f,
-                "the real second reflection stops at the same collision point and extinguishes the receiver");
-            GD.Print($"TRACE blocked second reflection at {impact}");
-        }
-        finally
-        {
-            blocker.QueueFree();
-        }
+        blocker = (body, ray);
+        GD.Print($"FIXTURE {context}: layer={OpticalOnlyLayer}, centre={midpoint}, ray={from} -> {to}");
 
         await Frames(6);
-        Require(scene.GetWorld3D().DirectSpaceState.IntersectRay(ray).Count == 0,
-            "removing the fixture clears the native optical ray again");
+        var hit = scene.GetWorld3D().DirectSpaceState.IntersectRay(ray);
+        Require(hit.TryGetValue("collider", out Variant collider) && collider.AsGodotObject() == body,
+            $"{context}: the native 3D ray hits the temporary optical-only collider");
+        Vector3 impact = hit["position"].AsVector3();
+        Require(scene.Optics.TowerHit && !scene.Optics.ReceiverLit && scene.ReachedEast
+            && scene.Optics.Path.SecondReflection is { Hit: LightHit3D.Obstacle } blocked
+            && ToGodot(blocked.To).DistanceTo(impact) < .02f,
+            $"{context}: the real second reflection stops at the same collision point and extinguishes the receiver");
+        GD.Print($"TRACE {context}: blocked second reflection at {impact}");
+    }
+
+    private async Task UnblockSecondReflection()
+    {
+        var fixture = blocker ?? throw new InvalidOperationException("No optical fixture is active");
+        fixture.Body.QueueFree();
+        blocker = null;
+        await Frames(6);
+        Require(scene.GetWorld3D().DirectSpaceState.IntersectRay(fixture.Ray).Count == 0,
+            "removing the fixture clears the native optical ray");
         RequireEastPath();
     }
 
@@ -243,6 +272,8 @@ internal sealed class GrayboxRouteCheck(TowerGraybox scene)
         RequireBridge(Port.East, "at the east dock");
         RequireEastPath();
         Require(!scene.ReachedEast, "lighting the receiver from the tower does not count as reaching east");
+        auditSupply = true;
+        await ConfirmSustainedLight();
 
         await Walk(Key.D, () => scene.Player.GlobalPosition.X >= scene.Rig.EastMarker.X - .15f,
             "walk east over the supported bridge to the actual east marker");
@@ -251,8 +282,145 @@ internal sealed class GrayboxRouteCheck(TowerGraybox scene)
             "the east milestone requires the physical crossing and the clear reflected beam stays on");
     }
 
+    private async Task ConfirmSustainedLight()
+    {
+        float lightProgress = scene.Cargo.LightProgress;
+        Require(lightProgress is > 0f and < .25f && scene.Cargo.Phase == CargoPhase.WaitingForLight
+            && !scene.CargoTrack.FruitVisible && scene.State.Counterweight == 0f,
+            "the initial real receiver hit starts the light timer without awarding a crate");
+
+        float secondsRemaining = (1f - lightProgress) * CargoJourney.RequiredLightSeconds;
+        int ticksBeforeThreshold = Mathf.FloorToInt(secondsRemaining * Engine.PhysicsTicksPerSecond) - 3;
+        await Frames(ticksBeforeThreshold);
+        Require(scene.Optics.ReceiverLit && scene.Cargo.LightProgress is > .9f and < 1f
+            && !scene.Cargo.HasFruit && !scene.CargoTrack.FruitVisible && scene.State.Counterweight == 0f,
+            "just short of 1.5 seconds of clear light there is still no crate or transferred water");
+        await Until(() => scene.Cargo.HasFruit, 8, "the continuous 1.5-second beam earns the single crate");
+        Require(scene.Cargo.Phase == CargoPhase.Loading && scene.CargoTrack.FruitVisible && scene.Cargo.DeliveredCount == 0,
+            "the earned crate appears on the car and begins loading without counting as delivered");
+    }
+
+    private async Task BoardCarrier()
+    {
+        await Walk(Key.D, () => scene.Player.GlobalPosition.X >= scene.CargoTrack.Departure.X - .12f,
+            "walk across the east floor and board the stationary car at its real departure point");
+        Require(scene.CargoTrack.IsAboard(scene.Player.GlobalPosition)
+            && PhysicsBodyPosition(carrier).DistanceTo(scene.CargoTrack.Departure) < PositionTolerance
+            && scene.Cargo.TravelProgress == 0f && scene.Cargo.DeliveredCount == 0,
+            "the grounded player is on the car and its native body is still at departure");
+    }
+
+    private async Task CheckLaunchGates()
+    {
+        Require(scene.Optics.ReceiverLit && scene.Cargo.HasFruit && scene.Cargo.Phase == CargoPhase.Loading
+            && scene.State.Counterweight is > 0f and < CargoJourney.CounterweightRequired,
+            "the real car is boarded while the original water is still filling the counterweight");
+        await Tap(Key.G);
+        Require(scene.LastCargoResult == CargoActionResult.NeedCounterweight && scene.Cargo.TravelProgress == 0f,
+            "actual G refuses departure with a lit receiver and an underfilled counterweight");
+
+        await BlockSecondReflection("partial transfer");
+        TowerState paused = scene.State;
+        Require(paused.Counterweight is > 0f and < CargoJourney.CounterweightRequired,
+            "the blocked beam interrupts a genuinely partial transfer");
+        await Frames(55);
+        Require(scene.Cargo.Phase == CargoPhase.Loading && scene.CargoTrack.FruitVisible && !scene.Optics.ReceiverLit
+            && Mathf.Abs(scene.State.Water - paused.Water) < WaterTolerance
+            && Mathf.Abs(scene.State.Counterweight - paused.Counterweight) < WaterTolerance,
+            "darkness pauses both tanks without losing the crate or the transferred water");
+        TraceCargo("partial transfer held");
+        await Tap(Key.G);
+        Require(scene.LastCargoResult == CargoActionResult.NeedLight && scene.Cargo.TravelProgress == 0f,
+            "actual G refuses departure while the partial load is dark");
+        await UnblockSecondReflection();
+        await Until(() => scene.State.Counterweight > paused.Counterweight + .04f, 60,
+            "removing the blocker resumes the transfer from the retained amount");
+        await WaitReady();
+
+        await BlockSecondReflection("full load before departure");
+        await Tap(Key.G);
+        Require(scene.LastCargoResult == CargoActionResult.NeedLight && scene.Cargo.TravelProgress == 0f
+            && Mathf.Abs(scene.State.Counterweight - CargoJourney.CounterweightRequired) < WaterTolerance,
+            "actual G also refuses dark departure at a full 4/4 counterweight");
+        await UnblockSecondReflection();
+    }
+
+    private async Task WaitReady()
+    {
+        await Until(() => scene.Cargo.Phase == CargoPhase.Ready && scene.Optics.ReceiverLit, 300,
+            "the clear beam fills the cargo counterweight");
+        Require(Mathf.Abs(scene.State.Counterweight - CargoJourney.CounterweightRequired) < WaterTolerance
+            && Mathf.Abs(scene.State.Water - (TowerMechanism.Capacity - CargoJourney.CounterweightRequired)) < WaterTolerance
+            && scene.CargoTrack.FruitVisible && scene.Cargo.DeliveredCount == 0,
+            "at 4/4 the original tank retains two units and the loaded car still awaits G");
+        TraceCargo("ready to launch");
+    }
+
+    private async Task LaunchAndRide(bool blockAfterLaunch = false)
+    {
+        Vector3 start = PhysicsBodyPosition(carrier);
+        Vector3 offset = scene.Player.GlobalPosition - start;
+        int recoveries = scene.Recoveries;
+        await Tap(Key.G);
+        Require(scene.LastCargoResult == CargoActionResult.Applied && scene.Cargo.Phase == CargoPhase.Travelling
+            && scene.Cargo.TravelProgress > 0f, "actual G launches the occupied car with a clear receiver and full counterweight");
+        await Until(() => PhysicsBodyPosition(carrier).X > start.X + .12f, 60,
+            "the native car body starts translating with its grounded rider");
+        if (blockAfterLaunch)
+        {
+            await BlockSecondReflection("already in motion");
+            Require(scene.Cargo.Phase == CargoPhase.Travelling && !scene.Optics.ReceiverLit,
+                "losing light after G does not cancel the ongoing trip");
+        }
+
+        float maxRelativeDrift = 0f;
+        for (int frame = 0; frame < 300 && scene.Cargo.Phase == CargoPhase.Travelling; frame++)
+        {
+            await Frames(1);
+            Vector3 liveOffset = scene.Player.GlobalPosition - PhysicsBodyPosition(carrier);
+            maxRelativeDrift = Mathf.Max(maxRelativeDrift, liveOffset.DistanceTo(offset));
+            if (!scene.Player.IsOnFloor() || scene.Recoveries != recoveries || (blockAfterLaunch && scene.Optics.ReceiverLit))
+                throw new InvalidOperationException("The rider lost physical support or the expected dark travel state");
+        }
+
+        await Frames(5);
+        Vector3 actual = PhysicsBodyPosition(carrier);
+        Vector3 terminal = scene.CargoTrack.Terminal;
+        Require(scene.Cargo.Phase == CargoPhase.Arrived && scene.Cargo.TravelProgress >= .999f
+            && actual.DistanceTo(terminal) < PositionTolerance && scene.CargoTrack.CarrierPosition.DistanceTo(terminal) < PositionTolerance,
+            "the native and rendered car both arrive at the authored terminal");
+        Require(actual.DistanceTo(start) > 7f && maxRelativeDrift < .20f
+            && scene.Player.IsOnFloor() && scene.CargoTrack.IsAboard(scene.Player.GlobalPosition) && scene.Recoveries == recoveries,
+            $"the car physically carries the grounded player {actual.DistanceTo(start):0.00} m with drift {maxRelativeDrift:0.000} m");
+        Require(scene.Cargo.DeliveredCount == 0 && scene.CargoTrack.FruitVisible
+            && (!blockAfterLaunch || !scene.Optics.ReceiverLit),
+            "arrival retains the crate and does not auto-deliver it");
+        TraceCargo(blockAfterLaunch ? "arrived in darkness" : "arrived in light");
+        if (blockAfterLaunch) await UnblockSecondReflection();
+    }
+
+    private async Task ConfirmDelivery()
+    {
+        await Tap(Key.G);
+        Require(scene.LastCargoResult == CargoActionResult.NeedDeliveryStation && scene.Cargo.DeliveredCount == 0,
+            "actual G on the arrived car refuses delivery away from the garden marker");
+        await Walk(Key.D, () => scene.Player.GlobalPosition.X >= scene.CargoTrack.Goal.X - .12f,
+            "walk off the real arrived car onto the delivery shore and reach its goal");
+        Require(scene.CargoTrack.IsAtDeliveryStation(scene.Player.GlobalPosition) && scene.Cargo.DeliveredCount == 0,
+            "reaching the actual garden goal still requires a G confirmation");
+        await Tap(Key.G);
+        Require(scene.LastCargoResult == CargoActionResult.Applied && scene.Cargo.Phase == CargoPhase.Delivered
+            && scene.Cargo.DeliveredCount == 1 && !scene.CargoTrack.FruitVisible,
+            "actual G at the delivery marker confirms 1/1 and removes the crate from the car");
+        await Tap(Key.G);
+        Require(scene.Cargo.Phase == CargoPhase.Delivered && scene.Cargo.DeliveredCount == 1,
+            "repeated actual G cannot count the delivery twice");
+        TraceCargo("delivered 1/1");
+    }
+
     private async Task ResetToEntrance(string context)
     {
+        auditSupply = false;
         await Tap(Key.R);
         await Frames(8);
         RequireEntrance($"R {context}");
@@ -293,6 +461,12 @@ internal sealed class GrayboxRouteCheck(TowerGraybox scene)
         Require(!scene.Optics.IsSunny && !scene.Optics.IsCalibrated && !scene.Optics.TowerHit && !scene.Optics.ReceiverLit
             && !scene.Optics.Path.Incoming.HasValue,
             $"{context}: clear the collector pose, local sunshine and optical hits");
+        Require(state.Counterweight == 0f && scene.Cargo.Phase == CargoPhase.WaitingForLight
+            && scene.Cargo.LightProgress == 0f && scene.Cargo.TravelProgress == 0f && scene.Cargo.DeliveredCount == 0
+            && !scene.CargoTrack.FruitVisible && scene.LastCargoResult == null
+            && scene.CargoTrack.CarrierPosition.DistanceTo(scene.CargoTrack.Departure) < PositionTolerance
+            && PhysicsBodyPosition(carrier).DistanceTo(scene.CargoTrack.Departure) < PositionTolerance,
+            $"{context}: clear ballast, crate and delivery and return the native car to departure");
         RequireBridge(Port.Entry, context);
     }
 
@@ -312,8 +486,31 @@ internal sealed class GrayboxRouteCheck(TowerGraybox scene)
         => scene.Player.IsOnFloor() && scene.Rig.IsOnDeck(scene.Player.GlobalPosition)
             && Mathf.Abs(scene.Player.GlobalPosition.Y - scene.Rig.Station.Y) < PositionTolerance;
 
-    private Vector3 PhysicsLiftPosition()
-        => PhysicsServer3D.BodyGetState(lift.GetRid(), PhysicsServer3D.BodyState.Transform).AsTransform3D().Origin;
+    private Vector3 PhysicsLiftPosition() => PhysicsBodyPosition(lift);
+
+    private static Vector3 PhysicsBodyPosition(AnimatableBody3D body)
+        => PhysicsServer3D.BodyGetState(body.GetRid(), PhysicsServer3D.BodyState.Transform).AsTransform3D().Origin;
+
+    private void AuditSupply()
+    {
+        TowerState state = scene.State;
+        float highY = scene.Rig.EastMarker.Y;
+        float waterDrift = Mathf.Abs(state.Water + state.Counterweight - TowerMechanism.Capacity);
+        float heightDrift = Mathf.Abs(state.Height - TowerMechanism.TravelMetres);
+        float liftDrift = Mathf.Abs(PhysicsLiftPosition().Y - highY);
+        float deckDrift = Mathf.Abs(scene.Rig.Station.Y - highY);
+        maxWaterDrift = Mathf.Max(maxWaterDrift, waterDrift);
+        maxLiftDrift = Mathf.Max(maxLiftDrift, Mathf.Max(heightDrift, Mathf.Max(liftDrift, deckDrift)));
+        supplySamples++;
+        if (waterDrift > WaterTolerance || maxLiftDrift > LiftTolerance || !state.Latched || state.DockedPort != Port.East)
+            throw new InvalidOperationException($"Cargo changed total water or the real high lift: {state}; lift={PhysicsLiftPosition()}");
+    }
+
+    private void TraceCargo(string context)
+        => GD.Print($"TRACE {context}: phase={scene.Cargo.Phase}, light={scene.Optics.ReceiverLit}, "
+            + $"water={scene.State.Water:0.000000}, ballast={scene.State.Counterweight:0.000000}, "
+            + $"height={scene.State.Height:0.000}, lift_y={PhysicsLiftPosition().Y:0.000}, "
+            + $"car={PhysicsBodyPosition(carrier)}, rider={scene.Player.GlobalPosition}, delivered={scene.Cargo.DeliveredCount}");
 
     private static Vector3 ToGodot(System.Numerics.Vector3 point) => new(point.X, point.Y, point.Z);
 
@@ -382,7 +579,10 @@ internal sealed class GrayboxRouteCheck(TowerGraybox scene)
     private async Task Frames(int count)
     {
         for (int frame = 0; frame < count; frame++)
+        {
             await scene.ToSignal(scene.GetTree(), SceneTree.SignalName.PhysicsFrame);
+            if (auditSupply) AuditSupply();
+        }
     }
 
     private async Task Capture(string fileName)

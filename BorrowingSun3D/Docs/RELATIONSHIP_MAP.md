@@ -1,6 +1,6 @@
-# 3D 关系图 · 第 05B 轮
+# 3D 关系图 · 第 05C 轮
 
-`TowerGraybox` 负责输入、物理步进和 HUD。塔机和到访规则沿用冻结的 2D C# 源码。三维空间接线和光学求交各有自己的职责。
+`TowerGraybox` 负责输入、物理步进和 HUD。塔机、到访和货运规则沿用冻结的 2D C# 源码。三维场景适配负责真实光路、塔桥和车台的碰撞与呈现。
 
 ```mermaid
 flowchart LR
@@ -20,6 +20,14 @@ flowchart LR
     Trace -->|LightPath3D| Optics
     Optics -->|计算光段| Beam[光束网格和接光盘]
     Optics -->|TowerHit / ReceiverLit| Scene
+    Scene -->|本帧受光 / 发车 / 确认交付| Cargo[CargoJourney · 共享]
+    Cargo -->|转入配重| Mechanism
+    Cargo -->|装货 / 行程 / 交付状态| Scene
+    Scene -->|TravelProgress / HasFruit| Track[CargoTrack3D]
+    Track -->|车台位置和果箱可见性| Car[实体货车]
+    Track -->|车面和交付点| Scene
+    Scene -->|塔机 / 光路 / 货运状态| Hud[HUD]
+    Verify[GrayboxRouteCheck] -->|实际按键| Input
 ```
 
 | 关系 | 代码与场景 |
@@ -28,6 +36,8 @@ flowchart LR
 | `TowerRig3D` 投影塔台姿态并切换桥碰撞 | [实体桥适配](../Scripts/TowerRig3D.cs) · [场景](../Scenes/TowerGraybox.tscn) |
 | `SunCourtOptics3D` 持有北庭天气和校准状态，读取世界姿态，接入物理遮挡和显示 | [3D 采光适配](../Scripts/SunCourtOptics3D.cs) |
 | `Optics3D` 使用几何和遮挡查询，返回入射及反射段 | [3D 光学求解](../Scripts/Optics3D.cs) |
-| `GrayboxRouteCheck` 向默认场景发按键并检查落脚、停靠和光路 | [验证入口](../Scripts/Verification/GrayboxRouteCheck.cs) |
+| `CargoJourney` 根据实时受光装货，与 `TowerMechanism` 共享原水转移，并持有发车、行程和交付状态 | [共享货运规则](../../BorrowingSun2D/Scripts/Core/CargoJourney.cs) · [共享塔机规则](../../BorrowingSun2D/Scripts/Core/TowerMechanism.cs) |
+| `CargoTrack3D` 把行程投影到实体车台，从车面和花庭标记提供交互位置，按状态显示果箱 | [实体货运适配](../Scripts/CargoTrack3D.cs) · [场景](../Scenes/TowerGraybox.tscn) |
+| `GrayboxRouteCheck` 向默认场景发按键并检查落脚、停靠、光路、货车及交付 | [验证入口](../Scripts/Verification/GrayboxRouteCheck.cs) |
 
-[05A 历史关系图](ROUND_05A.md#规则与场景接线) · [05B 设计与验证](ROUND_05B.md)
+[05A 规则接线](ROUND_05A.md#规则与场景接线) · [05B 光路](ROUND_05B.md) · [05C 货运](ROUND_05C.md)

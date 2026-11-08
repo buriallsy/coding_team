@@ -15,23 +15,30 @@ public partial class TowerGraybox : Node3D
     private string feedback = "";
     private float feedbackTime;
     private Label telemetry = null!;
+    private Label cargoTelemetry = null!;
     private Label hint = null!;
 
     internal GrayboxPlayer Player { get; private set; } = null!;
     internal TowerRig3D Rig { get; private set; } = null!;
     internal SunCourtOptics3D Optics { get; private set; } = null!;
+    internal CargoTrack3D CargoTrack { get; private set; } = null!;
+    internal CargoJourney Cargo { get; } = new();
     internal TowerState State => mechanism.State;
     internal bool ReachedSunCourt => route.ReachedSunCourt;
     internal bool ReachedEast => route.Completed;
     internal MechanismResult? LastResult { get; private set; }
+    internal CargoActionResult? LastCargoResult { get; private set; }
     internal int Recoveries { get; private set; }
     private bool AtSolarStation => Player.IsOnFloor() && Optics.IsAtStation(Player.Feet);
+    private bool IsAboardCargo => Player.IsOnFloor() && CargoTrack.IsAboard(Player.Feet);
+    private bool AtDeliveryStation => Player.IsOnFloor() && CargoTrack.IsAtDeliveryStation(Player.Feet);
 
     public override void _Ready()
     {
         Player = GetNode<GrayboxPlayer>("Player");
         Rig = new TowerRig3D(this);
         Optics = new SunCourtOptics3D(this);
+        CargoTrack = new CargoTrack3D(this);
         BuildHud(GetNode<CanvasLayer>("Interface"));
         ResetRoute();
         if (Array.IndexOf(OS.GetCmdlineUserArgs(), "--verify") >= 0)
@@ -51,8 +58,17 @@ public partial class TowerGraybox : Node3D
         ReadCommands();
         mechanism.Tick(step);
         Rig.Synchronize(State);
+        bool receiverWasLit = Optics.ReceiverLit;
+        CargoPhase previousCargoPhase = Cargo.Phase;
         Optics.Tick();
-        Player.Step(Input.GetVector("walk_west", "walk_east", "walk_north", "walk_south"), step);
+        Cargo.Tick(step, mechanism, Optics.ReceiverLit);
+        if (receiverWasLit != Optics.ReceiverLit || previousCargoPhase != Cargo.Phase)
+            feedbackTime = 0f;
+        ReadCargoCommand();
+        CargoTrack.Synchronize(Cargo.TravelProgress, Cargo.HasFruit);
+        Vector2 walk = Cargo.Phase == CargoPhase.Travelling ? Vector2.Zero
+            : Input.GetVector("walk_west", "walk_east", "walk_north", "walk_south");
+        Player.Step(walk, step);
         TrackPlayer();
         RefreshHud();
     }
@@ -109,7 +125,33 @@ public partial class TowerGraybox : Node3D
             MechanismResult.Full => "The tank is full. Select wind to turn.",
             MechanismResult.TurnLimit => "End of travel. Turn in the other direction.",
             MechanismResult.UnsupportedWeather => "Use sunny weather at the north mirror.",
+            MechanismResult.CounterweightCommitted => "Rainwater is in the ballast. The tower stays locked.",
             _ => "This action is unavailable here.",
+        });
+    }
+
+    private void ReadCargoCommand()
+    {
+        if (!Input.IsActionJustPressed("cargo_action", exactMatch: true)) return;
+        LastCargoResult = Cargo.Phase is CargoPhase.Arrived or CargoPhase.Delivered
+            ? Cargo.TryDeliver(AtDeliveryStation)
+            : Cargo.TryLaunch(mechanism, Optics.ReceiverLit, IsAboardCargo);
+        if (LastCargoResult == CargoActionResult.Applied)
+        {
+            feedbackTime = 0f;
+            return;
+        }
+
+        Say(LastCargoResult switch
+        {
+            CargoActionResult.NeedFruit => "Keep the east receiver lit to load the fruit crate.",
+            CargoActionResult.NeedLight => "Receiver dark. Restore light before departure.",
+            CargoActionResult.NeedCounterweight => "Wait for rainwater to fill the ballast.",
+            CargoActionResult.NeedEastDock => "Dock the tower at the east shore before departure.",
+            CargoActionResult.NeedBoarding => "Board the centre of the cargo car, then press G.",
+            CargoActionResult.NeedDeliveryStation => "Walk to the Flower Court marker to deliver.",
+            CargoActionResult.AlreadyDelivered => "Delivered 1/1. Press R to restart.",
+            _ => "The car is crossing the valley. Wait for arrival.",
         });
     }
 
@@ -156,7 +198,9 @@ public partial class TowerGraybox : Node3D
         }
         if (feet.Y >= FallHeight) return;
 
-        Player.Respawn(deckCheckpoint ? Rig.Station + Vector3.Up * .08f : Rig.Spawn);
+        Vector3 recovery = Cargo.Phase is CargoPhase.Travelling or CargoPhase.Arrived or CargoPhase.Delivered
+            ? CargoTrack.SafeFeet : deckCheckpoint ? Rig.Station + Vector3.Up * .08f : Rig.Spawn;
+        Player.Respawn(recovery);
         Recoveries++;
         Say("Back at the last safe platform.");
     }
@@ -165,13 +209,16 @@ public partial class TowerGraybox : Node3D
     {
         mechanism.Reset();
         route.Reset();
+        Cargo.Reset();
         Rig.Synchronize(State);
         Optics.Reset();
+        CargoTrack.Synchronize(Cargo.TravelProgress, Cargo.HasFruit);
         Player.Respawn(Rig.Spawn);
         selectedWeather = Weather.Rain;
         deckCheckpoint = false;
         Recoveries = 0;
         LastResult = null;
+        LastCargoResult = null;
         feedbackTime = 0f;
         RefreshHud();
     }
@@ -185,6 +232,11 @@ public partial class TowerGraybox : Node3D
     private string CurrentHint()
     {
         if (feedbackTime > 0f) return feedback;
+        if (Cargo.Phase == CargoPhase.Delivered) return "Delivered 1/1 at Flower Court. Press R to restart.";
+        if (Cargo.Phase == CargoPhase.Travelling) return "Crossing the valley. Wait for the car to arrive.";
+        if (Cargo.Phase == CargoPhase.Arrived) return AtDeliveryStation
+            ? "Flower Court reached. Press G to deliver the crate."
+            : "Car arrived. Walk right to the Flower Court marker.";
         if (mechanism.IsTurning) return "Bridge turning. Stay near the console.";
         if (mechanism.Draining) return "Draining. Press F to stop.";
         if (mechanism.IsLifting) return "Collecting rain. Stay on the tower until it locks.";
@@ -199,8 +251,7 @@ public partial class TowerGraybox : Node3D
         {
             if (!ReachedSunCourt) return "Visit north first. On the tower, use 2 then Shift+E.";
             if (!ReachedEast) return "East bridge connected. Hold D / Right to the receiver.";
-            return Optics.ReceiverLit ? "East receiver lit and reached. Press R to replay."
-                : "East receiver reached. Check the north mirror and beam.";
+            return CargoHint();
         }
         if (mechanism.DockedPort == Port.SunCourt)
             return Optics.TowerHit ? "Tower mirror lit. Use 2 then E at the tower to turn east."
@@ -209,6 +260,21 @@ public partial class TowerGraybox : Node3D
         if (Player.IsOnFloor() && Rig.IsAtStation(Player.Feet)) return "At the console. Press 1, then E, to collect rain.";
         if (mechanism.Height > 0f) return "Rain paused. Press 1, then E at the console, to resume.";
         return "Hold D / Right across the west bridge to the tower console.";
+    }
+
+    private string CargoHint()
+    {
+        if (!Optics.ReceiverLit) return Cargo.Phase == CargoPhase.Loading
+            ? "Receiver dark. Ballast transfer paused; water retained."
+            : "Receiver dark. Restore the beam from the north mirror.";
+        return Cargo.Phase switch
+        {
+            CargoPhase.WaitingForLight => "Keep the receiver lit to load one fruit crate.",
+            CargoPhase.Loading => "Fruit loaded. Rainwater is filling the ballast.",
+            CargoPhase.Ready when IsAboardCargo => "Ballast full. Press G to cross the valley.",
+            CargoPhase.Ready => "Ballast full. Walk right onto the cargo car.",
+            _ => "Walk to the Flower Court marker.",
+        };
     }
 
     private void RefreshHud()
@@ -223,6 +289,9 @@ public partial class TowerGraybox : Node3D
         string light = Optics.ReceiverLit ? "East lit" : Optics.TowerHit ? "Tower lit" : "Dark";
         telemetry.Text = $"{selectedWeather}  |  Water {mechanism.Water:0.0}/{TowerMechanism.Capacity:0}  |  "
             + $"Lift {mechanism.Height:0.0} m  |  {dock}  |  {light}";
+        float ballast = MathF.Floor(mechanism.Counterweight * 10f) / 10f;
+        cargoTelemetry.Text = $"Crate {(Cargo.HasFruit ? 1 : 0)}/1  |  "
+            + $"Ballast {ballast:0.0}/{CargoJourney.CounterweightRequired:0}  |  Delivered {Cargo.DeliveredCount}/1";
         hint.Text = CurrentHint();
     }
 
@@ -243,9 +312,10 @@ public partial class TowerGraybox : Node3D
         card.AddChild(lines);
         lines.AddChild(HudLine("BORROWING SUN   /   3D GRAYBOX", 14, new Color(.50f, .86f, .80f)));
         lines.AddChild(telemetry = HudLine("", 16, Colors.White));
+        lines.AddChild(cargoTelemetry = HudLine("", 16, Colors.White));
         lines.AddChild(hint = HudLine("", 16, Colors.White));
         lines.AddChild(HudLine("WASD / arrows   ·   1 Rain   ·   2 Wind   ·   3 Sun   ·   E Cast", 13, Colors.LightGray));
-        lines.AddChild(HudLine("Shift+E Reverse   ·   Q Recall   ·   F Drain   ·   R Restart", 13, Colors.LightGray));
+        lines.AddChild(HudLine("Shift+E Reverse   ·   Q Recall   ·   F Drain   ·   G Cargo   ·   R Restart", 13, Colors.LightGray));
     }
 
     private static Label HudLine(string text, int size, Color color)

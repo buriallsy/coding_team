@@ -6,5 +6,6 @@
   <ItemGroup>
     <Compile Include="../BorrowingSun2D/Scripts/Core/TowerMechanism.cs" Link="Core/TowerMechanism.cs" />
     <Compile Include="../BorrowingSun2D/Scripts/Core/RouteProgress.cs" Link="Core/RouteProgress.cs" />
+    <Compile Include="../BorrowingSun2D/Scripts/Core/CargoJourney.cs" Link="Core/CargoJourney.cs" />
   </ItemGroup>
 </Project>

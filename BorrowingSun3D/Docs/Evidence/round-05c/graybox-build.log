@@ -1,0 +1,10 @@
+验证工作负载时遇到问题。有关详细信息，请运行 "dotnet workload update"。
+  Determining projects to restore...
+  Restored <clean-copy>/BorrowingSun3D/BorrowingSun3D.csproj (in 234 ms).
+  BorrowingSun3D -> <clean-copy>/BorrowingSun3D/.godot/mono/temp/bin/Debug/BorrowingSun3D.dll
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:03.00

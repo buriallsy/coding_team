@@ -1,0 +1,166 @@
+Godot Engine v4.7.1.stable.mono.official.a13da4feb - https://godotengine.org
+OpenGL API 4.1 Metal - 90.5 - Compatibility - Using Device: Apple - Apple M5
+
+SCOPE: 3D graybox with production Input Map and Physics3D; no player placement or state injection. One optical-only StaticBody3D at a time is the only fixture. The replay is fixture-free.
+PASS initial state: restore the west spawn, zero mechanism state and clear both milestones | feet=(-8.8, 0, 0), lift=(0, 0, 0), dock=Entry
+PASS initial state: clear the collector pose, local sunshine and optical hits | feet=(-8.8, 0, 0), lift=(0, 0, 0), dock=Entry
+PASS initial state: clear ballast, crate and delivery and return the native car to departure | feet=(-8.8, 0, 0), lift=(0, 0, 0), dock=Entry
+PASS initial state: expected dock=Entry, bridge flag=True, native bridge hit=True | feet=(-8.8, 0, 0), lift=(0, 0, 0), dock=Entry
+CAPTURE west-entrance.png (1280, 720)
+PASS walk from the west low shore to the supported doorway | feet=(-4.390001, 0.0007994863, 0), lift=(0, 0, 0), dock=Entry
+PASS wind is refused while the player is standing in the actual doorway | feet=(-4.390001, 0.0007994863, 0), lift=(0, 0, 0), dock=Entry
+PASS low doorway refusal: expected dock=Entry, bridge flag=True, native bridge hit=True | feet=(-4.390001, 0.0007994863, 0), lift=(0, 0, 0), dock=Entry
+PASS walk east across supported surfaces to the centre of the tower | feet=(-0.049999416, 0.0008341038, 0), lift=(0, 0, 0), dock=Entry
+PASS the player stands on the real deck clear of the doorway | feet=(-0.049999416, 0.0008341038, 0), lift=(0, 0, 0), dock=Entry
+PASS wind at the low station is refused | feet=(-0.049999416, 0.0008341038, 0), lift=(0, 0, 0), dock=Entry
+PASS low wind refusal: expected dock=Entry, bridge flag=True, native bridge hit=True | feet=(-0.049999416, 0.0008341038, 0), lift=(0, 0, 0), dock=Entry
+PASS rain starts raising the occupied lift | feet=(-0.049999416, 1.0008337, 0), lift=(0, 1.0249996, 0), dock=None
+PASS the real moving lift carries the stationary player upward | feet=(-0.049999416, 1.0008337, 0), lift=(0, 1.0249996, 0), dock=None
+PASS while rising: expected dock=None, bridge flag=False, native bridge hit=False | feet=(-0.049999416, 1.0008337, 0), lift=(0, 1.0249996, 0), dock=None
+PASS rain fills the tower and latches the high deck | feet=(-0.049999416, 5.9758477, 0), lift=(0, 6, 0), dock=None
+PASS six units of rain hold both the actual lift and grounded rider six metres higher | feet=(-0.049999416, 6.000834, 0), lift=(0, 6, 0), dock=None
+PASS high but still west-facing: expected dock=None, bridge flag=False, native bridge hit=False | feet=(-0.049999416, 6.000834, 0), lift=(0, 6, 0), dock=None
+PASS wind starts a turn while the high deck stays locked under the player | feet=(-0.04987102, 6.000834, -0.003923322), lift=(0, 6, 0), dock=None
+PASS while turning north: expected dock=None, bridge flag=False, native bridge hit=False | feet=(-0.04987102, 6.000834, -0.003923322), lift=(0, 6, 0), dock=None
+PASS the wind turn docks north | feet=(-0.000693728, 6.000834, -0.05050661), lift=(0, 6, 0), dock=SunCourt
+PASS the lift is stopped at 90 degrees and the player remains supported | feet=(-3.290741E-05, 6.000834, -0.050515685), lift=(0, 6, 0), dock=SunCourt
+PASS at the north dock: expected dock=SunCourt, bridge flag=True, native bridge hit=True | feet=(-3.290741E-05, 6.000834, -0.050515685), lift=(0, 6, 0), dock=SunCourt
+PASS walk north over the supported bridge to the actual marker | feet=(-3.2907617E-05, 6.0008307, -8.450533), lift=(0, 6, 0), dock=SunCourt
+PASS the north milestone is recorded at the authored marker | feet=(-3.2907617E-05, 6.0008307, -8.450533), lift=(0, 6, 0), dock=SunCourt
+PASS sunny weather at the parked collector does not light the tower or the east receiver | feet=(-3.2907617E-05, 6.0008307, -8.450533), lift=(0, 6, 0), dock=SunCourt
+PASS actual 2 and E at the north station calibrate the collector | feet=(-3.2907617E-05, 6.0008307, -8.450533), lift=(0, 6, 0), dock=SunCourt
+PASS actual 3 and E clear the sky and send light to the tower | feet=(-3.2907617E-05, 6.0008307, -8.450533), lift=(0, 6, 0), dock=SunCourt
+PASS at north, the collector reaches the tower and the second reflection points west, leaving the east receiver dark | feet=(-3.2907617E-05, 6.0008307, -8.450533), lift=(0, 6, 0), dock=SunCourt
+PASS Q recalls sunshine at the north station while keeping its calibrated aim | feet=(-3.2907617E-05, 6.0008307, -8.450533), lift=(0, 6, 0), dock=SunCourt
+PASS at north, the collector reaches the tower and the second reflection points west, leaving the east receiver dark | feet=(-3.2907617E-05, 6.0008307, -8.450533), lift=(0, 6, 0), dock=SunCourt
+CAPTURE north-marker.png (1280, 720)
+PASS walk south across the north bridge back to the tower console | feet=(-3.2847656E-05, 6.0008345, 0.01947711), lift=(0, 6, 0), dock=SunCourt
+PASS the north beam persists when leaving the solar station, with the east receiver still dark | feet=(-3.2847656E-05, 6.0008345, 0.01947711), lift=(0, 6, 0), dock=SunCourt
+PASS the east turn begins under the grounded player and the receiver remains dark while misaligned | feet=(-0.0015610808, 6.0008345, 0.019424515), lift=(0, 6, 0), dock=None
+PASS while turning east: expected dock=None, bridge flag=False, native bridge hit=False | feet=(-0.0015610808, 6.0008345, 0.019424515), lift=(0, 6, 0), dock=None
+PASS the east turn reaches its midpoint | feet=(-0.01367965, 6.0008345, 0.014002788), lift=(0, 6, 0), dock=None
+PASS at 135 degrees the reflected light still misses the east receiver | feet=(-0.01367965, 6.0008345, 0.014002788), lift=(0, 6, 0), dock=None
+PASS halfway through the east turn: expected dock=None, bridge flag=False, native bridge hit=False | feet=(-0.01367965, 6.0008345, 0.014002788), lift=(0, 6, 0), dock=None
+PASS the wind turn docks east | feet=(-0.019675173, 6.0008345, 0.00023563087), lift=(0, 6, 0), dock=East
+PASS the lift stops at 180 degrees with the player still supported | feet=(-0.019678256, 6.0008345, -2.1796004E-05), lift=(0, 6, 0), dock=East
+PASS at the east dock: expected dock=East, bridge flag=True, native bridge hit=True | feet=(-0.019678256, 6.0008345, -2.1796004E-05), lift=(0, 6, 0), dock=East
+PASS at east, one continuous ray hits the collector, tower mirror and receiver in that order | feet=(-0.019678256, 6.0008345, -2.1796004E-05), lift=(0, 6, 0), dock=East
+PASS lighting the receiver from the tower does not count as reaching east | feet=(-0.019678256, 6.0008345, -2.1796004E-05), lift=(0, 6, 0), dock=East
+PASS the initial real receiver hit starts the light timer without awarding a crate | feet=(-0.019678256, 6.0008345, -2.1796004E-05), lift=(0, 6, 0), dock=East
+PASS just short of 1.5 seconds of clear light there is still no crate or transferred water | feet=(-0.019678256, 6.0008345, -2.1796004E-05), lift=(0, 6, 0), dock=East
+PASS the continuous 1.5-second beam earns the single crate | feet=(-0.019678256, 6.0008345, -2.1796004E-05), lift=(0, 6, 0), dock=East
+PASS the earned crate appears on the car and begins loading without counting as delivered | feet=(-0.019678256, 6.0008345, -2.1796004E-05), lift=(0, 6, 0), dock=East
+PASS walk east over the supported bridge to the actual east marker | feet=(8.520316, 6.0008373, -2.1892838E-05), lift=(0, 6, 0), dock=East
+PASS the east milestone requires the physical crossing and the clear reflected beam stays on | feet=(8.520316, 6.0008373, -2.1892838E-05), lift=(0, 6, 0), dock=East
+CAPTURE east-receiver.png (1280, 720)
+PASS walk across the east floor and board the stationary car at its real departure point | feet=(13.350313, 6.0008373, -2.1892838E-05), lift=(0, 6, 0), dock=East
+PASS the grounded player is on the car and its native body is still at departure | feet=(13.350313, 6.0008373, -2.1892838E-05), lift=(0, 6, 0), dock=East
+PASS the real car is boarded while the original water is still filling the counterweight | feet=(13.350313, 6.0008373, -2.1892838E-05), lift=(0, 6, 0), dock=East
+PASS actual G refuses departure with a lit receiver and an underfilled counterweight | feet=(13.350313, 6.0008373, -2.1892838E-05), lift=(0, 6, 0), dock=East
+PASS partial transfer: start from an actual unobstructed receiver hit | feet=(13.350313, 6.0008373, -2.1892838E-05), lift=(0, 6, 0), dock=East
+FIXTURE partial transfer: layer=8, centre=(4.3, 7.4500003, 2.597845E-06), ray=(6.8629936E-07, 7.7, 1.9073486E-06) -> (8.6, 7.200001, 3.2883413E-06)
+PASS partial transfer: the native 3D ray hits the temporary optical-only collider | feet=(13.350313, 6.0008373, -2.1892838E-05), lift=(0, 6, 0), dock=East
+PASS partial transfer: the real second reflection stops at the same collision point and extinguishes the receiver | feet=(13.350313, 6.0008373, -2.1892838E-05), lift=(0, 6, 0), dock=East
+TRACE partial transfer: blocked second reflection at (4.1000004, 7.461628, 2.5657287E-06)
+PASS the blocked beam interrupts a genuinely partial transfer | feet=(13.350313, 6.0008373, -2.1892838E-05), lift=(0, 6, 0), dock=East
+PASS darkness pauses both tanks without losing the crate or the transferred water | feet=(13.350313, 6.0008373, -2.1892838E-05), lift=(0, 6, 0), dock=East
+TRACE partial transfer held: phase=Loading, light=False, water=2.566669, ballast=3.433331, height=6.000, lift_y=6.000, car=(13.38, 6, 0), rider=(13.350313, 6.0008373, -2.1892838E-05), delivered=0
+PASS actual G refuses departure while the partial load is dark | feet=(13.350313, 6.0008373, -2.1892838E-05), lift=(0, 6, 0), dock=East
+PASS removing the fixture clears the native optical ray | feet=(13.350313, 6.0008373, -2.1892838E-05), lift=(0, 6, 0), dock=East
+PASS at east, one continuous ray hits the collector, tower mirror and receiver in that order | feet=(13.350313, 6.0008373, -2.1892838E-05), lift=(0, 6, 0), dock=East
+PASS removing the blocker resumes the transfer from the retained amount | feet=(13.350313, 6.0008373, -2.1892838E-05), lift=(0, 6, 0), dock=East
+PASS the clear beam fills the cargo counterweight | feet=(13.350313, 6.0008373, -2.1892838E-05), lift=(0, 6, 0), dock=East
+PASS at 4/4 the original tank retains two units and the loaded car still awaits G | feet=(13.350313, 6.0008373, -2.1892838E-05), lift=(0, 6, 0), dock=East
+TRACE ready to launch: phase=Ready, light=True, water=2.000000, ballast=4.000000, height=6.000, lift_y=6.000, car=(13.38, 6, 0), rider=(13.350313, 6.0008373, -2.1892838E-05), delivered=0
+PASS full load before departure: start from an actual unobstructed receiver hit | feet=(13.350313, 6.0008373, -2.1892838E-05), lift=(0, 6, 0), dock=East
+FIXTURE full load before departure: layer=8, centre=(4.3, 7.4500003, 2.597845E-06), ray=(6.8629936E-07, 7.7, 1.9073486E-06) -> (8.6, 7.200001, 3.2883413E-06)
+PASS full load before departure: the native 3D ray hits the temporary optical-only collider | feet=(13.350313, 6.0008373, -2.1892838E-05), lift=(0, 6, 0), dock=East
+PASS full load before departure: the real second reflection stops at the same collision point and extinguishes the receiver | feet=(13.350313, 6.0008373, -2.1892838E-05), lift=(0, 6, 0), dock=East
+TRACE full load before departure: blocked second reflection at (4.1000004, 7.461628, 2.5657287E-06)
+PASS actual G also refuses dark departure at a full 4/4 counterweight | feet=(13.350313, 6.0008373, -2.1892838E-05), lift=(0, 6, 0), dock=East
+PASS removing the fixture clears the native optical ray | feet=(13.350313, 6.0008373, -2.1892838E-05), lift=(0, 6, 0), dock=East
+PASS at east, one continuous ray hits the collector, tower mirror and receiver in that order | feet=(13.350313, 6.0008373, -2.1892838E-05), lift=(0, 6, 0), dock=East
+CAPTURE cargo-ready.png (1280, 720)
+PASS actual G launches the occupied car with a clear receiver and full counterweight | feet=(13.527764, 6.0008373, -2.1892838E-05), lift=(0, 6, 0), dock=East
+PASS the native car body starts translating with its grounded rider | feet=(13.527764, 6.0008373, -2.1892838E-05), lift=(0, 6, 0), dock=East
+PASS already in motion: start from an actual unobstructed receiver hit | feet=(13.527764, 6.0008373, -2.1892838E-05), lift=(0, 6, 0), dock=East
+FIXTURE already in motion: layer=8, centre=(4.3, 7.4500003, 2.597845E-06), ray=(6.8629936E-07, 7.7, 1.9073486E-06) -> (8.6, 7.200001, 3.2883413E-06)
+PASS already in motion: the native 3D ray hits the temporary optical-only collider | feet=(13.7407055, 6.0008373, -2.1892838E-05), lift=(0, 6, 0), dock=East
+PASS already in motion: the real second reflection stops at the same collision point and extinguishes the receiver | feet=(13.7407055, 6.0008373, -2.1892838E-05), lift=(0, 6, 0), dock=East
+TRACE already in motion: blocked second reflection at (4.1000004, 7.461628, 2.5657287E-06)
+PASS losing light after G does not cancel the ongoing trip | feet=(13.7407055, 6.0008373, -2.1892838E-05), lift=(0, 6, 0), dock=East
+PASS the native and rendered car both arrive at the authored terminal | feet=(20.59031, 6.0008373, -2.1892838E-05), lift=(0, 6, 0), dock=East
+PASS the car physically carries the grounded player 7.24 m with drift 0.035 m | feet=(20.59031, 6.0008373, -2.1892838E-05), lift=(0, 6, 0), dock=East
+PASS arrival retains the crate and does not auto-deliver it | feet=(20.59031, 6.0008373, -2.1892838E-05), lift=(0, 6, 0), dock=East
+TRACE arrived in darkness: phase=Arrived, light=False, water=2.000000, ballast=4.000000, height=6.000, lift_y=6.000, car=(20.619995, 6, 0), rider=(20.59031, 6.0008373, -2.1892838E-05), delivered=0
+PASS removing the fixture clears the native optical ray | feet=(20.59031, 6.0008373, -2.1892838E-05), lift=(0, 6, 0), dock=East
+PASS at east, one continuous ray hits the collector, tower mirror and receiver in that order | feet=(20.59031, 6.0008373, -2.1892838E-05), lift=(0, 6, 0), dock=East
+PASS actual G on the arrived car refuses delivery away from the garden marker | feet=(20.59031, 6.0008373, -2.1892838E-05), lift=(0, 6, 0), dock=East
+PASS walk off the real arrived car onto the delivery shore and reach its goal | feet=(24.860308, 6.00084, -2.1912767E-05), lift=(0, 6, 0), dock=East
+PASS reaching the actual garden goal still requires a G confirmation | feet=(24.860308, 6.00084, -2.1912767E-05), lift=(0, 6, 0), dock=East
+PASS actual G at the delivery marker confirms 1/1 and removes the crate from the car | feet=(24.860308, 6.00084, -2.1912767E-05), lift=(0, 6, 0), dock=East
+PASS repeated actual G cannot count the delivery twice | feet=(24.860308, 6.00084, -2.1912767E-05), lift=(0, 6, 0), dock=East
+TRACE delivered 1/1: phase=Delivered, light=True, water=2.000000, ballast=4.000000, height=6.000, lift_y=6.000, car=(20.619995, 6, 0), rider=(24.860308, 6.00084, -2.1912767E-05), delivered=1
+PASS R from the delivery marker: restore the west spawn, zero mechanism state and clear both milestones | feet=(-8.8, 0, 0), lift=(0, 0, 0), dock=Entry
+PASS R from the delivery marker: clear the collector pose, local sunshine and optical hits | feet=(-8.8, 0, 0), lift=(0, 0, 0), dock=Entry
+PASS R from the delivery marker: clear ballast, crate and delivery and return the native car to departure | feet=(-8.8, 0, 0), lift=(0, 0, 0), dock=Entry
+PASS R from the delivery marker: expected dock=Entry, bridge flag=True, native bridge hit=True | feet=(-8.8, 0, 0), lift=(0, 0, 0), dock=Entry
+PASS walk east across supported surfaces to the centre of the tower | feet=(-0.0499925, 0.00083410146, 0), lift=(0, 0, 0), dock=Entry
+PASS the player stands on the real deck clear of the doorway | feet=(-0.0499925, 0.00083410146, 0), lift=(0, 0, 0), dock=Entry
+PASS rain starts raising the occupied lift | feet=(-0.0499925, 1.0008336, 0), lift=(0, 1.0249996, 0), dock=None
+PASS the real moving lift carries the stationary player upward | feet=(-0.0499925, 1.0008336, 0), lift=(0, 1.0249996, 0), dock=None
+PASS while rising: expected dock=None, bridge flag=False, native bridge hit=False | feet=(-0.0499925, 1.0008336, 0), lift=(0, 1.0249996, 0), dock=None
+PASS rain fills the tower and latches the high deck | feet=(-0.0499925, 5.9758477, 0), lift=(0, 6, 0), dock=None
+PASS six units of rain hold both the actual lift and grounded rider six metres higher | feet=(-0.0499925, 6.000834, 0), lift=(0, 6, 0), dock=None
+PASS high but still west-facing: expected dock=None, bridge flag=False, native bridge hit=False | feet=(-0.0499925, 6.000834, 0), lift=(0, 6, 0), dock=None
+PASS wind starts a turn while the high deck stays locked under the player | feet=(-0.049864125, 6.000834, -0.00392278), lift=(0, 6, 0), dock=None
+PASS while turning north: expected dock=None, bridge flag=False, native bridge hit=False | feet=(-0.049864125, 6.000834, -0.00392278), lift=(0, 6, 0), dock=None
+PASS the wind turn docks north | feet=(-0.0006936489, 6.000834, -0.050499626), lift=(0, 6, 0), dock=SunCourt
+PASS the lift is stopped at 90 degrees and the player remains supported | feet=(-3.2919634E-05, 6.000834, -0.0505087), lift=(0, 6, 0), dock=SunCourt
+PASS at the north dock: expected dock=SunCourt, bridge flag=True, native bridge hit=True | feet=(-3.2919634E-05, 6.000834, -0.0505087), lift=(0, 6, 0), dock=SunCourt
+PASS walk north over the supported bridge to the actual marker | feet=(-3.2907254E-05, 6.0008307, -8.45051), lift=(0, 6, 0), dock=SunCourt
+PASS the north milestone is recorded at the authored marker | feet=(-3.2907254E-05, 6.0008307, -8.45051), lift=(0, 6, 0), dock=SunCourt
+PASS actual 2 and E at the north station calibrate the collector | feet=(-3.2907254E-05, 6.0008307, -8.45051), lift=(0, 6, 0), dock=SunCourt
+PASS actual 3 and E clear the sky and send light to the tower | feet=(-3.2907254E-05, 6.0008307, -8.45051), lift=(0, 6, 0), dock=SunCourt
+PASS at north, the collector reaches the tower and the second reflection points west, leaving the east receiver dark | feet=(-3.2907254E-05, 6.0008307, -8.45051), lift=(0, 6, 0), dock=SunCourt
+PASS walk south across the north bridge back to the tower console | feet=(-3.2906344E-05, 6.000818, 0.01948478), lift=(0, 6, 0), dock=SunCourt
+PASS the north beam persists when leaving the solar station, with the east receiver still dark | feet=(-3.2906344E-05, 6.000818, 0.01948478), lift=(0, 6, 0), dock=SunCourt
+PASS the east turn begins under the grounded player and the receiver remains dark while misaligned | feet=(-0.0015617412, 6.000818, 0.019432161), lift=(0, 6, 0), dock=None
+PASS while turning east: expected dock=None, bridge flag=False, native bridge hit=False | feet=(-0.0015617412, 6.000818, 0.019432161), lift=(0, 6, 0), dock=None
+PASS the east turn reaches its midpoint | feet=(-0.013685075, 6.000818, 0.01400827), lift=(0, 6, 0), dock=None
+PASS at 135 degrees the reflected light still misses the east receiver | feet=(-0.013685075, 6.000818, 0.01400827), lift=(0, 6, 0), dock=None
+PASS halfway through the east turn: expected dock=None, bridge flag=False, native bridge hit=False | feet=(-0.013685075, 6.000818, 0.01400827), lift=(0, 6, 0), dock=None
+PASS the wind turn docks east | feet=(-0.019682927, 6.000818, 0.00023567321), lift=(0, 6, 0), dock=East
+PASS the lift stops at 180 degrees with the player still supported | feet=(-0.01968601, 6.000818, -2.1855143E-05), lift=(0, 6, 0), dock=East
+PASS at the east dock: expected dock=East, bridge flag=True, native bridge hit=True | feet=(-0.01968601, 6.000818, -2.1855143E-05), lift=(0, 6, 0), dock=East
+PASS at east, one continuous ray hits the collector, tower mirror and receiver in that order | feet=(-0.01968601, 6.000818, -2.1855143E-05), lift=(0, 6, 0), dock=East
+PASS lighting the receiver from the tower does not count as reaching east | feet=(-0.01968601, 6.000818, -2.1855143E-05), lift=(0, 6, 0), dock=East
+PASS the initial real receiver hit starts the light timer without awarding a crate | feet=(-0.01968601, 6.000818, -2.1855143E-05), lift=(0, 6, 0), dock=East
+PASS just short of 1.5 seconds of clear light there is still no crate or transferred water | feet=(-0.01968601, 6.000818, -2.1855143E-05), lift=(0, 6, 0), dock=East
+PASS the continuous 1.5-second beam earns the single crate | feet=(-0.01968601, 6.000818, -2.1855143E-05), lift=(0, 6, 0), dock=East
+PASS the earned crate appears on the car and begins loading without counting as delivered | feet=(-0.01968601, 6.000818, -2.1855143E-05), lift=(0, 6, 0), dock=East
+PASS walk east over the supported bridge to the actual east marker | feet=(8.520321, 6.0008373, -2.1855183E-05), lift=(0, 6, 0), dock=East
+PASS the east milestone requires the physical crossing and the clear reflected beam stays on | feet=(8.520321, 6.0008373, -2.1855183E-05), lift=(0, 6, 0), dock=East
+PASS walking off the real east shore returns the airborne player to the live deck and preserves both milestones | feet=(0, 6.0001364, -0.07), lift=(0, 6, 0), dock=East
+PASS walk across the east floor and board the stationary car at its real departure point | feet=(13.370014, 6.000824, -0.07000009), lift=(0, 6, 0), dock=East
+PASS the grounded player is on the car and its native body is still at departure | feet=(13.370014, 6.000824, -0.07000009), lift=(0, 6, 0), dock=East
+PASS the clear beam fills the cargo counterweight | feet=(13.370014, 6.000824, -0.07000009), lift=(0, 6, 0), dock=East
+PASS at 4/4 the original tank retains two units and the loaded car still awaits G | feet=(13.370014, 6.000824, -0.07000009), lift=(0, 6, 0), dock=East
+TRACE ready to launch: phase=Ready, light=True, water=2.000000, ballast=4.000000, height=6.000, lift_y=6.000, car=(13.38, 6, 0), rider=(13.370014, 6.000824, -0.07000009), delivered=0
+PASS actual G launches the occupied car with a clear receiver and full counterweight | feet=(13.547465, 6.000824, -0.07000009), lift=(0, 6, 0), dock=East
+PASS the native car body starts translating with its grounded rider | feet=(13.547465, 6.000824, -0.07000009), lift=(0, 6, 0), dock=East
+PASS the native and rendered car both arrive at the authored terminal | feet=(20.610008, 6.000824, -0.07000009), lift=(0, 6, 0), dock=East
+PASS the car physically carries the grounded player 7.24 m with drift 0.035 m | feet=(20.610008, 6.000824, -0.07000009), lift=(0, 6, 0), dock=East
+PASS arrival retains the crate and does not auto-deliver it | feet=(20.610008, 6.000824, -0.07000009), lift=(0, 6, 0), dock=East
+TRACE arrived in light: phase=Arrived, light=True, water=2.000000, ballast=4.000000, height=6.000, lift_y=6.000, car=(20.619995, 6, 0), rider=(20.610008, 6.000824, -0.07000009), delivered=0
+PASS actual G on the arrived car refuses delivery away from the garden marker | feet=(20.610008, 6.000824, -0.07000009), lift=(0, 6, 0), dock=East
+PASS walk off the real arrived car onto the delivery shore and reach its goal | feet=(24.88002, 6.0007915, -0.07000009), lift=(0, 6, 0), dock=East
+PASS reaching the actual garden goal still requires a G confirmation | feet=(24.88002, 6.0007915, -0.07000009), lift=(0, 6, 0), dock=East
+PASS actual G at the delivery marker confirms 1/1 and removes the crate from the car | feet=(24.88002, 6.0007915, -0.07000009), lift=(0, 6, 0), dock=East
+PASS repeated actual G cannot count the delivery twice | feet=(24.88002, 6.0007915, -0.07000009), lift=(0, 6, 0), dock=East
+TRACE delivered 1/1: phase=Delivered, light=True, water=2.000000, ballast=4.000000, height=6.000, lift_y=6.000, car=(20.619995, 6, 0), rider=(24.88002, 6.0007915, -0.07000009), delivered=1
+PASS the fixture-free route from the reset low bridge delivers 1/1 again | feet=(24.88002, 6.0007915, -0.07000009), lift=(0, 6, 0), dock=East
+CAPTURE cargo-delivered.png (1280, 720)
+PASS the cargo route audited conserved water and the actual high lift every physics step | feet=(24.88002, 6.0007915, -0.07000009), lift=(0, 6, 0), dock=East
+SUPPLY samples=1539, max_water_drift=0.000000, max_lift_drift_m=0.000000
+GRAYBOX_ROUTE PASSED assertions=142 failures=0

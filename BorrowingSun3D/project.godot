@@ -67,6 +67,10 @@ toggle_drain={
 "deadzone": 0.2,
 "events": [Object(InputEventKey,"physical_keycode":70)]
 }
+cargo_action={
+"deadzone": 0.2,
+"events": [Object(InputEventKey,"physical_keycode":71)]
+}
 reset_slice={
 "deadzone": 0.2,
 "events": [Object(InputEventKey,"physical_keycode":82)]
@@ -75,7 +79,7 @@ reset_slice={
 [layer_names]
 
 3d_physics/layer_1="Shore solids"
-3d_physics/layer_2="Lift and bridge"
+3d_physics/layer_2="Moving platforms"
 3d_physics/layer_3="Player"
 3d_physics/layer_4="Optical occluders"
 
