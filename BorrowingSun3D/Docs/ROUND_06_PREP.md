@@ -6,8 +6,8 @@ AP6412 · 路线 B · 小组报告工作稿。报告、演示和打包均以可�
 
 | 版本 | 对照代码 | 状态 |
 | --- | --- | --- |
-| 2D 基线 | [`6175db93b0156b35fb736af2e28cc97aaa65d470`](https://github.com/buriallsy/coding_team/commit/6175db93b0156b35fb736af2e28cc97aaa65d470) | 已固定为 `2d-baseline`。macOS 路线已有实测，Windows 窗口待验收。 |
-| 3D 第 05D 轮 | [`fb4cbb451c028234dd093576fa8c0e6e72bb457e`](https://github.com/buriallsy/coding_team/commit/fb4cbb451c028234dd093576fa8c0e6e72bb457e) | 候选代码。macOS 无头与窗口路线已通过。Windows 自动无头工作流正在准备，尚无通过结果。Windows 窗口验收待完成，`3d-final` 尚未打标。 |
+| 2D 基线 | [`6175db93b0156b35fb736af2e28cc97aaa65d470`](https://github.com/buriallsy/coding_team/commit/6175db93b0156b35fb736af2e28cc97aaa65d470) | 已固定为 `2d-baseline`。macOS 无头和窗口、Windows 托管无头已通过。Windows 桌面窗口待验收。 |
+| 3D 第 05D 轮 | [`fb4cbb451c028234dd093576fa8c0e6e72bb457e`](https://github.com/buriallsy/coding_team/commit/fb4cbb451c028234dd093576fa8c0e6e72bb457e) | macOS 无头和窗口、Windows 托管无头已通过。Windows 桌面窗口验收待完成，`3d-final` 等两端结果齐全后打标。 |
 
 两版均使用 Godot 4.7.1 .NET 和 .NET 8 SDK。分别用 F5 运行 `BorrowingSun2D/project.godot` 和 `BorrowingSun3D/project.godot`。3D 项目依赖同级 `BorrowingSun2D` 的共享源码，打包须保留相对目录结构。 [2D 运行说明](../../BorrowingSun2D/README.md) · [3D 运行说明](../README.md) · [05D 验收记录](ROUND_05D.md) · [Windows 验收记录](WINDOWS_ACCEPTANCE.md)
 
@@ -21,7 +21,7 @@ AP6412 · 路线 B · 小组报告工作稿。报告、演示和打包均以可�
 
 **变化与 CCR。** 候选 CCR 为 `(2 个修改 + 0 个移除) ÷ 5 个冻结端核心类 × 100% = 40.00%`。保留共享实现的是 `TowerMechanism`、`RouteProgress`、`CargoJourney`。两项修改为 `Optics2D` → `Optics3D` 与 `SunCourtOptics2D` → `SunCourtOptics3D`。对应替换按原职责各计一次，3D 新增的独立核心职责为零。输入、物理适配、界面与资源分别在变化图里解释。百分比衡量预先划定的玩法核心类改动比例。若最终验收代码变更，须以实际最终提交重审清单及复算。 [变化图和计数口径](CHANGE_MAP.md) · [机器清单](ccr-analysis.json) · [CCR 输出](Evidence/round-05d/ccr.log)
 
-**验证结果与边界。** 在 macOS 26.5.2 arm64 上，冻结 2D 基线通过 154 项无头路线检查和 46 项窗口检查。3D 05D 候选通过 160 项无头检查和 160 项 1280×720 窗口检查。验证从默认场景以实际键码行走，覆盖发车拒绝、实体跨谷、花庭签收和复位重走。断光反例通过临时实体遮挡复现。960×600 的窗口复核只覆盖开场，其游戏画面为 960×540。现有路线测试证明这些场景结果可复现。首次玩家是否能自行读懂反馈及实际完成用时仍需观察，约三分钟为设计目标。Windows 无头和窗口结果分别记录。 [实测和限制](ROUND_05D.md#实测与签收--2026-11-08) · [2D 验收口径](../../BorrowingSun2D/Docs/2D-to-3D/ACCEPTANCE.md) · [Windows 验收记录](WINDOWS_ACCEPTANCE.md)
+**验证结果与边界。** 在 macOS 26.5.2 arm64 上，冻结 2D 基线通过 154 项无头路线检查和 46 项窗口检查。3D 05D 候选通过 160 项无头检查和 160 项 1280×720 窗口检查。Windows Server 2025 x64 的托管无头测试分别通过 154 项和 160 项，桌面窗口结果待补。自动路线在默认场景发送真实按键，覆盖发车拒绝、实体跨谷、花庭签收和复位重走。断光反例通过临时实体遮挡复现。960×600 的窗口复核覆盖开场，游戏画面为 960×540。首次玩家是否能自行读懂反馈和实际完成用时仍待观察，约三分钟为设计目标。 [macOS 实测](ROUND_05D.md#实测与签收--2026-11-08) · [2D 验收口径](../../BorrowingSun2D/Docs/2D-to-3D/ACCEPTANCE.md) · [Windows 验收记录](WINDOWS_ACCEPTANCE.md)
 
 ### 制作过程与可用证据
 
@@ -59,6 +59,8 @@ AP6412 · 路线 B · 小组报告工作稿。报告、演示和打包均以可�
 
 ## 交付检查表
 
+已用 `9c36355` 生成临时源码 ZIP 并核对完整性。两个项目的主场景和场景资源均在包内，3D 的四个共享源码引用均能解析，缓存与构建输出已排除。正式交付仍需在解压后的新目录验证启动，并加入报告和已签署材料。
+
 - [ ] 在独立检出记录两版测试 SHA、系统、Godot 和 SDK。在 Windows 分别记录无头路线和实机窗口结果，留开场、发车前及签收原帧，验证 `R` 后能再次签收。双平台接受实际发布代码后才核定 `3d-final`。 [双平台验收](ROUND_05D.md) · [Windows 验收记录](WINDOWS_ACCEPTANCE.md)
 - [ ] 记录至少一次独立首玩，填写版本、玩家首次卡点、实际完成用时和可重现的操作。若课程提交前未完成，报告保留「待测」。
 - [ ] 导出一份共同 PDF，附 2D 与 3D 类图、逐类变化和 CCR、主要测试、GitHub 对照链接和各成员署名反思。逐条核实个人分支、提交或 PR 证据对应真实贡献。
@@ -71,5 +73,5 @@ AP6412 · 路线 B · 小组报告工作稿。报告、演示和打包均以可�
 | 成员姓名、个人分工、经确认的提交或 PR、署名反思 | `[每位成员填写]` → 共同 PDF 的个人反思节 |
 | 原创声明与个人生成式 AI 声明 | `[签署人及状态]` → 私有交付包的声明文件 |
 | AI 交流时间、原始对话位置、影响产物、核对结果 | `[各成员私有索引]` → 课程指定的提交位置 |
-| Windows 无头与窗口、真人首玩、最终版本 | `[执行人、日期、结果、证据路径]` → 验收记录和共同 PDF |
+| Windows 桌面窗口、真人首玩、最终版本 | `[执行人、日期、结果、证据路径]` → 验收记录和共同 PDF |
 | 组号、NTULearn 截止时间、最终归档名、提交人和回执 | `[提交人核对]` → 小组交付记录 |

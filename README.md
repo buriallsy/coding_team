@@ -21,12 +21,12 @@ The 3D project compiles shared rules from its sibling `BorrowingSun2D` directory
 
 ## Verification
 
-| Reference | macOS arm64 automated route |
-| --- | --- |
-| Frozen 2D `2d-baseline` (`6175db9`) | 154 headless checks and 46 windowed checks. [Round 04 acceptance](BorrowingSun2D/Docs/2D-to-3D/ROUND_04.md) |
-| 3D 05D code candidate (`fb4cbb4`) | 160 headless checks and 160 windowed checks. [05D comparison and evidence](BorrowingSun3D/Docs/ROUND_05D.md) |
+| Reference | macOS arm64 automated route | Windows Server 2025 x64 |
+| --- | --- | --- |
+| Frozen 2D `2d-baseline` (`6175db9`) | 154 headless checks and 46 windowed checks. [Round 04 acceptance](BorrowingSun2D/Docs/2D-to-3D/ROUND_04.md) | 154 headless checks. |
+| 3D 05D code candidate (`fb4cbb4`) | 160 headless checks and 160 windowed checks. [05D comparison and evidence](BorrowingSun3D/Docs/ROUND_05D.md) | 160 headless checks. |
 
-Windows headless results, windowed results and manual playthroughs are tracked separately. Desktop playthroughs remain pending before `3d-final`. [Windows acceptance](BorrowingSun3D/Docs/WINDOWS_ACCEPTANCE.md)
+The hosted Windows headless run passed on both versions. Windows desktop playthroughs remain pending before `3d-final`. [Windows acceptance](BorrowingSun3D/Docs/WINDOWS_ACCEPTANCE.md) · [GitHub Actions evidence](https://github.com/buriallsy/coding_team/actions/runs/42501063399)
 
 ![Round 04 delivery screen. The player has signed for one crate and the replay button is focused.](BorrowingSun2D/Docs/Evidence/round-04/finished.png)
 

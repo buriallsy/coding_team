@@ -1,0 +1,22 @@
+Filtered output from Windows Server 2025 x64, GitHub Actions job 128793708788.
+Run: https://github.com/buriallsy/coding_team/actions/runs/42501063399
+Workflow commit: 9c363550011efea4389e2637b7391a410fbac466
+2D baseline: 6175db93b0156b35fb736af2e28cc97aaa65d470
+3D source candidate: fb4cbb451c028234dd093576fa8c0e6e72bb457e
+.NET SDK: 8.0.424
+Artifact: windows-godot-headless-1 (13625169089)
+Artifact SHA-256: 6eb4987b3608db91d4e098d2989a17c05f32e816591c9b930dc33cdfe24ae208
+Scope: hosted headless route, not desktop window acceptance.
+
+2026-11-08T16:41:03.5028959Z DOMAIN_CHECKS PASSED: 80 assertions; domain and geometry fixtures.
+2026-11-08T16:41:05.8251866Z Godot Engine v4.7.1.stable.mono.official.a13da4feb - https://godotengine.org
+2026-11-08T16:41:07.9151036Z TOWER_ROUTE PASSED
+2026-11-08T16:41:09.6506029Z Godot Engine v4.7.1.stable.mono.official.a13da4feb - https://godotengine.org
+2026-11-08T16:41:10.8297419Z SUPPLY max_total_error=0.000000 max_height_error=0.000000 max_physics_lift_drift_px=0.000000 max_scene_deck_drift_px=0.000000 samples=3617
+2026-11-08T16:41:10.8298214Z ROUND_04_ACCEPTANCE PASSED assertions=154 failures=0
+2026-11-08T16:41:13.3001248Z Godot Engine v4.7.1.stable.mono.official.a13da4feb - https://godotengine.org
+2026-11-08T16:41:22.9902721Z Godot Engine v4.7.1.stable.mono.official.a13da4feb - https://godotengine.org
+2026-11-08T16:41:23.7641503Z SUPPLY samples=1607, max_water_drift=0.000000, max_lift_drift_m=0.000000
+2026-11-08T16:41:23.7641878Z GRAYBOX_ROUTE PASSED assertions=160 failures=0
+2026-11-08T16:41:23.8966720Z 3D WINDOWS VERIFICATION PASSED (headless)
+2026-11-08T16:41:25.0112661Z Artifact windows-godot-headless-1 has been successfully uploaded! Final size is 24988 bytes. Artifact ID is 13625169089

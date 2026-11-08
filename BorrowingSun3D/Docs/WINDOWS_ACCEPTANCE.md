@@ -4,11 +4,15 @@
 
 ## 托管无头验证
 
+2026-11-09，GitHub Actions 的 Windows Server 2025 x64 任务通过。环境为 Godot 4.7.1 .NET 与 .NET SDK 8.0.424。工作流提交 `9c36355` 的 3D 构建输入经核对与 `fb4cbb4` 一致。2D 实际按键路线通过 154 项，3D 通过 160 项，均为零失败。 [运行与完整产物](https://github.com/buriallsy/coding_team/actions/runs/42501063399) · [持久日志摘要](Evidence/round-06/windows-headless.log)
+
 打开仓库 Actions 的 **Godot Windows headless**。查看同一次运行内的 2D 基线与 3D 候选步骤，保存运行链接及 `windows-godot-headless-<运行尝试次数>` 产物。产物含源码和工作流 SHA、环境信息及两版日志。2D 在冻结标签运行。3D 使用包含新验证脚本的分支检出，核对实际工程及共享源码与 05D 代码候选一致后运行。日志中的 `PASSED` 属于对应平台的自动按键路线。 [工作流](../../.github/workflows/godot-windows.yml)
 
 ## Windows 桌面复跑
 
 准备 **Godot 4.7.1 .NET**、**.NET 8 SDK** 和 **PowerShell 7.2 或更新版本**。完整解压官方 `Godot_v4.7.1-stable_mono_win64.zip`，保留 `GodotSharp` 目录并使用包内 `_console.exe`。将命令中的安装路径换成本机路径。 [Godot 官方发行页](https://github.com/godotengine/godot-builds/releases/tag/4.7.1-stable)
+
+如果 `dotnet --version` 默认选中了另一个大版本，用 `dotnet --list-sdks` 找到已安装的 8.0 SDK，在两个临时验收检出共同的上级目录运行 `dotnet new globaljson --sdk-version 8.0.424 --roll-forward latestPatch`。将示例版本换成本机的 8.0 SDK 版本，再从两个检出分别确认 `dotnet --version`。
 
 ### 2D 冻结基线
 
@@ -65,7 +69,7 @@ if ($LASTEXITCODE -ne 0) { throw '3D build inputs differ from the 05D candidate.
 
 | 证据 | 2D 冻结基线 | 3D 05D 候选 |
 | --- | --- | --- |
-| Windows Server x64 托管无头 | 待记录运行链接、标签 SHA、通过项和日志。 | 待记录运行链接、候选与工作流 SHA、通过项和日志。 |
+| Windows Server 2025 x64 托管无头 | `6175db9`，154 项通过。领域夹具另通过 80 项。 | `fb4cbb4`，160 项通过。工作流来源 `9c36355`。 |
 | Windows x64 桌面 | 待记录本机无头与人工窗口结果。 | 待记录本机无头、自动窗口与人工窗口结果。 |
 | 人工签收两趟 | 待填第一次、`R` 回低桥、第二次的证据。 | 待填第一次、`R` 回低桥、第二次的证据。 |
 
