@@ -1,0 +1,31 @@
+Mesh2Motion / Scott Petrovic — Climb Ladder
+License: CC0 1.0 Universal, original author art asset license saved as License.txt.
+Original project: https://mesh2motion.org/
+Original repository: https://github.com/Mesh2Motion/mesh2motion-app
+Pinned revision: 653a9698f5f315523072f1c3ff3496100401317b
+Original animation library: https://raw.githubusercontent.com/Mesh2Motion/mesh2motion-app/653a9698f5f315523072f1c3ff3496100401317b/static/animations/human-addon-animations.glb
+Original preview: https://raw.githubusercontent.com/Mesh2Motion/mesh2motion-app/653a9698f5f315523072f1c3ff3496100401317b/static/animpreviews/human/dark_Climb%20Ladder.mp4
+Original license: https://github.com/Mesh2Motion/mesh2motion-app/blob/653a9698f5f315523072f1c3ff3496100401317b/LICENSE-CC0.MD
+Downloaded and visually inspected: 2026-10-22, Asia/Singapore.
+
+This is the original hand-keyed in-place vertical ladder action, not a generated substitute.
+Local conversion extracts Climb Ladder only (frames 1–87 at 24 fps, about 3.583 s);
+retains the original rest skeleton, bone rotations and timing; exports armature FBX.
+The FBX static hierarchy is neutral T pose, with the original action baked separately.
+Unity still exposes the first animated pose for an armature-only animated FBX;
+therefore an additional no-animation Mesh2Motion_LadderRest.fbx supplies the
+original neutral calibration transforms. Bone names match; only the file-derived
+root name is remapped. Unity verifies matching bones and straight horizontal arms
+before building Humanoid. The original action frames 1–87 are unchanged.
+Unity explicit Humanoid mapping retargets to the existing Kenney player Avatar.
+The original shared ground controller is unchanged. Journey owns physical motion;
+optional Playables presentation advances from signed actual ladder displacement,
+pauses when W/S is released, and runs backwards while descending.
+L5 pacing: one loop represents two 0.4 m rungs (0.8 m travelled).
+This is a whitebox pacing calibration, not a claim of exact contact IK.
+
+Original source and reproducible conversion evidence:
+  art-source/characters/mesh2motion-ladder/
+  tools/blender/create_mesh2motion_ladder_clip.py
+Unity import / target binding:
+  Assets/BorrowingSun/Editor/Skywell/SkywellClimbAnimationSetup.cs

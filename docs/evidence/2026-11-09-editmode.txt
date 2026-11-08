@@ -1,0 +1,9 @@
+Unity 6000.5.4f1, macOS, batch EditMode test run on the upload snapshot
+Start UTC: 2026-11-08 18:09:07Z
+Result: Passed
+Total: 117
+Passed: 117
+Failed: 0
+Skipped: 0
+Inconclusive: 0
+Editor exit code: 0

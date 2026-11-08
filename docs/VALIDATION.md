@@ -1,0 +1,35 @@
+# Unity snapshot verification
+
+On November 9, 2026 (Singapore time), the upload snapshot was checked with Unity 6000.5.4f1 on macOS. The 597 retained project files match the authoring project byte for byte. Skywell's scene SHA-256 is `35c3c52f20ac2445a39117fa3d8ac8e9054be1d9450f48e049189dd2e08bfc63`.
+
+| Check | Result |
+| --- | --- |
+| Source import | Unity resolved the locked packages and compiled the project in a temporary copy. |
+| EditMode | 117 passed, zero failed or skipped. [Test result](evidence/2026-11-09-editmode.txt) |
+| Serialized references | Four authored scenes and one prefab passed. Unity inspected 8,341 components. [Reference audit](evidence/2026-11-09-references.txt) |
+
+Unity cleared its derived URP runtime settings list in the validation copy during import. The upload carries the saved authoring asset. The upload checks cover import, rules, and scene references. The route and build results below retain their original dates and test scope.
+
+Run the checks from **Borrowing Sun > Validation** in the Unity editor. Use **Run existing EditMode tests**, wait for completion, then use **Check all authored scenes and prefabs**. Both write results under `unity_prototype/validation/current/project/`.
+
+For batch checks, set `UNITY` to the installed editor executable and run from the repository root. Run one command at a time.
+
+```sh
+"$UNITY" -batchmode -nographics -projectPath "$PWD/unity_prototype/BorrowingSun" \
+  -runTests -testPlatform EditMode -testResults "$PWD/editmode-results.xml" -logFile "$PWD/editmode.log"
+
+"$UNITY" -batchmode -nographics -projectPath "$PWD/unity_prototype/BorrowingSun" \
+  -executeMethod BorrowingSun.Editor.ProjectValidation.CheckReferences \
+  -quit -logFile "$PWD/references.log"
+```
+
+## Dated L5 evidence
+
+| Date | Scope and result |
+| --- | --- |
+| Oct 22, 2026 | 266 fixed-camera and 279 over-the-shoulder checks. Each route starts at the normal entrance and uses gameplay inputs through delivery and reset. [Fixed](evidence/2026-10-22-main-fixed.txt) · [Over-the-shoulder](evidence/2026-10-22-main-shoulder.txt) |
+| Oct 28, 2026 | 267 fixed-camera and 273 over-the-shoulder checks on the cave, deer, and four-cloud route. Each starts from one East Village placement and then uses gameplay input. [Fixed](evidence/2026-10-28-cloud-fixed.txt) · [Over-the-shoulder](evidence/2026-10-28-cloud-shoulder.txt) |
+| Oct 28, 2026 | 117 EditMode checks and 8,341 component reference checks. The local L5 macOS development build succeeded with zero errors and one warning. The locally signed app passed 48 headless startup checks and exited with code 0. [EditMode](evidence/2026-10-28-editmode.txt) · [References](evidence/2026-10-28-references.txt) |
+| Oct 29, 2026 | Play Mode captures for separate weather states. The validation used explicit start positions and ran 59 capture-related checks. [Rain raises the tower](evidence/skywell-rain.png) · [Sunlight reaches the tower mirror](evidence/skywell-sun.png) |
+
+Windows desktop testing, a complete playthrough in the standalone app, and first-time player testing remain open for the Unity prototype.

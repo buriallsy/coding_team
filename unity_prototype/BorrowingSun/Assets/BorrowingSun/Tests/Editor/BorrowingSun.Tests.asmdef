@@ -1,0 +1,9 @@
+{
+  "name": "BorrowingSun.Tests",
+  "rootNamespace": "BorrowingSun.Tests",
+  "references": ["BorrowingSun.Runtime"],
+  "includePlatforms": ["Editor"],
+  "optionalUnityReferences": ["TestAssemblies"],
+  "defineConstraints": ["UNITY_INCLUDE_TESTS"],
+  "autoReferenced": false
+}

@@ -1,0 +1,408 @@
+2026-10-28T07:50:28.1233890Z
+SKYWELL_DEER_SHOULDER_ROUTE
+Production Input System, CharacterController, local weather and actual gameplay rays. Automated checks do not establish first-player understanding or fun.
+CONTINUOUS BRANCH WITH ONE START FIXTURE: reset, then place the unmounted player once beside the east-village resident. Walk the cave, use real weather, ride outward across four clouds, arrive on the northern floor for automatic dismount, observe the deer hopping back, then freely jump the cloud route on foot and walk the cave back east. All player travel uses production keyboard/mouse and physical collision. No later player placement, growth/unlock/velocity injection or forced success. This is not the complete original entrance route or a declared fall-recovery fixture.
+CAMERA: shoulder, turning through actual mouse input before W; weather must be visible from that selected camera's production targeting frame, with no helper fallback to another view.
+PASS: The branch has an authored grove and deer ride.
+PASS: The saved ride route contains distinct physical landing colliders.
+PASS: The saved route contains four clouds between the island and original northern floor.
+PASS: Island and northern floor remain separate physical endpoint surfaces.
+PASS: Saved cloud 0 has a landing collider and authored centre marker.
+PASS: Saved cloud 1 has a landing collider and authored centre marker.
+PASS: Saved cloud 2 has a landing collider and authored centre marker.
+PASS: Saved cloud 3 has a landing collider and authored centre marker.
+SAVED CLOUD ROUTE: Grove_island_solid -> Cloud_platform_0 -> Cloud_platform_1 -> Cloud_platform_2 -> Cloud_platform_3 -> Outer_mountain_court
+PASS: Grove reset clears growth, detached fruit and pending gratitude: continuous branch start
+PASS: Grove reset hides clouds, returns the deer and clears its weather owner: continuous branch start
+PASS: The incremental scene root exists.
+PASS: The saved scene supplies the cave path waypoint parent.
+PASS: The cave path has distinct, numerically ordered authored waypoints.
+PASS: The walking approach has no remaining visible path-cloud meshes.
+PASS: The authored mountain supplies a cave presentation component.
+PASS: The five authored cave surfaces begin with normal visible shadow casting.
+SAVED CAVE WAYPOINTS: Waypoint_00=(53.50, 26.00, 114.60) -> Waypoint_01=(52.63, 26.50, 118.62) -> Waypoint_02=(51.75, 26.50, 122.73) -> Waypoint_03=(41.29, 27.20, 120.51) -> Waypoint_04=(36.20, 27.60, 119.43) -> Waypoint_05=(32.00, 28.00, 123.00) -> Waypoint_06=(28.00, 28.00, 127.00) -> Waypoint_07=(28.00, 28.00, 132.00)
+PASS: The L5 camera uses its authored fixed/shoulder opt-in profile.
+PASS: Real Z input selects shoulder gameplay view.
+NAV TURN actual mouse yaw=-140.00; aligned before W; viewForward=(0.00, -0.21, 0.98) facing=(0.64, 0.00, -0.77) viewFacing=False carriedYaw=0.00 shoulder=True cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=Locked keyboard=20 W=False A=False S=False D=False
+PASS: WALK cave path Waypoint_00 reaches its authored height through actual collision.
+NAV TURN actual mouse yaw=-11.59; aligned before W; viewForward=(-0.20, -0.21, 0.96) facing=(0.00, 0.00, 1.00) viewFacing=False carriedYaw=0.00 shoulder=True cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=Locked keyboard=20 W=False A=False S=False D=False
+PASS: WALK cave path Waypoint_01 reaches its authored height through actual collision.
+NAV TURN actual mouse yaw=-0.75; aligned before W; viewForward=(-0.21, -0.21, 0.96) facing=(-0.20, 0.00, 0.98) viewFacing=False carriedYaw=0.00 shoulder=True cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=Locked keyboard=20 W=False A=False S=False D=False
+PASS: WALK cave path Waypoint_02 reaches its authored height through actual collision.
+PASS: The L5 camera uses its authored fixed/shoulder opt-in profile.
+PASS: Real Z input selects fixed gameplay view.
+PASS: Inside the cave, fixed view makes only its obstructing authored surfaces shadow-only.
+PASS: Cave presentation preserves the visible renderer component and solid collision: Cave_shell_floor
+PASS: Cave presentation preserves the visible renderer component and solid collision: Cave_shell_roof
+PASS: Cave presentation preserves the visible renderer component and solid collision: Cave_shell_front
+PASS: Cave presentation preserves the visible renderer component and solid collision: Cave_shell_back
+PASS: Cave presentation preserves the visible renderer component and solid collision: Cave_shell_east
+PASS: A shadow-only cave face still physically blocks a body or nearby-floor sightline: Cave_shell_roof
+PASS: A shadow-only cave face still physically blocks a body or nearby-floor sightline: Cave_shell_east
+PASS: Fixed cave view has no visible solid shell between the camera and feet.
+PASS: Fixed cave view has no visible solid shell between the camera and head.
+PASS: The L5 camera uses its authored fixed/shoulder opt-in profile.
+PASS: Real Z input selects shoulder gameplay view.
+PASS: Real Z to shoulder restores all cave surface rendering while the player remains inside.
+PASS: The L5 camera uses its authored fixed/shoulder opt-in profile.
+PASS: Real Z input selects shoulder gameplay view.
+PASS: Actual mode switches restore the selected route view and its cave presentation.
+NAV TURN actual mouse yaw=-88.42; aligned before W; viewForward=(-0.96, -0.21, -0.18) facing=(-0.21, 0.00, 0.98) viewFacing=False carriedYaw=0.00 shoulder=True cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=Locked keyboard=20 W=False A=False S=False D=False
+PASS: WALK cave path Waypoint_03 reaches its authored height through actual collision.
+NAV TURN actual mouse yaw=-1.18; aligned before W; viewForward=(-0.96, -0.21, -0.20) facing=(-0.98, 0.00, -0.19) viewFacing=False carriedYaw=0.00 shoulder=True cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=Locked keyboard=20 W=False A=False S=False D=False
+PASS: WALK cave path Waypoint_04 reaches its authored height through actual collision.
+NAV TURN actual mouse yaw=50.64; aligned before W; viewForward=(-0.76, -0.21, 0.61) facing=(-0.98, 0.00, -0.21) viewFacing=False carriedYaw=0.00 shoulder=True cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=Locked keyboard=20 W=False A=False S=False D=False
+PASS: WALK cave path Waypoint_05 reaches its authored height through actual collision.
+NAV TURN actual mouse yaw=6.05; aligned before W; viewForward=(-0.69, -0.21, 0.69) facing=(-0.78, 0.00, 0.63) viewFacing=False carriedYaw=0.00 shoulder=True cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=Locked keyboard=20 W=False A=False S=False D=False
+PASS: WALK cave path Waypoint_06 reaches its authored height through actual collision.
+NAV TURN actual mouse yaw=43.63; aligned before W; viewForward=(-0.03, -0.21, 0.98) facing=(-0.71, 0.00, 0.70) viewFacing=False carriedYaw=0.00 shoulder=True cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=Locked keyboard=20 W=False A=False S=False D=False
+PASS: WALK cave path Waypoint_07 reaches its authored height through actual collision.
+PASS: The actual walking route enters the cave and exercises its fixed/shoulder visibility.
+PASS: Leaving the cave restores all surface rendering and preserves collision: outbound cave exit
+NAV TURN actual mouse yaw=-9.00; aligned before W; viewForward=(-0.18, -0.21, 0.96) facing=(-0.03, 0.00, 1.00) viewFacing=False carriedYaw=0.00 shoulder=True cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=Locked keyboard=20 W=False A=False S=False D=False
+PASS: WALK apple clearing observation position reaches its authored height through actual collision.
+PASS: Walking the authored cave physically reaches the island before any unlock.
+PASS: The waiting deer circles the tree in the reachable clearing.
+WEATHER INPUT before Tab hold for Wind frame=20741 t=242.391 unscaled=246.740 focused=True cursor=Locked keyboard=20 expected=20 tabHeld=False tabPressed=False pickerHeld=False pickerOpen=False targeting=False weatherBlocked=False observationBlocked=False journey=Walking voyage=Waiting primaryPending=False pointerPicker=False closingFrame=-1 pickerStarted=53.38567
+WEATHER INPUT Tab down submitted before production Update frame=20741 t=242.391 unscaled=246.740 focused=True cursor=Locked keyboard=20 expected=20 tabHeld=True tabPressed=True pickerHeld=False pickerOpen=False targeting=False weatherBlocked=False observationBlocked=False journey=Walking voyage=Waiting primaryPending=False pointerPicker=False closingFrame=-1 pickerStarted=53.38567
+WEATHER INPUT after unchanged .45-second Tab hold frame=20781 t=242.878 unscaled=247.228 focused=True cursor=None keyboard=20 expected=20 tabHeld=True tabPressed=False pickerHeld=True pickerOpen=True targeting=False weatherBlocked=True observationBlocked=False journey=Walking voyage=Waiting primaryPending=False pointerPicker=False closingFrame=-1 pickerStarted=246.7404
+PASS: Holding Tab opens weather picker.
+PASS: Release selects Wind without inserting it remotely.
+PASS: Held E retains the selected view while preparing Wind.
+PASS: The production automatic shoulder targeting view exposes a visible, unoccluded tree pixel.
+PASS: The production camera ray hovers the visible 山间苹果树.
+PASS: A real pointer hit applies Wind in the continuous branch.
+PASS: Releasing E restores the same gameplay view after the tree cast.
+PASS: Sparse fruit drops from the actual tree
+PASS: One sparse apple does not unlock the cloud route.
+WEATHER INPUT before Tab hold for Rain frame=21022 t=245.903 unscaled=250.253 focused=True cursor=Locked keyboard=20 expected=20 tabHeld=False tabPressed=False pickerHeld=False pickerOpen=False targeting=False weatherBlocked=False observationBlocked=False journey=Walking voyage=Waiting primaryPending=False pointerPicker=False closingFrame=20893 pickerStarted=246.7404
+WEATHER INPUT Tab down submitted before production Update frame=21022 t=245.903 unscaled=250.253 focused=True cursor=Locked keyboard=20 expected=20 tabHeld=True tabPressed=True pickerHeld=False pickerOpen=False targeting=False weatherBlocked=False observationBlocked=False journey=Walking voyage=Waiting primaryPending=False pointerPicker=False closingFrame=20893 pickerStarted=246.7404
+WEATHER INPUT after unchanged .45-second Tab hold frame=21060 t=246.394 unscaled=250.744 focused=True cursor=None keyboard=20 expected=20 tabHeld=True tabPressed=False pickerHeld=True pickerOpen=True targeting=False weatherBlocked=True observationBlocked=False journey=Walking voyage=Waiting primaryPending=False pointerPicker=False closingFrame=20893 pickerStarted=250.2526
+PASS: Holding Tab opens weather picker.
+PASS: Release selects Rain without inserting it remotely.
+PASS: Held E retains the selected view while preparing Rain.
+PASS: The production automatic shoulder targeting view exposes a visible, unoccluded tree pixel.
+PASS: The production camera ray hovers the visible 山间苹果树.
+PASS: A real pointer hit applies Rain in the continuous branch.
+PASS: Releasing E restores the same gameplay view after the tree cast.
+PASS: Real rain grows the tree once and exposes its mature fruit
+WEATHER INPUT before Tab hold for Wind frame=21461 t=251.327 unscaled=255.676 focused=True cursor=Locked keyboard=20 expected=20 tabHeld=False tabPressed=False pickerHeld=False pickerOpen=False targeting=False weatherBlocked=False observationBlocked=False journey=Walking voyage=Waiting primaryPending=False pointerPicker=False closingFrame=21173 pickerStarted=250.2526
+WEATHER INPUT Tab down submitted before production Update frame=21461 t=251.327 unscaled=255.676 focused=True cursor=Locked keyboard=20 expected=20 tabHeld=True tabPressed=True pickerHeld=False pickerOpen=False targeting=False weatherBlocked=False observationBlocked=False journey=Walking voyage=Waiting primaryPending=False pointerPicker=False closingFrame=21173 pickerStarted=250.2526
+WEATHER INPUT after unchanged .45-second Tab hold frame=21499 t=251.808 unscaled=256.158 focused=True cursor=None keyboard=20 expected=20 tabHeld=True tabPressed=False pickerHeld=True pickerOpen=True targeting=False weatherBlocked=True observationBlocked=False journey=Walking voyage=Waiting primaryPending=False pointerPicker=False closingFrame=21173 pickerStarted=255.6762
+PASS: Holding Tab opens weather picker.
+PASS: Release selects Wind without inserting it remotely.
+PASS: Held E retains the selected view while preparing Wind.
+PASS: The production automatic shoulder targeting view exposes a visible, unoccluded tree pixel.
+PASS: The production camera ray hovers the visible 山间苹果树.
+PASS: A real pointer hit applies Wind in the continuous branch.
+PASS: Releasing E restores the same gameplay view after the tree cast.
+PASS: Mature apples fall onto the actual island collider
+PASS: The deer approaches and eats before the cloud route finishes appearing
+NAV TURN actual mouse yaw=-26.26; aligned before W; viewForward=(-0.59, -0.21, 0.78) facing=(-0.18, 0.00, 0.98) viewFacing=False carriedYaw=0.00 shoulder=True cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=Locked keyboard=20 W=False A=False S=False D=False
+PASS: WALK approach the waiting deer around trunk 0 reaches its authored height through actual collision.
+NAV TURN actual mouse yaw=71.19; aligned before W; viewForward=(0.55, -0.21, 0.81) facing=(-0.60, 0.00, 0.80) viewFacing=False carriedYaw=0.00 shoulder=True cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=Locked keyboard=20 W=False A=False S=False D=False
+PASS: WALK approach the waiting deer around trunk 1 reaches its authored height through actual collision.
+NAV TURN actual mouse yaw=-12.76; aligned before W; viewForward=(0.36, -0.21, 0.91) facing=(0.56, 0.00, 0.83) viewFacing=False carriedYaw=0.00 shoulder=True cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=Locked keyboard=20 W=False A=False S=False D=False
+PASS: WALK approach the waiting deer around trunk 2 reaches its authored height through actual collision.
+NAV TURN actual mouse yaw=-21.25; aligned before W; viewForward=(0.00, -0.21, 0.98) facing=(0.37, 0.00, 0.93) viewFacing=False carriedYaw=0.00 shoulder=True cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=Locked keyboard=20 W=False A=False S=False D=False
+PASS: WALK approach the waiting deer around trunk 3 reaches its authored height through actual collision.
+NAV TURN actual mouse yaw=-21.97; aligned before W; viewForward=(-0.36, -0.21, 0.91) facing=(0.01, 0.00, 1.00) viewFacing=False carriedYaw=0.00 shoulder=True cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=Locked keyboard=20 W=False A=False S=False D=False
+PASS: WALK approach the waiting deer around trunk 4 reaches its authored height through actual collision.
+NAV TURN actual mouse yaw=-21.80; aligned before W; viewForward=(-0.67, -0.21, 0.71) facing=(-0.37, 0.00, 0.93) viewFacing=False carriedYaw=0.00 shoulder=True cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=Locked keyboard=20 W=False A=False S=False D=False
+PASS: WALK approach the waiting deer around trunk 5 reaches its authored height through actual collision.
+NAV TURN actual mouse yaw=-22.08; aligned before W; viewForward=(-0.89, -0.21, 0.40) facing=(-0.69, 0.00, 0.73) viewFacing=False carriedYaw=0.00 shoulder=True cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=Locked keyboard=20 W=False A=False S=False D=False
+PASS: WALK approach the waiting deer around trunk 6 reaches its authored height through actual collision.
+NAV TURN actual mouse yaw=-22.59; aligned before W; viewForward=(-0.98, -0.21, 0.03) facing=(-0.91, 0.00, 0.41) viewFacing=False carriedYaw=0.00 shoulder=True cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=Locked keyboard=20 W=False A=False S=False D=False
+PASS: WALK approach the waiting deer around trunk 7 reaches its authored height through actual collision.
+NAV TURN actual mouse yaw=-21.79; aligned before W; viewForward=(-0.92, -0.21, -0.33) facing=(-1.00, 0.00, 0.03) viewFacing=False carriedYaw=0.00 shoulder=True cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=Locked keyboard=20 W=False A=False S=False D=False
+PASS: WALK approach the waiting deer around trunk 8 reaches its authored height through actual collision.
+NAV TURN actual mouse yaw=-97.15; aligned before W; viewForward=(0.45, -0.21, -0.87) facing=(-0.94, 0.00, -0.34) viewFacing=False carriedYaw=0.00 shoulder=True cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=Locked keyboard=20 W=False A=False S=False D=False
+PASS: WALK approach the waiting deer reaches its authored height through actual collision.
+PASS: Real short E mounts the deer reached on foot.
+NAV TURN actual mouse yaw=179.56; aligned before W; viewForward=(-0.42, -0.41, 0.81) facing=(0.46, 0.00, -0.89) viewFacing=False carriedYaw=0.00 shoulder=True cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=Locked keyboard=20 W=False A=False S=False D=False
+PASS: RIDE south-east clearing around trunk 0 settles on actual supported ground.
+NAV TURN actual mouse yaw=116.38; aligned before W; viewForward=(0.91, -0.41, 0.02) facing=(-0.46, 0.00, 0.89) viewFacing=False carriedYaw=0.00 shoulder=True cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=Locked keyboard=20 W=False A=False S=False D=False
+PASS: RIDE south-east clearing around trunk 1 settles on actual supported ground.
+NAV TURN actual mouse yaw=9.76; aligned before W; viewForward=(0.90, -0.41, -0.14) facing=(1.00, 0.00, 0.02) viewFacing=False carriedYaw=0.00 shoulder=True cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=Locked keyboard=20 W=False A=False S=False D=False
+PASS: RIDE south-east clearing around trunk 2 settles on actual supported ground.
+NAV TURN actual mouse yaw=21.66; aligned before W; viewForward=(0.79, -0.41, -0.46) facing=(0.99, 0.00, -0.15) viewFacing=False carriedYaw=0.00 shoulder=True cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=Locked keyboard=20 W=False A=False S=False D=False
+PASS: RIDE south-east clearing around trunk 3 settles on actual supported ground.
+NAV TURN actual mouse yaw=25.93; aligned before W; viewForward=(0.51, -0.41, -0.76) facing=(0.86, 0.00, -0.50) viewFacing=False carriedYaw=0.00 shoulder=True cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=Locked keyboard=20 W=False A=False S=False D=False
+PASS: RIDE south-east clearing around trunk 4 settles on actual supported ground.
+NAV TURN actual mouse yaw=26.45; aligned before W; viewForward=(0.12, -0.41, -0.91) facing=(0.56, 0.00, -0.83) viewFacing=False carriedYaw=0.00 shoulder=True cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=Locked keyboard=20 W=False A=False S=False D=False
+PASS: RIDE south-east clearing around trunk 5 settles on actual supported ground.
+NAV TURN actual mouse yaw=15.15; aligned before W; viewForward=(-0.12, -0.41, -0.91) facing=(0.13, 0.00, -0.99) viewFacing=False carriedYaw=0.00 shoulder=True cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=Locked keyboard=20 W=False A=False S=False D=False
+PASS: RIDE south-east clearing around trunk 6 settles on actual supported ground.
+NAV TURN actual mouse yaw=26.83; aligned before W; viewForward=(-0.52, -0.41, -0.75) facing=(-0.14, 0.00, -0.99) viewFacing=False carriedYaw=0.00 shoulder=True cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=Locked keyboard=20 W=False A=False S=False D=False
+PASS: RIDE south-east clearing around trunk 7 settles on actual supported ground.
+NAV TURN actual mouse yaw=-103.10; aligned before W; viewForward=(0.85, -0.41, -0.34) facing=(-0.57, 0.00, -0.82) viewFacing=False carriedYaw=0.00 shoulder=True cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=Locked keyboard=20 W=False A=False S=False D=False
+PASS: RIDE south-east clearing settles on actual supported ground.
+NAV TURN actual mouse yaw=161.33; aligned before W; viewForward=(-0.91, -0.41, 0.05) facing=(0.93, 0.00, -0.37) viewFacing=False carriedYaw=0.00 shoulder=True cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=Locked keyboard=20 W=False A=False S=False D=False
+PASS: RIDE south clearing settles on actual supported ground.
+NAV TURN actual mouse yaw=-2.99; aligned before W; viewForward=(-0.91, -0.41, 0.00) facing=(-1.00, 0.00, 0.05) viewFacing=False carriedYaw=0.00 shoulder=True cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=Locked keyboard=20 W=False A=False S=False D=False
+PASS: RIDE west cloud approach settles on actual supported ground.
+PASS: The authored riding motion exposes readable flight and ground braking parameters.
+PASS: Actual five-point source footprint supports the launch and run-up: outbound cloud 0
+PASS: The target landing uses the actual five-point destination footprint: outbound cloud 0
+NAV TURN actual mouse yaw=-146.50; aligned before W; viewForward=(0.76, -0.41, -0.50) facing=(-1.00, 0.00, 0.00) viewFacing=False carriedYaw=0.00 shoulder=True cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=Locked keyboard=20 W=False A=False S=False D=False
+PASS: RIDE outbound cloud 0 run-up settles on actual supported ground.
+NAV TURN actual mouse yaw=61.21; aligned before W; viewForward=(-0.07, -0.41, -0.91) facing=(0.84, 0.00, -0.55) viewFacing=False carriedYaw=0.00 shoulder=True cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=Locked keyboard=20 W=False A=False S=False D=False
+PASS: The moving deer reaches a real safe launch footprint: outbound cloud 0
+JUMP TAKEOFF outbound cloud 0 feet=(24.991, 28.030, 131.395) velocity=(-0.450, 0.000, -5.626) plannedLaunch=(24.472, 28.030, 131.396) target=(24.058, 28.630, 126.223)
+PASS: Space produces an actual airborne ascent: outbound cloud 0
+JUMP BRAKE outbound cloud 0 feet=(24.541, 30.524, 128.672) velocity=(-1.160, 0.000, -5.887) target=(24.058, 28.630, 126.223) remaining=2.497 stoppingDistance=2.427 predictedStop=(24.071, 28.630, 126.291) vertical=0.987 flightTime=0.487 landingSpeed=3.077
+JUMP LANDING outbound cloud 0 touchdown=(24.122, 28.630, 126.547) velocity=(-0.603, 0.000, -3.062) settled=(24.083, 28.630, 126.352) target=(24.058, 28.630, 126.223) centre=(24.000, 28.630, 125.500) lastSafe=Cloud_platform_0
+PASS: Real landing footprint belongs to Cloud_platform_0 without recovery: outbound cloud 0
+JUMP outbound cloud 0 source=Grove_island_solid destination=Cloud_platform_0 launch=(24.47, 28.03, 131.40) landed=(24.08, 28.63, 126.35) peak=30.54
+PASS: Landing height matches the actual destination: outbound cloud 0
+JUMP COMFORT riding: real input on the cloud reached by the continuous route; centre walking, neutral buffered hop, mouse observation and late edge jump. No teleport, velocity write, unlock injection or destination magnet.
+NAV TURN actual mouse yaw=-5.56; aligned before W; viewForward=(-0.09, -0.41, -0.91) facing=(-0.19, 0.00, -0.98) viewFacing=False carriedYaw=0.00 shoulder=True cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=Locked keyboard=20 W=False A=False S=False D=False
+PASS: RIDE riding centre for controls check settles on actual supported ground.
+PASS: Cloud framing is requested by the active riding motion owner.
+PASS: Local shoulder framing widens the landing view.
+PASS: Looking around a stationary cloud does not rotate or move the character.
+PASS: Neutral Space starts a real riding hop.
+PASS: A pre-landing Space press is buffered into the next physical riding jump
+PASS: The buffered hop lands again
+PASS: Buffered hopping retains real local support without drift or an air jump.
+NAV TURN actual mouse yaw=-35.59; aligned before W; viewForward=(0.00, -0.41, -0.91) facing=(-0.10, 0.00, -1.00) viewFacing=False carriedYaw=0.00 shoulder=True cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=Locked keyboard=20 W=False A=False S=False D=False
+PASS: Space just after the physical rim still launches riding through coyote time.
+PASS: Turning follows the requested jump direction rather than old outward inertia.
+PASS: Real opposite input brakes the airborne traveller
+PASS: Late jump returns onto the actual cloud collider
+PASS: Late takeoff lands safely without recovery or invisible support.
+NAV TURN actual mouse yaw=177.58; aligned before W; viewForward=(-0.04, -0.41, 0.91) facing=(0.00, 0.00, -1.00) viewFacing=False carriedYaw=0.00 shoulder=True cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=Locked keyboard=20 W=False A=False S=False D=False
+PASS: RIDE riding return from rim check settles on actual supported ground.
+PASS: The authored riding motion exposes readable flight and ground braking parameters.
+PASS: Actual five-point source footprint supports the launch and run-up: outbound cloud 1
+PASS: The target landing uses the actual five-point destination footprint: outbound cloud 1
+PASS: RIDE outbound cloud 1 run-up settles on actual supported ground.
+NAV TURN actual mouse yaw=-135.31; aligned before W; viewForward=(-0.62, -0.41, -0.67) facing=(-0.04, 0.00, 1.00) viewFacing=False carriedYaw=0.00 shoulder=True cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=Locked keyboard=20 W=False A=False S=False D=False
+PASS: The moving deer reaches a real safe launch footprint: outbound cloud 1
+JUMP TAKEOFF outbound cloud 1 feet=(23.226, 28.630, 124.484) velocity=(-4.060, 0.000, -4.418) plannedLaunch=(23.159, 28.630, 124.575) target=(19.437, 29.230, 120.481)
+PASS: Space produces an actual airborne ascent: outbound cloud 1
+JUMP BRAKE outbound cloud 1 feet=(21.017, 31.147, 122.145) velocity=(-4.132, 0.000, -4.350) target=(19.437, 29.230, 120.481) remaining=2.294 stoppingDistance=2.246 predictedStop=(19.470, 29.230, 120.516) vertical=-0.529 flightTime=0.412 landingSpeed=3.527
+JUMP LANDING outbound cloud 1 touchdown=(19.688, 29.230, 120.746) velocity=(-2.449, 0.000, -2.578) settled=(19.507, 29.230, 120.555) target=(19.437, 29.230, 120.481) centre=(19.000, 29.230, 120.000) lastSafe=Cloud_platform_1
+PASS: Real landing footprint belongs to Cloud_platform_1 without recovery: outbound cloud 1
+JUMP outbound cloud 1 source=Cloud_platform_0 destination=Cloud_platform_1 launch=(23.16, 28.63, 124.58) landed=(19.51, 29.23, 120.55) peak=31.16
+PASS: Landing height matches the actual destination: outbound cloud 1
+PASS: The authored riding motion exposes readable flight and ground braking parameters.
+PASS: Actual five-point source footprint supports the launch and run-up: outbound cloud 2
+PASS: The target landing uses the actual five-point destination footprint: outbound cloud 2
+NAV TURN actual mouse yaw=-11.61; aligned before W; viewForward=(-0.48, -0.41, -0.78) facing=(-0.69, 0.00, -0.73) viewFacing=False carriedYaw=0.00 shoulder=True cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=Locked keyboard=20 W=False A=False S=False D=False
+PASS: RIDE outbound cloud 2 run-up settles on actual supported ground.
+NAV TURN actual mouse yaw=66.21; aligned before W; viewForward=(-0.90, -0.41, 0.13) facing=(-0.53, 0.00, -0.85) viewFacing=False carriedYaw=0.00 shoulder=True cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=Locked keyboard=20 W=False A=False S=False D=False
+PASS: The moving deer reaches a real safe launch footprint: outbound cloud 2
+JUMP TAKEOFF outbound cloud 2 feet=(18.037, 29.230, 120.298) velocity=(-5.940, 0.000, 0.849) plannedLaunch=(18.060, 29.230, 120.134) target=(12.792, 28.530, 120.887)
+PASS: Space produces an actual airborne ascent: outbound cloud 2
+JUMP BRAKE outbound cloud 2 feet=(15.614, 31.667, 120.581) velocity=(-5.965, 0.000, 0.647) target=(12.792, 28.530, 120.887) remaining=2.839 stoppingDistance=2.766 predictedStop=(12.864, 28.530, 120.879) vertical=2.066 flightTime=0.673 landingSpeed=1.963
+JUMP LANDING outbound cloud 2 touchdown=(12.994, 28.530, 120.865) velocity=(-1.999, 0.000, 0.217) settled=(12.913, 28.530, 120.874) target=(12.792, 28.530, 120.887) centre=(12.000, 28.530, 121.000) lastSafe=Cloud_platform_2
+PASS: Real landing footprint belongs to Cloud_platform_2 without recovery: outbound cloud 2
+JUMP outbound cloud 2 source=Cloud_platform_1 destination=Cloud_platform_2 launch=(18.06, 29.23, 120.13) landed=(12.91, 28.53, 120.87) peak=31.76
+PASS: Landing height matches the actual destination: outbound cloud 2
+PASS: The authored riding motion exposes readable flight and ground braking parameters.
+PASS: Actual five-point source footprint supports the launch and run-up: outbound cloud 3
+PASS: The target landing uses the actual five-point destination footprint: outbound cloud 3
+PASS: RIDE outbound cloud 3 run-up settles on actual supported ground.
+NAV TURN actual mouse yaw=75.68; aligned before W; viewForward=(-0.13, -0.41, 0.90) facing=(-0.99, 0.00, 0.11) viewFacing=False carriedYaw=0.00 shoulder=True cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=Locked keyboard=20 W=False A=False S=False D=False
+PASS: The moving deer reaches a real safe launch footprint: outbound cloud 3
+JUMP TAKEOFF outbound cloud 3 feet=(11.980, 28.530, 122.068) velocity=(-0.849, 0.000, 5.940) plannedLaunch=(11.848, 28.530, 122.064) target=(11.113, 27.430, 127.208)
+PASS: Space produces an actual airborne ascent: outbound cloud 3
+JUMP BRAKE outbound cloud 3 feet=(11.592, 30.955, 124.427) velocity=(-1.018, 0.000, 5.913) target=(11.113, 27.430, 127.208) remaining=2.822 stoppingDistance=2.823 predictedStop=(11.113, 27.430, 127.209) vertical=2.230 flightTime=0.716 landingSpeed=1.707
+JUMP LANDING outbound cloud 3 touchdown=(11.128, 27.430, 127.123) velocity=(-0.287, 0.000, 1.670) settled=(11.119, 27.430, 127.177) target=(11.113, 27.430, 127.208) centre=(11.000, 27.430, 128.000) lastSafe=Cloud_platform_3
+PASS: Real landing footprint belongs to Cloud_platform_3 without recovery: outbound cloud 3
+JUMP outbound cloud 3 source=Cloud_platform_2 destination=Cloud_platform_3 launch=(11.85, 28.53, 122.06) landed=(11.12, 27.43, 127.18) peak=31.07
+PASS: Landing height matches the actual destination: outbound cloud 3
+PASS: 4 outbound cloud jumps landed without recovery or placement.
+PASS: The authored riding motion exposes readable flight and ground braking parameters.
+PASS: Actual five-point source footprint supports the launch and run-up: outbound final cloud across the gap to north village
+PASS: The target landing uses the actual five-point destination footprint: outbound final cloud across the gap to north village
+NAV TURN actual mouse yaw=1.57; aligned before W; viewForward=(-0.13, -0.41, 0.90) facing=(-0.17, 0.00, 0.99) viewFacing=False carriedYaw=0.00 shoulder=True cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=Locked keyboard=20 W=False A=False S=False D=False
+PASS: RIDE outbound final cloud across the gap to north village run-up settles on actual supported ground.
+NAV TURN actual mouse yaw=-52.92; aligned before W; viewForward=(-0.80, -0.41, 0.44) facing=(-0.14, 0.00, 0.99) viewFacing=False carriedYaw=0.00 shoulder=True cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=Locked keyboard=20 W=False A=False S=False D=False
+PASS: The moving deer reaches a real safe launch footprint: outbound final cloud across the gap to north village
+JUMP TAKEOFF outbound final cloud across the gap to north village feet=(9.997, 27.430, 128.436) velocity=(-5.254, 0.000, 2.898) plannedLaunch=(10.037, 27.430, 128.531) target=(4.796, 26.030, 131.423)
+PASS: Space produces an actual airborne ascent: outbound final cloud across the gap to north village
+JUMP BRAKE outbound final cloud across the gap to north village feet=(7.126, 29.945, 130.079) velocity=(-5.197, 0.000, 2.998) target=(4.796, 26.030, 131.423) remaining=2.690 stoppingDistance=2.626 predictedStop=(4.852, 26.030, 131.391) vertical=-0.826 flightTime=0.586 landingSpeed=2.485
+JUMP LANDING outbound final cloud across the gap to north village touchdown=(5.004, 26.030, 131.303) velocity=(-2.177, 0.000, 1.254) settled=(4.893, 26.030, 131.367) target=(4.796, 26.030, 131.423) centre=(-3.500, 26.030, 136.000) lastSafe=Outer_mountain_court
+PASS: Real landing footprint belongs to Outer_mountain_court without recovery: outbound final cloud across the gap to north village
+JUMP outbound final cloud across the gap to north village source=Cloud_platform_3 destination=Outer_mountain_court launch=(10.04, 27.43, 128.53) landed=(4.89, 26.03, 131.37) peak=29.97
+PASS: Landing height matches the actual destination: outbound final cloud across the gap to north village
+PASS: Stable northern arrival automatically dismounts and unlocks foot travel
+PASS: Automatic dismount leaves the traveller on the original northern floor.
+PASS: Northern arrival releases riding without an E interaction.
+PASS: Arrival and dismount retain the chosen gameplay camera.
+PASS: Automatic dismount begins the visible deer return before its first cloud landing.
+PASS: Deer return reports one actual cloud landing at a time.
+PASS: Returning deer has five real support points on Cloud_platform_3.
+PASS: Returning deer visibly rises and crosses space before landing on Cloud_platform_3.
+PASS: Returning deer keeps its visible model active at Cloud_platform_3.
+DEER RETURN landing=1 platform=Cloud_platform_3 feet=(9.949, 27.430, 128.580) peak=28.630
+PASS: Deer return reports one actual cloud landing at a time.
+PASS: Returning deer has five real support points on Cloud_platform_2.
+PASS: Returning deer visibly rises and crosses space before landing on Cloud_platform_2.
+PASS: Returning deer keeps its visible model active at Cloud_platform_2.
+DEER RETURN landing=2 platform=Cloud_platform_2 feet=(11.830, 28.530, 122.188) peak=30.030
+PASS: Deer return reports one actual cloud landing at a time.
+PASS: Returning deer has five real support points on Cloud_platform_1.
+PASS: Returning deer visibly rises and crosses space before landing on Cloud_platform_1.
+PASS: Returning deer keeps its visible model active at Cloud_platform_1.
+DEER RETURN landing=3 platform=Cloud_platform_1 feet=(17.931, 29.230, 120.153) peak=31.130
+PASS: Deer return reports one actual cloud landing at a time.
+PASS: Returning deer has five real support points on Cloud_platform_0.
+PASS: Returning deer visibly rises and crosses space before landing on Cloud_platform_0.
+PASS: Returning deer keeps its visible model active at Cloud_platform_0.
+DEER RETURN landing=4 platform=Cloud_platform_0 feet=(23.112, 28.630, 124.523) peak=31.830
+PASS: Deer return reports one actual cloud landing at a time.
+PASS: Returning deer has five real support points on Grove_island_solid.
+PASS: Returning deer visibly rises and crosses space before landing on Grove_island_solid.
+PASS: Returning deer keeps its visible model active at Grove_island_solid.
+DEER RETURN landing=5 platform=Grove_island_solid feet=(24.464, 28.030, 131.301) peak=31.230
+PASS: The deer physically lands on all four clouds and the island, then finishes parking before becoming available.
+PASS: After its fifth landing the deer visibly walks inward far enough to clear the cloud approach.
+PASS: The parking walk stays on five real island support points with visible bounded movement, without teleporting.
+PASS: The deer remains unavailable until the supported parking walk has finished.
+DEER PARKING landing=(24.464, 28.030, 131.301) parked=(24.663, 28.030, 133.793) walked=2.500 movingFrames=51
+PASS: The traveller remains on the northern floor while the independent visible deer returns.
+PASS: The earned cloud route exposes its player-controlled foot driver.
+PASS: The authored foot motion exposes readable flight and ground braking parameters.
+FOOT ENDPOINT PLAN source=Outer_mountain_court launch=(6.600, 26.030, 128.000) runup=(5.500, 26.030, 128.000) target=(10.050, 27.430, 128.000) distance=3.450 fullRunup=1.10m; actual top, local support and five-point footprints only.
+PASS: Actual five-point source footprint supports the launch and run-up: on foot from north onto final cloud
+PASS: The target landing uses the actual five-point destination footprint: on foot from north onto final cloud
+NAV TURN actual mouse yaw=-130.21; aligned before W; viewForward=(0.16, -0.41, -0.90) facing=(-0.87, 0.00, 0.50) viewFacing=False carriedYaw=0.00 shoulder=True cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=Locked keyboard=20 W=False A=False S=False D=False
+PASS: FOOT on foot from north onto final cloud run-up settles on actual supported ground.
+NAV TURN actual mouse yaw=-79.77; aligned before W; viewForward=(0.91, -0.41, 0.00) facing=(0.18, 0.00, -0.98) viewFacing=False carriedYaw=0.00 shoulder=True cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=Locked keyboard=20 W=False A=False S=False D=False
+PASS: The moving traveller reaches a real safe launch footprint: on foot from north onto final cloud
+PASS: The actual foot launch remains inside the production local jump area: on foot from north onto final cloud
+JUMP TAKEOFF on foot from north onto final cloud feet=(6.572, 26.030, 127.896) velocity=(6.000, 0.000, 0.000) plannedLaunch=(6.600, 26.030, 128.000) target=(10.050, 27.430, 128.000)
+PASS: Space produces an actual airborne ascent: on foot from north onto final cloud
+PASS: Real Space uses the foot driver and the single player collider, without remounting: on foot from north onto final cloud
+JUMP BRAKE on foot from north onto final cloud feet=(7.199, 26.971, 127.896) velocity=(6.000, 0.000, 0.000) target=(10.050, 27.430, 128.000) remaining=2.851 stoppingDistance=2.852 predictedStop=(10.051, 27.430, 127.896) vertical=8.110 flightTime=0.750 landingSpeed=1.501
+JUMP LANDING on foot from north onto final cloud touchdown=(9.970, 27.430, 127.896) velocity=(1.538, 0.000, 0.000) settled=(10.004, 27.430, 127.896) target=(10.050, 27.430, 128.000) centre=(11.000, 27.430, 128.000) lastSafe=Cloud_platform_3
+PASS: Real landing footprint belongs to Cloud_platform_3 without recovery: on foot from north onto final cloud
+JUMP on foot from north onto final cloud source=Outer_mountain_court destination=Cloud_platform_3 launch=(6.60, 26.03, 128.00) landed=(10.00, 27.43, 127.90) peak=28.56
+PASS: Landing height matches the actual destination: on foot from north onto final cloud
+JUMP COMFORT on-foot: real input on the cloud reached by the continuous route; centre walking, neutral buffered hop, mouse observation and late edge jump. No teleport, velocity write, unlock injection or destination magnet.
+NAV TURN actual mouse yaw=-5.96; aligned before W; viewForward=(0.91, -0.41, 0.09) facing=(1.00, 0.00, 0.00) viewFacing=False carriedYaw=0.00 shoulder=True cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=Locked keyboard=20 W=False A=False S=False D=False
+PASS: FOOT on-foot centre for controls check settles on actual supported ground.
+PASS: Cloud framing is requested by the active on-foot motion owner.
+PASS: Local shoulder framing widens the landing view.
+PASS: Looking around a stationary cloud does not rotate or move the character.
+PASS: Neutral Space starts a real on-foot hop.
+PASS: A pre-landing Space press is buffered into the next physical on-foot jump
+PASS: The buffered hop lands again
+PASS: Buffered hopping retains real local support without drift or an air jump.
+NAV TURN actual mouse yaw=65.96; aligned before W; viewForward=(0.00, -0.41, -0.91) facing=(0.99, 0.00, 0.10) viewFacing=False carriedYaw=0.00 shoulder=True cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=Locked keyboard=20 W=False A=False S=False D=False
+PASS: Space just after the physical rim still launches on-foot through coyote time.
+PASS: Turning follows the requested jump direction rather than old outward inertia.
+PASS: Real opposite input brakes the airborne traveller
+PASS: Late jump returns onto the actual cloud collider
+PASS: Late takeoff lands safely without recovery or invisible support.
+NAV TURN actual mouse yaw=-179.76; aligned before W; viewForward=(0.00, -0.41, 0.91) facing=(0.00, 0.00, -1.00) viewFacing=False carriedYaw=0.00 shoulder=True cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=Locked keyboard=20 W=False A=False S=False D=False
+PASS: FOOT on-foot return from rim check settles on actual supported ground.
+PASS: The authored foot motion exposes readable flight and ground braking parameters.
+FOOT RUN-UP on foot return cloud 3 point=(11.035, 27.430, 127.753) length=1.10 uses actual local support with 0.35m planning margin.
+PASS: Actual five-point source footprint supports the launch and run-up: on foot return cloud 3
+PASS: The target landing uses the actual five-point destination footprint: on foot return cloud 3
+PASS: FOOT on foot return cloud 3 run-up settles on actual supported ground.
+NAV TURN actual mouse yaw=171.63; aligned before W; viewForward=(0.13, -0.41, -0.90) facing=(0.00, 0.00, 1.00) viewFacing=False carriedYaw=0.00 shoulder=True cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=Locked keyboard=20 W=False A=False S=False D=False
+PASS: The moving traveller reaches a real safe launch footprint: on foot return cloud 3
+PASS: The actual foot launch remains inside the production local jump area: on foot return cloud 3
+JUMP TAKEOFF on foot return cloud 3 feet=(11.156, 27.430, 126.706) velocity=(0.849, 0.000, -5.939) plannedLaunch=(11.191, 27.430, 126.664) target=(11.873, 28.530, 121.891)
+PASS: Space produces an actual airborne ascent: on foot return cloud 3
+PASS: Real Space uses the foot driver and the single player collider, without remounting: on foot return cloud 3
+JUMP BRAKE on foot return cloud 3 feet=(11.517, 29.872, 124.263) velocity=(0.889, 0.000, -5.934) target=(11.873, 28.530, 121.891) remaining=2.399 stoppingDistance=2.357 predictedStop=(11.867, 28.530, 121.932) vertical=1.967 flightTime=0.478 landingSpeed=3.133
+JUMP LANDING on foot return cloud 3 touchdown=(11.836, 28.530, 122.139) velocity=(0.468, 0.000, -3.123) settled=(11.859, 28.530, 121.983) target=(11.873, 28.530, 121.891) centre=(12.000, 28.530, 121.000) lastSafe=Cloud_platform_2
+PASS: Real landing footprint belongs to Cloud_platform_2 without recovery: on foot return cloud 3
+JUMP on foot return cloud 3 source=Cloud_platform_3 destination=Cloud_platform_2 launch=(11.19, 27.43, 126.66) landed=(11.86, 28.53, 121.98) peak=29.96
+PASS: Landing height matches the actual destination: on foot return cloud 3
+PASS: The authored foot motion exposes readable flight and ground braking parameters.
+FOOT RUN-UP on foot return cloud 2 point=(12.247, 28.530, 120.965) length=1.10 uses actual local support with 0.35m planning margin.
+PASS: Actual five-point source footprint supports the launch and run-up: on foot return cloud 2
+PASS: The target landing uses the actual five-point destination footprint: on foot return cloud 2
+NAV TURN actual mouse yaw=-12.37; aligned before W; viewForward=(0.33, -0.41, -0.85) facing=(0.15, 0.00, -0.99) viewFacing=False carriedYaw=0.00 shoulder=True cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=Locked keyboard=20 W=False A=False S=False D=False
+PASS: FOOT on foot return cloud 2 run-up settles on actual supported ground.
+NAV TURN actual mouse yaw=-60.98; aligned before W; viewForward=(0.90, -0.41, -0.13) facing=(0.36, 0.00, -0.93) viewFacing=False carriedYaw=0.00 shoulder=True cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=Locked keyboard=20 W=False A=False S=False D=False
+PASS: The moving traveller reaches a real safe launch footprint: on foot return cloud 2
+PASS: The actual foot launch remains inside the production local jump area: on foot return cloud 2
+JUMP TAKEOFF on foot return cloud 2 feet=(13.282, 28.530, 120.850) velocity=(5.940, 0.000, -0.849) plannedLaunch=(13.336, 28.530, 120.809) target=(18.208, 29.230, 120.113)
+PASS: Space produces an actual airborne ascent: on foot return cloud 2
+PASS: Real Space uses the foot driver and the single player collider, without remounting: on foot return cloud 2
+JUMP BRAKE on foot return cloud 2 feet=(15.735, 30.987, 120.485) velocity=(5.933, 0.000, -0.892) target=(18.208, 29.230, 120.113) remaining=2.501 stoppingDistance=2.472 predictedStop=(18.180, 29.230, 120.118) vertical=1.932 flightTime=0.527 landingSpeed=2.839
+JUMP LANDING on foot return cloud 2 touchdown=(18.021, 29.230, 120.141) velocity=(2.801, 0.000, -0.421) settled=(18.147, 29.230, 120.122) target=(18.208, 29.230, 120.113) centre=(19.000, 29.230, 120.000) lastSafe=Cloud_platform_1
+PASS: Real landing footprint belongs to Cloud_platform_1 without recovery: on foot return cloud 2
+JUMP on foot return cloud 2 source=Cloud_platform_2 destination=Cloud_platform_1 launch=(13.34, 28.53, 120.81) landed=(18.15, 29.23, 120.12) peak=31.07
+PASS: Landing height matches the actual destination: on foot return cloud 2
+PASS: The authored foot motion exposes readable flight and ground braking parameters.
+FOOT RUN-UP on foot return cloud 1 point=(19.034, 29.230, 120.037) length=1.10 uses actual local support with 0.35m planning margin.
+PASS: Actual five-point source footprint supports the launch and run-up: on foot return cloud 1
+PASS: The target landing uses the actual five-point destination footprint: on foot return cloud 1
+NAV TURN actual mouse yaw=-3.05; aligned before W; viewForward=(0.91, -0.41, -0.09) facing=(0.99, 0.00, -0.15) viewFacing=False carriedYaw=0.00 shoulder=True cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=Locked keyboard=20 W=False A=False S=False D=False
+PASS: FOOT on foot return cloud 1 run-up settles on actual supported ground.
+NAV TURN actual mouse yaw=-53.22; aligned before W; viewForward=(0.61, -0.41, 0.68) facing=(1.00, 0.00, -0.10) viewFacing=False carriedYaw=0.00 shoulder=True cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=Locked keyboard=20 W=False A=False S=False D=False
+PASS: The moving traveller reaches a real safe launch footprint: on foot return cloud 1
+PASS: The actual foot launch remains inside the production local jump area: on foot return cloud 1
+JUMP TAKEOFF on foot return cloud 1 feet=(19.649, 29.230, 120.963) velocity=(4.036, 0.000, 4.440) plannedLaunch=(19.774, 29.230, 120.851) target=(23.311, 28.630, 124.742)
+PASS: Space produces an actual airborne ascent: on foot return cloud 1
+PASS: Real Space uses the foot driver and the single player collider, without remounting: on foot return cloud 1
+JUMP BRAKE on foot return cloud 1 feet=(21.366, 31.686, 122.751) velocity=(4.193, 0.000, 4.292) target=(23.311, 28.630, 124.742) remaining=2.782 stoppingDistance=2.724 predictedStop=(23.270, 28.630, 124.700) vertical=1.933 flightTime=0.658 landingSpeed=2.053
+JUMP LANDING on foot return cloud 1 touchdown=(23.210, 28.630, 124.639) velocity=(1.385, 0.000, 1.418) settled=(23.251, 28.630, 124.681) target=(23.311, 28.630, 124.742) centre=(24.000, 28.630, 125.500) lastSafe=Cloud_platform_0
+PASS: Real landing footprint belongs to Cloud_platform_0 without recovery: on foot return cloud 1
+JUMP on foot return cloud 1 source=Cloud_platform_1 destination=Cloud_platform_0 launch=(19.77, 29.23, 120.85) landed=(23.25, 28.63, 124.68) peak=31.76
+PASS: Landing height matches the actual destination: on foot return cloud 1
+PASS: The authored foot motion exposes readable flight and ground braking parameters.
+FOOT RUN-UP on foot return cloud 0 point=(24.014, 28.630, 125.674) length=1.10 uses actual local support with 0.35m planning margin.
+PASS: Actual five-point source footprint supports the launch and run-up: on foot return cloud 0
+PASS: The target landing uses the actual five-point destination footprint: on foot return cloud 0
+NAV TURN actual mouse yaw=-6.82; aligned before W; viewForward=(0.56, -0.41, 0.72) facing=(0.70, 0.00, 0.72) viewFacing=False carriedYaw=0.00 shoulder=True cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=Locked keyboard=20 W=False A=False S=False D=False
+PASS: FOOT on foot return cloud 0 run-up settles on actual supported ground.
+NAV TURN actual mouse yaw=-32.94; aligned before W; viewForward=(0.07, -0.41, 0.91) facing=(0.61, 0.00, 0.79) viewFacing=False carriedYaw=0.00 shoulder=True cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=Locked keyboard=20 W=False A=False S=False D=False
+PASS: The moving traveller reaches a real safe launch footprint: on foot return cloud 0
+PASS: The actual foot launch remains inside the production local jump area: on foot return cloud 0
+JUMP TAKEOFF on foot return cloud 0 feet=(24.186, 28.630, 126.780) velocity=(0.478, 0.000, 5.981) plannedLaunch=(24.102, 28.630, 126.771) target=(24.484, 28.030, 131.546)
+PASS: Space produces an actual airborne ascent: on foot return cloud 0
+PASS: Real Space uses the foot driver and the single player collider, without remounting: on foot return cloud 0
+JUMP BRAKE on foot return cloud 0 feet=(24.308, 30.782, 128.622) velocity=(0.361, 0.000, 5.989) target=(24.484, 28.030, 131.546) remaining=2.929 stoppingDistance=2.869 predictedStop=(24.480, 28.030, 131.486) vertical=4.045 flightTime=0.764 landingSpeed=1.413
+JUMP LANDING on foot return cloud 0 touchdown=(24.476, 28.030, 131.420) velocity=(0.085, 0.000, 1.420) settled=(24.478, 28.030, 131.447) target=(24.484, 28.030, 131.546) centre=(25.000, 28.030, 138.000) lastSafe=Grove_island_solid
+PASS: Real landing footprint belongs to Grove_island_solid without recovery: on foot return cloud 0
+JUMP on foot return cloud 0 source=Cloud_platform_0 destination=Grove_island_solid launch=(24.10, 28.63, 126.77) landed=(24.48, 28.03, 131.45) peak=31.16
+PASS: Landing height matches the actual destination: on foot return cloud 0
+PASS: The actual on-foot reverse cloud route reaches the island without recovery or remounting.
+PASS: On-foot return preserves the earned tree and foot-route state.
+PASS: The parked deer leaves clear space for the traveller's actual island landing.
+PASS: The whole branch caused no unrelated journey rescue.
+PASS: The complete outward and return traversal preserves its selected camera mode.
+NAV TURN actual mouse yaw=-7.06; aligned before W; viewForward=(-0.06, -0.41, 0.91) facing=(0.06, 0.00, 1.00) viewFacing=False carriedYaw=0.00 shoulder=True cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=Locked keyboard=20 W=False A=False S=False D=False
+PASS: WALK return to cave-path entrance around trunk 0 reaches its authored height through actual collision.
+NAV TURN actual mouse yaw=100.17; aligned before W; viewForward=(0.91, -0.41, -0.10) facing=(-0.06, 0.00, 1.00) viewFacing=False carriedYaw=0.00 shoulder=True cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=Locked keyboard=20 W=False A=False S=False D=False
+PASS: WALK return to cave-path entrance around trunk 1 reaches its authored height through actual collision.
+NAV TURN actual mouse yaw=-46.88; aligned before W; viewForward=(0.75, -0.21, 0.63) facing=(0.99, 0.00, -0.11) viewFacing=False carriedYaw=0.00 shoulder=True cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=Locked keyboard=20 W=False A=False S=False D=False
+PASS: WALK return to cave-path entrance around trunk 2 reaches its authored height through actual collision.
+NAV TURN actual mouse yaw=81.52; aligned before W; viewForward=(0.74, -0.21, -0.64) facing=(0.76, 0.00, 0.65) viewFacing=False carriedYaw=0.00 shoulder=True cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=Locked keyboard=20 W=False A=False S=False D=False
+PASS: WALK return to cave-path entrance reaches its authored height through actual collision.
+NAV TURN actual mouse yaw=34.51; aligned before W; viewForward=(0.24, -0.21, -0.95) facing=(0.75, 0.00, -0.66) viewFacing=False carriedYaw=0.00 shoulder=True cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=Locked keyboard=20 W=False A=False S=False D=False
+PASS: WALK return cave path Waypoint_07 reaches its authored height through actual collision.
+NAV TURN actual mouse yaw=13.81; aligned before W; viewForward=(0.01, -0.21, -0.98) facing=(0.25, 0.00, -0.97) viewFacing=False carriedYaw=0.00 shoulder=True cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=Locked keyboard=20 W=False A=False S=False D=False
+PASS: WALK return cave path Waypoint_06 reaches its authored height through actual collision.
+NAV TURN actual mouse yaw=-43.03; aligned before W; viewForward=(0.67, -0.21, -0.71) facing=(0.01, 0.00, -1.00) viewFacing=False carriedYaw=0.00 shoulder=True cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=Locked keyboard=20 W=False A=False S=False D=False
+PASS: WALK return cave path Waypoint_05 reaches its authored height through actual collision.
+NAV TURN actual mouse yaw=-5.85; aligned before W; viewForward=(0.74, -0.21, -0.64) facing=(0.69, 0.00, -0.73) viewFacing=False carriedYaw=0.00 shoulder=True cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=Locked keyboard=20 W=False A=False S=False D=False
+PASS: WALK return cave path Waypoint_04 reaches its authored height through actual collision.
+NAV TURN actual mouse yaw=-50.62; aligned before W; viewForward=(0.96, -0.21, 0.17) facing=(0.76, 0.00, -0.65) viewFacing=False carriedYaw=0.00 shoulder=True cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=Locked keyboard=20 W=False A=False S=False D=False
+PASS: WALK return cave path Waypoint_03 reaches its authored height through actual collision.
+NAV TURN actual mouse yaw=-1.98; aligned before W; viewForward=(0.96, -0.21, 0.20) facing=(0.98, 0.00, 0.17) viewFacing=False carriedYaw=0.00 shoulder=True cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=Locked keyboard=20 W=False A=False S=False D=False
+PASS: WALK return cave path Waypoint_02 reaches its authored height through actual collision.
+NAV TURN actual mouse yaw=86.98; aligned before W; viewForward=(0.25, -0.21, -0.94) facing=(0.98, 0.00, 0.21) viewFacing=False carriedYaw=0.00 shoulder=True cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=Locked keyboard=20 W=False A=False S=False D=False
+PASS: WALK return cave path Waypoint_01 reaches its authored height through actual collision.
+NAV TURN actual mouse yaw=2.61; aligned before W; viewForward=(0.21, -0.21, -0.96) facing=(0.26, 0.00, -0.97) viewFacing=False carriedYaw=0.00 shoulder=True cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=Locked keyboard=20 W=False A=False S=False D=False
+PASS: WALK return cave path Waypoint_00 reaches its authored height through actual collision.
+PASS: The authored cave walking path is also traversable downhill without rescue.
+PASS: Walking off the island and back through the cave releases foot-route ownership to ordinary player movement before reset.
+PASS: The entire continuous foot return, including the island-to-cave transition, causes no foot-driver recovery before reset.
+PASS: Leaving the cave restores all surface rendering and preserves collision: return to the east-village cave mouth
+PASS: Grove reset clears growth, detached fruit and pending gratitude: continuous bidirectional branch reset
+PASS: Grove reset hides clouds, returns the deer and clears its weather owner: continuous bidirectional branch reset
+PASS: Final real R releases riding and restores the fixed gameplay camera.
+PASS: Final real R clears the earned foot route, deer return and airborne foot ownership.
+PASS: Leaving the cave restores all surface rendering and preserves collision: final real R
+SKYWELL_DEER_SHOULDER_ROUTE_PASSED
