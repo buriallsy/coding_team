@@ -22,6 +22,8 @@ public partial class TowerGraybox : Node3D
     internal TowerRig3D Rig { get; private set; } = null!;
     internal SunCourtOptics3D Optics { get; private set; } = null!;
     internal CargoTrack3D CargoTrack { get; private set; } = null!;
+    internal TowerSessionOverlay3D Overlay { get; private set; } = null!;
+    internal TowerScreen Screen { get; private set; }
     internal CargoJourney Cargo { get; } = new();
     internal TowerState State => mechanism.State;
     internal bool ReachedSunCourt => route.ReachedSunCourt;
@@ -39,17 +41,24 @@ public partial class TowerGraybox : Node3D
         Rig = new TowerRig3D(this);
         Optics = new SunCourtOptics3D(this);
         CargoTrack = new CargoTrack3D(this);
+        Overlay = GetNode<TowerSessionOverlay3D>("OverlayLayer/SessionOverlay");
+        Overlay.Accepted += AcceptScreen;
         BuildHud(GetNode<CanvasLayer>("Interface"));
-        ResetRoute();
+        ResetRoute(TowerScreen.Intro);
         if (Array.IndexOf(OS.GetCmdlineUserArgs(), "--verify") >= 0)
             new GrayboxRouteCheck(this).Run();
     }
 
     public override void _PhysicsProcess(double delta)
     {
-        if (Input.IsActionJustPressed("reset_slice"))
+        if (Screen != TowerScreen.Intro && Input.IsActionJustPressed("reset_slice"))
         {
             ResetRoute();
+            return;
+        }
+        if (Screen != TowerScreen.Playing)
+        {
+            if (Input.IsActionJustPressed("ui_accept")) AcceptScreen();
             return;
         }
 
@@ -66,6 +75,12 @@ public partial class TowerGraybox : Node3D
             feedbackTime = 0f;
         ReadCargoCommand();
         CargoTrack.Synchronize(Cargo.TravelProgress, Cargo.HasFruit);
+        if (Cargo.Phase == CargoPhase.Delivered)
+        {
+            RefreshHud();
+            SetScreen(TowerScreen.Finished);
+            return;
+        }
         Vector2 walk = Cargo.Phase == CargoPhase.Travelling ? Vector2.Zero
             : Input.GetVector("walk_west", "walk_east", "walk_north", "walk_south");
         Player.Step(walk, step);
@@ -205,7 +220,7 @@ public partial class TowerGraybox : Node3D
         Say("Back at the last safe platform.");
     }
 
-    private void ResetRoute()
+    private void ResetRoute(TowerScreen nextScreen = TowerScreen.Playing)
     {
         mechanism.Reset();
         route.Reset();
@@ -221,6 +236,19 @@ public partial class TowerGraybox : Node3D
         LastCargoResult = null;
         feedbackTime = 0f;
         RefreshHud();
+        SetScreen(nextScreen);
+    }
+
+    private void AcceptScreen()
+    {
+        if (Screen == TowerScreen.Intro) SetScreen(TowerScreen.Playing);
+        else if (Screen == TowerScreen.Finished) ResetRoute();
+    }
+
+    private void SetScreen(TowerScreen screen)
+    {
+        Screen = screen;
+        Overlay.Present(screen, Cargo.DeliveredCount);
     }
 
     private void Say(string message)

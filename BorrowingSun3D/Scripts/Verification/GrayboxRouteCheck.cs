@@ -14,6 +14,7 @@ internal sealed class GrayboxRouteCheck(TowerGraybox scene)
     private const float LiftTolerance = .03f;
     private const uint OpticalOnlyLayer = 8;
     private const string CaptureOption = "--capture-dir=";
+    private const string OverlayContent = "SafeArea/Center/Card/Content/";
 
     private AnimatableBody3D lift = null!;
     private AnimatableBody3D carrier = null!;
@@ -43,10 +44,11 @@ internal sealed class GrayboxRouteCheck(TowerGraybox scene)
                     throw new InvalidOperationException("Viewport capture requires a graphical Godot run");
                 Directory.CreateDirectory(captureDirectory);
             }
-            GD.Print("SCOPE: 3D graybox with production Input Map and Physics3D; no player placement or state injection. "
+            GD.Print("SCOPE: 3D graybox from the production intro, with real key events and Physics3D; no player placement or state injection. "
                 + "One optical-only StaticBody3D at a time is the only fixture. The replay is fixture-free.");
             await Frames(8);
-            RequireEntrance("initial state");
+            await CheckIntroduction();
+            RequireEntrance("after Enter from the intro");
             await Capture("west-entrance.png");
 
             await Walk(Key.D, () => scene.Rig.IsAtDoorway(scene.Player.GlobalPosition),
@@ -73,7 +75,7 @@ internal sealed class GrayboxRouteCheck(TowerGraybox scene)
             await LaunchAndRide(blockAfterLaunch: true);
             await ConfirmDelivery();
 
-            await ResetToEntrance("from the delivery marker");
+            await ResetToEntrance(Key.R, "R from the finish overlay");
             await WalkToStation();
             await RiseAndVisitNorth();
             await CalibrateAndLightNorth();
@@ -86,6 +88,7 @@ internal sealed class GrayboxRouteCheck(TowerGraybox scene)
             Require(scene.Cargo.DeliveredCount == 1 && scene.Optics.ReceiverLit,
                 "the fixture-free route from the reset low bridge delivers 1/1 again");
             await Capture("cargo-delivered.png");
+            await ResetToEntrance(Key.Space, "Space from the second finish overlay");
 
             Require(supplySamples > 0, "the cargo route audited conserved water and the actual high lift every physics step");
             GD.Print($"SUPPLY samples={supplySamples}, max_water_drift={maxWaterDrift:0.000000}, max_lift_drift_m={maxLiftDrift:0.000000}");
@@ -96,7 +99,7 @@ internal sealed class GrayboxRouteCheck(TowerGraybox scene)
         catch (Exception failure)
         {
             GD.PushError($"GRAYBOX_ROUTE FAILED after {assertions} checks: {failure.Message}; "
-                + $"state={scene.State}, feet={scene.Player?.GlobalPosition}, floor={scene.Player?.IsOnFloor()}, "
+                + $"screen={scene.Screen}, state={scene.State}, feet={scene.Player?.GlobalPosition}, floor={scene.Player?.IsOnFloor()}, "
                 + $"bridge={scene.Rig?.BridgeCollisionEnabled}, northVisited={scene.ReachedSunCourt}, "
                 + $"eastVisited={scene.ReachedEast}, towerHit={scene.Optics?.TowerHit}, receiverLit={scene.Optics?.ReceiverLit}, "
                 + $"cargo={scene.Cargo?.Phase}, lastCargoResult={scene.LastCargoResult}, "
@@ -107,6 +110,54 @@ internal sealed class GrayboxRouteCheck(TowerGraybox scene)
         {
             if (blocker is { } fixture) fixture.Body.QueueFree();
         }
+    }
+
+    private async Task CheckIntroduction()
+    {
+        RequireModal(TowerScreen.Intro, "default scene opens the intro");
+        Require(OverlayText("Title") == "借晴" && OverlayText("Summary") == "把一箱水果送到花庭"
+            && scene.Overlay.ActionButton.Text == "开始" && OverlayText("ConfirmHint").Contains("Enter", StringComparison.Ordinal),
+            "the visible intro states the delivery goal and identifies Enter as a start key");
+        await Capture("intro.png");
+
+        Vector3 feet = scene.Player.GlobalPosition;
+        Vector3 car = PhysicsBodyPosition(carrier);
+        TowerState state = scene.State;
+        Send(Key.D, true);
+        try
+        {
+            await Cast(Key.Key2);
+            await Cast(Key.Key3);
+            await Tap(Key.G);
+            await Tap(Key.Q);
+            await Tap(Key.F);
+            await Tap(Key.R);
+            await KeepHeldForFrames(Key.D, 18);
+        }
+        finally
+        {
+            Send(Key.D, false);
+        }
+
+        Require(scene.Screen == TowerScreen.Intro && scene.Overlay.IsVisibleInTree() && scene.Overlay.ActionButton.HasFocus()
+            && scene.Player.GlobalPosition.DistanceTo(feet) < .01f && PhysicsBodyPosition(carrier).DistanceTo(car) < .01f
+            && scene.State == state && scene.Cargo.Phase == CargoPhase.WaitingForLight
+            && scene.LastResult == null && scene.LastCargoResult == null,
+            "held D and actual weather, cargo, drain and R keys leave gameplay frozen before starting");
+
+        await Tap(Key.Enter);
+        await Frames(5);
+        Require(scene.Player.GlobalPosition.DistanceTo(feet) < PositionTolerance,
+            "actual Enter starts at the same authored west spawn");
+    }
+
+    private string OverlayText(string label) => scene.Overlay.GetNode<Label>(OverlayContent + label).Text;
+
+    private void RequireModal(TowerScreen screen, string context)
+    {
+        Require(scene.Screen == screen && scene.Overlay.IsVisibleInTree(), $"{context}: overlay is visible");
+        Require(scene.Overlay.ActionButton.IsVisibleInTree() && scene.Overlay.ActionButton.HasFocus(),
+            $"{context}: the visible action button owns keyboard focus");
     }
 
     private async Task RiseAndVisitNorth()
@@ -412,18 +463,44 @@ internal sealed class GrayboxRouteCheck(TowerGraybox scene)
         Require(scene.LastCargoResult == CargoActionResult.Applied && scene.Cargo.Phase == CargoPhase.Delivered
             && scene.Cargo.DeliveredCount == 1 && !scene.CargoTrack.FruitVisible,
             "actual G at the delivery marker confirms 1/1 and removes the crate from the car");
-        await Tap(Key.G);
-        Require(scene.Cargo.Phase == CargoPhase.Delivered && scene.Cargo.DeliveredCount == 1,
-            "repeated actual G cannot count the delivery twice");
+        await CheckFinish();
         TraceCargo("delivered 1/1");
     }
 
-    private async Task ResetToEntrance(string context)
+    private async Task CheckFinish()
+    {
+        RequireModal(TowerScreen.Finished, "successful delivery opens the finish");
+        Require(OverlayText("Title") == "花庭已收货" && OverlayText("Summary") == "水果交付 1/1"
+            && scene.Overlay.ActionButton.Text == "再玩一次" && OverlayText("ConfirmHint").Contains("R", StringComparison.Ordinal),
+            "the visible finish shows delivery 1/1 and identifies R as a replay key");
+
+        Vector3 feet = scene.Player.GlobalPosition;
+        TowerState state = scene.State;
+        Send(Key.A, true);
+        try
+        {
+            await Tap(Key.G);
+            await Cast(Key.Key1);
+            await KeepHeldForFrames(Key.A, 18);
+        }
+        finally
+        {
+            Send(Key.A, false);
+        }
+
+        Require(scene.Screen == TowerScreen.Finished && scene.Overlay.IsVisibleInTree() && scene.Overlay.ActionButton.HasFocus()
+            && scene.Player.GlobalPosition.DistanceTo(feet) < .01f && scene.State == state
+            && scene.Cargo.Phase == CargoPhase.Delivered && scene.Cargo.DeliveredCount == 1
+            && scene.LastCargoResult == CargoActionResult.Applied,
+            "held A and repeated actual G or weather keys leave the finished game frozen at one delivery");
+    }
+
+    private async Task ResetToEntrance(Key key, string context)
     {
         auditSupply = false;
-        await Tap(Key.R);
+        await Tap(key);
         await Frames(8);
-        RequireEntrance($"R {context}");
+        RequireEntrance(context);
     }
 
     private async Task FallAndRecover()
@@ -453,6 +530,8 @@ internal sealed class GrayboxRouteCheck(TowerGraybox scene)
     private void RequireEntrance(string context)
     {
         TowerState state = scene.State;
+        Require(scene.Screen == TowerScreen.Playing && !scene.Overlay.IsVisibleInTree()
+            && !scene.Overlay.ActionButton.HasFocus(), $"{context}: gameplay is active and the overlay releases focus");
         Require(scene.Player.IsOnFloor() && scene.Player.GlobalPosition.DistanceTo(scene.Rig.Spawn) < PositionTolerance
             && state.Water == 0f && state.Height == 0f && state.Heading == 0f && !state.Latched
             && state.ActiveWeather == Weather.None && !scene.ReachedSunCourt && !scene.ReachedEast && scene.Recoveries == 0
@@ -564,6 +643,15 @@ internal sealed class GrayboxRouteCheck(TowerGraybox scene)
         if (!Input.IsPhysicalKeyPressed(key)) Send(key, true);
     }
 
+    private async Task KeepHeldForFrames(Key key, int count)
+    {
+        for (int frame = 0; frame < count; frame++)
+        {
+            KeepHeld(key);
+            await Frames(1);
+        }
+    }
+
     private static void Send(Key key, bool pressed)
     {
         using var input = new InputEventKey { Keycode = key, PhysicalKeycode = key, Pressed = pressed };
@@ -590,7 +678,8 @@ internal sealed class GrayboxRouteCheck(TowerGraybox scene)
         if (captureDirectory == null) return;
 
         await scene.ToSignal(scene.GetTree(), SceneTree.SignalName.ProcessFrame);
-        await scene.ToSignal(RenderingServer.Singleton, RenderingServer.SignalName.FramePostDraw);
+        // Request a fresh viewport image even when the desktop skips an automatic draw.
+        RenderingServer.ForceDraw(false);
         using Image image = scene.GetViewport().GetTexture().GetImage();
         string path = Path.Combine(captureDirectory, fileName);
         if (image.SavePng(path) != Error.Ok)

@@ -1,7 +1,8 @@
-[gd_scene load_steps=39 format=3]
+[gd_scene load_steps=40 format=3]
 
 [ext_resource type="Script" path="res://Scripts/TowerGraybox.cs" id="1_graybox"]
 [ext_resource type="Script" path="res://Scripts/GrayboxPlayer.cs" id="2_player"]
+[ext_resource type="PackedScene" path="res://Scenes/TowerSessionOverlay3D.tscn" id="3_session_overlay"]
 
 [sub_resource type="Environment" id="Environment_valley"]
 background_mode = 1
@@ -565,3 +566,8 @@ position = Vector3(0, 0.75, 0)
 mesh = SubResource("Mesh_player")
 
 [node name="Interface" type="CanvasLayer" parent="."]
+
+[node name="OverlayLayer" type="CanvasLayer" parent="."]
+layer = 5
+
+[node name="SessionOverlay" parent="OverlayLayer" instance=ExtResource("3_session_overlay")]
