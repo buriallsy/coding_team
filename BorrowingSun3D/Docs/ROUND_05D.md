@@ -18,6 +18,8 @@
 
 ## Windows 复跑
 
+本页保留 05D 当时的对照记录。后续的 Windows 托管无头、开窗截图与人工验收进度见 [Windows 验收交接](WINDOWS_ACCEPTANCE.md)。
+
 使用 Godot 4.7.1 .NET 的 Windows 控制台可执行文件和 .NET 8 SDK。先在独立的干净检出切到冻结基线，从仓库根目录运行。请替换示例安装路径。
 
 ```powershell

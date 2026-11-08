@@ -1,6 +1,6 @@
 # 借晴 · 3D 塔台灰盒
 
-第 05D 轮补上开场引导与签收页。从西岸上塔，借雨升高、借风接岸，经两面镜子把日光送到东岸，再用原来的雨水驱动货车，把一箱水果送到花庭。3D 分支起于 `2d-baseline`（`6175db9`），当前已测代码为 `fb4cbb4`。Windows 桌面验收待补，`3d-final` 待双平台确认。 [05D 对照证据](Docs/ROUND_05D.md) · [Windows 复跑](Docs/WINDOWS_ACCEPTANCE.md) · [3D 关系图](Docs/RELATIONSHIP_MAP.md) · [变化图与 CCR](Docs/CHANGE_MAP.md)
+第 05D 轮补上开场引导与签收页。从西岸上塔，借雨升高、借风接岸，经两面镜子把日光送到东岸，再用原来的雨水驱动货车，把一箱水果送到花庭。3D 分支起于 `2d-baseline`（`6175db9`），当前已测代码为 `fb4cbb4`。Windows 托管开窗预验已复跑两趟，实机人工验收待补。 [05D 对照证据](Docs/ROUND_05D.md) · [Windows 复跑](Docs/WINDOWS_ACCEPTANCE.md) · [3D 关系图](Docs/RELATIONSHIP_MAP.md) · [变化图与 CCR](Docs/CHANGE_MAP.md)
 
 ## 运行
 

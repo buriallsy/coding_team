@@ -1,6 +1,6 @@
 # 从这里开始
 
-两版都从西岸上塔、调镜借光，最后搭实体货车把一箱水果送到花庭。2D 已冻结为 `2d-baseline`（`6175db9`）。3D 以第 05D 轮已测代码 `fb4cbb4` 为验收候选，Windows 桌面验收待补。
+两版都从西岸上塔、调镜借光，最后搭实体货车把一箱水果送到花庭。2D 已冻结为 `2d-baseline`（`6175db9`）。3D 以第 05D 轮已测代码 `fb4cbb4` 为验收候选。两版已完成 Windows 托管开窗预验，实机人工验收待补。
 
 1. 用 Godot 4.7.1 .NET 与 .NET 8 SDK 导入对应工程，按 F5 后从开场卡片开始。3D 工程需要同级的 2D 源码。 [2D 运行与按键](BorrowingSun2D/README.md) · [3D 运行与按键](BorrowingSun3D/README.md)
 2. 对照两版的类关系与迁移变化。CCR 候选值为 `2/5 = 40%`。 [2D 类图](BorrowingSun2D/Docs/2D-to-3D/RELATIONSHIP_MAP.svg) · [3D 类图](BorrowingSun3D/Docs/RELATIONSHIP_MAP.md) · [变化图与复算](BorrowingSun3D/Docs/CHANGE_MAP.md)
