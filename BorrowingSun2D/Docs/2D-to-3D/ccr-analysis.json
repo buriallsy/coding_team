@@ -1,0 +1,35 @@
+{
+  "schema": 1,
+  "baseline": null,
+  "final_ref": null,
+  "candidates": [
+    {
+      "id": "TowerMechanism",
+      "path": "BorrowingSun2D/Scripts/Core/TowerMechanism.cs",
+      "reason": "Tower movement, docking, high lock and conserved rainwater"
+    },
+    {
+      "id": "RouteProgress",
+      "path": "BorrowingSun2D/Scripts/Core/RouteProgress.cs",
+      "reason": "North visit prerequisite and east shore progress"
+    },
+    {
+      "id": "CargoJourney",
+      "path": "BorrowingSun2D/Scripts/Core/CargoJourney.cs",
+      "reason": "Light confirmation, cargo loading, departure, journey and delivery"
+    },
+    {
+      "id": "Optics2D",
+      "path": "BorrowingSun2D/Scripts/Core/Optics2D.cs",
+      "reason": "Gameplay-critical two-reflection and occlusion solver"
+    },
+    {
+      "id": "SunCourtOptics2D",
+      "path": "BorrowingSun2D/Scripts/SunCourtOptics2D.cs",
+      "reason": "Owns local weather and mirror calibration alongside scene geometry adaptation"
+    }
+  ],
+  "reviews": [],
+  "new_core_classes": [],
+  "note": "Round 03 candidate inventory. Audit mixed scene and rule responsibilities before freezing the complete 2D baseline."
+}

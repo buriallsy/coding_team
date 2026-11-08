@@ -4,6 +4,8 @@
 
 Borrowing Sun is a weather puzzle set around a mountain tower. Rain lifts the tower and wind connects its bridges. Aim the Sun Court mirror, borrow sunlight, and turn the tower east to light the receiver. Sustained light earns one fruit crate. The same rainwater fills the cargo counterweight so you can ride across the valley and deliver the crate.
 
+The Round 03 integration adds automated domain checks, a Windows and macOS CI matrix, and CCR tooling linked to the current game rules. [Architecture and verification index](START_HERE.md)
+
 ## Run and play
 
 1. Clone or download this repository. Install **Godot 4.7.1 .NET** and the **.NET 8 SDK**.
@@ -19,6 +21,16 @@ The clean macOS arm64 build passed without warnings or errors. The cargo route p
 
 ![Godot 2D after one successful delivery. The player stands at the garden flag and the HUD reads delivery 1/1.](BorrowingSun2D/Docs/Evidence/round-03/delivered.png)
 
+From the repository root, run the standalone rule checks and the CCR tool tests.
+
+```sh
+dotnet run --project Tests/DomainChecks --configuration Release
+python3 -m unittest discover -s Tests -p test_ccr.py
+python3 Tools/ccr.py
+```
+
+The CCR command reports the current baseline status. The CI matrix runs the domain and CCR checks. Godot route verification is a separate step. [Integration run logs](BorrowingSun2D/Docs/Evidence/2026-11-08-round03-integration/RESULTS.md) [Run the Godot route and review the acceptance gates](BorrowingSun2D/Docs/2D-to-3D/ACCEPTANCE.md)
+
 ## Design and development
 
 `TowerMechanism` owns the lift, docking and shared rainwater. `SunCourtOptics2D` uses the pure C# `Optics2D` solver to determine live receiver light. `CargoJourney` uses that light to earn the crate and fill the counterweight. Once the car departs, `CargoTrack2D` moves its physical deck according to journey progress until arrival.
@@ -26,6 +38,7 @@ The clean macOS arm64 build passed without warnings or errors. The cargo route p
 | Project documents | What to look for |
 | --- | --- |
 | [Game concept / 项目构思](BorrowingSun2D/Docs/2D-to-3D/DESIGN.md) | The full gameplay loop and what carries from 2D to 3D |
+| [Scope and architecture / 范围与架构](BorrowingSun2D/Docs/2D-to-3D/FRAMEWORK.md) | Current rules, class maps and the CCR workflow |
 | [Production plan / 制作计划](BorrowingSun2D/Docs/2D-to-3D/PRODUCTION_PLAN.md) | Milestones, acceptance checks and evidence for the report |
 | [Project conventions / 项目规范](BorrowingSun2D/Docs/2D-to-3D/PROJECT_CONVENTIONS.md) | Code responsibilities, scene editing, testing and Git workflow |
 | [Current status / 当前版本](BorrowingSun2D/Docs/2D-to-3D/CURRENT_STATUS.md) | What is playable now, the reset regression, and the next milestone |

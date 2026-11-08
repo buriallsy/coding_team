@@ -1,0 +1,81 @@
+PASS initial low entry
+PASS sunny cannot become tower wind
+PASS no token cannot become tower wind
+PASS low tower refuses a wind turn
+PASS rain starts at the west entry
+PASS wind cannot interrupt ascent
+PASS rain recall preserves partial water and height
+PASS rain is accepted before the high lock
+PASS six units reach the high lock
+PASS height alone gives no bridge at the west heading
+PASS occupied doorway blocks wind
+PASS west limit prevents reverse wrap
+PASS clockwise wind begins a turn
+PASS the bridge stays open as a gap during rotation
+PASS wind recall preserves the partial angle
+PASS wind starts toward SunCourt (Clockwise)
+PASS tower settles at SunCourt (Clockwise)
+PASS wind starts toward East (Clockwise)
+PASS tower settles at East (Clockwise)
+PASS east limit prevents forward wrap
+PASS wind starts toward SunCourt (Counterclockwise)
+PASS tower settles at SunCourt (Counterclockwise)
+PASS wind starts toward None (Counterclockwise)
+PASS tower settles at None (Counterclockwise)
+PASS reverse wind returns to the high west heading
+PASS the west-facing drain releases an uncommitted lock
+PASS draining settles at the real low entry state
+PASS east cannot finish an out-of-order visit
+PASS north is a milestone
+PASS a second north visit does not repeat the milestone
+PASS east finishes the ordered shore route
+PASS east finish is recorded once
+PASS route reset clears both milestones
+PASS finite mirrors reflect in order from collector to relay to receiver
+PASS reflected segments end at the authored target points
+PASS a physical obstruction before the collector prevents the first bounce
+PASS an obstruction between mirrors prevents the second bounce
+PASS an obstruction truncates the outgoing beam before the receiver
+PASS the physical query wins over a coincident receiver endpoint
+PASS the relay back face cannot reflect
+PASS the receiver back face cannot accept light
+PASS the finite relay aperture can miss
+PASS a direct receiver hit cannot skip either mirror
+PASS finite ray range can prevent the first mirror hit
+PASS zero direction emits no optical segments
+PASS Round 03 reward, ballast and travel values
+PASS light alone cannot launch before the fruit reward
+PASS rain is accepted before the high lock
+PASS wind starts toward SunCourt (Clockwise)
+PASS tower settles at SunCourt (Clockwise)
+PASS wind starts toward East (Clockwise)
+PASS tower settles at East (Clockwise)
+PASS short illumination earns no crate
+PASS interruption resets the incomplete dwell
+PASS continuous illumination earns one crate and begins the transfer phase
+PASS automatic transfer partitions the original water and preserves the lift height
+PASS lost light pauses transfer without losing cargo or water
+PASS underfilled cargo cannot depart
+PASS restored light resumes transfer and caps it at four of six units
+PASS full ballast cannot depart in darkness
+PASS departure requires a rider on the carrier
+PASS wind starts toward SunCourt (Counterclockwise)
+PASS tower settles at SunCourt (Counterclockwise)
+PASS departure requires the east dock
+PASS wind starts toward None (Counterclockwise)
+PASS tower settles at None (Counterclockwise)
+PASS committed water prevents draining the locked tower
+PASS wind starts toward SunCourt (Clockwise)
+PASS tower settles at SunCourt (Clockwise)
+PASS wind starts toward East (Clockwise)
+PASS tower settles at East (Clockwise)
+PASS fruit, live light, east dock, ballast and rider allow departure
+PASS departure cannot be triggered twice
+PASS delivery cannot be confirmed during travel
+PASS the carrier continues in darkness
+PASS arrival in darkness still needs confirmation
+PASS confirmation requires the delivery station
+PASS one confirmation delivers the single crate
+PASS delivery is counted once
+PASS reset clears the whole delivery loop
+DOMAIN_CHECKS PASSED: 80 assertions; domain and geometry fixtures.

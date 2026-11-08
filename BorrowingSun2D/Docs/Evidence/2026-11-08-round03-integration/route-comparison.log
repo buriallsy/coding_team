@@ -1,0 +1,15 @@
+Production snapshot: all 26 tracked project/config/Scenes/Scripts files match de74962dd467c18b173495a2b1eaff87d8719d01 and the tested copy byte for byte.
+Platform: macOS arm64, Godot 4.7.1.stable.mono.official.a13da4feb, .NET SDK 8.0.424, local Godot NuGet feed.
+round01-builtin: 112 assertions; all selected outcome and numeric trace lines identical to the original Round 03 run.
+round01-independent: 71 assertions; all selected outcome and numeric trace lines identical to the original Round 03 run.
+round02-optics: 57 assertions; all selected outcome and numeric trace lines identical to the original Round 03 run.
+round03-cargo: 129 assertions; all selected outcome and numeric trace lines identical to the original Round 03 run.
+clean-build: 0 warnings, 0 errors.
+probe-build: 0 warnings, 0 errors.
+TRACE delivered 1/1: phase=Delivered lit=True water=2.000000 ballast=4.000000 height=6.000000 latch=True fruit=False delivered=1 travel=1.000000 deck_y=300.000 lift_body_y=300.000 carrier=(1183, 300) rider=(1242.9698, 299.93384)
+TRACE partial transfer held: phase=Loading lit=False water=3.700001 ballast=2.299999 height=6.000000 latch=True fruit=True delivered=0 travel=0.000000 deck_y=300.000 lift_body_y=300.000 carrier=(1119, 300) rider=(1124.4679, 299.93384)
+TRACE arrived in darkness: phase=Arrived lit=False water=2.000000 ballast=4.000000 height=6.000000 latch=True fruit=True delivered=0 travel=1.000000 deck_y=300.000 lift_body_y=300.000 carrier=(1183, 300) rider=(1188.4679, 299.93384)
+TRACE delivered 1/1: phase=Delivered lit=False water=2.000000 ballast=4.000000 height=6.000000 latch=True fruit=False delivered=1 travel=1.000000 deck_y=300.000 lift_body_y=300.000 carrier=(1183, 300) rider=(1242.968, 299.93384)
+TRACE delivered 1/1: phase=Delivered lit=True water=2.000000 ballast=4.000000 height=6.000000 latch=True fruit=False delivered=1 travel=1.000000 deck_y=300.000 lift_body_y=300.000 carrier=(1183, 300) rider=(1242.968, 299.93384)
+SUPPLY max_total_error=0.000000 max_height_error=0.000000 max_physics_lift_drift_px=0.000000 max_scene_deck_drift_px=0.000000 samples=3460
+Simulation evidence is from automated production inputs, with the optical blocker explicitly confined to its fixture phase.

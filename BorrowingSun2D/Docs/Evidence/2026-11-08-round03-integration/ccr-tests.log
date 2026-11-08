@@ -1,0 +1,12 @@
+test_duplicate_reviews_are_rejected (test_ccr.CcrEvidenceTests) ... ok
+test_empty_inventory_rejected (test_ccr.CcrEvidenceTests) ... ok
+test_frozen_git_evidence_and_ratio (test_ccr.CcrEvidenceTests) ... ok
+test_missing_final_source_rejected (test_ccr.CcrEvidenceTests) ... ok
+test_missing_reason_rejected (test_ccr.CcrEvidenceTests) ... ok
+test_moved_baseline_rejected (test_ccr.CcrEvidenceTests) ... ok
+test_pending_never_reports_zero (test_ccr.CcrEvidenceTests) ... ok
+
+----------------------------------------------------------------------
+Ran 7 tests in 2.304s
+
+OK

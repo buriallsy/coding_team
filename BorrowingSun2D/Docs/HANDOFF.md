@@ -4,6 +4,8 @@
 
 本轮 `CargoJourney` 负责接光计时、发车门槛和一次性交付。`TowerMechanism` 持有同一份雨水与配重，`CargoTrack2D` 负责实体车台。 [对象关系图](2D-to-3D/RELATIONSHIP_MAP.svg) · [光路基线](2D-to-3D/ROUND_02.md)
 
+2026-11-08 整合了同学的测试、双平台 CI、CCR 与架构资料。领域测试引用第 03 轮规则，复测通过。 [整合验证](Evidence/2026-11-08-round03-integration/RESULTS.md) · [第 04 轮冻结前计划](2D-to-3D/PRODUCTION_PLAN.md#第-04-轮冻结前)
+
 ## 第 00 轮归档
 
 - **首轮实现**。2D 行走与活动平台使用真实碰撞。雨让 6 单位储水抬高塔台 6 m，机械锁保高。风转到北侧停点后桥舌才承托玩家。当时以北庭旗标为终点。

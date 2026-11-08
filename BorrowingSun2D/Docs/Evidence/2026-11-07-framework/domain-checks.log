@@ -1,0 +1,71 @@
+PASS initial low entry
+PASS sun cannot become tower wind
+PASS none is not wind
+PASS low tower refuses cargo turn
+PASS full water high lock
+PASS height alone gives no high bridge
+PASS occupied doorway blocks turn
+PASS invalid target rejected
+PASS legacy wind retained
+PASS no bridge while turning
+PASS recall does not invent docking
+PASS request SunCourt
+PASS north stop
+PASS cannot transfer at north
+PASS request Cargo
+PASS east is distinct from north
+PASS transfer conserves water
+PASS transfer keeps lock and height
+PASS no refill after transfer begins
+PASS ballast prevents destructive drain
+PASS transfer clamps to available water
+PASS tower reset clears both reservoirs
+PASS reject NaN delta
+PASS reject negative transfer delta
+PASS mirror starts uncalibrated
+PASS wind selects next mirror detent
+PASS sun preserves mirror angle
+PASS invalid mirror command preserves state
+PASS local recall preserves calibration
+PASS three detents cycle
+PASS short illumination earns no cargo
+PASS interruption resets dwell
+PASS continuous light unlocks one cargo
+PASS unlocked cargo survives lost light
+PASS reset clears reward
+PASS real two-mirror finite path hits receiver
+PASS sun off emits no light
+PASS occlusion before receiver blocks path
+PASS back face cannot reflect
+PASS finite aperture miss
+PASS direct receiver hit cannot skip mirrors
+PASS ray range exhausted
+PASS coincident blocker wins
+PASS coincident blocker independent of ordering
+PASS invalid direction rejected
+PASS nonperpendicular normal rejected
+PASS transfer gated before unlock
+PASS request Cargo
+PASS geometry hit feeds reward rule
+PASS explicit transfer request
+PASS session transfer
+PASS lost light pauses without losing water or request
+PASS lost light blocks departure
+PASS insufficient ballast blocks departure
+PASS passenger required
+PASS departure accepted
+PASS cannot depart twice
+PASS departed cart arrives despite lost light
+PASS must get off at station
+PASS must be at station
+PASS delivery confirmation
+PASS delivery exactly once
+PASS global domain reset
+PASS request Cargo
+PASS repeat complete domain run departure
+PASS repeat complete domain run delivery
+PASS request Cargo
+PASS repeat complete domain run departure
+PASS repeat complete domain run delivery
+DOMAIN_CHECKS PASSED: 69 assertions; spatial integration fixture, not full gameplay.
+

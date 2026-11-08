@@ -1,0 +1,20 @@
+Borrowing Sun 2D production build, isolated merged-tree source copy.
+Target framework: net8.0; Godot.NET.Sdk 4.7.1; offline bundled packages.
+Command: dotnet build -p:NuGetAudit=false --disable-build-servers
+Only the temporary machine-specific project path is abbreviated below.
+
+UTC: 2026-11-08T06:58:23Z
+SDK: 8.0.424
+  Determining projects to restore...
+CSSM_ModuleLoad(): One or more parameters passed to a function were not valid.
+  Restored <clean-copy>/BorrowingSun2D/BorrowingSun2D.csproj (in 196 ms).
+  BorrowingSun2D -> <clean-copy>/BorrowingSun2D/.godot/mono/temp/bin/Debug/BorrowingSun2D.dll
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:03.87
+real 4.48
+user 4.42
+sys 0.62

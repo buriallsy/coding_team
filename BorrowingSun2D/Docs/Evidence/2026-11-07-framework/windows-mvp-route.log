@@ -1,0 +1,31 @@
+Godot Engine v4.7.1.stable.mono.official.a13da4feb - https://godotengine.org
+
+ERROR: Failed to read the root certificate store.
+   at: get_system_ca_certificates (platform/windows/os_windows.cpp:2582)
+PASS spawn on the low entry with the bridge physically connected
+PASS reach destination by holding walk_right
+PASS walk continuously from the entry onto the deck
+PASS rain raises the physical deck and carries the stationary player
+PASS wind is refused while the lift is moving
+PASS recall stops filling and preserves the intermediate height
+PASS draining lowers the deck and carries the player downward
+PASS a second drain interaction stops the rollback
+PASS reach high lock after restoring rain
+PASS height alone leaves a real gap to the sun court
+PASS reach destination by holding walk_left
+PASS a player in the bridge threshold prevents rotation
+PASS reach destination by holding walk_left
+PASS walking into the unbridged gap falls and recovers on the deck without completing
+PASS wind preserves high lock and leaves the opening unsupported while turning
+PASS recall can stop midway without connecting the gap
+PASS the bridge collider becomes active after the wind stop
+PASS reach destination by holding walk_left
+PASS walk across the connected bridge and reach the sun-court goal
+PASS reset restores the entry, player, mechanism, and bridge
+PASS reach destination by holding walk_right
+PASS walk onto the physical low bridge again after reset
+PASS start the lift again after reset
+PASS reset from a moving platform clears the carry and restores the spawn
+PASS reach destination by holding walk_right
+PASS walk onto the low bridge after resetting in motion
+TOWER_ROUTE PASSED

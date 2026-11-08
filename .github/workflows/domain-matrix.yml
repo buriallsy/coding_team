@@ -1,0 +1,24 @@
+name: Domain and geometry checks
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  domain:
+    strategy:
+      matrix:
+        os: [windows-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+      - run: dotnet run --project Tests/DomainChecks/DomainChecks.csproj --configuration Release
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+      - run: python -m unittest discover -s Tests -p test_ccr.py
+      # Pure rules and geometry only. Godot full-level/platform playtests remain separate gates.
