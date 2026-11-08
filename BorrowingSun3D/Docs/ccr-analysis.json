@@ -1,0 +1,120 @@
+{
+  "schema": 1,
+  "baseline": {
+    "tag": "2d-baseline",
+    "commit": "6175db93b0156b35fb736af2e28cc97aaa65d470",
+    "classes": [
+      {
+        "id": "TowerMechanism",
+        "path": "BorrowingSun2D/Scripts/Core/TowerMechanism.cs",
+        "reason": "Tower movement, docking, high lock and conserved rainwater",
+        "blob": "0329925a03e821df3b9721d563b4e69dcfdc70e0"
+      },
+      {
+        "id": "RouteProgress",
+        "path": "BorrowingSun2D/Scripts/Core/RouteProgress.cs",
+        "reason": "North visit prerequisite and east shore progress",
+        "blob": "b466a400f462e8aaf121b8ebf1ec2f0c372b5d35"
+      },
+      {
+        "id": "CargoJourney",
+        "path": "BorrowingSun2D/Scripts/Core/CargoJourney.cs",
+        "reason": "Light confirmation, cargo loading, departure, journey and delivery",
+        "blob": "5471a0d12ac71b198eea2da265bbb95bc1defd68"
+      },
+      {
+        "id": "Optics2D",
+        "path": "BorrowingSun2D/Scripts/Core/Optics2D.cs",
+        "reason": "Gameplay-critical two-reflection and occlusion solver",
+        "blob": "956d0a31f77e73c4e6938a73b6cfca6b662cd92a"
+      },
+      {
+        "id": "SunCourtOptics2D",
+        "path": "BorrowingSun2D/Scripts/SunCourtOptics2D.cs",
+        "reason": "Owns local weather and mirror calibration alongside scene geometry adaptation",
+        "blob": "46be998313af7f39023defeb18a57e3035cda3ac"
+      }
+    ]
+  },
+  "final_ref": "fb4cbb451c028234dd093576fa8c0e6e72bb457e",
+  "candidates": [
+    {
+      "id": "TowerMechanism",
+      "path": "BorrowingSun2D/Scripts/Core/TowerMechanism.cs",
+      "reason": "Tower movement, docking, high lock and conserved rainwater"
+    },
+    {
+      "id": "RouteProgress",
+      "path": "BorrowingSun2D/Scripts/Core/RouteProgress.cs",
+      "reason": "North visit prerequisite and east shore progress"
+    },
+    {
+      "id": "CargoJourney",
+      "path": "BorrowingSun2D/Scripts/Core/CargoJourney.cs",
+      "reason": "Light confirmation, cargo loading, departure, journey and delivery"
+    },
+    {
+      "id": "Optics2D",
+      "path": "BorrowingSun2D/Scripts/Core/Optics2D.cs",
+      "reason": "Gameplay-critical two-reflection and occlusion solver"
+    },
+    {
+      "id": "SunCourtOptics2D",
+      "path": "BorrowingSun2D/Scripts/SunCourtOptics2D.cs",
+      "reason": "Owns local weather and mirror calibration alongside scene geometry adaptation"
+    }
+  ],
+  "reviews": [
+    {
+      "id": "TowerMechanism",
+      "status": "shared",
+      "final_paths": [
+        "BorrowingSun2D/Scripts/Core/TowerMechanism.cs",
+        "BorrowingSun3D/BorrowingSun3D.csproj"
+      ],
+      "reason": "雨水蓄放、高位机械锁、朝向和原水配重转移直接编译冻结源码。",
+      "evidence": "候选提交与冻结标签上的源码 blob 相同。3D csproj 直接链接该路径，见 05A–05C 的规则接线和路线验证。"
+    },
+    {
+      "id": "RouteProgress",
+      "status": "shared",
+      "final_paths": [
+        "BorrowingSun2D/Scripts/Core/RouteProgress.cs",
+        "BorrowingSun3D/BorrowingSun3D.csproj"
+      ],
+      "reason": "北庭先到访的前置条件和东岸到访状态直接编译冻结源码。",
+      "evidence": "候选提交与冻结标签上的源码 blob 相同。3D csproj 直接链接该路径，见 05A–05C 的规则接线和路线验证。"
+    },
+    {
+      "id": "CargoJourney",
+      "status": "shared",
+      "final_paths": [
+        "BorrowingSun2D/Scripts/Core/CargoJourney.cs",
+        "BorrowingSun3D/BorrowingSun3D.csproj"
+      ],
+      "reason": "持续受光、装箱、配重、发车、行程和一次签收直接编译冻结源码。",
+      "evidence": "候选提交与冻结标签上的源码 blob 相同。3D csproj 直接链接该路径，见 05A–05C 的规则接线和路线验证。"
+    },
+    {
+      "id": "Optics2D",
+      "status": "modified",
+      "final_paths": [
+        "BorrowingSun3D/Scripts/Optics3D.cs"
+      ],
+      "reason": "有限线段镜面改成三维有限圆面，与向量、法向和有效入射一起决定双反射结果。",
+      "evidence": "对照两个 Trace 实现和 05B 的镜面命中、实体遮挡和恢复路线。"
+    },
+    {
+      "id": "SunCourtOptics2D",
+      "status": "modified",
+      "final_paths": [
+        "BorrowingSun3D/Scripts/SunCourtOptics3D.cs",
+        "BorrowingSun3D/Scenes/TowerGraybox.tscn"
+      ],
+      "reason": "北庭天气与调镜职责延续，镜面由三维世界姿态确定并继承实体塔台偏航，遮挡由 Physics3D 查询。",
+      "evidence": "对照 Tick、AimWithWind 和场景镜面标记，见 05B 的未校准、北向、东向及遮挡证据。"
+    }
+  ],
+  "new_core_classes": [],
+  "note": "冻结分母为 2d-baseline 上核对过的五个核心类。final_ref 固定到 05D 已测试代码提交。Windows 验收待补。macOS 与 Windows 均验收通过后再标记 3d-final。"
+}

@@ -1,0 +1,8 @@
+Godot Engine v4.7.1.stable.mono.official.a13da4feb - https://godotengine.org
+OpenGL API 4.1 Metal - 90.5 - Compatibility - Using Device: Apple - Apple M5
+
+SCOPE: 3D graybox from the production intro, with real key events and Physics3D; no player placement or state injection. One optical-only StaticBody3D at a time is the only fixture. The replay is fixture-free.
+PASS default scene opens the intro: overlay is visible | feet=(-8.8, 0, 0), lift=(0, 0, 0), dock=Entry
+PASS default scene opens the intro: the visible action button owns keyboard focus | feet=(-8.8, 0, 0), lift=(0, 0, 0), dock=Entry
+PASS the visible intro states the delivery goal and identifies Enter as a start key | feet=(-8.8, 0, 0), lift=(0, 0, 0), dock=Entry
+CAPTURE intro.png (960, 540)

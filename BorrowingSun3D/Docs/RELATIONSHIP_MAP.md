@@ -1,6 +1,6 @@
-# 3D 关系图 · 第 05C 轮
+# 3D 关系图 · 第 05D 轮
 
-`TowerGraybox` 负责输入、物理步进和 HUD。塔机、到访和货运规则沿用冻结的 2D C# 源码。三维场景适配负责真实光路、塔桥和车台的碰撞与呈现。
+`TowerGraybox` 负责输入、物理步进、会话切换和 HUD。塔机、到访和货运规则沿用冻结的 2D C# 源码。三维场景适配负责真实光路、塔桥和车台的碰撞与呈现。会话卡片只展示当前页面和实际签收计数，按键和按钮都通过关卡协调器进入原复位流程。
 
 ```mermaid
 flowchart LR
@@ -27,6 +27,9 @@ flowchart LR
     Track -->|车台位置和果箱可见性| Car[实体货车]
     Track -->|车面和交付点| Scene
     Scene -->|塔机 / 光路 / 货运状态| Hud[HUD]
+    Scene -->|Intro / Playing / Finished 与签收计数| Session[TowerSessionOverlay3D]
+    Session -->|按钮 Accepted| Scene
+    Session -->|读取字体| Font[TowerUiFont · 共享呈现]
     Verify[GrayboxRouteCheck] -->|实际按键| Input
 ```
 
@@ -38,6 +41,7 @@ flowchart LR
 | `Optics3D` 使用几何和遮挡查询，返回入射及反射段 | [3D 光学求解](../Scripts/Optics3D.cs) |
 | `CargoJourney` 根据实时受光装货，与 `TowerMechanism` 共享原水转移，并持有发车、行程和交付状态 | [共享货运规则](../../BorrowingSun2D/Scripts/Core/CargoJourney.cs) · [共享塔机规则](../../BorrowingSun2D/Scripts/Core/TowerMechanism.cs) |
 | `CargoTrack3D` 把行程投影到实体车台，从车面和花庭标记提供交互位置，按状态显示果箱 | [实体货运适配](../Scripts/CargoTrack3D.cs) · [场景](../Scenes/TowerGraybox.tscn) |
-| `GrayboxRouteCheck` 向默认场景发按键并检查落脚、停靠、光路、货车及交付 | [验证入口](../Scripts/Verification/GrayboxRouteCheck.cs) |
+| `TowerSessionOverlay3D` 根据 `TowerScreen` 显示开场或签收，按钮回调由 `TowerGraybox` 处理 | [界面脚本](../Scripts/TowerSessionOverlay3D.cs) · [界面场景](../Scenes/TowerSessionOverlay3D.tscn) · [共享字体](../../BorrowingSun2D/Scripts/TowerUiFont.cs) |
+| `GrayboxRouteCheck` 向默认场景发按键并检查开场、落脚、停靠、光路、货车、交付及重开 | [验证入口](../Scripts/Verification/GrayboxRouteCheck.cs) |
 
-[05A 规则接线](ROUND_05A.md#规则与场景接线) · [05B 光路](ROUND_05B.md) · [05C 货运](ROUND_05C.md)
+[05A 规则接线](ROUND_05A.md#规则与场景接线) · [05B 光路](ROUND_05B.md) · [05C 货运](ROUND_05C.md) · [05D 首玩与验收](ROUND_05D.md) · [逐类变化与 CCR](CHANGE_MAP.md)
