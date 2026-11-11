@@ -2,6 +2,8 @@
 
 2026-11-11 · Unity 6000.5.4f1。打开 `05_Skywell_FlowerMarket.unity`，从原 L5 入口取桨和晴令、借雨升塔、修镜送光、登车并在花庭签收。签收之后走到小铺，再短按 `E` 开始经营。场景副本有自己的 GUID。原 `05_Skywell.unity`、它的元数据、原航线及 `SkywellVoyage.cs` 字节保持一致。 [花庭白盒场景](../../unity_prototype/BorrowingSun/Assets/BorrowingSun/Scenes/05_Skywell_FlowerMarket.unity) · [接入方案](../05_Architecture/05_MARKET_INTEGRATION.md) · [冲突分析](../05_Architecture/06_MARKET_CONFLICTS.md)
 
+现行操作与数值见 [花庭昼夜回路](Skywell_Flower_Market_Day_Night.md)。本页保留首版白盒的复测记录。
+
 ## 场地与走法
 
 小铺放在花庭固定平台的西北侧。签收点和登岸过板继续留给原货运。菌菇靠西南侧，雨果靠东南侧，玩家能选择近处补货，或多走一段并操纵天气。柜台和雨盆用实体盒体，食材标记不拦路。原屋、临崖栏杆和货台闸门按原逻辑保留。

@@ -8,36 +8,58 @@ namespace BorrowingSun
         [SerializeField] private Transform shop, mushrooms, rainFruit;
         [SerializeField] private SkywellWeatherZone rainZone;
         [SerializeField] private SkywellWeatherTarget rainTarget;
+        [SerializeField] private Collider courtFloor;
+        [SerializeField] private SkywellSceneLighting lighting;
+        [SerializeField] private Transform orchardSunSample;
+        [SerializeField] private TextMesh orchardLabel;
+        [SerializeField] private Renderer orchardCanopy;
+        [SerializeField] private Light shopLamp;
         [SerializeField, Min(.25f)] private float interactionRadius = 1.35f;
         [SerializeField, Min(0f)] private float regrowSeconds = 1f;
+        [SerializeField, Min(1f)] private float dayGatherSeconds = 75f;
+        [SerializeField, Min(1f)] private float nightGatherSeconds = 45f;
 
-        private enum Point { None, Shop, Mushrooms, RainFruit }
+        private enum Point { None, Shop, Mushrooms, Orchard }
+        private enum LightPeriod { Day, Dusk, Night }
+
+        private static readonly int BaseColor = Shader.PropertyToID("_BaseColor");
+        private readonly RaycastHit[] sunHits = new RaycastHit[16];
+        private FlowerMarketRun run;
+        private CourtPlayer player;
+        private MaterialPropertyBlock canopyTint;
+        private FlowerIngredient? lastProduce;
+        private LightPeriod lightPeriod;
         private float mushroomsReadyAt, fruitReadyAt;
         private int closedFrame = -1, commandFrame = -1;
         private string feedback;
         private float feedbackUntil;
 
-        public FlowerMarketRun Run { get; } = new FlowerMarketRun();
+        public FlowerMarketRun Run => run ??= new FlowerMarketRun(dayGatherSeconds, nightGatherSeconds);
         public Transform Shop => shop;
         public Transform Mushrooms => mushrooms;
         public Transform RainFruit => rainFruit;
         public SkywellWeatherZone RainZone => rainZone;
         public SkywellWeatherTarget RainTarget => rainTarget;
         public bool IsShopOpen { get; private set; }
-        public bool InputBlocked => IsShopOpen || closedFrame == Time.frameCount;
+        public bool IsDuskOpen { get; private set; }
+        public bool InputBlocked => IsShopOpen || IsDuskOpen || closedFrame == Time.frameCount;
         public bool FruitIsWet => rainFruit && rainZone && rainZone.IsRain && rainZone.Contains(rainFruit.position);
+        public bool SunlightAvailable => !Run.IsNight && lighting && lighting.sunLight &&
+            lighting.sunLight.enabled && lighting.sunLight.intensity > 0f;
+        public bool OrchardReceivesSunlight => SunlightAvailable && IsOrchardUnoccluded();
+        public FlowerIngredient? OrchardProduce => Run.GetOrchardProduce(FruitIsWet,
+            Run.CanGather && !Run.IsNight && !FruitIsWet && OrchardReceivesSunlight);
         public string Feedback => Time.time < feedbackUntil ? feedback : null;
 
         internal bool AllowsWeather(int station, SkywellToken token, bool delivered) =>
             !rainTarget || station != rainTarget.StationIndex ||
-            delivered && Run.IsStarted && token == SkywellToken.Rain;
+            delivered && Run.CanGather && token == SkywellToken.Rain;
 
         internal bool TryInteract(CourtPlayer actor)
         {
             Point point = FindPoint(actor.FeetPosition);
             if (point == Point.None) return false;
-            if (actor.IsSwimming || actor.IsExternallyDriven || actor.IsAutoPositioning ||
-                !actor.TryGetComponent<CharacterController>(out var body) || !body.isGrounded)
+            if (!CanStandInCourt(actor))
             {
                 Say("站稳后再交互。");
                 return true;
@@ -45,24 +67,25 @@ namespace BorrowingSun
 
             if (point == Point.Shop)
             {
-                if (Run.TryStart()) Say("第一天：先采菌菇，再试试用雨令催生雨露果。");
-                IsShopOpen = true;
-                commandFrame = Time.frameCount;
+                UseShop();
                 return true;
             }
 
-            if (!Run.IsStarted)
+            if (!Run.CanGather)
             {
-                Say("先到花庭小铺开张。");
+                Say(Run.IsStarted ? "采集时段已结束，回小铺继续。" : "先到花庭小铺开始第一天。");
                 return true;
             }
 
             if (point == Point.Mushrooms)
-                Harvest(FlowerIngredient.Mushroom, ref mushroomsReadyAt, "采到菌菇 ×1。");
-            else if (FruitIsWet)
-                Harvest(FlowerIngredient.WeatherFruit, ref fruitReadyAt, "采到雨露果 ×1。");
-            else
-                Say("树下目前无雨。选雨令，长按 E 点击花庭的雨牌。");
+            {
+                Harvest(FlowerIngredient.Mushroom, ref mushroomsReadyAt);
+                return true;
+            }
+
+            var produce = OrchardProduce;
+            if (produce.HasValue) Harvest(produce.Value, ref fruitReadyAt);
+            else Say(Run.IsNight ? "夜里无晴果。对花庭集雨盆施雨可采雨夜果。" : "果树没有直射日光。可对花庭集雨盆施雨。");
             return true;
         }
 
@@ -72,54 +95,95 @@ namespace BorrowingSun
                 (feet - shop.position).sqrMagnitude > 225f) return null;
             if (Feedback != null) return Feedback;
 
-            switch (FindPoint(feet))
+            var point = FindPoint(feet);
+            if (point == Point.Shop)
             {
-                case Point.Shop: return Run.IsStarted ? "E 打开花庭小铺" : "E 开始花庭经营";
-                case Point.Mushrooms: return "E 采菌菇";
-                case Point.RainFruit: return FruitIsWet ? "E 采雨露果" : "雨露果需要本地降雨 · 长按 E 点击雨牌";
-                default: return Run.IsStarted ? "花庭小铺 · 找菌菇和雨露果，回店做菜" : "货已签收 · 到花庭小铺按 E 开始经营";
+                return Run.Phase switch
+                {
+                    FlowerMarketPhase.Locked => "E 开始第一天",
+                    FlowerMarketPhase.DayGathering => "E 提前结束白天采集",
+                    FlowerMarketPhase.DuskChoice => "E 选择黄昏行程",
+                    _ => "E 回店营业"
+                };
             }
+
+            if (Run.Phase == FlowerMarketPhase.DuskChoice) return "黄昏到了 · 到庭院地面选择行程";
+            if (Run.Phase == FlowerMarketPhase.ReturningToShop) return "采集结束 · 回花庭小铺按 E 营业";
+            if (Run.CanGather && point == Point.Mushrooms) return "E 采菌菇";
+            if (Run.CanGather && point == Point.Orchard)
+            {
+                var produce = OrchardProduce;
+                if (produce.HasValue) return "E 采" + IngredientName(produce.Value);
+                return Run.IsNight ? "夜间无晴果 · 施雨可采雨夜果" : "此处无直射日光 · 施雨可采雨露果";
+            }
+
+            return Run.IsStarted ? "花庭小铺 · 采集后回店" : "货已签收 · 到花庭小铺按 E 开始经营";
         }
 
-        internal void Tick(float deltaSeconds)
+        internal void Tick(float deltaSeconds, CourtPlayer actor, bool canOpenDusk)
         {
+            player = actor;
             Run.Tick(deltaSeconds);
-            if (!IsShopOpen || Keyboard.current == null) return;
+            if (Run.Phase == FlowerMarketPhase.DuskChoice && !IsDuskOpen && canOpenDusk && CanStandInCourt(actor))
+                OpenDusk();
+            RefreshLighting();
+            RefreshOrchard();
+
             var keyboard = Keyboard.current;
-            if (keyboard.escapeKey.wasPressedThisFrame) CloseShop();
+            if (keyboard == null) return;
+            if (IsDuskOpen)
+            {
+                if (keyboard.digit1Key.wasPressedThisFrame) ChooseDusk(false, actor);
+                else if (keyboard.digit2Key.wasPressedThisFrame) ChooseDusk(true, actor);
+                return;
+            }
+            if (!IsShopOpen) return;
+            if (keyboard.escapeKey.wasPressedThisFrame) HideShop();
             else if (keyboard.digit1Key.wasPressedThisFrame) Cook(FlowerRecipe.MushroomBento);
             else if (keyboard.digit2Key.wasPressedThisFrame) Cook(FlowerRecipe.FruitBento);
-            else if (keyboard.nKey.wasPressedThisFrame) NextDay();
+            else if (keyboard.nKey.wasPressedThisFrame) EndTrading();
+        }
+
+        internal void ChooseDusk(bool explore, CourtPlayer actor)
+        {
+            if (!IsDuskOpen || !BeginCommand() || !Run.TryChooseDusk(explore)) return;
+            IsDuskOpen = false;
+            closedFrame = Time.frameCount;
+            if (explore) Say("夜探开始。夜里无晴果，借雨可采雨夜果。");
+            else if (Near(actor.FeetPosition, shop)) OpenTrading();
+            else Say("回花庭小铺按 E 营业。");
+            RefreshLighting();
+            RefreshOrchard();
         }
 
         internal void Cook(FlowerRecipe recipe)
         {
-            if (!BeginShopCommand()) return;
+            if (!IsShopOpen || !BeginCommand()) return;
             Say(Run.TryCook(recipe) ? "开始烹饪。" : "材料不足，或上一份餐还未交付。");
         }
 
         internal void Serve()
         {
-            if (!BeginShopCommand()) return;
+            if (!IsShopOpen || !BeginCommand()) return;
             int previousCash = Run.Cash;
             if (Run.TryServe()) Say($"已收款 +{Run.Cash - previousCash}。");
             else Say("选一道菜下锅，出餐后按 E 收款。");
         }
 
-        internal void NextDay()
+        internal void EndTrading()
         {
-            if (!BeginShopCommand()) return;
-            if (!Run.TryNextDay())
-            {
-                Say("先把已下锅的餐做完并收款。");
-                return;
-            }
-
+            if (!IsShopOpen || !BeginCommand()) return;
+            bool refund = Run.OrderStage == FlowerOrderStage.Cooking || Run.OrderStage == FlowerOrderStage.Ready;
+            if (!Run.TryCloseShop()) return;
+            HideShop();
             mushroomsReadyAt = fruitReadyAt = Time.time;
-            Say($"第 {Run.Day} 天 · 钱箱与食材已结转。");
+            RefreshLighting();
+            RefreshOrchard();
+            Say(refund ? $"第 {Run.Day} 天 · 钱箱与食材已结转，未交付食材已退回。" :
+                $"第 {Run.Day} 天 · 钱箱与食材已结转。");
         }
 
-        internal void CloseShop()
+        internal void HideShop()
         {
             if (!IsShopOpen) return;
             IsShopOpen = false;
@@ -128,26 +192,149 @@ namespace BorrowingSun
 
         internal void ResetMarket()
         {
-            CloseShop();
+            HideShop();
+            IsDuskOpen = false;
+            closedFrame = Time.frameCount;
             Run.Reset();
             mushroomsReadyAt = fruitReadyAt = feedbackUntil = 0f;
             feedback = null;
+            RefreshLighting();
+            RefreshOrchard();
         }
 
-        private void OnDisable() => CloseShop();
+        private void OnDisable()
+        {
+            HideShop();
+            IsDuskOpen = false;
+            if (Application.isPlaying)
+            {
+                if (lighting) lighting.RestoreAuthoredLighting();
+                if (shopLamp) shopLamp.enabled = false;
+            }
+            lightPeriod = LightPeriod.Day;
+        }
+
+        private void UseShop()
+        {
+            switch (Run.Phase)
+            {
+                case FlowerMarketPhase.Locked:
+                    Run.TryStart();
+                    Say("第一天 · 采菌菇，看看果树在日光和雨下的变化。");
+                    break;
+                case FlowerMarketPhase.DayGathering:
+                    Run.TryEndDay();
+                    OpenDusk();
+                    break;
+                case FlowerMarketPhase.DuskChoice:
+                    OpenDusk();
+                    break;
+                case FlowerMarketPhase.NightExploration:
+                    Run.TryReturnToShop();
+                    OpenTrading();
+                    break;
+                default:
+                    OpenTrading();
+                    break;
+            }
+            RefreshLighting();
+            RefreshOrchard();
+        }
+
+        private void OpenDusk()
+        {
+            IsDuskOpen = true;
+            commandFrame = Time.frameCount;
+            feedbackUntil = 0f;
+        }
+
+        private void OpenTrading()
+        {
+            if (Run.Phase != FlowerMarketPhase.Trading && !Run.TryOpenShop()) return;
+            IsShopOpen = true;
+            commandFrame = Time.frameCount;
+            feedbackUntil = 0f;
+        }
+
+        private void RefreshLighting()
+        {
+            LightPeriod next = Run.IsNight ? LightPeriod.Night :
+                Run.Phase == FlowerMarketPhase.DuskChoice ? LightPeriod.Dusk : LightPeriod.Day;
+            if (next == lightPeriod) return;
+
+            lightPeriod = next;
+            if (shopLamp) shopLamp.enabled = next == LightPeriod.Night;
+            if (!lighting) return;
+            switch (next)
+            {
+                case LightPeriod.Dusk:
+                    lighting.SetRuntimeLighting(new Color(.31f,.22f,.30f), new Color(.36f,.28f,.32f),
+                        new Color(1f,.65f,.39f), .85f);
+                    break;
+                case LightPeriod.Night:
+                    lighting.SetRuntimeLighting(new Color(.07f,.11f,.18f), new Color(.30f,.36f,.47f),
+                        lighting.sunColor, 0f);
+                    break;
+                default:
+                    lighting.RestoreAuthoredLighting();
+                    break;
+            }
+        }
+
+        private bool IsOrchardUnoccluded()
+        {
+            if (!orchardSunSample || lighting.sunLight.type != LightType.Directional) return false;
+            Vector3 towardSun = -lighting.sunLight.transform.forward;
+            if (towardSun.y <= .01f) return false;
+            int count = Physics.RaycastNonAlloc(orchardSunSample.position + towardSun * .08f, towardSun,
+                sunHits, 250f, Physics.DefaultRaycastLayers, QueryTriggerInteraction.Ignore);
+            if (count == sunHits.Length) return false;
+            for (int i = 0; i < count; i++)
+                if (!player || !sunHits[i].transform.IsChildOf(player.transform)) return false;
+            return true;
+        }
+
+        private void RefreshOrchard()
+        {
+            var produce = OrchardProduce;
+            if (produce == lastProduce && canopyTint != null) return;
+            lastProduce = produce;
+            if (orchardLabel) orchardLabel.text = produce.HasValue ? IngredientName(produce.Value) : "果树";
+            if (!orchardCanopy) return;
+            canopyTint ??= new MaterialPropertyBlock();
+            Color color = produce switch
+            {
+                FlowerIngredient.SunnyFruit => new Color(1f,.65f,.18f),
+                FlowerIngredient.WeatherFruit => new Color(.15f,.76f,.61f),
+                FlowerIngredient.RainNightFruit => new Color(.63f,.49f,.94f),
+                _ => new Color(.32f,.44f,.39f)
+            };
+            orchardCanopy.GetPropertyBlock(canopyTint);
+            canopyTint.SetColor(BaseColor, color);
+            orchardCanopy.SetPropertyBlock(canopyTint);
+        }
+
+        private bool CanStandInCourt(CourtPlayer actor)
+        {
+            if (!actor || actor.IsSwimming || actor.IsExternallyDriven || actor.IsAutoPositioning ||
+                !actor.TryGetComponent<CharacterController>(out var body) || !body.isGrounded || !courtFloor)
+                return false;
+            var down = new Ray(actor.FeetPosition + Vector3.up * .15f, Vector3.down);
+            return courtFloor.Raycast(down, out _, .35f);
+        }
 
         private Point FindPoint(Vector3 feet)
         {
             if (Near(feet, shop)) return Point.Shop;
             if (Near(feet, mushrooms)) return Point.Mushrooms;
-            return Near(feet, rainFruit) ? Point.RainFruit : Point.None;
+            return Near(feet, rainFruit) ? Point.Orchard : Point.None;
         }
 
         private bool Near(Vector3 feet, Transform point) => point &&
             Mathf.Abs(feet.y - point.position.y) <= .65f &&
             (feet - point.position).sqrMagnitude <= interactionRadius * interactionRadius;
 
-        private void Harvest(FlowerIngredient ingredient, ref float readyAt, string message)
+        private void Harvest(FlowerIngredient ingredient, ref float readyAt)
         {
             if (Time.time < readyAt)
             {
@@ -157,12 +344,21 @@ namespace BorrowingSun
 
             if (!Run.TryHarvest(ingredient)) return;
             readyAt = Time.time + regrowSeconds;
-            Say(message);
+            Say($"采到{IngredientName(ingredient)} ×1。");
         }
 
-        private bool BeginShopCommand()
+        private static string IngredientName(FlowerIngredient ingredient) => ingredient switch
         {
-            if (!IsShopOpen || commandFrame == Time.frameCount) return false;
+            FlowerIngredient.Mushroom => "菌菇",
+            FlowerIngredient.SunnyFruit => "晴果",
+            FlowerIngredient.WeatherFruit => "雨露果",
+            FlowerIngredient.RainNightFruit => "雨夜果",
+            _ => "食材"
+        };
+
+        private bool BeginCommand()
+        {
+            if (commandFrame == Time.frameCount) return false;
             commandFrame = Time.frameCount;
             return true;
         }

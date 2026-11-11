@@ -20,18 +20,19 @@ Download the atlas HTML and open it in a browser to view or export individual SV
 
 ## Flower Court market whitebox · 花庭经营白盒
 
-After the original cargo handover, the Flower Court market opens a short loop of gathering, cooking, collecting payments, and carrying cash and ingredients into the next day. Mushrooms grow at the west patch. Dewfruit can be picked in the east patch while the local rain is active.
+The Flower Court market starts after the cargo handover. Gather during the day, choose at dusk between opening the shop and a night outing, then close the shop to carry cash and ingredients into the next day.
 
-在花庭完成原货运签收后，可开小铺、采菌菇和雨露果、烹饪两道菜、收款并结转次日。雨露果需要用花庭集雨盆施雨。
+1. 已有仓库用 `git switch unity-skywell` 切分支，再用 `git pull --ff-only` 拉取。首次下载可用 `git clone --branch unity-skywell https://github.com/buriallsy/coding_team.git`。用 Unity Hub 和 **6000.5.4f1** 打开 `unity_prototype/BorrowingSun`。
+2. 打开 `Assets/BorrowingSun/Scenes/05_Skywell_FlowerMarket.unity`，按 **Play**。走完下方的 L5 路线并签收，在花庭西北侧小铺按 `E` 开始第 1 天。靠近菌菇或果树短按 `E` 采集。 [场景文件](unity_prototype/BorrowingSun/Assets/BorrowingSun/Scenes/05_Skywell_FlowerMarket.unity)
+3. 白天到时，在花庭地面站稳就会弹出黄昏选择。想立即试玩分支，可提前回柜台按 `E` 结束白天采集。
+4. **直接营业**按 `1`。在柜台会立即开店，从庭院其他位置选择则走回柜台按 `E`。**夜探**按 `2`。走到果树附近，按住 `Tab` 再按 `1` 选雨令，松开 `Tab` 后长按 `E` 并左键点击集雨盆。下雨后短按 `E` 采雨夜果。夜探到时或提前回来，都可在小铺按 `E` 开始营业。
+5. 营业时按 `1` 或 `2` 下锅，完成后按 `E` 交餐收款。按 `N` 收摊进入次日，现金与库存结转，未交餐的食材退回。按 `R` 从原入口重开。
 
-1. 已有仓库切到 `unity-skywell` 并拉取。首次下载可用 `git clone --branch unity-skywell https://github.com/buriallsy/coding_team.git`。用 Unity Hub 打开 `unity_prototype/BorrowingSun`，编辑器版本为 **6000.5.4f1**。
-2. 在 Project 窗口打开 `Assets/BorrowingSun/Scenes/05_Skywell_FlowerMarket.unity`，按 **Play**。走完下方原 L5 路线，在花庭签收后，走到西北侧「花庭小铺」，短按 `E` 开店。 [打开白盒场景文件](unity_prototype/BorrowingSun/Assets/BorrowingSun/Scenes/05_Skywell_FlowerMarket.unity)
-3. 用 `Q` 或 `Esc` 回庭院，靠近食材短按 `E` 采集。采雨露果前按住 `Tab` 选雨令，再长按 `E` 左键点击花庭集雨盆。
-4. 回店按 `1` 或 `2` 下锅。完成后按 `E` 交餐收款，按 `N` 进入次日。按 `R` 从原入口重开。
+**调白天和夜探时间**。退出 Play Mode，在花庭副本的 Hierarchy 搜索 `Flower_market_prototype`，在 Inspector 的 **Skywell Flower Market** 组件调整 **Day Gather Seconds**（75 秒）和 **Night Gather Seconds**（45 秒）。保存场景再按 **Play**。同一组件可调采集半径和刷新时间。菜价、食材消耗和烹饪时间在 `FlowerMarketRun.TryGetRecipe`。 [菜谱代码](unity_prototype/BorrowingSun/Assets/BorrowingSun/Runtime/Skywell/Market/FlowerMarketRun.cs)
 
-Open the Flower Market scene in **Unity 6000.5.4f1** and press **Play**. Complete the delivery, then tap `E` at the shop on the northwest side of Flower Court. Tap `E` to gather, hold `Tab` to select the Rain token and hold `E` while left-clicking the basin to water the dewfruit patch. At the shop, `1` or `2` starts a recipe, `E` serves it, and `N` advances the day.
+**English quick start**. Open the Flower Market scene in Unity 6000.5.4f1, complete delivery, and tap `E` at the northwest shop to start day one. Gather with `E`. At dusk press `1` to return to the shop or `2` to explore at night. For a quick dusk test, tap `E` again at the shop. At night, hold `Tab` and press `1` to select Rain. Release `Tab`, then hold `E` and left-click the basin. Tap `E` at the orchard to gather a rain-night fruit. Return to the shop and tap `E` to trade. Cook with `1` or `2`, serve with `E`, and close the day with `N`. In Edit Mode, find `Flower_market_prototype` and set **Day Gather Seconds** or **Night Gather Seconds** on **Skywell Flower Market**.
 
-调菜价、食材消耗与烹饪时间，在 `FlowerMarketRun.TryGetRecipe` 修改。调采集距离和刷新时间，在场景层级搜索 `Flower_market_prototype`，打开 **Skywell Flower Market** 组件，调整 `Interaction Radius` 和 `Regrow Seconds`。本轮实测菌菇回店 **1.24 秒**，雨露果回店 **2.68 秒**。 [菜谱代码](unity_prototype/BorrowingSun/Assets/BorrowingSun/Runtime/Skywell/Market/FlowerMarketRun.cs) · [实测、试值与截图](docs/04_Iterations/Skywell_Flower_Market_Whitebox.md)
+实测晴果、雨露果和雨夜果的变化，两条黄昏路线、调参试值及截图见本轮记录。 [昼夜实测 / Day-night playtest](docs/04_Iterations/Skywell_Flower_Market_Day_Night.md)
 
 ## Play on macOS
 

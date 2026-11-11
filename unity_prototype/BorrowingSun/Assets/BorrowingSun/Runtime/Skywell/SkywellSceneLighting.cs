@@ -26,10 +26,22 @@ namespace BorrowingSun
         [Range(0,2)] public float ambientIntensity = .65f;
         public Color ambientColor = new Color(.35f,.46f,.61f);
         private volatile bool pending;
+        private (Color background, Color ambient, Color sun, float intensity)? runtimeLighting;
         private void OnEnable(){ApplySettings();}
         // OnValidate can run outside the main thread. Only request the next editor/player update.
         private void OnValidate(){pending=true;}
         private void Update(){if(pending)ApplySettings();}
+        internal void SetRuntimeLighting(Color background, Color ambient, Color sun, float intensity)
+        {
+            runtimeLighting = (background, ambient, sun, intensity);
+            ApplySettings();
+        }
+        internal void RestoreAuthoredLighting()
+        {
+            if (!runtimeLighting.HasValue) return;
+            runtimeLighting = null;
+            ApplySettings();
+        }
         [ContextMenu("应用日光参数")]
         public void ApplySettings()
         {
@@ -37,16 +49,18 @@ namespace BorrowingSun
             if(backgroundCamera)
             {
                 if(backgroundCamera.clearFlags!=CameraClearFlags.SolidColor)backgroundCamera.clearFlags=CameraClearFlags.SolidColor;
-                if(!SameRgb(backgroundCamera.backgroundColor,backgroundColor))backgroundCamera.backgroundColor=backgroundColor;
+                var background=runtimeLighting?.background??backgroundColor;
+                if(!SameRgb(backgroundCamera.backgroundColor,background))backgroundCamera.backgroundColor=background;
             }
             if(!sunLight||sunLight.type!=LightType.Directional)return;
             var rotation=Quaternion.Euler(sunEulerAngles);
-            float intensity=Mathf.Max(0,sunIntensity),strength=Mathf.Clamp01(shadowStrength);
-            var ambient=ambientColor*Mathf.Max(0,ambientIntensity);
+            float intensity=Mathf.Max(0,runtimeLighting?.intensity??sunIntensity),strength=Mathf.Clamp01(shadowStrength);
+            var ambient=runtimeLighting?.ambient??ambientColor*Mathf.Max(0,ambientIntensity);
+            var directLight=runtimeLighting?.sun??sunColor;
             // ExecuteAlways also runs when leaving Play Mode. Avoid dirtying unchanged author-scene objects.
             if(Quaternion.Angle(sunLight.transform.rotation,rotation)>.001f)sunLight.transform.rotation=rotation;
             if(!Mathf.Approximately(sunLight.intensity,intensity))sunLight.intensity=intensity;
-            if(!SameRgb(sunLight.color,sunColor))sunLight.color=sunColor;
+            if(!SameRgb(sunLight.color,directLight))sunLight.color=directLight;
             if(sunLight.shadows!=LightShadows.Soft)sunLight.shadows=LightShadows.Soft;
             if(!Mathf.Approximately(sunLight.shadowStrength,strength))sunLight.shadowStrength=strength;
             if(RenderSettings.sun!=sunLight)RenderSettings.sun=sunLight;

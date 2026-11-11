@@ -113,12 +113,13 @@ namespace BorrowingSun
         {
             if(consoles==null||consoles.Length<2||!optics)return;
             ReturnDepartedTokens();
-            if(FlowerMarket)flowerMarket.Tick(Time.deltaTime);
+            if(FlowerMarket)
+                flowerMarket.Tick(Time.deltaTime,player,!ObservationInputBlocked&&!WeatherInputBlocked&&!WeatherTravelBlocked&&!primaryPending);
             UpdateWeatherInput();
             foreach(var station in consoles)if(station)station.Tick(Time.deltaTime);
             bool wasLit=BorrowedSunAtVillage;
             // The collector validates its own local weather, real sun access and mechanical focus.
-            optics.Evaluate(true);
+            optics.Evaluate(!FlowerMarket||!flowerMarket.Run.IsNight);
             if(wasLit&&!BorrowedSunAtVillage&&Mathf.Abs(yaw-targetYaw)>.1f)
             {ShowMessage("中继镜随平台转走，山阴暂时断光；已存的雨水与机械位置保留。",5);}
             TickMechanisms(Time.deltaTime);
@@ -196,7 +197,7 @@ namespace BorrowingSun
         }
         public void InteractSecondary()
         {
-            if(MarketInputBlocked){flowerMarket.CloseShop();SyncCameraInteraction();return;}
+            if(MarketInputBlocked){flowerMarket.HideShop();SyncCameraInteraction();return;}
             if(ObservationInputBlocked)return;
             if(WeatherSelectionHeld){CancelWeatherPicker();return;}
             if(WeatherTargeting||primaryPending){CancelWeatherTargeting();return;}

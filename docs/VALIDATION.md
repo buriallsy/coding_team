@@ -29,6 +29,12 @@ The graphical Unity Game View replay on macOS passed 312 checks. It started at t
 
 To replay, open `05_Skywell_FlowerMarket.unity`, enter Play Mode, and select **Borrowing Sun → Skywell → Check complete Flower Market route** with the editor in the foreground. The original ladder interaction requires actual window focus. The published EditMode XML omits machine-local paths. [Playtest record and timings](04_Iterations/Skywell_Flower_Market_Whitebox.md) · [Play Mode report](evidence/flower-market/playmode.txt) · [EditMode results](evidence/flower-market/editmode.xml) · [Serialized references](evidence/flower-market/references.txt)
 
+## Flower Court day and night · November 11, 2026
+
+The macOS graphical Unity Game View passed 346 checks from the original entrance through delivery, both dusk choices, local rain, day rollover and reset from night. The replay used the shop's early-return controls and verified the gathering clocks while walking. The EditMode suite verified both natural countdown transitions and passed 128 tests, including 11 Flower Court cases. The serialized reference audit covered five scenes, one prefab and 12,358 components.
+
+Open the Flower Market scene and run **Borrowing Sun → Skywell → Check complete Flower Market route** in focused Play Mode. The published EditMode XML omits machine-local paths. [Playtest and tuning notes](04_Iterations/Skywell_Flower_Market_Day_Night.md) · [Play Mode report](evidence/flower-market-day-night/playmode.txt) · [EditMode results](evidence/flower-market-day-night/editmode.xml) · [Serialized references](evidence/flower-market-day-night/references.txt)
+
 ## Dated L5 evidence
 
 | Date | Scope and result |
