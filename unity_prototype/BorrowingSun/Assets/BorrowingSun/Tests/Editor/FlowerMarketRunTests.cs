@@ -1,3 +1,4 @@
+using System;
 using NUnit.Framework;
 
 namespace BorrowingSun.Tests
@@ -10,8 +11,10 @@ namespace BorrowingSun.Tests
             var run = new FlowerMarketRun();
 
             Assert.IsFalse(run.TryHarvest(FlowerIngredient.Mushroom));
-            Assert.IsFalse(run.TryCook(FlowerRecipe.MushroomBento));
-            Assert.IsFalse(run.TryServe());
+            Assert.IsFalse(run.TryAcceptOrders());
+            Assert.IsFalse(run.TryCook(0));
+            Assert.IsFalse(run.TryServe(0));
+            Assert.IsFalse(run.TryUpgradeKitchen());
             Assert.IsFalse(run.TryEndDay());
             Assert.IsFalse(run.TryChooseDusk(true));
             Assert.IsFalse(run.TryReturnToShop());
@@ -87,10 +90,11 @@ namespace BorrowingSun.Tests
             run.TryHarvest(FlowerIngredient.Mushroom);
             OpenShopDirectly(run);
 
-            Assert.IsFalse(run.CanCook(FlowerRecipe.FruitBento));
-            Assert.IsFalse(run.TryCook(FlowerRecipe.FruitBento));
+            Assert.IsFalse(run.TryAcceptOrders());
+            Assert.IsFalse(run.OrdersAccepted);
+            Assert.IsFalse(run.TryCook(0));
             Assert.That(run.GetStock(FlowerIngredient.Mushroom), Is.EqualTo(1));
-            Assert.That(run.OrderStage, Is.EqualTo(FlowerOrderStage.Idle));
+            Assert.That(run.GetStove(0).Stage, Is.EqualTo(FlowerOrderStage.Idle));
         }
 
         [TestCase(FlowerRecipe.MushroomBento, 2, FlowerIngredient.WeatherFruit, 0, 3f, 12)]
@@ -114,26 +118,35 @@ namespace BorrowingSun.Tests
             else
             {
                 for (var i = 0; i < fruitCount; i++) Assert.IsTrue(run.TryHarvest(fruit));
-                Assert.IsFalse(run.CanCook(recipe));
+                Assert.IsFalse(run.TryAcceptOrders());
                 OpenShopDirectly(run);
             }
 
-            Assert.IsTrue(run.CanCook(recipe));
-            Assert.IsTrue(run.TryCook(recipe));
+            Assert.IsFalse(run.TryCook(0));
+            Assert.IsTrue(run.TryAcceptOrders());
+            Assert.That(run.GetStove(0).Stage, Is.EqualTo(FlowerOrderStage.Waiting));
+            Assert.That(run.GetStove(0).Recipe, Is.EqualTo(recipe));
+            Assert.That(run.GetStock(FlowerIngredient.Mushroom), Is.EqualTo(mushrooms));
+            Assert.That(run.GetReserved(FlowerIngredient.Mushroom), Is.EqualTo(mushrooms));
+            Assert.That(run.GetStock(fruit), Is.EqualTo(fruitCount));
+            Assert.That(run.GetReserved(fruit), Is.EqualTo(fruitCount));
+            Assert.IsTrue(run.TryCook(0));
             Assert.That(run.GetStock(FlowerIngredient.Mushroom), Is.Zero);
             Assert.That(run.GetStock(fruit), Is.Zero);
-            Assert.That(run.OrderStage, Is.EqualTo(FlowerOrderStage.Cooking));
-            Assert.That(run.CookTimeRemaining, Is.EqualTo(seconds));
-            Assert.IsFalse(run.TryCook(recipe));
+            Assert.That(run.GetReserved(FlowerIngredient.Mushroom), Is.Zero);
+            Assert.That(run.GetStove(0).Stage, Is.EqualTo(FlowerOrderStage.Cooking));
+            Assert.That(run.GetStove(0).RemainingSeconds, Is.EqualTo(seconds));
+            Assert.IsFalse(run.TryCook(0));
 
             run.Tick(seconds - .5f);
-            Assert.IsFalse(run.TryServe());
+            Assert.IsFalse(run.TryServe(0));
             Assert.That(run.Cash, Is.Zero);
             run.Tick(.5f);
-            Assert.That(run.OrderStage, Is.EqualTo(FlowerOrderStage.Ready));
-            Assert.IsTrue(run.TryServe());
-            Assert.IsFalse(run.TryServe());
+            Assert.That(run.GetStove(0).Stage, Is.EqualTo(FlowerOrderStage.Ready));
+            Assert.IsTrue(run.TryServe(0));
+            Assert.IsFalse(run.TryServe(0));
             Assert.That(run.Cash, Is.EqualTo(price));
+            Assert.That(run.TotalRevenue, Is.EqualTo(price));
         }
 
         [Test]
@@ -146,9 +159,10 @@ namespace BorrowingSun.Tests
             run.TryHarvest(FlowerIngredient.Mushroom);
             run.TryHarvest(FlowerIngredient.WeatherFruit);
             OpenShopDirectly(run);
-            run.TryCook(FlowerRecipe.MushroomBento);
+            Assert.IsTrue(run.TryAcceptOrders());
+            Assert.IsTrue(run.TryCook(0));
             run.Tick(3f);
-            run.TryServe();
+            Assert.IsTrue(run.TryServe(0));
 
             Assert.IsTrue(run.TryCloseShop());
             Assert.That(run.Day, Is.EqualTo(2));
@@ -158,10 +172,14 @@ namespace BorrowingSun.Tests
             Assert.That(run.Cash, Is.EqualTo(12));
             Assert.That(run.GetStock(FlowerIngredient.Mushroom), Is.EqualTo(1));
             Assert.That(run.GetStock(FlowerIngredient.WeatherFruit), Is.EqualTo(1));
-            Assert.That(run.OrderStage, Is.EqualTo(FlowerOrderStage.Idle));
-            Assert.That(run.CurrentRecipe, Is.Null);
+            Assert.IsFalse(run.OrdersAccepted);
+            Assert.IsFalse(run.HasPendingOrders);
+            Assert.That(run.GetStove(0).Stage, Is.EqualTo(FlowerOrderStage.Idle));
+            Assert.That(run.GetStove(1).Recipe, Is.Null);
             OpenShopDirectly(run);
-            Assert.IsTrue(run.TryCook(FlowerRecipe.FruitBento));
+            Assert.IsTrue(run.TryAcceptOrders());
+            Assert.That(run.GetStove(0).Recipe, Is.EqualTo(FlowerRecipe.FruitBento));
+            Assert.IsTrue(run.TryCook(0));
 
             run.Reset();
             Assert.IsFalse(run.IsStarted);
@@ -169,11 +187,13 @@ namespace BorrowingSun.Tests
             Assert.That(run.RemainingGatherSeconds, Is.Zero);
             Assert.That(run.Day, Is.Zero);
             Assert.That(run.Cash, Is.Zero);
+            Assert.That(run.TotalRevenue, Is.Zero);
             Assert.That(run.GetStock(FlowerIngredient.Mushroom), Is.Zero);
             Assert.That(run.GetStock(FlowerIngredient.WeatherFruit), Is.Zero);
-            Assert.That(run.OrderStage, Is.EqualTo(FlowerOrderStage.Idle));
-            Assert.That(run.CurrentRecipe, Is.Null);
-            Assert.That(run.CookTimeRemaining, Is.Zero);
+            Assert.That(run.GetStove(0).Stage, Is.EqualTo(FlowerOrderStage.Idle));
+            Assert.That(run.GetStove(0).Recipe, Is.Null);
+            Assert.That(run.GetStove(0).RemainingSeconds, Is.Zero);
+            Assert.IsFalse(run.OrdersAccepted);
             Assert.IsTrue(run.TryStart());
             Assert.That(run.Day, Is.EqualTo(1));
         }
@@ -193,7 +213,9 @@ namespace BorrowingSun.Tests
             run.TryReturnToShop();
             run.TryOpenShop();
 
-            Assert.IsTrue(run.TryCook(FlowerRecipe.FruitBento));
+            Assert.IsTrue(run.TryAcceptOrders());
+            Assert.That(run.GetReserved(FlowerIngredient.RainNightFruit), Is.EqualTo(1));
+            Assert.IsTrue(run.TryCook(0));
             Assert.That(run.GetStock(FlowerIngredient.RainNightFruit), Is.Zero);
             Assert.That(run.GetStock(FlowerIngredient.WeatherFruit), Is.EqualTo(1));
             Assert.That(run.GetStock(FlowerIngredient.SunnyFruit), Is.EqualTo(1));
@@ -205,6 +227,171 @@ namespace BorrowingSun.Tests
             Assert.That(run.GetStock(FlowerIngredient.WeatherFruit), Is.EqualTo(1));
             Assert.That(run.GetStock(FlowerIngredient.SunnyFruit), Is.EqualTo(1));
             Assert.That(run.GetStock(FlowerIngredient.RainNightFruit), Is.EqualTo(1));
+        }
+
+        [Test]
+        public void WaitingStovesDoNotDoubleReserveOneBatchOfStock()
+        {
+            var run = new FlowerMarketRun();
+            run.TryStart();
+            GatherMushrooms(run, 2);
+            Assert.IsTrue(run.TryHarvest(FlowerIngredient.WeatherFruit));
+            OpenShopDirectly(run);
+
+            Assert.IsTrue(run.TryAcceptOrders());
+            Assert.IsFalse(run.TryAcceptOrders());
+            Assert.That(run.GetStove(0).Recipe, Is.EqualTo(FlowerRecipe.MushroomBento));
+            Assert.That(run.GetStove(1).Stage, Is.EqualTo(FlowerOrderStage.Idle));
+            Assert.That(run.GetStock(FlowerIngredient.Mushroom), Is.EqualTo(2));
+            Assert.That(run.GetReserved(FlowerIngredient.Mushroom), Is.EqualTo(2));
+            Assert.That(run.GetReserved(FlowerIngredient.WeatherFruit), Is.Zero);
+            Assert.IsFalse(run.TryCook(-1));
+            Assert.IsFalse(run.TryServe(FlowerMarketRun.StoveCount));
+            Assert.IsFalse(run.TryServe(0));
+            Assert.IsTrue(run.TryCloseShop());
+            Assert.That(run.GetStock(FlowerIngredient.Mushroom), Is.EqualTo(2));
+            Assert.That(run.GetReserved(FlowerIngredient.Mushroom), Is.Zero);
+        }
+
+        [Test]
+        public void TwoStovesCookAndServeIndependentlyAndOnlyTheServedStoveRefills()
+        {
+            var run = new FlowerMarketRun();
+            run.TryStart();
+            GatherMushrooms(run, 5);
+            Assert.IsTrue(run.TryHarvest(FlowerIngredient.WeatherFruit));
+            Assert.IsTrue(run.TryHarvest(FlowerIngredient.SunnyFruit));
+            OpenShopDirectly(run);
+            Assert.IsTrue(run.TryAcceptOrders());
+            Assert.That(run.GetStove(0).Recipe, Is.EqualTo(FlowerRecipe.MushroomBento));
+            Assert.That(run.GetStove(1).Recipe, Is.EqualTo(FlowerRecipe.FruitBento));
+            Assert.That(run.GetReserved(FlowerIngredient.Mushroom), Is.EqualTo(3));
+            Assert.That(run.GetReserved(FlowerIngredient.WeatherFruit), Is.EqualTo(1));
+            Assert.That(run.GetReserved(FlowerIngredient.SunnyFruit), Is.Zero);
+
+            Assert.IsTrue(run.TryCook(0));
+            run.Tick(1f);
+            Assert.IsTrue(run.TryCook(1));
+            run.Tick(2f);
+            Assert.That(run.GetStove(0).Stage, Is.EqualTo(FlowerOrderStage.Ready));
+            Assert.That(run.GetStove(1).Stage, Is.EqualTo(FlowerOrderStage.Cooking));
+            Assert.That(run.GetStove(1).RemainingSeconds, Is.EqualTo(2f));
+            Assert.IsFalse(run.TryServe(1));
+            Assert.IsTrue(run.TryServe(0));
+            Assert.IsFalse(run.TryServe(0));
+            Assert.That(run.GetStove(0).Stage, Is.EqualTo(FlowerOrderStage.Waiting));
+            Assert.That(run.GetStove(0).Recipe, Is.EqualTo(FlowerRecipe.MushroomBento));
+            Assert.That(run.GetStove(1).RemainingSeconds, Is.EqualTo(2f));
+            Assert.That(run.Cash, Is.EqualTo(12));
+
+            run.Tick(2f);
+            Assert.IsTrue(run.TryServe(1));
+            Assert.That(run.GetStove(1).Stage, Is.EqualTo(FlowerOrderStage.Idle));
+            Assert.That(run.GetStove(0).Stage, Is.EqualTo(FlowerOrderStage.Waiting));
+            Assert.That(run.GetStock(FlowerIngredient.SunnyFruit), Is.EqualTo(1));
+            Assert.IsTrue(run.TryCook(0));
+            run.Tick(3f);
+            Assert.IsTrue(run.TryServe(0));
+            Assert.That(run.Cash, Is.EqualTo(46));
+            Assert.That(run.TotalRevenue, Is.EqualTo(46));
+            Assert.IsFalse(run.HasPendingOrders);
+            Assert.IsFalse(run.TryAcceptOrders());
+        }
+
+        [Test]
+        public void CloseRefundsBothReadyAndCookingStovesWithoutCreditingRevenue()
+        {
+            var run = new FlowerMarketRun();
+            run.TryStart();
+            GatherMushrooms(run, 3);
+            Assert.IsTrue(run.TryHarvest(FlowerIngredient.WeatherFruit));
+            OpenShopDirectly(run);
+            Assert.IsTrue(run.TryAcceptOrders());
+            Assert.IsTrue(run.TryCook(0));
+            Assert.IsTrue(run.TryCook(1));
+            run.Tick(3f);
+            Assert.That(run.GetStove(0).Stage, Is.EqualTo(FlowerOrderStage.Ready));
+            Assert.That(run.GetStove(1).Stage, Is.EqualTo(FlowerOrderStage.Cooking));
+
+            Assert.IsTrue(run.TryCloseShop());
+            Assert.IsFalse(run.TryCloseShop());
+            Assert.That(run.GetStock(FlowerIngredient.Mushroom), Is.EqualTo(3));
+            Assert.That(run.GetStock(FlowerIngredient.WeatherFruit), Is.EqualTo(1));
+            Assert.That(run.GetReserved(FlowerIngredient.Mushroom), Is.Zero);
+            Assert.That(run.Cash, Is.Zero);
+            Assert.That(run.TotalRevenue, Is.Zero);
+            Assert.IsFalse(run.HasPendingOrders);
+        }
+
+        [Test]
+        public void OneTimeUpgradeDebitsCashAndKeepsTunedDurationsAcrossDaysUntilReset()
+        {
+            var run = new FlowerMarketRun(mushroomCookSeconds: 5.5f, fruitCookSeconds: 7f,
+                upgradedMushroomCookSeconds: 1.25f, upgradedFruitCookSeconds: 2.75f, kitchenUpgradeCost: 30);
+            run.TryStart();
+            GatherMushrooms(run, 6);
+            OpenShopDirectly(run);
+            Assert.IsFalse(run.CanUpgradeKitchen);
+            Assert.IsFalse(run.TryUpgradeKitchen());
+            Assert.IsTrue(run.TryGetRecipe(FlowerRecipe.FruitBento, out var baseFruit));
+            Assert.That(baseFruit.CookSeconds, Is.EqualTo(7f));
+            Assert.That(baseFruit.Price, Is.EqualTo(22));
+            Assert.IsTrue(run.TryAcceptOrders());
+            Assert.IsTrue(run.TryCook(0));
+            Assert.IsTrue(run.TryCook(1));
+            Assert.That(run.GetStove(0).RemainingSeconds, Is.EqualTo(5.5f));
+            run.Tick(5.5f);
+            Assert.IsTrue(run.TryServe(0));
+            Assert.IsTrue(run.TryServe(1));
+            Assert.IsTrue(run.TryCook(0));
+            run.Tick(5.5f);
+            Assert.IsTrue(run.TryServe(0));
+            Assert.That(run.Cash, Is.EqualTo(36));
+            Assert.IsFalse(run.TryUpgradeKitchen());
+            Assert.IsTrue(run.TryCloseShop());
+            Assert.IsFalse(run.TryUpgradeKitchen());
+
+            GatherMushrooms(run, 3);
+            Assert.IsTrue(run.TryHarvest(FlowerIngredient.WeatherFruit));
+            OpenShopDirectly(run);
+            Assert.That(run.KitchenUpgradeCost, Is.EqualTo(30));
+            Assert.IsTrue(run.CanUpgradeKitchen);
+            Assert.IsTrue(run.TryUpgradeKitchen());
+            Assert.IsFalse(run.TryUpgradeKitchen());
+            Assert.That(run.Cash, Is.EqualTo(6));
+            Assert.That(run.TotalRevenue, Is.EqualTo(36));
+            Assert.IsTrue(run.TryAcceptOrders());
+            Assert.IsTrue(run.TryCook(0));
+            Assert.IsTrue(run.TryCook(1));
+            Assert.That(run.GetStove(0).RemainingSeconds, Is.EqualTo(1.25f));
+            Assert.That(run.GetStove(1).RemainingSeconds, Is.EqualTo(2.75f));
+            Assert.IsTrue(run.TryCloseShop());
+            Assert.IsTrue(run.KitchenUpgraded);
+            Assert.That(run.Day, Is.EqualTo(3));
+            Assert.That(run.GetStock(FlowerIngredient.Mushroom), Is.EqualTo(3));
+            Assert.That(run.GetStock(FlowerIngredient.WeatherFruit), Is.EqualTo(1));
+
+            run.Reset();
+            Assert.IsFalse(run.KitchenUpgraded);
+            Assert.That(run.Cash, Is.Zero);
+            Assert.That(run.TotalRevenue, Is.Zero);
+            Assert.That(run.KitchenUpgradeCost, Is.EqualTo(30));
+            Assert.IsTrue(run.TryGetRecipe(FlowerRecipe.FruitBento, out var resetFruit));
+            Assert.That(resetFruit.CookSeconds, Is.EqualTo(7f));
+        }
+
+        [Test]
+        public void InvalidCookingDurationsAndUpgradeFeeAreRejected()
+        {
+            Assert.Throws<ArgumentOutOfRangeException>(() => new FlowerMarketRun(mushroomCookSeconds: 0));
+            Assert.Throws<ArgumentOutOfRangeException>(() => new FlowerMarketRun(fruitCookSeconds: float.PositiveInfinity));
+            Assert.Throws<ArgumentOutOfRangeException>(() => new FlowerMarketRun(upgradedFruitCookSeconds: float.NaN));
+            Assert.Throws<ArgumentOutOfRangeException>(() => new FlowerMarketRun(kitchenUpgradeCost: 0));
+        }
+
+        private static void GatherMushrooms(FlowerMarketRun run, int count)
+        {
+            for (int i = 0; i < count; i++) Assert.IsTrue(run.TryHarvest(FlowerIngredient.Mushroom));
         }
 
         private static void OpenShopDirectly(FlowerMarketRun run)

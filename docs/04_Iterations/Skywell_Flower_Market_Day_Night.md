@@ -2,6 +2,8 @@
 
 2026-11-11 · Unity 6000.5.4f1。打开 `05_Skywell_FlowerMarket.unity`，从原入口走到花庭签收，再到西北侧小铺短按 `E` 开始第一天。 [花庭副本](../../unity_prototype/BorrowingSun/Assets/BorrowingSun/Scenes/05_Skywell_FlowerMarket.unity) · [上一轮白盒](Skywell_Flower_Market_Whitebox.md)
 
+当前双窗接单、升级和交餐按键见新一轮记录。 [双窗与快灶](Skywell_Flower_Market_Kitchen.md)
+
 ## 一天怎么过
 
 | 时段 | 玩法 |

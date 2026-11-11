@@ -35,6 +35,12 @@ The macOS graphical Unity Game View passed 346 checks from the original entrance
 
 Open the Flower Market scene and run **Borrowing Sun → Skywell → Check complete Flower Market route** in focused Play Mode. The published EditMode XML omits machine-local paths. [Playtest and tuning notes](04_Iterations/Skywell_Flower_Market_Day_Night.md) · [Play Mode report](evidence/flower-market-day-night/playmode.txt) · [EditMode results](evidence/flower-market-day-night/editmode.xml) · [Serialized references](evidence/flower-market-day-night/references.txt)
 
+## Flower Court dual burners and kitchen upgrade · November 11, 2026
+
+The macOS Unity Game View replay passed 372 checks from the original entrance through cargo handover and both dusk choices. It accepted and reserved two orders, cooked them concurrently, served each window, upgraded the kitchen, and closed with a refund for the undelivered fruit dish. The third day kept 22 in cash, 58 in gross revenue, the upgrade, and the exact refunded stock. EditMode passed all 133 tests, including 16 market cases. Five scenes and one prefab passed the reference audit across 12,358 components.
+
+In focused Play Mode on the Flower Market scene, run **Borrowing Sun → Skywell → Check complete Flower Market route**. [Playtest and tuning notes](04_Iterations/Skywell_Flower_Market_Kitchen.md) · [Play Mode report](evidence/flower-market-kitchen/playmode.txt) · [EditMode results](evidence/flower-market-kitchen/editmode.xml) · [Serialized references](evidence/flower-market-kitchen/references.txt)
+
 ## Dated L5 evidence
 
 | Date | Scope and result |

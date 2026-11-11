@@ -130,13 +130,7 @@ namespace BorrowingSun.Editor
             float outbound = Time.time;
             yield return Walk(mushrooms, "Shop to dry mushrooms");
             float atMushrooms = Time.time;
-            for (int collected = 1; collected <= 4; collected++)
-            {
-                yield return Press(Key.E);
-                Require(market.Run.GetStock(FlowerIngredient.Mushroom) == collected,
-                    $"Short E collects mushroom {collected} from the authored patch.");
-                if (collected < 4) yield return Wait(1.25f);
-            }
+            yield return GatherFlowerMushrooms(market, 5);
             float returning = Time.time;
             yield return Walk(shop, "Dry mushrooms to shop");
             RecordFlowerTrip("dry mushrooms", outbound, atMushrooms, returning);
@@ -189,24 +183,63 @@ namespace BorrowingSun.Editor
             yield return Press(Key.E);
             Require(market.IsShopOpen, "A separate short E reopens trading with the gathered ingredients.");
             yield return CheckFlowerMarketModal(market, "The trading panel");
-            yield return CookAndServeFlowerOrder(market, Key.Digit1, FlowerRecipe.MushroomBento, 2, 1, 12);
-            yield return CookAndServeFlowerOrder(market, Key.Digit2, FlowerRecipe.FruitBento, 1, 0, 34);
+            yield return Press(Key.U);
+            Require(!market.Run.KitchenUpgraded && market.Run.Cash == 0 && !market.Run.OrdersAccepted,
+                "U cannot buy the upgrade before the first day's earnings.");
+            yield return Press(Key.Digit1);
+            Require(!market.Run.OrdersAccepted && market.Run.GetStove(0).Stage == FlowerOrderStage.Idle &&
+                market.Run.GetStock(FlowerIngredient.Mushroom) == 5,
+                "The window key cannot start cooking before the player accepts customer orders.");
+            yield return AcceptFlowerOrders(market, FlowerIngredient.WeatherFruit);
+            Capture(Path.Combine(Folder, "flower-market-orders-accepted.png"));
+            yield return StartFlowerStove(market, 0, FlowerRecipe.MushroomBento);
+            float standardCookRemaining = market.Run.GetStove(0).RemainingSeconds;
+            yield return StartFlowerStove(market, 1, FlowerRecipe.FruitBento);
+            float standardFruitCookRemaining = market.Run.GetStove(1).RemainingSeconds;
+            Require(market.Run.GetStove(0).Stage == FlowerOrderStage.Cooking &&
+                market.Run.GetStock(FlowerIngredient.Mushroom) == 2 &&
+                market.Run.GetStock(FlowerIngredient.WeatherFruit) == 0 &&
+                market.Run.GetStock(FlowerIngredient.SunnyFruit) == 1,
+                "Both stoves cook at the same time and consume the exact day-one ingredients once.");
+            RecordFlowerKitchen("day one parallel", market);
+            Capture(Path.Combine(Folder, "flower-market-dual-stove.png"));
+            yield return Press(Key.Digit1);
+            Require(market.Run.GetStove(0).Stage == FlowerOrderStage.Cooking && market.Run.Cash == 0,
+                "Pressing a busy order key cannot collect an early payment.");
+            yield return ServeFlowerStove(market, 0, 12);
+            yield return ServeFlowerStove(market, 1, 34);
             Capture(Path.Combine(Folder, "flower-market-two-orders.png"));
+            Require(market.Run.GetStove(0).Stage == FlowerOrderStage.Waiting &&
+                market.Run.GetStove(0).Recipe == FlowerRecipe.MushroomBento,
+                "The served mushroom window refills with a new affordable order.");
+            yield return StartFlowerStove(market, 0, FlowerRecipe.MushroomBento);
+            yield return ServeFlowerStove(market, 0, 46);
+            yield return Press(Key.Digit1);
+            Require(market.Run.Cash == 46 && market.Run.TotalRevenue == 46,
+                "Pressing the emptied order key cannot collect payment again.");
+            yield return Press(Key.U);
+            Require(!market.Run.KitchenUpgraded && market.Run.Cash == 46,
+                "Even with enough earnings, U cannot upgrade after orders have opened for the evening.");
             yield return Press(Key.N);
             Require(market.Run.Day == 2 && market.Run.Phase == FlowerMarketPhase.DayGathering && !market.IsShopOpen &&
-                !market.Run.IsNight && market.Run.Cash == 34 && market.Run.OrderStage == FlowerOrderStage.Idle &&
-                market.Run.GetStock(FlowerIngredient.Mushroom) == 1 &&
+                !market.Run.IsNight && market.Run.Cash == 46 && market.Run.TotalRevenue == 46 && !market.Run.OrdersAccepted &&
+                !market.Run.HasPendingOrders && market.Run.GetStock(FlowerIngredient.Mushroom) == 0 &&
                 market.Run.GetStock(FlowerIngredient.SunnyFruit) == 1 && market.SunlightAvailable,
                 "Actual N closes trading for dawn on day two and carries forward cash and unused ingredients.");
             Capture(Path.Combine(Folder, "flower-market-day-two.png"));
 
+            yield return Walk(mushrooms, "Day-two shop to dry mushrooms");
+            yield return GatherFlowerMushrooms(market, 3);
+            yield return Walk(shop, "Day-two mushrooms to shop");
             yield return EnterFlowerMarketDusk(market);
             yield return Press(Key.Digit2);
             Require(market.Run.Day == 2 && market.Run.Phase == FlowerMarketPhase.NightExploration && market.Run.IsNight &&
                 market.Run.CanGather && market.Run.RemainingGatherSeconds > 0 && !market.IsDuskOpen && !market.IsShopOpen,
                 "Actual 2 closes the dusk choice and starts timed night exploration with free movement.");
             float nightRemaining = market.Run.RemainingGatherSeconds;
+            outbound = Time.time;
             yield return Walk(rainFruit, "Shop to the night orchard");
+            float atNightOrchard = Time.time;
             Require(market.Run.RemainingGatherSeconds < nightRemaining, "The night clock advances during actual travel.");
             Require(!market.SunlightAvailable && !market.OrchardReceivesSunlight &&
                 !market.FruitIsWet && !market.OrchardProduce.HasValue,
@@ -229,24 +262,51 @@ namespace BorrowingSun.Editor
                 "Short E picks one RainNightFruit at night without producing either daylight fruit.");
             RecordFlowerCrop("night rain", market);
             Capture(Path.Combine(Folder, "flower-market-night-rain.png"));
+            returning = Time.time;
             yield return Walk(shop, "Night orchard to the Flower Court shop");
+            RecordFlowerTrip("night orchard", outbound, atNightOrchard, returning);
             yield return WaitForFlowerMarketRainReturn(market);
             yield return Press(Key.E);
             Require(market.Run.Day == 2 && market.Run.Phase == FlowerMarketPhase.Trading && market.IsShopOpen &&
                 market.Run.GetStock(FlowerIngredient.RainNightFruit) == 1,
                 "A separate short E ends night exploration and opens trading with the rain-night crop.");
             Capture(Path.Combine(Folder, "flower-market-night-trading.png"));
-            yield return Press(Key.Digit2);
-            Require(market.Run.OrderStage == FlowerOrderStage.Cooking &&
+            Require(market.Run.CanUpgradeKitchen && !market.Run.OrdersAccepted && !market.Run.KitchenUpgraded,
+                "The second day's funded shop offers the kitchen upgrade before accepting orders.");
+            yield return Press(Key.U);
+            int upgradedCash = 46 - market.Run.KitchenUpgradeCost;
+            Require(market.Run.KitchenUpgraded && !market.Run.CanUpgradeKitchen && market.Run.Cash == upgradedCash &&
+                market.Run.TotalRevenue == 46 && !market.Run.OrdersAccepted,
+                "U buys the upgrade for exactly its configured cost and preserves gross revenue.");
+            yield return Press(Key.U);
+            Require(market.Run.Cash == upgradedCash, "Repeated U cannot charge for the same upgrade twice.");
+            RecordFlowerKitchen("kitchen upgrade", market);
+            Capture(Path.Combine(Folder, "flower-market-kitchen-upgraded.png"));
+            yield return AcceptFlowerOrders(market, FlowerIngredient.RainNightFruit);
+            yield return StartFlowerStove(market, 0, FlowerRecipe.MushroomBento);
+            Require(market.Run.GetStove(0).RemainingSeconds < standardCookRemaining - .4f,
+                "The upgraded mushroom stove has a shorter live timer than the same recipe yesterday.");
+            yield return StartFlowerStove(market, 1, FlowerRecipe.FruitBento);
+            Require(market.Run.GetStove(0).Stage == FlowerOrderStage.Cooking &&
+                market.Run.GetStove(1).RemainingSeconds < standardFruitCookRemaining - .4f &&
+                market.Run.GetStock(FlowerIngredient.Mushroom) == 0 &&
                 market.Run.GetStock(FlowerIngredient.RainNightFruit) == 0 &&
                 market.Run.GetStock(FlowerIngredient.SunnyFruit) == 1,
-                "The night fruit takes precedence over sunny fruit when starting the fruit recipe.");
+                "Both upgraded stoves use shorter live timers and the fruit order consumes the night crop before the sunny crop.");
+            RecordFlowerKitchen("day two upgraded parallel", market);
+            Capture(Path.Combine(Folder, "flower-market-upgraded-dual-stove.png"));
+            yield return ServeFlowerStove(market, 0, upgradedCash + 12);
+            yield return WaitUntil(() => market.Run.GetStove(1).Stage == FlowerOrderStage.Ready, 8,
+                "The second stove finishes independently while its order remains undelivered.");
+            Require(market.Run.HasPendingOrders, "The undelivered fruit dish is still pending at closing time.");
             yield return Press(Key.N);
             Require(market.Run.Day == 3 && market.Run.Phase == FlowerMarketPhase.DayGathering && !market.IsShopOpen &&
-                !market.Run.IsNight && market.Run.Cash == 34 && market.Run.OrderStage == FlowerOrderStage.Idle &&
-                market.Run.GetStock(FlowerIngredient.RainNightFruit) == 1 &&
+                !market.Run.IsNight && market.Run.Cash == upgradedCash + 12 && market.Run.TotalRevenue == 58 &&
+                market.Run.KitchenUpgraded && !market.Run.OrdersAccepted && !market.Run.HasPendingOrders &&
+                market.Run.GetStock(FlowerIngredient.RainNightFruit) == 1 && market.Run.GetStock(FlowerIngredient.SunnyFruit) == 1 &&
                 market.Run.GetStock(FlowerIngredient.Mushroom) == 1,
-                "Actual N closes trading for day-three dawn, refunds the pending recipe and preserves cash.");
+                "Actual N refunds the undelivered dish's exact mushroom and night fruit, retaining cash, revenue and the upgrade at day-three dawn.");
+            RecordFlowerKitchen("day three carryover", market);
             yield return WaitUntil(() => market.SunlightAvailable && market.OrchardReceivesSunlight &&
                 court.BorrowedSunAtVillage, 4, "Dawn restores actual orchard sunlight and the original village light path.");
             RecordFlowerCrop("dawn after night", market);
@@ -265,7 +325,8 @@ namespace BorrowingSun.Editor
             Require(!market.IsShopOpen && !market.IsDuskOpen && market.Run.Phase == FlowerMarketPhase.Locked &&
                 market.Run.Day == 0 && market.Run.Cash == 0 && !market.Run.IsNight && market.SunlightAvailable &&
                 Enum.GetValues(typeof(FlowerIngredient)).Cast<FlowerIngredient>().All(ingredient => market.Run.GetStock(ingredient) == 0) &&
-                market.Run.OrderStage == FlowerOrderStage.Idle && Vector3.Distance(court.Player.FeetPosition, spawn) < .5f,
+                market.Run.TotalRevenue == 0 && !market.Run.KitchenUpgraded && !market.Run.OrdersAccepted &&
+                !market.Run.HasPendingOrders && Vector3.Distance(court.Player.FeetPosition, spawn) < .5f,
                 "Actual R from night clears the market and restores the original entrance and daylight.");
         }
 
@@ -333,25 +394,61 @@ namespace BorrowingSun.Editor
             SaveProgress();
         }
 
-        private static IEnumerator CookAndServeFlowerOrder(SkywellFlowerMarket market, Key key,
-            FlowerRecipe recipe, int mushroomStock, int fruitStock, int expectedCash)
+        private static IEnumerator GatherFlowerMushrooms(SkywellFlowerMarket market, int count)
         {
-            int cashBeforeOrder = market.Run.Cash;
-            yield return Press(key);
-            Require(market.Run.CurrentRecipe == recipe && market.Run.OrderStage == FlowerOrderStage.Cooking &&
-                market.Run.CookTimeRemaining > 0 && market.Run.GetStock(FlowerIngredient.Mushroom) == mushroomStock &&
-                market.Run.GetStock(FlowerIngredient.WeatherFruit) == fruitStock,
-                $"{key} starts {recipe} and consumes the correct ingredients exactly once.");
+            int initialStock = market.Run.GetStock(FlowerIngredient.Mushroom);
+            for (int collected = 1; collected <= count; collected++)
+            {
+                yield return Press(Key.E);
+                Require(market.Run.GetStock(FlowerIngredient.Mushroom) == initialStock + collected,
+                    $"Short E collects mushroom {collected} from the authored patch.");
+                if (collected < count) yield return Wait(1.25f);
+            }
+        }
+
+        private static IEnumerator AcceptFlowerOrders(SkywellFlowerMarket market, FlowerIngredient reservedFruit)
+        {
+            int mushrooms = market.Run.GetStock(FlowerIngredient.Mushroom);
+            int fruit = market.Run.GetStock(reservedFruit);
             yield return Press(Key.E);
-            Require(market.Run.Day == 1 && market.Run.Cash == cashBeforeOrder,
-                "A pending order rejects early serving.");
-            yield return WaitUntil(() => market.Run.OrderStage == FlowerOrderStage.Ready, 8,
-                $"{recipe} becomes ready through the live cooking timer.");
+            Require(market.Run.OrdersAccepted && market.Run.GetStove(0).Stage == FlowerOrderStage.Waiting &&
+                market.Run.GetStove(0).Recipe == FlowerRecipe.MushroomBento &&
+                market.Run.GetStove(1).Stage == FlowerOrderStage.Waiting &&
+                market.Run.GetStove(1).Recipe == FlowerRecipe.FruitBento,
+                "E accepts a waiting mushroom order at window A and a waiting fruit order at window B.");
             yield return Press(Key.E);
-            Require(market.Run.OrderStage == FlowerOrderStage.Served && market.Run.Cash == expectedCash,
-                $"E serves {recipe} for the expected total of {expectedCash}.");
-            yield return Press(Key.E);
-            Require(market.Run.Cash == expectedCash, "Repeated E cannot collect the same order payment twice.");
+            Require(market.Run.GetStock(FlowerIngredient.Mushroom) == mushrooms &&
+                market.Run.GetStock(reservedFruit) == fruit &&
+                market.Run.GetReserved(FlowerIngredient.Mushroom) == 3 &&
+                market.Run.GetReserved(reservedFruit) == 1 &&
+                market.Run.GetReserved(FlowerIngredient.SunnyFruit) == 0,
+                $"Accepted orders reserve three mushrooms and exactly one {reservedFruit}, even after repeated E.");
+        }
+
+        private static IEnumerator StartFlowerStove(SkywellFlowerMarket market, int slot, FlowerRecipe recipe)
+        {
+            yield return Press(slot == 0 ? Key.Digit1 : Key.Digit2);
+            var stove = market.Run.GetStove(slot);
+            Require(stove.Stage == FlowerOrderStage.Cooking && stove.Recipe == recipe && stove.RemainingSeconds > 0,
+                $"Actual {slot + 1} starts {recipe} at its own stove.");
+        }
+
+        private static IEnumerator ServeFlowerStove(SkywellFlowerMarket market, int slot, int expectedCash)
+        {
+            yield return WaitUntil(() => market.Run.GetStove(slot).Stage == FlowerOrderStage.Ready, 8,
+                $"Stove {slot + 1} becomes ready through its live cooking timer.");
+            yield return Press(slot == 0 ? Key.Digit1 : Key.Digit2);
+            Require(market.Run.Cash == expectedCash && market.Run.GetStove(slot).Stage != FlowerOrderStage.Ready,
+                $"Actual {slot + 1} delivers its dish and raises cash to {expectedCash} exactly once.");
+        }
+
+        private static void RecordFlowerKitchen(string label, SkywellFlowerMarket market)
+        {
+            var first = market.Run.GetStove(0);
+            var second = market.Run.GetStove(1);
+            report.Add(FormattableString.Invariant(
+                $"FLOWER KITCHEN {label}: day={market.Run.Day} upgraded={market.Run.KitchenUpgraded} cash={market.Run.Cash} revenue={market.Run.TotalRevenue} A={first.Stage}/{first.Recipe}/{first.RemainingSeconds:F2}s B={second.Stage}/{second.Recipe}/{second.RemainingSeconds:F2}s"));
+            SaveProgress();
         }
     }
 }

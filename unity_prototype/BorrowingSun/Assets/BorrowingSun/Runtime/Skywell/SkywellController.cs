@@ -169,7 +169,7 @@ namespace BorrowingSun
         public void InteractPrimary()
         {
             // E is also sent by CourtPlayer while movement is suppressed. Consume it here once.
-            if(MarketInputBlocked){flowerMarket.Serve();return;}
+            if(MarketInputBlocked){flowerMarket.AcceptOrders();return;}
             if(story&&story.DialogueOpen){story.Advance();return;}
             if(story&&story.InputBlocked)return;
             if(observationClosedFrame==Time.frameCount)return;

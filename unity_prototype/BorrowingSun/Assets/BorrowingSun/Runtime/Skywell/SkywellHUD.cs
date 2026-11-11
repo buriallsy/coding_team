@@ -337,39 +337,72 @@ private static Texture2D CreateStoryTriangleTexture()
 
         private void DrawFlowerMarket(SkywellFlowerMarket market,float w,float h)
         {
-            var run=market.Run;
-            float width=Mathf.Min(500,w-36),x=(w-width)/2,y=(h-345)/2;
-            Panel(new Rect(x,y,width,345));
-            x+=18;width-=36;
-            GUI.Label(new Rect(x,y+16,width,32),$"花庭小铺 · 第 {run.Day} 天 · 营业",title);
-            GUI.Label(new Rect(x,y+53,width,48),
-                $"菌菇 {run.GetStock(FlowerIngredient.Mushroom)}   晴果 {run.GetStock(FlowerIngredient.SunnyFruit)}   雨露果 {run.GetStock(FlowerIngredient.WeatherFruit)}   雨夜果 {run.GetStock(FlowerIngredient.RainNightFruit)}   钱箱 {run.Cash}",body);
-            DrawMarketRecipe(market,FlowerRecipe.MushroomBento,"1 · 菌菇便当",new Rect(x,y+104,width,36));
-            DrawMarketRecipe(market,FlowerRecipe.FruitBento,"2 · 果香菌菇盒",new Rect(x,y+146,width,36));
-            string stage=run.OrderStage switch
+            var run = market.Run;
+            float width = Mathf.Min(560, w - 36), x = (w - width) / 2, y = (h - 372) / 2;
+            Panel(new Rect(x, y, width, 372));
+            x += 18;
+            width -= 36;
+
+            GUI.Label(new Rect(x, y + 16, width, 32), $"花庭小铺 · 第 {run.Day} 天", title);
+            GUI.Label(new Rect(x, y + 55, width, 44),
+                $"钱箱 {run.Cash} 元 · 累计营业额 {run.TotalRevenue} 元\n" +
+                $"菌菇 {run.GetStock(FlowerIngredient.Mushroom)}   晴果 {run.GetStock(FlowerIngredient.SunnyFruit)}   雨露果 {run.GetStock(FlowerIngredient.WeatherFruit)}   雨夜果 {run.GetStock(FlowerIngredient.RainNightFruit)}", body);
+
+            float columnWidth = (width - 12) / 2;
+            if (run.OrdersAccepted)
             {
-                FlowerOrderStage.Cooking=>$"烹饪中 · {run.CookTimeRemaining:0.0} 秒",
-                FlowerOrderStage.Ready=>"已出餐 · E 交餐收款",
-                FlowerOrderStage.Served=>"已收款 · 可继续做菜或收摊",
-                _=>"从上面的菜单选一道菜"
-            };
-            GUI.Label(new Rect(x,y+190,width,30),stage,body);
-            GUI.Label(new Rect(x,y+222,width,33),market.Feedback??"收摊时，未交付订单的食材会退回。",body);
+                for (int slot = 0; slot < FlowerMarketRun.StoveCount; slot++)
+                    DrawFlowerStove(market, slot, x + slot * (columnWidth + 12), y + 108, columnWidth);
+            }
+            else
+            {
+                DrawFlowerRecipe(run, FlowerRecipe.MushroomBento, new Rect(x, y + 110, width, 27));
+                DrawFlowerRecipe(run, FlowerRecipe.FruitBento, new Rect(x, y + 140, width, 27));
+                if (GUI.Button(new Rect(x, y + 182, columnWidth, 36), "E 接单", button)) market.AcceptOrders();
+                if (run.KitchenUpgraded)
+                    GUI.Label(new Rect(x + columnWidth + 12, y + 189, columnWidth, 28), "厨房已升级 · 双灶提速", small);
+                else if (GUI.Button(new Rect(x + columnWidth + 12, y + 182, columnWidth, 36),
+                    $"U 升级厨房 · {run.KitchenUpgradeCost} 元", button)) market.UpgradeKitchen();
+            }
 
-            float gap=6,buttonWidth=(width-2*gap)/3;
-            if(GUI.Button(new Rect(x,y+266,buttonWidth,34),"E 收款",button))market.Serve();
-            if(GUI.Button(new Rect(x+buttonWidth+gap,y+266,buttonWidth,34),"N 收摊",button))market.EndTrading();
-            if(GUI.Button(new Rect(x+2*(buttonWidth+gap),y+266,buttonWidth,34),"返回",button))market.HideShop();
-            GUI.Label(new Rect(x,y+309,width,27),"Q / Esc 回庭院 · R 重开关卡",small);
+            string hint = run.OrdersAccepted ? "收摊会取消未交付订单，并退回已下锅的食材。" :
+                "接单后按窗口编号下锅和交餐。厨房升级在接单前购买。";
+            GUI.Label(new Rect(x, y + 235, width, 40), market.Feedback ?? hint, body);
+            if (GUI.Button(new Rect(x, y + 287, columnWidth, 36), "N 收摊 · 进入次日", button)) market.EndTrading();
+            if (GUI.Button(new Rect(x + columnWidth + 12, y + 287, columnWidth, 36), "返回庭院", button)) market.HideShop();
+            GUI.Label(new Rect(x, y + 333, width, 24), "Q / Esc 回庭院 · R 重开关卡", small);
         }
 
-        private void DrawMarketRecipe(SkywellFlowerMarket market,FlowerRecipe recipe,string label,Rect rect)
+        private void DrawFlowerRecipe(FlowerMarketRun run, FlowerRecipe recipe, Rect rect)
         {
-            if(!FlowerMarketRun.TryGetRecipe(recipe,out var info))return;
-            string fruit=info.WeatherFruit>0?$" + 任一果实 {info.WeatherFruit}":"";
-            if(GUI.Button(rect,$"{label}   菌菇 {info.Mushrooms}{fruit}   {info.CookSeconds:0.#} 秒 · {info.Price} 元",button))
-                market.Cook(recipe);
+            if (!run.TryGetRecipe(recipe, out var info)) return;
+            string fruit = info.WeatherFruit > 0 ? $" + 果实 {info.WeatherFruit}" : "";
+            GUI.Label(rect, $"{FlowerRecipeName(recipe)}   菌菇 {info.Mushrooms}{fruit}   {info.CookSeconds:0.##} 秒 · {info.Price} 元", body);
         }
+
+        private void DrawFlowerStove(SkywellFlowerMarket market, int slot, float x, float y, float width)
+        {
+            var order = market.Run.GetStove(slot);
+            GUI.Label(new Rect(x, y, width, 30), $"窗口 {slot + 1}", title);
+            string dish = order.Recipe.HasValue ? FlowerRecipeName(order.Recipe.Value) : "暂无订单";
+            GUI.Label(new Rect(x, y + 35, width, 24), dish, body);
+            var action = new Rect(x, y + 72, width, 36);
+            switch (order.Stage)
+            {
+                case FlowerOrderStage.Waiting:
+                    if (GUI.Button(action, $"{slot + 1} 下锅", button)) market.UseStove(slot);
+                    break;
+                case FlowerOrderStage.Cooking:
+                    GUI.Label(action, $"烹饪中 · {order.RemainingSeconds:0.0} 秒", body);
+                    break;
+                case FlowerOrderStage.Ready:
+                    if (GUI.Button(action, $"{slot + 1} 交餐收款", button)) market.UseStove(slot);
+                    break;
+            }
+        }
+
+        private static string FlowerRecipeName(FlowerRecipe recipe) =>
+            recipe == FlowerRecipe.MushroomBento ? "菌菇便当" : "果香菌菇盒";
 
         private static void Panel(Rect r){GUI.color=new Color(.025f,.08f,.09f,.96f);GUI.DrawTexture(r,Texture2D.whiteTexture);GUI.color=Color.white;}
     }

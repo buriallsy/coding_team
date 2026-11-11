@@ -5284,6 +5284,11 @@ MonoBehaviour:
   regrowSeconds: 1
   dayGatherSeconds: 75
   nightGatherSeconds: 45
+  kitchenUpgradeCost: 36
+  mushroomCookSeconds: 3
+  fruitCookSeconds: 4
+  upgradedMushroomCookSeconds: 2.1
+  upgradedFruitCookSeconds: 2.8
 --- !u!1 &84505040
 GameObject:
   m_ObjectHideFlags: 0

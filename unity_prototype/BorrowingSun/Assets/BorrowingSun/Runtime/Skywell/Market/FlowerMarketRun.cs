@@ -4,7 +4,7 @@ namespace BorrowingSun
 {
     public enum FlowerIngredient { Mushroom, WeatherFruit, SunnyFruit, RainNightFruit }
     public enum FlowerRecipe { MushroomBento, FruitBento }
-    public enum FlowerOrderStage { Idle, Cooking, Ready, Served }
+    public enum FlowerOrderStage { Idle, Waiting, Cooking, Ready }
     public enum FlowerMarketPhase { Locked, DayGathering, DuskChoice, NightExploration, ReturningToShop, Trading }
 
     public readonly struct FlowerRecipeInfo
@@ -23,15 +23,43 @@ namespace BorrowingSun
         }
     }
 
+    public readonly struct FlowerStoveStatus
+    {
+        public FlowerOrderStage Stage { get; }
+        public FlowerRecipe? Recipe { get; }
+        public float RemainingSeconds { get; }
+
+        internal FlowerStoveStatus(FlowerOrderStage stage, FlowerRecipe recipe, float remainingSeconds)
+        {
+            Stage = stage;
+            Recipe = recipe;
+            RemainingSeconds = remainingSeconds;
+        }
+    }
+
     public sealed class FlowerMarketRun
     {
+        public const int StoveCount = 2;
+
+        private struct Order
+        {
+            internal FlowerOrderStage Stage;
+            internal FlowerRecipe Recipe;
+            internal FlowerIngredient? Fruit;
+            internal float RemainingSeconds;
+        }
+
         private static readonly FlowerIngredient[] FruitPriority =
             { FlowerIngredient.RainNightFruit, FlowerIngredient.WeatherFruit, FlowerIngredient.SunnyFruit };
 
         private readonly int[] stock = new int[(int)FlowerIngredient.RainNightFruit + 1];
+        private readonly Order[] orders = new Order[StoveCount];
         private readonly float dayGatherSeconds;
         private readonly float nightGatherSeconds;
-        private FlowerIngredient? reservedFruit;
+        private readonly float mushroomCookSeconds;
+        private readonly float fruitCookSeconds;
+        private readonly float upgradedMushroomCookSeconds;
+        private readonly float upgradedFruitCookSeconds;
 
         public bool IsStarted => Phase != FlowerMarketPhase.Locked;
         public FlowerMarketPhase Phase { get; private set; }
@@ -41,21 +69,43 @@ namespace BorrowingSun
         public float RemainingGatherSeconds { get; private set; }
         public int Day { get; private set; }
         public int Cash { get; private set; }
-        public FlowerOrderStage OrderStage { get; private set; }
-        public FlowerRecipe? CurrentRecipe { get; private set; }
-        public float CookTimeRemaining { get; private set; }
+        public int TotalRevenue { get; private set; }
+        public bool KitchenUpgraded { get; private set; }
+        public int KitchenUpgradeCost { get; }
+        public bool OrdersAccepted { get; private set; }
+        public bool CanUpgradeKitchen => Phase == FlowerMarketPhase.Trading && !OrdersAccepted &&
+            !KitchenUpgraded && Cash >= KitchenUpgradeCost;
 
-        private bool HasPendingOrder => OrderStage == FlowerOrderStage.Cooking || OrderStage == FlowerOrderStage.Ready;
-
-        public FlowerMarketRun(float dayGatherSeconds = 75f, float nightGatherSeconds = 45f)
+        public bool HasPendingOrders
         {
-            if (!(dayGatherSeconds > 0f) || float.IsInfinity(dayGatherSeconds))
-                throw new ArgumentOutOfRangeException(nameof(dayGatherSeconds));
-            if (!(nightGatherSeconds > 0f) || float.IsInfinity(nightGatherSeconds))
-                throw new ArgumentOutOfRangeException(nameof(nightGatherSeconds));
+            get
+            {
+                foreach (var order in orders)
+                    if (order.Stage != FlowerOrderStage.Idle) return true;
+                return false;
+            }
+        }
+
+        public FlowerMarketRun(float dayGatherSeconds = 75f, float nightGatherSeconds = 45f,
+            float mushroomCookSeconds = 3f, float fruitCookSeconds = 4f,
+            float upgradedMushroomCookSeconds = 2.1f, float upgradedFruitCookSeconds = 2.8f,
+            int kitchenUpgradeCost = 36)
+        {
+            ValidateSeconds(dayGatherSeconds, nameof(dayGatherSeconds));
+            ValidateSeconds(nightGatherSeconds, nameof(nightGatherSeconds));
+            ValidateSeconds(mushroomCookSeconds, nameof(mushroomCookSeconds));
+            ValidateSeconds(fruitCookSeconds, nameof(fruitCookSeconds));
+            ValidateSeconds(upgradedMushroomCookSeconds, nameof(upgradedMushroomCookSeconds));
+            ValidateSeconds(upgradedFruitCookSeconds, nameof(upgradedFruitCookSeconds));
+            if (kitchenUpgradeCost <= 0) throw new ArgumentOutOfRangeException(nameof(kitchenUpgradeCost));
 
             this.dayGatherSeconds = dayGatherSeconds;
             this.nightGatherSeconds = nightGatherSeconds;
+            this.mushroomCookSeconds = mushroomCookSeconds;
+            this.fruitCookSeconds = fruitCookSeconds;
+            this.upgradedMushroomCookSeconds = upgradedMushroomCookSeconds;
+            this.upgradedFruitCookSeconds = upgradedFruitCookSeconds;
+            KitchenUpgradeCost = kitchenUpgradeCost;
         }
 
         public bool TryStart()
@@ -109,6 +159,19 @@ namespace BorrowingSun
             return index >= 0 && index < stock.Length ? stock[index] : 0;
         }
 
+        public int GetReserved(FlowerIngredient ingredient)
+        {
+            int reserved = 0;
+            foreach (var order in orders)
+            {
+                if (order.Stage != FlowerOrderStage.Waiting) continue;
+                TryGetRecipe(order.Recipe, out var info);
+                if (ingredient == FlowerIngredient.Mushroom) reserved += info.Mushrooms;
+                else if (order.Fruit == ingredient) reserved += info.WeatherFruit;
+            }
+            return reserved;
+        }
+
         public bool TryHarvest(FlowerIngredient ingredient)
         {
             if (!CanGather) return false;
@@ -127,15 +190,17 @@ namespace BorrowingSun
             return true;
         }
 
-        public static bool TryGetRecipe(FlowerRecipe recipe, out FlowerRecipeInfo info)
+        public bool TryGetRecipe(FlowerRecipe recipe, out FlowerRecipeInfo info)
         {
             switch (recipe)
             {
                 case FlowerRecipe.MushroomBento:
-                    info = new FlowerRecipeInfo(mushrooms: 2, weatherFruit: 0, cookSeconds: 3f, price: 12);
+                    info = new FlowerRecipeInfo(mushrooms: 2, weatherFruit: 0,
+                        cookSeconds: KitchenUpgraded ? upgradedMushroomCookSeconds : mushroomCookSeconds, price: 12);
                     return true;
                 case FlowerRecipe.FruitBento:
-                    info = new FlowerRecipeInfo(mushrooms: 1, weatherFruit: 1, cookSeconds: 4f, price: 22);
+                    info = new FlowerRecipeInfo(mushrooms: 1, weatherFruit: 1,
+                        cookSeconds: KitchenUpgraded ? upgradedFruitCookSeconds : fruitCookSeconds, price: 22);
                     return true;
                 default:
                     info = default;
@@ -143,24 +208,46 @@ namespace BorrowingSun
             }
         }
 
-        public bool CanCook(FlowerRecipe recipe) => TryGetRecipe(recipe, out var info) && CanCook(info, out _);
-
-        public bool TryCook(FlowerRecipe recipe)
+        public FlowerStoveStatus GetStove(int slot)
         {
-            if (!TryGetRecipe(recipe, out var info) || !CanCook(info, out var fruit)) return false;
+            if (!ValidSlot(slot)) return default;
+            var order = orders[slot];
+            return order.Stage == FlowerOrderStage.Idle
+                ? default : new FlowerStoveStatus(order.Stage, order.Recipe, order.RemainingSeconds);
+        }
+
+        public bool TryUpgradeKitchen()
+        {
+            if (!CanUpgradeKitchen) return false;
+            Cash -= KitchenUpgradeCost;
+            KitchenUpgraded = true;
+            return true;
+        }
+
+        public bool TryAcceptOrders()
+        {
+            if (Phase != FlowerMarketPhase.Trading || OrdersAccepted) return false;
+            for (int slot = 0; slot < StoveCount; slot++) FillStove(slot);
+            OrdersAccepted = HasPendingOrders;
+            return OrdersAccepted;
+        }
+
+        public bool TryCook(int slot)
+        {
+            if (Phase != FlowerMarketPhase.Trading || !ValidSlot(slot)) return false;
+            ref var order = ref orders[slot];
+            if (order.Stage != FlowerOrderStage.Waiting || !TryGetRecipe(order.Recipe, out var info)) return false;
 
             stock[(int)FlowerIngredient.Mushroom] -= info.Mushrooms;
-            if (fruit.HasValue) stock[(int)fruit.Value] -= info.WeatherFruit;
-            reservedFruit = fruit;
-            CurrentRecipe = recipe;
-            CookTimeRemaining = info.CookSeconds;
-            OrderStage = FlowerOrderStage.Cooking;
+            if (order.Fruit.HasValue) stock[(int)order.Fruit.Value] -= info.WeatherFruit;
+            order.Stage = FlowerOrderStage.Cooking;
+            order.RemainingSeconds = info.CookSeconds;
             return true;
         }
 
         public void Tick(float deltaSeconds)
         {
-            if (!(deltaSeconds > 0f)) return;
+            if (!(deltaSeconds > 0f) || float.IsInfinity(deltaSeconds)) return;
 
             if (CanGather)
             {
@@ -171,18 +258,26 @@ namespace BorrowingSun
                 return;
             }
 
-            if (OrderStage != FlowerOrderStage.Cooking) return;
-            CookTimeRemaining = Math.Max(0f, CookTimeRemaining - deltaSeconds);
-            if (CookTimeRemaining == 0f) OrderStage = FlowerOrderStage.Ready;
+            for (int slot = 0; slot < StoveCount; slot++)
+            {
+                ref var order = ref orders[slot];
+                if (order.Stage != FlowerOrderStage.Cooking) continue;
+                order.RemainingSeconds = Math.Max(0f, order.RemainingSeconds - deltaSeconds);
+                if (order.RemainingSeconds == 0f) order.Stage = FlowerOrderStage.Ready;
+            }
         }
 
-        public bool TryServe()
+        public bool TryServe(int slot)
         {
-            if (Phase != FlowerMarketPhase.Trading || OrderStage != FlowerOrderStage.Ready || !CurrentRecipe.HasValue ||
-                !TryGetRecipe(CurrentRecipe.Value, out var info)) return false;
+            if (Phase != FlowerMarketPhase.Trading || !ValidSlot(slot)) return false;
+            var order = orders[slot];
+            if (order.Stage != FlowerOrderStage.Ready || !TryGetRecipe(order.Recipe, out var info) ||
+                TotalRevenue > int.MaxValue - info.Price) return false;
 
             Cash += info.Price;
-            OrderStage = FlowerOrderStage.Served;
+            TotalRevenue += info.Price;
+            orders[slot] = default;
+            FillStove(slot);
             return true;
         }
 
@@ -190,39 +285,56 @@ namespace BorrowingSun
         {
             if (Phase != FlowerMarketPhase.Trading) return false;
 
-            if (HasPendingOrder && CurrentRecipe.HasValue && TryGetRecipe(CurrentRecipe.Value, out var info))
+            foreach (var order in orders)
             {
+                // Waiting orders reserve stock without debiting it.
+                if (order.Stage != FlowerOrderStage.Cooking && order.Stage != FlowerOrderStage.Ready) continue;
+                TryGetRecipe(order.Recipe, out var info);
                 stock[(int)FlowerIngredient.Mushroom] += info.Mushrooms;
-                if (reservedFruit.HasValue) stock[(int)reservedFruit.Value] += info.WeatherFruit;
+                if (order.Fruit.HasValue) stock[(int)order.Fruit.Value] += info.WeatherFruit;
             }
-            ClearOrder();
+            ClearOrders();
             BeginDay();
             return true;
         }
 
         public void Reset()
         {
-            Day = Cash = 0;
+            Day = Cash = TotalRevenue = 0;
             Phase = FlowerMarketPhase.Locked;
             RemainingGatherSeconds = 0f;
+            KitchenUpgraded = false;
             Array.Clear(stock, 0, stock.Length);
-            ClearOrder();
+            ClearOrders();
         }
 
-        private bool CanCook(FlowerRecipeInfo info, out FlowerIngredient? fruit)
+        private void FillStove(int slot)
         {
-            fruit = null;
-            if (Phase != FlowerMarketPhase.Trading || HasPendingOrder || GetStock(FlowerIngredient.Mushroom) < info.Mushrooms)
+            var firstChoice = slot == 0 ? FlowerRecipe.MushroomBento : FlowerRecipe.FruitBento;
+            var secondChoice = slot == 0 ? FlowerRecipe.FruitBento : FlowerRecipe.MushroomBento;
+            if (!TryReserveOrder(slot, firstChoice)) TryReserveOrder(slot, secondChoice);
+        }
+
+        private bool TryReserveOrder(int slot, FlowerRecipe recipe)
+        {
+            if (!TryGetRecipe(recipe, out var info) ||
+                GetStock(FlowerIngredient.Mushroom) - GetReserved(FlowerIngredient.Mushroom) < info.Mushrooms)
                 return false;
 
-            if (info.WeatherFruit == 0) return true;
-            foreach (var ingredient in FruitPriority)
+            FlowerIngredient? fruit = null;
+            if (info.WeatherFruit > 0)
             {
-                if (GetStock(ingredient) < info.WeatherFruit) continue;
-                fruit = ingredient;
-                return true;
+                foreach (var ingredient in FruitPriority)
+                {
+                    if (GetStock(ingredient) - GetReserved(ingredient) < info.WeatherFruit) continue;
+                    fruit = ingredient;
+                    break;
+                }
+                if (!fruit.HasValue) return false;
             }
-            return false;
+
+            orders[slot] = new Order { Stage = FlowerOrderStage.Waiting, Recipe = recipe, Fruit = fruit };
+            return true;
         }
 
         private void BeginDay()
@@ -232,12 +344,18 @@ namespace BorrowingSun
             RemainingGatherSeconds = dayGatherSeconds;
         }
 
-        private void ClearOrder()
+        private void ClearOrders()
         {
-            OrderStage = FlowerOrderStage.Idle;
-            CurrentRecipe = null;
-            reservedFruit = null;
-            CookTimeRemaining = 0f;
+            Array.Clear(orders, 0, orders.Length);
+            OrdersAccepted = false;
+        }
+
+        private static bool ValidSlot(int slot) => slot >= 0 && slot < StoveCount;
+
+        private static void ValidateSeconds(float seconds, string parameter)
+        {
+            if (!(seconds > 0f) || float.IsInfinity(seconds))
+                throw new ArgumentOutOfRangeException(parameter);
         }
     }
 }

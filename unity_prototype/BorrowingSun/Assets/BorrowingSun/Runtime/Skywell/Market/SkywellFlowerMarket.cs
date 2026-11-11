@@ -18,6 +18,12 @@ namespace BorrowingSun
         [SerializeField, Min(0f)] private float regrowSeconds = 1f;
         [SerializeField, Min(1f)] private float dayGatherSeconds = 75f;
         [SerializeField, Min(1f)] private float nightGatherSeconds = 45f;
+        [Header("Kitchen")]
+        [SerializeField, Min(1)] private int kitchenUpgradeCost = 36;
+        [SerializeField, Min(.1f)] private float mushroomCookSeconds = 3f;
+        [SerializeField, Min(.1f)] private float fruitCookSeconds = 4f;
+        [SerializeField, Min(.1f)] private float upgradedMushroomCookSeconds = 2.1f;
+        [SerializeField, Min(.1f)] private float upgradedFruitCookSeconds = 2.8f;
 
         private enum Point { None, Shop, Mushrooms, Orchard }
         private enum LightPeriod { Day, Dusk, Night }
@@ -34,7 +40,9 @@ namespace BorrowingSun
         private string feedback;
         private float feedbackUntil;
 
-        public FlowerMarketRun Run => run ??= new FlowerMarketRun(dayGatherSeconds, nightGatherSeconds);
+        public FlowerMarketRun Run => run ??= new FlowerMarketRun(dayGatherSeconds, nightGatherSeconds,
+            mushroomCookSeconds, fruitCookSeconds, upgradedMushroomCookSeconds,
+            upgradedFruitCookSeconds, kitchenUpgradeCost);
         public Transform Shop => shop;
         public Transform Mushrooms => mushrooms;
         public Transform RainFruit => rainFruit;
@@ -139,9 +147,10 @@ namespace BorrowingSun
             }
             if (!IsShopOpen) return;
             if (keyboard.escapeKey.wasPressedThisFrame) HideShop();
-            else if (keyboard.digit1Key.wasPressedThisFrame) Cook(FlowerRecipe.MushroomBento);
-            else if (keyboard.digit2Key.wasPressedThisFrame) Cook(FlowerRecipe.FruitBento);
             else if (keyboard.nKey.wasPressedThisFrame) EndTrading();
+            else if (keyboard.uKey.wasPressedThisFrame) UpgradeKitchen();
+            else if (keyboard.digit1Key.wasPressedThisFrame) UseStove(0);
+            else if (keyboard.digit2Key.wasPressedThisFrame) UseStove(1);
         }
 
         internal void ChooseDusk(bool explore, CourtPlayer actor)
@@ -156,30 +165,57 @@ namespace BorrowingSun
             RefreshOrchard();
         }
 
-        internal void Cook(FlowerRecipe recipe)
+        internal void AcceptOrders()
         {
             if (!IsShopOpen || !BeginCommand()) return;
-            Say(Run.TryCook(recipe) ? "开始烹饪。" : "材料不足，或上一份餐还未交付。");
+            if (Run.OrdersAccepted)
+            {
+                Say("按窗口的数字键下锅或交餐。");
+                return;
+            }
+            Say(Run.TryAcceptOrders() ? "已接单，按 1 或 2 给对应窗口下锅。" : "食材不足，按 N 收摊进入次日。");
         }
 
-        internal void Serve()
+        internal void UpgradeKitchen()
         {
             if (!IsShopOpen || !BeginCommand()) return;
-            int previousCash = Run.Cash;
-            if (Run.TryServe()) Say($"已收款 +{Run.Cash - previousCash}。");
-            else Say("选一道菜下锅，出餐后按 E 收款。");
+            if (Run.KitchenUpgraded) Say("厨房已升级，两口灶都已提速。");
+            else if (Run.OrdersAccepted) Say("明天接单前可以升级厨房。");
+            else if (Run.TryUpgradeKitchen()) Say($"支付 {Run.KitchenUpgradeCost} 元 · 两口灶已提速。");
+            else Say($"钱箱不足 {Run.KitchenUpgradeCost} 元。");
+        }
+
+        internal void UseStove(int slot)
+        {
+            if (!IsShopOpen || !BeginCommand()) return;
+            switch (Run.GetStove(slot).Stage)
+            {
+                case FlowerOrderStage.Waiting:
+                    if (Run.TryCook(slot)) Say($"窗口 {slot + 1} 已下锅。");
+                    break;
+                case FlowerOrderStage.Ready:
+                    int previousCash = Run.Cash;
+                    if (Run.TryServe(slot)) Say($"窗口 {slot + 1} 已交餐，收款 +{Run.Cash - previousCash} 元。");
+                    break;
+                case FlowerOrderStage.Cooking:
+                    Say($"窗口 {slot + 1} 正在烹饪。");
+                    break;
+                default:
+                    Say(Run.OrdersAccepted ? "这个窗口暂无订单。" : "先按 E 接单。");
+                    break;
+            }
         }
 
         internal void EndTrading()
         {
             if (!IsShopOpen || !BeginCommand()) return;
-            bool refund = Run.OrderStage == FlowerOrderStage.Cooking || Run.OrderStage == FlowerOrderStage.Ready;
+            bool refund = Run.HasPendingOrders;
             if (!Run.TryCloseShop()) return;
             HideShop();
             mushroomsReadyAt = fruitReadyAt = Time.time;
             RefreshLighting();
             RefreshOrchard();
-            Say(refund ? $"第 {Run.Day} 天 · 钱箱与食材已结转，未交付食材已退回。" :
+            Say(refund ? $"第 {Run.Day} 天 · 已取消未交付订单，结转钱箱和食材。" :
                 $"第 {Run.Day} 天 · 钱箱与食材已结转。");
         }
 

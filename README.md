@@ -20,19 +20,20 @@ Download the atlas HTML and open it in a browser to view or export individual SV
 
 ## Flower Court market whitebox · 花庭经营白盒
 
-The Flower Court market starts after the cargo handover. Gather during the day, choose at dusk between opening the shop and a night outing, then close the shop to carry cash and ingredients into the next day.
+The Flower Court market starts after the cargo handover. Gather ingredients, choose whether to explore after dusk, and cook orders on two burners. Closing the shop carries cash, ingredients, and the kitchen upgrade into the next day.
 
 1. 已有仓库用 `git switch unity-skywell` 切分支，再用 `git pull --ff-only` 拉取。首次下载可用 `git clone --branch unity-skywell https://github.com/buriallsy/coding_team.git`。用 Unity Hub 和 **6000.5.4f1** 打开 `unity_prototype/BorrowingSun`。
 2. 打开 `Assets/BorrowingSun/Scenes/05_Skywell_FlowerMarket.unity`，按 **Play**。走完下方的 L5 路线并签收，在花庭西北侧小铺按 `E` 开始第 1 天。靠近菌菇或果树短按 `E` 采集。 [场景文件](unity_prototype/BorrowingSun/Assets/BorrowingSun/Scenes/05_Skywell_FlowerMarket.unity)
 3. 白天到时，在花庭地面站稳就会弹出黄昏选择。想立即试玩分支，可提前回柜台按 `E` 结束白天采集。
 4. **直接营业**按 `1`。在柜台会立即开店，从庭院其他位置选择则走回柜台按 `E`。**夜探**按 `2`。走到果树附近，按住 `Tab` 再按 `1` 选雨令，松开 `Tab` 后长按 `E` 并左键点击集雨盆。下雨后短按 `E` 采雨夜果。夜探到时或提前回来，都可在小铺按 `E` 开始营业。
-5. 营业时按 `1` 或 `2` 下锅，完成后按 `E` 交餐收款。按 `N` 收摊进入次日，现金与库存结转，未交餐的食材退回。按 `R` 从原入口重开。
+5. 柜台按 `E` 接单。窗口有订单时按对应的 `1` 或 `2` 下锅，可同时做两道菜。完成后再按同一个键交餐收款。准备至少 3 份菌菇和 1 份果实，就能同时做菌菇便当和果香菌菇盒。
+6. 接单前可花 **36 元**按 `U` 升级厨房，两口灶一起提速，之后每天都有效。按 `N` 收摊进入次日，释放未下锅订单的预留，退回未交付订单用掉的食材，结转钱箱、库存和升级。按 `R` 从原入口重开。
 
-**调白天和夜探时间**。退出 Play Mode，在花庭副本的 Hierarchy 搜索 `Flower_market_prototype`，在 Inspector 的 **Skywell Flower Market** 组件调整 **Day Gather Seconds**（75 秒）和 **Night Gather Seconds**（45 秒）。保存场景再按 **Play**。同一组件可调采集半径和刷新时间。菜价、食材消耗和烹饪时间在 `FlowerMarketRun.TryGetRecipe`。 [菜谱代码](unity_prototype/BorrowingSun/Assets/BorrowingSun/Runtime/Skywell/Market/FlowerMarketRun.cs)
+**调数值**。退出 Play Mode，在花庭副本的 Hierarchy 搜索 `Flower_market_prototype`，在 Inspector 打开 **Skywell Flower Market**。**Day Gather Seconds**／**Night Gather Seconds** 默认 75／45 秒。**Kitchen** 下的 **Kitchen Upgrade Cost** 默认 36 元，**Mushroom Cook Seconds**／**Fruit Cook Seconds** 默认 3／4 秒，对应两个 **Upgraded** 字段默认 2.1／2.8 秒。改完保存场景再按 **Play**。
 
-**English quick start**. Open the Flower Market scene in Unity 6000.5.4f1, complete delivery, and tap `E` at the northwest shop to start day one. Gather with `E`. At dusk press `1` to return to the shop or `2` to explore at night. For a quick dusk test, tap `E` again at the shop. At night, hold `Tab` and press `1` to select Rain. Release `Tab`, then hold `E` and left-click the basin. Tap `E` at the orchard to gather a rain-night fruit. Return to the shop and tap `E` to trade. Cook with `1` or `2`, serve with `E`, and close the day with `N`. In Edit Mode, find `Flower_market_prototype` and set **Day Gather Seconds** or **Night Gather Seconds** on **Skywell Flower Market**.
+**English quick start**. Open the Flower Market scene in Unity 6000.5.4f1, complete delivery, and tap `E` at the northwest shop to start day one. Gather with `E`. At dusk press `1` to return to the shop or `2` to explore at night. For a quick dusk test, tap `E` again at the shop. At night, hold `Tab` and press `1` to select Rain. Release `Tab`, then hold `E` and left-click the basin. Tap `E` at the orchard to gather a rain-night fruit. Return to the shop and tap `E` to open the counter. Tap `E` at the counter to accept orders, then press `1` or `2` to cook at the corresponding window. Press the same key again when ready to serve and collect payment. Press `U` before accepting orders to upgrade both burners for 36, or `N` to close and start the next day. To tune the day and night clocks, the upgrade cost, and both sets of cook times, select `Flower_market_prototype` in Edit Mode and open **Skywell Flower Market** in the Inspector.
 
-实测晴果、雨露果和雨夜果的变化，两条黄昏路线、调参试值及截图见本轮记录。 [昼夜实测 / Day-night playtest](docs/04_Iterations/Skywell_Flower_Market_Day_Night.md)
+双窗接单、厨房升级、收摊和次日结转的试玩路线、调参试值及证据见本轮记录。 [双窗与快灶 / Dual burners and upgrade](docs/04_Iterations/Skywell_Flower_Market_Kitchen.md) · [上轮昼夜实测 / Day-night playtest](docs/04_Iterations/Skywell_Flower_Market_Day_Night.md)
 
 ## Play on macOS
 
