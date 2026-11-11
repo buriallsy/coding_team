@@ -32,6 +32,12 @@ internal sealed class CargoTrack2D
     internal Vector2 SafeFeet => new(carrier.GlobalPosition.X, CarrierFloor.Position.Y - 1f);
 
     internal bool IsAboard(Vector2 feet) => NearStation(feet, carrier.GlobalPosition);
+    internal bool IsOnDeck(Vector2 feet)
+    {
+        Rect2 floor = CarrierFloor;
+        return feet.X >= floor.Position.X && feet.X <= floor.End.X
+            && Mathf.Abs(feet.Y - floor.Position.Y) <= SurfaceTolerance;
+    }
     internal bool IsAtDeliveryStation(Vector2 feet) => NearStation(feet, Goal);
 
     internal void Synchronize(float travelProgress)

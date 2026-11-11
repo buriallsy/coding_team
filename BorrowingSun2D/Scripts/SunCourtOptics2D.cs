@@ -20,9 +20,10 @@ public partial class SunCourtOptics2D : Node2D
     private float calibratedAim;
     private float northNormalAngle;
     private float eastNormalAngle;
+    private bool sunlightAvailable = true;
 
     internal Weather ActiveWeather { get; private set; }
-    internal bool IsSunny => ActiveWeather == Weather.Sunny;
+    internal bool IsSunny => sunlightAvailable && ActiveWeather == Weather.Sunny;
     internal bool IsCalibrated { get; private set; }
     internal LightPath2D Path { get; private set; }
     internal bool TowerHit => Path.TowerHit;
@@ -79,8 +80,9 @@ public partial class SunCourtOptics2D : Node2D
         Tick(0f);
     }
 
-    internal void Tick(float towerHeading)
+    internal void Tick(float towerHeading, bool sunlightAvailable = true)
     {
+        this.sunlightAvailable = sunlightAvailable;
         // The side section uses an authored continuous projection of the rotor's azimuth.
         // The mirror keeps its pose independently of which objects the ray eventually hits.
         float weight = Mathf.InverseLerp(TowerMechanism.SunCourtHeading, TowerMechanism.EastHeading, towerHeading);

@@ -127,6 +127,13 @@ public sealed class TowerMechanism
         Counterweight = Math.Max(Counterweight, Math.Min(limit, Counterweight + amount));
     }
 
+    internal bool TrySpendWater(float amount)
+    {
+        if (!float.IsFinite(amount) || amount <= 0f || Water < amount) return false;
+        storedWater -= amount;
+        return true;
+    }
+
     public void Reset()
     {
         storedWater = Counterweight = Height = Heading = targetHeading = 0f;

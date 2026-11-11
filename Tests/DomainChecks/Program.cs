@@ -7,6 +7,7 @@ CheckTower();
 CheckRoute();
 CheckOptics();
 CheckCargo();
+MarketChecks.Run(Check);
 Console.WriteLine($"DOMAIN_CHECKS PASSED: {assertions} assertions; domain and geometry fixtures.");
 
 void CheckTower()

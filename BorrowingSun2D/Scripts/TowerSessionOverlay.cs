@@ -33,7 +33,7 @@ public partial class TowerSessionOverlay : Control
             Theme = new Theme { DefaultFont = TowerUiFont.Load() };
     }
 
-    internal void Present(TowerScreen screen, int deliveredCount)
+    internal void Present(TowerScreen screen, int deliveredCount, bool tutorial = false)
     {
         if (screen == TowerScreen.Playing)
         {
@@ -53,6 +53,15 @@ public partial class TowerSessionOverlay : Control
         controls.Visible = !finished;
         ActionButton.Text = finished ? "再玩一次" : "开始";
         confirmHint.Text = finished ? "R / Enter / Space 或点击按钮" : "Enter / Space 或点击按钮";
+        if (tutorial)
+        {
+            kicker.Text = finished ? "教 学 完 成" : "谷 地 外 卖 店";
+            instructions.Text = finished
+                ? "签收完成。接下来从中央店铺出发，白天采集食材，夜晚接单营业。"
+                : instructions.Text + "\n完成运货教学后，开始探索与经营。";
+            ActionButton.Text = finished ? "进入第 1 天" : "开始教学";
+            confirmHint.Text = finished ? "Enter / Space 进入第 1 天 · R 重练" : confirmHint.Text;
+        }
         Show();
         ActionButton.GrabFocus();
     }

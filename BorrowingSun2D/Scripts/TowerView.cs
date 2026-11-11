@@ -37,8 +37,10 @@ public partial class TowerView : Node2D
     {
         if (font == null) return;
         TowerState state = slice.State;
+        MarketPlay2D? market = slice.IsMarketActive ? slice.Market : null;
+        Color sky = market?.Run.IsNight == true ? new Color("101827") : Background;
 
-        DrawRect(new Rect2(0, 0, 1280, 720), Background);
+        DrawRect(new Rect2(0, 0, 1280, 720), sky);
         for (int x = 56; x <= 1224; x += 32)
             DrawLine(new Vector2(x, 147), new Vector2(x, 637), new Color("1c2a2c"));
         for (int y = 157; y <= 637; y += 24)
@@ -54,11 +56,26 @@ public partial class TowerView : Node2D
         DrawTower(state);
         DrawOptics();
         DrawCargo(state);
+        if (market != null) DrawMarketWorld(market, state);
         DrawPerson(slice.Player);
-        DrawReadout(state);
+        if (market == null) DrawReadout(state);
 
         DrawRect(new Rect2(0, 0, 1280, 137), Background);
         DrawLine(new Vector2(56, 137), new Vector2(1224, 137), Line);
+        if (market != null)
+        {
+            MarketRun run = market.Run;
+            string period = run.Phase == MarketPhase.Day ? "白天探索" : "夜晚";
+            Write($"谷地外卖店  /  第 {run.Day} 天", 56, 65, 32, Ink);
+            Write($"{period} · {Mathf.CeilToInt(run.Remaining)} 秒  |  {(market.Raining ? "雨天" : "无雨")}", 530, 65, 21, Wind);
+            Write($"钱箱 {run.Balance} 金币", 997, 65, 20, Sunny);
+            Write(MarketText.Stock(run.Bag), 57, 109, 19, Muted);
+            Write($"昨晚 +{run.LastNightRevenue}  ·  累计 {run.TotalRevenue}", 765, 109, 17, Sunny);
+            DrawLine(new Vector2(56, 637), new Vector2(1224, 637), Line);
+            Write(slice.Status, 56, 670, 22, Wind);
+            Write("A/D 行走 · 1/2/3 选天气 · E 施令 · Shift+E 逆转 · Q 收回 · F 放水 · C 采集 · G 摆渡", 56, 699, 16, Muted);
+            return;
+        }
         Write("借晴  /  塔台灰盒", 56, 74, 33, Ink);
         Write("北庭借光 · 雨水转作配重 · 登车送水果到花庭", 57, 109, 18, Muted);
         Write("侧视剖面   /   借光与交付", 966, 74, 18, Muted);
@@ -66,6 +83,54 @@ public partial class TowerView : Node2D
         DrawLine(new Vector2(56, 637), new Vector2(1224, 637), Line);
         Write(slice.Status, 56, 670, 23, slice.DeliveredCount > 0 ? Wind : Ink);
         Write("A/D 或 ←/→ 行走   1 雨 / 2 风 / 3 晴   E 施令   Shift+E 风反向   Q 收令   F 放水   G 发车 / 交付   R 重置", 56, 699, 16, Muted);
+    }
+
+    private void DrawMarketWorld(MarketPlay2D market, TowerState state)
+    {
+        Vector2 store = market.Store;
+        DrawRect(new Rect2(store.X - 43f, store.Y - 66f, 86f, 26f), Background);
+        Write("中央外卖店", store.X - 37f, store.Y - 47f, 14, Wind);
+
+        foreach (var (position, tree, food) in market.ResourceViews())
+        {
+            Vector2 dot = position + new Vector2(0, tree ? -40f : -17f);
+            if (tree)
+            {
+                DrawLine(position, dot, Wind, 3f);
+                DrawCircle(dot, 15f, new Color("354c43"));
+            }
+            Color mark = food.HasValue ? food.Value switch
+            {
+                FoodKind.Mushroom => Wind,
+                FoodKind.GameMeat => PlayerColor,
+                FoodKind.RainFruit => Rain,
+                FoodKind.MoonFruit => new Color("c9beff"),
+                FoodKind.StormFruit => new Color("a5a3ef"),
+                _ => Sunny,
+            } : Line;
+            DrawCircle(dot, food.HasValue ? 7f : 4f, mark);
+            string label = food.HasValue ? MarketText.FoodName(food.Value) : tree ? "树" : "采集点";
+            Write(label, Mathf.Min(position.X - 21f, 1198f), dot.Y - 12f, 15, mark);
+        }
+
+        DrawRect(new Rect2(954, 391, 270, 153), new Color("1b2a2d"));
+        Write($"原水 {state.Water:0.0}/6  ·  台高 {state.Height:0.0} m", 970, 422, 17, Ink);
+        string shore = state.DockedPort switch
+        {
+            Port.Entry => "西岸",
+            Port.SunCourt => "采光庭",
+            Port.East => "东岸",
+            _ => "未接岸",
+        };
+        Write($"塔台 · {shore}  |  已选 {slice.SelectedWeather switch
+        {
+            Weather.Rain => "雨",
+            Weather.Wind => "风",
+            _ => "晴",
+        }}", 970, 453, 17, Wind);
+        string light = market.Run.IsNight ? "夜间无阳光" : slice.Optics.ReceiverLit ? "东岸受光" : "东岸未受光";
+        Write(light, 970, 484, 17, Sunny);
+        Write($"上车按 G · 单程耗水 {MarketPlay2D.ShuttleWaterCost}", 970, 519, 16, Muted);
     }
 
     private void DrawGuide(float y, string text)
@@ -238,6 +303,7 @@ public partial class TowerView : Node2D
         DrawCircle(new Vector2(carrier.Position.X + 11f, carrier.End.Y + 3f), 4f, dock);
         DrawCircle(new Vector2(carrier.End.X - 11f, carrier.End.Y + 3f), 4f, dock);
 
+        if (slice.IsMarketActive) return;
         Rect2 weight = new(center + 7f, carrier.End.Y + 14f, 20f, 24f);
         DrawLine(new Vector2(weight.GetCenter().X, carrier.End.Y), new Vector2(weight.GetCenter().X, weight.Position.Y), Line, 2f);
         if (slice.CargoPhase == CargoPhase.Loading && slice.Optics.ReceiverLit && state.DockedPort == Port.East)

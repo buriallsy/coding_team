@@ -22,8 +22,11 @@ public partial class TowerSlice : Node2D
     internal SunCourtOptics2D Optics { get; private set; } = null!;
     internal CargoTrack2D CargoTrack { get; private set; } = null!;
     internal TowerSessionOverlay Overlay { get; private set; } = null!;
+    internal MarketPlay2D? Market { get; private set; }
+    internal bool IsMarketActive => Market is { Run.Phase: not MarketPhase.Tutorial };
     internal TowerScreen Screen { get; private set; }
     internal TowerState State => mechanism.State;
+    internal bool TrySpendWater(float amount) => mechanism.TrySpendWater(amount);
     internal Weather SelectedWeather { get; private set; } = Weather.Rain;
     internal bool ReachedSunCourt => route.ReachedSunCourt;
     internal bool Completed => route.Completed;
@@ -48,6 +51,7 @@ public partial class TowerSlice : Node2D
         get
         {
             if (time < messageUntil) return message;
+            if (IsMarketActive) return Market!.Hint;
             if (cargo.Phase == CargoPhase.Delivered) return "花庭已收货 · 交付 1/1 · R 重新开始";
             if (cargo.Phase == CargoPhase.Travelling) return "货车跨谷中 · 站稳等到站";
             if (cargo.Phase == CargoPhase.Arrived) return AtDeliveryStation
@@ -82,14 +86,18 @@ public partial class TowerSlice : Node2D
         Overlay.Accepted += AcceptScreen;
 
         string[] arguments = OS.GetCmdlineUserArgs();
+        if (Array.IndexOf(arguments, "--verify") < 0 && Array.IndexOf(arguments, "--tutorial-only") < 0)
+            Market = new MarketPlay2D(this);
         SetScreen(Array.IndexOf(arguments, "--skip-intro") >= 0 ? TowerScreen.Playing : TowerScreen.Intro);
         if (Array.IndexOf(arguments, "--verify") >= 0)
             new TowerRouteCheck(this).Run();
+        else if (Array.IndexOf(arguments, "--verify-market") >= 0)
+            new MarketRouteCheck(this).RunCheck();
     }
 
     public override void _PhysicsProcess(double delta)
     {
-        if (Screen != TowerScreen.Intro && Input.IsActionJustPressed("reset_slice"))
+        if (!IsMarketActive && Screen != TowerScreen.Intro && Input.IsActionJustPressed("reset_slice"))
         {
             ResetSlice();
             return;
@@ -102,11 +110,27 @@ public partial class TowerSlice : Node2D
         }
 
         float step = (float)delta;
+        MarketPlay2D? play = IsMarketActive ? Market : null;
+        if (play != null && !play.Run.IsExploring)
+        {
+            play.TickClock(step);
+            return;
+        }
+
         time += step;
         ReadCommands();
         mechanism.Tick(step);
         Rig.Synchronize(mechanism.State);
-        Optics.Tick(mechanism.Heading);
+        Optics.Tick(mechanism.Heading, sunlightAvailable: play == null || !play.Run.IsNight);
+        if (play != null)
+        {
+            play.TickExploration(step);
+            Player.Step(play.ShuttleMoving ? 0f : Input.GetAxis("walk_left", "walk_right"), step);
+            TrackPlayer();
+            play.TickClock(step);
+            return;
+        }
+
         cargo.Tick(step, mechanism, Optics.ReceiverLit);
         ReadCargoCommand();
         if (Screen == TowerScreen.Finished) return;
@@ -151,6 +175,17 @@ public partial class TowerSlice : Node2D
         TurnDirection direction = reverseCast ? TurnDirection.Counterclockwise : TurnDirection.Clockwise;
         LastResult = cast ? mechanism.Cast(SelectedWeather, DoorwayOccupied, direction)
             : mechanism.ToggleDrain(DoorwayOccupied);
+        if (Market is { Run.IsExploring: true } play && cast && SelectedWeather == Weather.Rain
+            && LastResult is MechanismResult.Applied or MechanismResult.Full)
+        {
+            play.Raining = true;
+            play.Say("降雨持续影响资源 · 在中央按 Q 收回");
+            if (LastResult == MechanismResult.Full)
+            {
+                messageUntil = 0f;
+                return;
+            }
+        }
         if (LastResult == MechanismResult.Applied)
         {
             messageUntil = 0f;
@@ -199,6 +234,11 @@ public partial class TowerSlice : Node2D
 
     private void CastAtSolarStation(bool reverseCast)
     {
+        if (Market is { Run.IsNight: true } play && SelectedWeather == Weather.Sunny)
+        {
+            play.Say("夜间没有阳光 · 仍可用风和雨");
+            return;
+        }
         if (SelectedWeather == Weather.Wind) Optics.AimWithWind(!reverseCast);
         else if (SelectedWeather == Weather.Sunny && !reverseCast) Optics.ClearSky();
         else
@@ -222,6 +262,11 @@ public partial class TowerSlice : Node2D
             return;
         }
 
+        if (Market is { Run.IsExploring: true } play && AtStation && play.Raining)
+        {
+            play.Raining = false;
+            play.Say("已收回降雨");
+        }
         if (mechanism.ActiveWeather == Weather.None) return;
         mechanism.Recall();
         Say("塔台天气已收回 · 已存水和当前朝向保留");
@@ -259,24 +304,37 @@ public partial class TowerSlice : Node2D
         }
 
         if (feet.Y - lastGroundY <= FallDistance && feet.Y <= 690f) return;
-        Vector2 recovery = cargo.Phase is CargoPhase.Travelling or CargoPhase.Arrived or CargoPhase.Delivered
+        Vector2 recovery = IsMarketActive && Market!.ShuttleMoving ? CargoTrack.SafeFeet
+            : cargo.Phase is CargoPhase.Travelling or CargoPhase.Arrived or CargoPhase.Delivered
             ? CargoTrack.SafeFeet : deckCheckpoint ? Rig.Station + Vector2.Up : Rig.Spawn;
         Player.Respawn(recovery);
         lastGroundY = Player.Feet.Y;
         Recoveries++;
+        if (IsMarketActive) Market!.Say("失足，已返回安全平台");
         Say("失足 · 已回到最近到达的安全平台");
     }
 
-    private void ResetSlice()
+    internal void ResetForMarket() => ResetSlice(marketStart: true);
+
+    internal void ReturnToStore()
+    {
+        Player.Respawn(Market!.Store + Vector2.Up);
+        lastGroundY = Player.Feet.Y;
+        deckCheckpoint = true;
+    }
+
+    private void ResetSlice(bool marketStart = false)
     {
         mechanism.Reset();
         cargo.Reset();
         Rig.Synchronize(mechanism.State);
         CargoTrack.Synchronize(cargo.TravelProgress);
         Optics.Reset();
-        Player.Respawn(Rig.Spawn);
+        // The lift marker can still be at the old height until the physics server applies the reset.
+        Vector2 start = marketStart ? new Vector2(Market!.Store.X, Rig.EntryFloor.Position.Y - 1f) : Rig.Spawn;
+        Player.Respawn(start);
         lastGroundY = Rig.EntryFloor.Position.Y;
-        deckCheckpoint = false;
+        deckCheckpoint = marketStart;
         route.Reset();
         Recoveries = 0;
         SelectedWeather = Weather.Rain;
@@ -289,13 +347,14 @@ public partial class TowerSlice : Node2D
     private void AcceptScreen()
     {
         if (Screen == TowerScreen.Intro) SetScreen(TowerScreen.Playing);
+        else if (Screen == TowerScreen.Finished && Market != null) Market.BeginRun();
         else if (Screen == TowerScreen.Finished) ResetSlice();
     }
 
     private void SetScreen(TowerScreen screen)
     {
         Screen = screen;
-        Overlay.Present(screen, DeliveredCount);
+        Overlay.Present(screen, DeliveredCount, tutorial: Market != null);
     }
 
     private void Say(string text)
