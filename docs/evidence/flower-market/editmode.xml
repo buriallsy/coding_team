@@ -1,0 +1,822 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="122" result="Passed" total="122" passed="122" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-11-11 10:20:22Z" end-time="2026-11-11 10:20:22Z" duration="0.2344282">
+  <test-suite type="TestSuite" id="1000" name="借晴 · 天井跨谷" fullname="借晴 · 天井跨谷" runstate="Runnable" testcasecount="122" result="Passed" start-time="2026-11-11 10:20:22Z" end-time="2026-11-11 10:20:22Z" duration="0.234428" total="122" passed="122" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="EditMode" />
+    </properties>
+    <test-suite type="Assembly" id="1146" name="BorrowingSun.Tests.dll" fullname="unity_prototype/BorrowingSun/Library/ScriptAssemblies/BorrowingSun.Tests.dll" runstate="Runnable" testcasecount="122" result="Passed" start-time="2026-11-11 10:20:22Z" end-time="2026-11-11 10:20:22Z" duration="0.231425" total="122" passed="122" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="28737" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="EditMode" />
+        <property name="EditorOnly" value="True" />
+      </properties>
+      <test-suite type="TestSuite" id="1147" name="BorrowingSun" fullname="BorrowingSun" runstate="Runnable" testcasecount="122" result="Passed" start-time="2026-11-11 10:20:22Z" end-time="2026-11-11 10:20:22Z" duration="0.231317" total="122" passed="122" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-suite type="TestSuite" id="1148" name="Tests" fullname="BorrowingSun.Tests" runstate="Runnable" testcasecount="122" result="Passed" start-time="2026-11-11 10:20:22Z" end-time="2026-11-11 10:20:22Z" duration="0.231116" total="122" passed="122" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-suite type="TestFixture" id="1002" name="BorrowedRainStateTests" fullname="BorrowingSun.Tests.BorrowedRainStateTests" classname="BorrowingSun.Tests.BorrowedRainStateTests" runstate="Runnable" testcasecount="12" result="Passed" start-time="2026-11-11 10:20:22Z" end-time="2026-11-11 10:20:22Z" duration="0.015087" total="12" passed="12" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-case id="1011" name="CartParkedOnBCanDescendAndBeRestoredWithoutReset" fullname="BorrowingSun.Tests.BorrowedRainStateTests.CartParkedOnBCanDescendAndBeRestoredWithoutReset" methodname="CartParkedOnBCanDescendAndBeRestoredWithoutReset" classname="BorrowingSun.Tests.BorrowedRainStateTests" runstate="Runnable" seed="168616713" result="Passed" start-time="2026-11-11 10:20:22Z" end-time="2026-11-11 10:20:22Z" duration="0.005914" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1012" name="CrossingLocksWaterCardAndSecondMoveUntilAnimationCompletes" fullname="BorrowingSun.Tests.BorrowedRainStateTests.CrossingLocksWaterCardAndSecondMoveUntilAnimationCompletes" methodname="CrossingLocksWaterCardAndSecondMoveUntilAnimationCompletes" classname="BorrowingSun.Tests.BorrowedRainStateTests" runstate="Runnable" seed="2023103682" result="Passed" start-time="2026-11-11 10:20:22Z" end-time="2026-11-11 10:20:22Z" duration="0.000365" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1009" name="DrainingBDoesNotEraseAAndCanBeRepairedWithExistingRainCard" fullname="BorrowingSun.Tests.BorrowedRainStateTests.DrainingBDoesNotEraseAAndCanBeRepairedWithExistingRainCard" methodname="DrainingBDoesNotEraseAAndCanBeRepairedWithExistingRainCard" classname="BorrowingSun.Tests.BorrowedRainStateTests" runstate="Runnable" seed="585332505" result="Passed" start-time="2026-11-11 10:20:22Z" end-time="2026-11-11 10:20:22Z" duration="0.000202" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1014" name="InvalidInputDoesNotCorruptWaterOrCardOwnership" fullname="BorrowingSun.Tests.BorrowedRainStateTests.InvalidInputDoesNotCorruptWaterOrCardOwnership" methodname="InvalidInputDoesNotCorruptWaterOrCardOwnership" classname="BorrowingSun.Tests.BorrowedRainStateTests" runstate="Runnable" seed="1202663349" result="Passed" start-time="2026-11-11 10:20:22Z" end-time="2026-11-11 10:20:22Z" duration="0.000107" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1008" name="LoweringAWhileRemoteRainRunsDisconnectsFeedButPreservesB" fullname="BorrowingSun.Tests.BorrowedRainStateTests.LoweringAWhileRemoteRainRunsDisconnectsFeedButPreservesB" methodname="LoweringAWhileRemoteRainRunsDisconnectsFeedButPreservesB" classname="BorrowingSun.Tests.BorrowedRainStateTests" runstate="Runnable" seed="1972129957" result="Passed" start-time="2026-11-11 10:20:22Z" end-time="2026-11-11 10:20:22Z" duration="0.000108" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1003" name="LowGutterSendsRemoteRainToWasteWithoutFillingEitherBasin" fullname="BorrowingSun.Tests.BorrowedRainStateTests.LowGutterSendsRemoteRainToWasteWithoutFillingEitherBasin" methodname="LowGutterSendsRemoteRainToWasteWithoutFillingEitherBasin" classname="BorrowingSun.Tests.BorrowedRainStateTests" runstate="Runnable" seed="1398551453" result="Passed" start-time="2026-11-11 10:20:22Z" end-time="2026-11-11 10:20:22Z" duration="0.000089" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1007" name="MatureRouteNeedsALowBHighAndReclaimedCard" fullname="BorrowingSun.Tests.BorrowedRainStateTests.MatureRouteNeedsALowBHighAndReclaimedCard" methodname="MatureRouteNeedsALowBHighAndReclaimedCard" classname="BorrowingSun.Tests.BorrowedRainStateTests" runstate="Runnable" seed="238152253" result="Passed" start-time="2026-11-11 10:20:22Z" end-time="2026-11-11 10:20:22Z" duration="0.000238" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1010" name="MidHeightCannotBeCrossedEvenWhenWaterHasStopped" fullname="BorrowingSun.Tests.BorrowedRainStateTests.MidHeightCannotBeCrossedEvenWhenWaterHasStopped" methodname="MidHeightCannotBeCrossedEvenWhenWaterHasStopped" classname="BorrowingSun.Tests.BorrowedRainStateTests" runstate="Runnable" seed="1865309911" result="Passed" start-time="2026-11-11 10:20:22Z" end-time="2026-11-11 10:20:22Z" duration="0.000208" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1004" name="OnlyOneCardCanBeInsertedAndItCannotBeRecalledFromOtherStation" fullname="BorrowingSun.Tests.BorrowedRainStateTests.OnlyOneCardCanBeInsertedAndItCannotBeRecalledFromOtherStation" methodname="OnlyOneCardCanBeInsertedAndItCannotBeRecalledFromOtherStation" classname="BorrowingSun.Tests.BorrowedRainStateTests" runstate="Runnable" seed="1302072829" result="Passed" start-time="2026-11-11 10:20:22Z" end-time="2026-11-11 10:20:22Z" duration="0.000170" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1005" name="RainCardTransferPreservesAAndDoesNotItselfFillB" fullname="BorrowingSun.Tests.BorrowedRainStateTests.RainCardTransferPreservesAAndDoesNotItselfFillB" methodname="RainCardTransferPreservesAAndDoesNotItselfFillB" classname="BorrowingSun.Tests.BorrowedRainStateTests" runstate="Runnable" seed="1672361921" result="Passed" start-time="2026-11-11 10:20:22Z" end-time="2026-11-11 10:20:22Z" duration="0.001159" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1013" name="ReversedFinalRouteRemainsConnectedAndResetCancelsTransit" fullname="BorrowingSun.Tests.BorrowedRainStateTests.ReversedFinalRouteRemainsConnectedAndResetCancelsTransit" methodname="ReversedFinalRouteRemainsConnectedAndResetCancelsTransit" classname="BorrowingSun.Tests.BorrowedRainStateTests" runstate="Runnable" seed="1734052643" result="Passed" start-time="2026-11-11 10:20:22Z" end-time="2026-11-11 10:20:22Z" duration="0.000205" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1006" name="StoppingRemoteRainPreservesPartialBWaterAndCanResume" fullname="BorrowingSun.Tests.BorrowedRainStateTests.StoppingRemoteRainPreservesPartialBWaterAndCanResume" methodname="StoppingRemoteRainPreservesPartialBWaterAndCanResume" classname="BorrowingSun.Tests.BorrowedRainStateTests" runstate="Runnable" seed="726494029" result="Passed" start-time="2026-11-11 10:20:22Z" end-time="2026-11-11 10:20:22Z" duration="0.000086" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+          </test-suite>
+          <test-suite type="TestFixture" id="1015" name="CourtPlayerExternalMotionTests" fullname="BorrowingSun.Tests.CourtPlayerExternalMotionTests" classname="BorrowingSun.Tests.CourtPlayerExternalMotionTests" runstate="Runnable" testcasecount="3" result="Passed" start-time="2026-11-11 10:20:22Z" end-time="2026-11-11 10:20:22Z" duration="0.006297" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-case id="1017" name="ExplicitTeleportReleasesExternalOwnershipAndRestoresNormalCapsule" fullname="BorrowingSun.Tests.CourtPlayerExternalMotionTests.ExplicitTeleportReleasesExternalOwnershipAndRestoresNormalCapsule" methodname="ExplicitTeleportReleasesExternalOwnershipAndRestoresNormalCapsule" classname="BorrowingSun.Tests.CourtPlayerExternalMotionTests" runstate="Runnable" seed="550528385" result="Passed" start-time="2026-11-11 10:20:22Z" end-time="2026-11-11 10:20:22Z" duration="0.003855" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1018" name="ExternalMovementRespectsShoulderFacingButFixedViewCanTurnWithTravel" fullname="BorrowingSun.Tests.CourtPlayerExternalMotionTests.ExternalMovementRespectsShoulderFacingButFixedViewCanTurnWithTravel" methodname="ExternalMovementRespectsShoulderFacingButFixedViewCanTurnWithTravel" classname="BorrowingSun.Tests.CourtPlayerExternalMotionTests" runstate="Runnable" seed="2082703197" result="Passed" start-time="2026-11-11 10:20:22Z" end-time="2026-11-11 10:20:22Z" duration="0.000676" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1016" name="OnlyOneExternalOwnerCanMoveAndReleaseTheExistingCollisionBody" fullname="BorrowingSun.Tests.CourtPlayerExternalMotionTests.OnlyOneExternalOwnerCanMoveAndReleaseTheExistingCollisionBody" methodname="OnlyOneExternalOwnerCanMoveAndReleaseTheExistingCollisionBody" classname="BorrowingSun.Tests.CourtPlayerExternalMotionTests" runstate="Runnable" seed="1254729005" result="Passed" start-time="2026-11-11 10:20:22Z" end-time="2026-11-11 10:20:22Z" duration="0.000390" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+          </test-suite>
+          <test-suite type="TestFixture" id="1019" name="CourtPlayerViewFacingTests" fullname="BorrowingSun.Tests.CourtPlayerViewFacingTests" classname="BorrowingSun.Tests.CourtPlayerViewFacingTests" runstate="Runnable" testcasecount="4" result="Passed" start-time="2026-11-11 10:20:22Z" end-time="2026-11-11 10:20:22Z" duration="0.002788" total="4" passed="4" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-case id="1021" name="ClearAndReplayReleaseBindingWithoutOverwritingLegacyFacing" fullname="BorrowingSun.Tests.CourtPlayerViewFacingTests.ClearAndReplayReleaseBindingWithoutOverwritingLegacyFacing" methodname="ClearAndReplayReleaseBindingWithoutOverwritingLegacyFacing" classname="BorrowingSun.Tests.CourtPlayerViewFacingTests" runstate="Runnable" seed="879890460" result="Passed" start-time="2026-11-11 10:20:22Z" end-time="2026-11-11 10:20:22Z" duration="0.000669" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1023" name="InvalidHeadingReleasesBindingWithoutPoisoningCharacterFacing" fullname="BorrowingSun.Tests.CourtPlayerViewFacingTests.InvalidHeadingReleasesBindingWithoutPoisoningCharacterFacing" methodname="InvalidHeadingReleasesBindingWithoutPoisoningCharacterFacing" classname="BorrowingSun.Tests.CourtPlayerViewFacingTests" runstate="Runnable" seed="1546309617" result="Passed" start-time="2026-11-11 10:20:22Z" end-time="2026-11-11 10:20:22Z" duration="0.000220" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1020" name="PlatformRotationPreservesBoundHeadingAcrossWrappedYaw" fullname="BorrowingSun.Tests.CourtPlayerViewFacingTests.PlatformRotationPreservesBoundHeadingAcrossWrappedYaw" methodname="PlatformRotationPreservesBoundHeadingAcrossWrappedYaw" classname="BorrowingSun.Tests.CourtPlayerViewFacingTests" runstate="Runnable" seed="1226475613" result="Passed" start-time="2026-11-11 10:20:22Z" end-time="2026-11-11 10:20:22Z" duration="0.000486" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1022" name="SwimmingDoesNotAcquireViewBindingAndKeepsAnExistingBoundHeading" fullname="BorrowingSun.Tests.CourtPlayerViewFacingTests.SwimmingDoesNotAcquireViewBindingAndKeepsAnExistingBoundHeading" methodname="SwimmingDoesNotAcquireViewBindingAndKeepsAnExistingBoundHeading" classname="BorrowingSun.Tests.CourtPlayerViewFacingTests" runstate="Runnable" seed="1964201437" result="Passed" start-time="2026-11-11 10:20:22Z" end-time="2026-11-11 10:20:22Z" duration="0.000224" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+          </test-suite>
+          <test-suite type="TestFixture" id="1024" name="CourtStateTests" fullname="BorrowingSun.Tests.CourtStateTests" classname="BorrowingSun.Tests.CourtStateTests" runstate="Runnable" testcasecount="9" result="Passed" start-time="2026-11-11 10:20:22Z" end-time="2026-11-11 10:20:22Z" duration="0.004234" total="9" passed="9" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-case id="1031" name="BridgeParkingAndReverseTravelRemainRecoverable" fullname="BorrowingSun.Tests.CourtStateTests.BridgeParkingAndReverseTravelRemainRecoverable" methodname="BridgeParkingAndReverseTravelRemainRecoverable" classname="BorrowingSun.Tests.CourtStateTests" runstate="Runnable" seed="1245449345" result="Passed" start-time="2026-11-11 10:20:22Z" end-time="2026-11-11 10:20:22Z" duration="0.000440" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1029" name="CartMotionInterlocksBothWaterControlsAndCard" fullname="BorrowingSun.Tests.CourtStateTests.CartMotionInterlocksBothWaterControlsAndCard" methodname="CartMotionInterlocksBothWaterControlsAndCard" classname="BorrowingSun.Tests.CourtStateTests" runstate="Runnable" seed="344667235" result="Passed" start-time="2026-11-11 10:20:22Z" end-time="2026-11-11 10:20:22Z" duration="0.000111" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1026" name="DeliveryRequiresLiftParkLowerAndReclaim" fullname="BorrowingSun.Tests.CourtStateTests.DeliveryRequiresLiftParkLowerAndReclaim" methodname="DeliveryRequiresLiftParkLowerAndReclaim" classname="BorrowingSun.Tests.CourtStateTests" runstate="Runnable" seed="1098256391" result="Passed" start-time="2026-11-11 10:20:22Z" end-time="2026-11-11 10:20:22Z" duration="0.000155" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1033" name="InvalidTicksAndNonAdjacentMovementDoNotCorruptState" fullname="BorrowingSun.Tests.CourtStateTests.InvalidTicksAndNonAdjacentMovementDoNotCorruptState" methodname="InvalidTicksAndNonAdjacentMovementDoNotCorruptState" classname="BorrowingSun.Tests.CourtStateTests" runstate="Runnable" seed="1335803468" result="Passed" start-time="2026-11-11 10:20:22Z" end-time="2026-11-11 10:20:22Z" duration="0.000092" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1030" name="MistakenEarlyDrainCanBeRecoveredWithoutReset" fullname="BorrowingSun.Tests.CourtStateTests.MistakenEarlyDrainCanBeRecoveredWithoutReset" methodname="MistakenEarlyDrainCanBeRecoveredWithoutReset" classname="BorrowingSun.Tests.CourtStateTests" runstate="Runnable" seed="1606018937" result="Passed" start-time="2026-11-11 10:20:22Z" end-time="2026-11-11 10:20:22Z" duration="0.000081" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1027" name="RemovingRainCardStopsRainButPreservesStoredWater" fullname="BorrowingSun.Tests.CourtStateTests.RemovingRainCardStopsRainButPreservesStoredWater" methodname="RemovingRainCardStopsRainButPreservesStoredWater" classname="BorrowingSun.Tests.CourtStateTests" runstate="Runnable" seed="137745006" result="Passed" start-time="2026-11-11 10:20:22Z" end-time="2026-11-11 10:20:22Z" duration="0.000100" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1032" name="ResetCancelsAnInFlightCartAndClearsAllControls" fullname="BorrowingSun.Tests.CourtStateTests.ResetCancelsAnInFlightCartAndClearsAllControls" methodname="ResetCancelsAnInFlightCartAndClearsAllControls" classname="BorrowingSun.Tests.CourtStateTests" runstate="Runnable" seed="294271726" result="Passed" start-time="2026-11-11 10:20:22Z" end-time="2026-11-11 10:20:22Z" duration="0.000185" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1028" name="RisingAndDescendingPreventCrossingSeams" fullname="BorrowingSun.Tests.CourtStateTests.RisingAndDescendingPreventCrossingSeams" methodname="RisingAndDescendingPreventCrossingSeams" classname="BorrowingSun.Tests.CourtStateTests" runstate="Runnable" seed="1814150604" result="Passed" start-time="2026-11-11 10:20:22Z" end-time="2026-11-11 10:20:22Z" duration="0.000101" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1025" name="SameWorldHeightHasDifferentSupportAtHighAndLowWater" fullname="BorrowingSun.Tests.CourtStateTests.SameWorldHeightHasDifferentSupportAtHighAndLowWater" methodname="SameWorldHeightHasDifferentSupportAtHighAndLowWater" classname="BorrowingSun.Tests.CourtStateTests" runstate="Runnable" seed="1770789905" result="Passed" start-time="2026-11-11 10:20:22Z" end-time="2026-11-11 10:20:22Z" duration="0.000253" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+          </test-suite>
+          <test-suite type="TestFixture" id="1034" name="FlowerMarketRunTests" fullname="BorrowingSun.Tests.FlowerMarketRunTests" classname="BorrowingSun.Tests.FlowerMarketRunTests" runstate="Runnable" testcasecount="5" result="Passed" start-time="2026-11-11 10:20:22Z" end-time="2026-11-11 10:20:22Z" duration="0.002581" total="5" passed="5" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-case id="1035" name="CommandsRequireStartAndRepeatedStartKeepsStock" fullname="BorrowingSun.Tests.FlowerMarketRunTests.CommandsRequireStartAndRepeatedStartKeepsStock" methodname="CommandsRequireStartAndRepeatedStartKeepsStock" classname="BorrowingSun.Tests.FlowerMarketRunTests" runstate="Runnable" seed="590568901" result="Passed" start-time="2026-11-11 10:20:22Z" end-time="2026-11-11 10:20:22Z" duration="0.000341" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-suite type="ParameterizedMethod" id="1039" name="EachRecipeConsumesItsIngredientsAndPaysExactlyOnce" fullname="BorrowingSun.Tests.FlowerMarketRunTests.EachRecipeConsumesItsIngredientsAndPaysExactlyOnce" classname="BorrowingSun.Tests.FlowerMarketRunTests" runstate="Runnable" testcasecount="2" result="Passed" start-time="2026-11-11 10:20:22Z" end-time="2026-11-11 10:20:22Z" duration="0.000756" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1037" name="EachRecipeConsumesItsIngredientsAndPaysExactlyOnce(MushroomBento,2,0,3.0f,12)" fullname="BorrowingSun.Tests.FlowerMarketRunTests.EachRecipeConsumesItsIngredientsAndPaysExactlyOnce(MushroomBento,2,0,3.0f,12)" methodname="EachRecipeConsumesItsIngredientsAndPaysExactlyOnce" classname="BorrowingSun.Tests.FlowerMarketRunTests" runstate="Runnable" seed="34956237" result="Passed" start-time="2026-11-11 10:20:22Z" end-time="2026-11-11 10:20:22Z" duration="0.000336" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1038" name="EachRecipeConsumesItsIngredientsAndPaysExactlyOnce(FruitBento,1,1,4.0f,22)" fullname="BorrowingSun.Tests.FlowerMarketRunTests.EachRecipeConsumesItsIngredientsAndPaysExactlyOnce(FruitBento,1,1,4.0f,22)" methodname="EachRecipeConsumesItsIngredientsAndPaysExactlyOnce" classname="BorrowingSun.Tests.FlowerMarketRunTests" runstate="Runnable" seed="1122993464" result="Passed" start-time="2026-11-11 10:20:22Z" end-time="2026-11-11 10:20:22Z" duration="0.000068" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+            </test-suite>
+            <test-case id="1036" name="MissingIngredientDoesNotDebitAvailableStock" fullname="BorrowingSun.Tests.FlowerMarketRunTests.MissingIngredientDoesNotDebitAvailableStock" methodname="MissingIngredientDoesNotDebitAvailableStock" classname="BorrowingSun.Tests.FlowerMarketRunTests" runstate="Runnable" seed="1795215762" result="Passed" start-time="2026-11-11 10:20:22Z" end-time="2026-11-11 10:20:22Z" duration="0.000130" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1040" name="NextDayKeepsStockAndCashAndResetClearsRun" fullname="BorrowingSun.Tests.FlowerMarketRunTests.NextDayKeepsStockAndCashAndResetClearsRun" methodname="NextDayKeepsStockAndCashAndResetClearsRun" classname="BorrowingSun.Tests.FlowerMarketRunTests" runstate="Runnable" seed="512049597" result="Passed" start-time="2026-11-11 10:20:22Z" end-time="2026-11-11 10:20:22Z" duration="0.000575" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+          </test-suite>
+          <test-suite type="TestFixture" id="1041" name="RainCargoStateTests" fullname="BorrowingSun.Tests.RainCargoStateTests" classname="BorrowingSun.Tests.RainCargoStateTests" runstate="Runnable" testcasecount="13" result="Passed" start-time="2026-11-11 10:20:22Z" end-time="2026-11-11 10:20:22Z" duration="0.010850" total="13" passed="13" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-case id="1053" name="CartTransitLocksWaterAndCardChangesUntilItsArrival" fullname="BorrowingSun.Tests.RainCargoStateTests.CartTransitLocksWaterAndCardChangesUntilItsArrival" methodname="CartTransitLocksWaterAndCardChangesUntilItsArrival" classname="BorrowingSun.Tests.RainCargoStateTests" runstate="Runnable" seed="557675486" result="Passed" start-time="2026-11-11 10:20:22Z" end-time="2026-11-11 10:20:22Z" duration="0.000515" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1052" name="DeliveryNeedsTheCardButDoesNotAddAnUnrelatedRestorationTask" fullname="BorrowingSun.Tests.RainCargoStateTests.DeliveryNeedsTheCardButDoesNotAddAnUnrelatedRestorationTask" methodname="DeliveryNeedsTheCardButDoesNotAddAnUnrelatedRestorationTask" classname="BorrowingSun.Tests.RainCargoStateTests" runstate="Runnable" seed="548166461" result="Passed" start-time="2026-11-11 10:20:22Z" end-time="2026-11-11 10:20:22Z" duration="0.000374" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1050" name="DrainedLiftCanBeRecoveredByReturningToReloadTheSameTank" fullname="BorrowingSun.Tests.RainCargoStateTests.DrainedLiftCanBeRecoveredByReturningToReloadTheSameTank" methodname="DrainedLiftCanBeRecoveredByReturningToReloadTheSameTank" classname="BorrowingSun.Tests.RainCargoStateTests" runstate="Runnable" seed="517180804" result="Passed" start-time="2026-11-11 10:20:22Z" end-time="2026-11-11 10:20:22Z" duration="0.000150" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1042" name="FullRouteCarriesStoredRainAwayFromItsSourceAndSpendsItOnTheLift" fullname="BorrowingSun.Tests.RainCargoStateTests.FullRouteCarriesStoredRainAwayFromItsSourceAndSpendsItOnTheLift" methodname="FullRouteCarriesStoredRainAwayFromItsSourceAndSpendsItOnTheLift" classname="BorrowingSun.Tests.RainCargoStateTests" runstate="Runnable" seed="1411679705" result="Passed" start-time="2026-11-11 10:20:22Z" end-time="2026-11-11 10:20:22Z" duration="0.000409" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1054" name="InvalidInputsAreRejectedAndResetCancelsAnActiveTransfer" fullname="BorrowingSun.Tests.RainCargoStateTests.InvalidInputsAreRejectedAndResetCancelsAnActiveTransfer" methodname="InvalidInputsAreRejectedAndResetCancelsAnActiveTransfer" classname="BorrowingSun.Tests.RainCargoStateTests" runstate="Runnable" seed="116639293" result="Passed" start-time="2026-11-11 10:20:22Z" end-time="2026-11-11 10:20:22Z" duration="0.000229" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1049" name="LiftOnlyConnectsToTheFloorAtItsCurrentHeight" fullname="BorrowingSun.Tests.RainCargoStateTests.LiftOnlyConnectsToTheFloorAtItsCurrentHeight" methodname="LiftOnlyConnectsToTheFloorAtItsCurrentHeight" classname="BorrowingSun.Tests.RainCargoStateTests" runstate="Runnable" seed="1682051427" result="Passed" start-time="2026-11-11 10:20:22Z" end-time="2026-11-11 10:20:22Z" duration="0.000108" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1045" name="LoweringTheFillingDockCutsTheRainConnectionWithoutErasingStoredWater" fullname="BorrowingSun.Tests.RainCargoStateTests.LoweringTheFillingDockCutsTheRainConnectionWithoutErasingStoredWater" methodname="LoweringTheFillingDockCutsTheRainConnectionWithoutErasingStoredWater" classname="BorrowingSun.Tests.RainCargoStateTests" runstate="Runnable" seed="1296684961" result="Passed" start-time="2026-11-11 10:20:22Z" end-time="2026-11-11 10:20:22Z" duration="0.000150" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1051" name="OnlyTheOneInsertedRainCardCanBeTakenOrOperated" fullname="BorrowingSun.Tests.RainCargoStateTests.OnlyTheOneInsertedRainCardCanBeTakenOrOperated" methodname="OnlyTheOneInsertedRainCardCanBeTakenOrOperated" classname="BorrowingSun.Tests.RainCargoStateTests" runstate="Runnable" seed="829513887" result="Passed" start-time="2026-11-11 10:20:22Z" end-time="2026-11-11 10:20:22Z" duration="0.000096" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1044" name="PartialTankSurvivesRemovingTheCardAndCanResumeFilling" fullname="BorrowingSun.Tests.RainCargoStateTests.PartialTankSurvivesRemovingTheCardAndCanResumeFilling" methodname="PartialTankSurvivesRemovingTheCardAndCanResumeFilling" classname="BorrowingSun.Tests.RainCargoStateTests" runstate="Runnable" seed="314663251" result="Passed" start-time="2026-11-11 10:20:22Z" end-time="2026-11-11 10:20:22Z" duration="0.000230" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1043" name="RainMissesTheTankWhenTheDockIsLowOrTheCartIsAbsent" fullname="BorrowingSun.Tests.RainCargoStateTests.RainMissesTheTankWhenTheDockIsLowOrTheCartIsAbsent" methodname="RainMissesTheTankWhenTheDockIsLowOrTheCartIsAbsent" classname="BorrowingSun.Tests.RainCargoStateTests" runstate="Runnable" seed="745794164" result="Passed" start-time="2026-11-11 10:20:22Z" end-time="2026-11-11 10:20:22Z" duration="0.000178" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1046" name="TransferConservesWaterAtEveryStepAndLocksConflictingOperations" fullname="BorrowingSun.Tests.RainCargoStateTests.TransferConservesWaterAtEveryStepAndLocksConflictingOperations" methodname="TransferConservesWaterAtEveryStepAndLocksConflictingOperations" classname="BorrowingSun.Tests.RainCargoStateTests" runstate="Runnable" seed="462033983" result="Passed" start-time="2026-11-11 10:20:22Z" end-time="2026-11-11 10:20:22Z" duration="0.000270" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1048" name="TransferFinishesAndConservesItsContentsAcrossDifferentTickSizes" fullname="BorrowingSun.Tests.RainCargoStateTests.TransferFinishesAndConservesItsContentsAcrossDifferentTickSizes" methodname="TransferFinishesAndConservesItsContentsAcrossDifferentTickSizes" classname="BorrowingSun.Tests.RainCargoStateTests" runstate="Runnable" seed="1936016304" result="Passed" start-time="2026-11-11 10:20:22Z" end-time="2026-11-11 10:20:22Z" duration="0.005008" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1047" name="WrongDockAndIncompleteTankCannotStartTheLift" fullname="BorrowingSun.Tests.RainCargoStateTests.WrongDockAndIncompleteTankCannotStartTheLift" methodname="WrongDockAndIncompleteTankCannotStartTheLift" classname="BorrowingSun.Tests.RainCargoStateTests" runstate="Runnable" seed="299583718" result="Passed" start-time="2026-11-11 10:20:22Z" end-time="2026-11-11 10:20:22Z" duration="0.000130" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+          </test-suite>
+          <test-suite type="TestFixture" id="1055" name="SkywellBoatJourneyTests" fullname="BorrowingSun.Tests.SkywellBoatJourneyTests" classname="BorrowingSun.Tests.SkywellBoatJourneyTests" runstate="Runnable" testcasecount="17" result="Passed" start-time="2026-11-11 10:20:22Z" end-time="2026-11-11 10:20:22Z" duration="0.034818" total="17" passed="17" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-case id="1072" name="AutomaticLadderGrabRespectsWeatherAndObservationModalFrames" fullname="BorrowingSun.Tests.SkywellBoatJourneyTests.AutomaticLadderGrabRespectsWeatherAndObservationModalFrames" methodname="AutomaticLadderGrabRespectsWeatherAndObservationModalFrames" classname="BorrowingSun.Tests.SkywellBoatJourneyTests" runstate="Runnable" seed="1463811479" result="Passed" start-time="2026-11-11 10:20:22Z" end-time="2026-11-11 10:20:22Z" duration="0.007496" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1069" name="BoardingResetReleasesMovementAndRestoresOriginalPickups" fullname="BorrowingSun.Tests.SkywellBoatJourneyTests.BoardingResetReleasesMovementAndRestoresOriginalPickups" methodname="BoardingResetReleasesMovementAndRestoresOriginalPickups" classname="BorrowingSun.Tests.SkywellBoatJourneyTests" runstate="Runnable" seed="1918538816" result="Passed" start-time="2026-11-11 10:20:22Z" end-time="2026-11-11 10:20:22Z" duration="0.002468" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1068" name="BoatBoardingRejectsFarPositionAndPhysicalWallAcrossMountPath" fullname="BorrowingSun.Tests.SkywellBoatJourneyTests.BoatBoardingRejectsFarPositionAndPhysicalWallAcrossMountPath" methodname="BoatBoardingRejectsFarPositionAndPhysicalWallAcrossMountPath" classname="BorrowingSun.Tests.SkywellBoatJourneyTests" runstate="Runnable" seed="1164431861" result="Passed" start-time="2026-11-11 10:20:22Z" end-time="2026-11-11 10:20:22Z" duration="0.003901" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1061" name="FootprintBeyondDryApronDoesNotExemptTheOrdinaryFallPlane" fullname="BorrowingSun.Tests.SkywellBoatJourneyTests.FootprintBeyondDryApronDoesNotExemptTheOrdinaryFallPlane" methodname="FootprintBeyondDryApronDoesNotExemptTheOrdinaryFallPlane" classname="BorrowingSun.Tests.SkywellBoatJourneyTests" runstate="Runnable" seed="1996321526" result="Passed" start-time="2026-11-11 10:20:22Z" end-time="2026-11-11 10:20:22Z" duration="0.001246" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1062" name="LadderAlignmentMovesGraduallyAndPhysicalBlockReleasesControlInPlace" fullname="BorrowingSun.Tests.SkywellBoatJourneyTests.LadderAlignmentMovesGraduallyAndPhysicalBlockReleasesControlInPlace" methodname="LadderAlignmentMovesGraduallyAndPhysicalBlockReleasesControlInPlace" classname="BorrowingSun.Tests.SkywellBoatJourneyTests" runstate="Runnable" seed="1860900271" result="Passed" start-time="2026-11-11 10:20:22Z" end-time="2026-11-11 10:20:22Z" duration="0.003217" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1070" name="LadderOnlyGrabsFromPhysicalFrontWithTowardLadderWAndNeverE" fullname="BorrowingSun.Tests.SkywellBoatJourneyTests.LadderOnlyGrabsFromPhysicalFrontWithTowardLadderWAndNeverE" methodname="LadderOnlyGrabsFromPhysicalFrontWithTowardLadderWAndNeverE" classname="BorrowingSun.Tests.SkywellBoatJourneyTests" runstate="Runnable" seed="305429247" result="Passed" start-time="2026-11-11 10:20:22Z" end-time="2026-11-11 10:20:22Z" duration="0.002729" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1071" name="LadderTopAcceptsSForDescentAndDoesNotRearmAfterLandingUntilRelease" fullname="BorrowingSun.Tests.SkywellBoatJourneyTests.LadderTopAcceptsSForDescentAndDoesNotRearmAfterLandingUntilRelease" methodname="LadderTopAcceptsSForDescentAndDoesNotRearmAfterLandingUntilRelease" classname="BorrowingSun.Tests.SkywellBoatJourneyTests" runstate="Runnable" seed="1646955126" result="Passed" start-time="2026-11-11 10:20:22Z" end-time="2026-11-11 10:20:22Z" duration="0.002388" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1058" name="MissingPhysicalDeckCannotStartBoardingOrGrantSunny" fullname="BorrowingSun.Tests.SkywellBoatJourneyTests.MissingPhysicalDeckCannotStartBoardingOrGrantSunny" methodname="MissingPhysicalDeckCannotStartBoardingOrGrantSunny" classname="BorrowingSun.Tests.SkywellBoatJourneyTests" runstate="Runnable" seed="1187958591" result="Passed" start-time="2026-11-11 10:20:22Z" end-time="2026-11-11 10:20:22Z" duration="0.000542" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-suite type="ParameterizedMethod" id="1067" name="NearbyBoatEBoardsEverySideWithPhysicalMotionAndNoProgressGrant" fullname="BorrowingSun.Tests.SkywellBoatJourneyTests.NearbyBoatEBoardsEverySideWithPhysicalMotionAndNoProgressGrant" classname="BorrowingSun.Tests.SkywellBoatJourneyTests" runstate="Runnable" testcasecount="4" result="Passed" start-time="2026-11-11 10:20:22Z" end-time="2026-11-11 10:20:22Z" duration="0.005689" total="4" passed="4" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1063" name="NearbyBoatEBoardsEverySideWithPhysicalMotionAndNoProgressGrant(1,0)" fullname="BorrowingSun.Tests.SkywellBoatJourneyTests.NearbyBoatEBoardsEverySideWithPhysicalMotionAndNoProgressGrant(1,0)" methodname="NearbyBoatEBoardsEverySideWithPhysicalMotionAndNoProgressGrant" classname="BorrowingSun.Tests.SkywellBoatJourneyTests" runstate="Runnable" seed="748977557" result="Passed" start-time="2026-11-11 10:20:22Z" end-time="2026-11-11 10:20:22Z" duration="0.001004" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1064" name="NearbyBoatEBoardsEverySideWithPhysicalMotionAndNoProgressGrant(-1,0)" fullname="BorrowingSun.Tests.SkywellBoatJourneyTests.NearbyBoatEBoardsEverySideWithPhysicalMotionAndNoProgressGrant(-1,0)" methodname="NearbyBoatEBoardsEverySideWithPhysicalMotionAndNoProgressGrant" classname="BorrowingSun.Tests.SkywellBoatJourneyTests" runstate="Runnable" seed="1100086919" result="Passed" start-time="2026-11-11 10:20:22Z" end-time="2026-11-11 10:20:22Z" duration="0.000903" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1065" name="NearbyBoatEBoardsEverySideWithPhysicalMotionAndNoProgressGrant(0,1)" fullname="BorrowingSun.Tests.SkywellBoatJourneyTests.NearbyBoatEBoardsEverySideWithPhysicalMotionAndNoProgressGrant(0,1)" methodname="NearbyBoatEBoardsEverySideWithPhysicalMotionAndNoProgressGrant" classname="BorrowingSun.Tests.SkywellBoatJourneyTests" runstate="Runnable" seed="1404172835" result="Passed" start-time="2026-11-11 10:20:22Z" end-time="2026-11-11 10:20:22Z" duration="0.000666" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1066" name="NearbyBoatEBoardsEverySideWithPhysicalMotionAndNoProgressGrant(0,-1)" fullname="BorrowingSun.Tests.SkywellBoatJourneyTests.NearbyBoatEBoardsEverySideWithPhysicalMotionAndNoProgressGrant(0,-1)" methodname="NearbyBoatEBoardsEverySideWithPhysicalMotionAndNoProgressGrant" classname="BorrowingSun.Tests.SkywellBoatJourneyTests" runstate="Runnable" seed="230876048" result="Passed" start-time="2026-11-11 10:20:22Z" end-time="2026-11-11 10:20:22Z" duration="0.000653" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+            </test-suite>
+            <test-case id="1073" name="ObstacleEnteringBoardingPathCancelsInPlaceAndReturnsPlayerControl" fullname="BorrowingSun.Tests.SkywellBoatJourneyTests.ObstacleEnteringBoardingPathCancelsInPlaceAndReturnsPlayerControl" methodname="ObstacleEnteringBoardingPathCancelsInPlaceAndReturnsPlayerControl" classname="BorrowingSun.Tests.SkywellBoatJourneyTests" runstate="Runnable" seed="2070757895" result="Passed" start-time="2026-11-11 10:20:22Z" end-time="2026-11-11 10:20:22Z" duration="0.000959" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1060" name="RealBoatLipSupportsCapsuleBeforeCentreButClosedHullDoesNot" fullname="BorrowingSun.Tests.SkywellBoatJourneyTests.RealBoatLipSupportsCapsuleBeforeCentreButClosedHullDoesNot" methodname="RealBoatLipSupportsCapsuleBeforeCentreButClosedHullDoesNot" classname="BorrowingSun.Tests.SkywellBoatJourneyTests" runstate="Runnable" seed="553788761" result="Passed" start-time="2026-11-11 10:20:22Z" end-time="2026-11-11 10:20:22Z" duration="0.000660" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1059" name="RefugeRecoveryKeepsBothItemsButReplayRestoresPickupsAndBoat" fullname="BorrowingSun.Tests.SkywellBoatJourneyTests.RefugeRecoveryKeepsBothItemsButReplayRestoresPickupsAndBoat" methodname="RefugeRecoveryKeepsBothItemsButReplayRestoresPickupsAndBoat" classname="BorrowingSun.Tests.SkywellBoatJourneyTests" runstate="Runnable" seed="493738826" result="Passed" start-time="2026-11-11 10:20:22Z" end-time="2026-11-11 10:20:22Z" duration="0.000695" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1057" name="SunnyIsAvailableBeforePaddleButDoesNotLetBoatDepart" fullname="BorrowingSun.Tests.SkywellBoatJourneyTests.SunnyIsAvailableBeforePaddleButDoesNotLetBoatDepart" methodname="SunnyIsAvailableBeforePaddleButDoesNotLetBoatDepart" classname="BorrowingSun.Tests.SkywellBoatJourneyTests" runstate="Runnable" seed="493046817" result="Passed" start-time="2026-11-11 10:20:22Z" end-time="2026-11-11 10:20:22Z" duration="0.000392" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1056" name="SurfacePaddleDoesNotGrantSunnyAndBoatNeedsBothItems" fullname="BorrowingSun.Tests.SkywellBoatJourneyTests.SurfacePaddleDoesNotGrantSunnyAndBoatNeedsBothItems" methodname="SurfacePaddleDoesNotGrantSunnyAndBoatNeedsBothItems" classname="BorrowingSun.Tests.SkywellBoatJourneyTests" runstate="Runnable" seed="419027703" result="Passed" start-time="2026-11-11 10:20:22Z" end-time="2026-11-11 10:20:22Z" duration="0.000337" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+          </test-suite>
+          <test-suite type="TestFixture" id="1074" name="SkywellCloudRouteTests" fullname="BorrowingSun.Tests.SkywellCloudRouteTests" classname="BorrowingSun.Tests.SkywellCloudRouteTests" runstate="Runnable" testcasecount="9" result="Passed" start-time="2026-11-11 10:20:22Z" end-time="2026-11-11 10:20:22Z" duration="0.013858" total="9" passed="9" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-case id="1082" name="EndpointExitAcceptsARealMixedIslandPathSeamWithoutMakingThePathJumpable" fullname="BorrowingSun.Tests.SkywellCloudRouteTests.EndpointExitAcceptsARealMixedIslandPathSeamWithoutMakingThePathJumpable" methodname="EndpointExitAcceptsARealMixedIslandPathSeamWithoutMakingThePathJumpable" classname="BorrowingSun.Tests.SkywellCloudRouteTests" runstate="Runnable" seed="1435797997" result="Passed" start-time="2026-11-11 10:20:22Z" end-time="2026-11-11 10:20:22Z" duration="0.002002" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1084" name="EndpointExitRejectsARealHoleAndACloudSurfaceAtTheSeam" fullname="BorrowingSun.Tests.SkywellCloudRouteTests.EndpointExitRejectsARealHoleAndACloudSurfaceAtTheSeam" methodname="EndpointExitRejectsARealHoleAndACloudSurfaceAtTheSeam" classname="BorrowingSun.Tests.SkywellCloudRouteTests" runstate="Runnable" seed="1623568359" result="Passed" start-time="2026-11-11 10:20:22Z" end-time="2026-11-11 10:20:22Z" duration="0.002291" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1083" name="EndpointExitRejectsTriggersAirborneFeetAndNonEndpointLandings" fullname="BorrowingSun.Tests.SkywellCloudRouteTests.EndpointExitRejectsTriggersAirborneFeetAndNonEndpointLandings" methodname="EndpointExitRejectsTriggersAirborneFeetAndNonEndpointLandings" classname="BorrowingSun.Tests.SkywellCloudRouteTests" runstate="Runnable" seed="2115477791" result="Passed" start-time="2026-11-11 10:20:22Z" end-time="2026-11-11 10:20:22Z" duration="0.000774" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1080" name="FootprintUsesActualMeshAndRejectsItsVisibleHoleOrRim" fullname="BorrowingSun.Tests.SkywellCloudRouteTests.FootprintUsesActualMeshAndRejectsItsVisibleHoleOrRim" methodname="FootprintUsesActualMeshAndRejectsItsVisibleHoleOrRim" classname="BorrowingSun.Tests.SkywellCloudRouteTests" runstate="Runnable" seed="673092851" result="Passed" start-time="2026-11-11 10:20:22Z" end-time="2026-11-11 10:20:22Z" duration="0.001315" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1081" name="HumanActivationIsLocalToCloudsAndEndpointApronsAndStillRequiresEarnedUnlock" fullname="BorrowingSun.Tests.SkywellCloudRouteTests.HumanActivationIsLocalToCloudsAndEndpointApronsAndStillRequiresEarnedUnlock" methodname="HumanActivationIsLocalToCloudsAndEndpointApronsAndStillRequiresEarnedUnlock" classname="BorrowingSun.Tests.SkywellCloudRouteTests" runstate="Runnable" seed="780426456" result="Passed" start-time="2026-11-11 10:20:22Z" end-time="2026-11-11 10:20:22Z" duration="0.001107" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-suite type="ParameterizedMethod" id="1078" name="ReturnArcReachesItsRealLandingOnTheDescendingHalf" fullname="BorrowingSun.Tests.SkywellCloudRouteTests.ReturnArcReachesItsRealLandingOnTheDescendingHalf" classname="BorrowingSun.Tests.SkywellCloudRouteTests" runstate="Runnable" testcasecount="3" result="Passed" start-time="2026-11-11 10:20:22Z" end-time="2026-11-11 10:20:22Z" duration="0.003417" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1075" name="ReturnArcReachesItsRealLandingOnTheDescendingHalf(0.0f)" fullname="BorrowingSun.Tests.SkywellCloudRouteTests.ReturnArcReachesItsRealLandingOnTheDescendingHalf(0.0f)" methodname="ReturnArcReachesItsRealLandingOnTheDescendingHalf" classname="BorrowingSun.Tests.SkywellCloudRouteTests" runstate="Runnable" seed="1097776768" result="Passed" start-time="2026-11-11 10:20:22Z" end-time="2026-11-11 10:20:22Z" duration="0.001027" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1076" name="ReturnArcReachesItsRealLandingOnTheDescendingHalf(1.2f)" fullname="BorrowingSun.Tests.SkywellCloudRouteTests.ReturnArcReachesItsRealLandingOnTheDescendingHalf(1.2f)" methodname="ReturnArcReachesItsRealLandingOnTheDescendingHalf" classname="BorrowingSun.Tests.SkywellCloudRouteTests" runstate="Runnable" seed="269941514" result="Passed" start-time="2026-11-11 10:20:22Z" end-time="2026-11-11 10:20:22Z" duration="0.000214" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1077" name="ReturnArcReachesItsRealLandingOnTheDescendingHalf(-1.2f)" fullname="BorrowingSun.Tests.SkywellCloudRouteTests.ReturnArcReachesItsRealLandingOnTheDescendingHalf(-1.2f)" methodname="ReturnArcReachesItsRealLandingOnTheDescendingHalf" classname="BorrowingSun.Tests.SkywellCloudRouteTests" runstate="Runnable" seed="1456860665" result="Passed" start-time="2026-11-11 10:20:22Z" end-time="2026-11-11 10:20:22Z" duration="0.000427" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+            </test-suite>
+            <test-case id="1079" name="ReturnRejectsUnreachableGeometryAndInvalidPhysics" fullname="BorrowingSun.Tests.SkywellCloudRouteTests.ReturnRejectsUnreachableGeometryAndInvalidPhysics" methodname="ReturnRejectsUnreachableGeometryAndInvalidPhysics" classname="BorrowingSun.Tests.SkywellCloudRouteTests" runstate="Runnable" seed="1004557247" result="Passed" start-time="2026-11-11 10:20:22Z" end-time="2026-11-11 10:20:22Z" duration="0.000386" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+          </test-suite>
+          <test-suite type="TestFixture" id="1085" name="SkywellJumpAssistTests" fullname="BorrowingSun.Tests.SkywellJumpAssistTests" classname="BorrowingSun.Tests.SkywellJumpAssistTests" runstate="Runnable" testcasecount="6" result="Passed" start-time="2026-11-11 10:20:22Z" end-time="2026-11-11 10:20:22Z" duration="0.005067" total="6" passed="6" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-case id="1091" name="DirectionalStandingJumpHasReadableLaunchWithoutChangingSpeedLimit" fullname="BorrowingSun.Tests.SkywellJumpAssistTests.DirectionalStandingJumpHasReadableLaunchWithoutChangingSpeedLimit" methodname="DirectionalStandingJumpHasReadableLaunchWithoutChangingSpeedLimit" classname="BorrowingSun.Tests.SkywellJumpAssistTests" runstate="Runnable" seed="855743881" result="Passed" start-time="2026-11-11 10:20:22Z" end-time="2026-11-11 10:20:22Z" duration="0.001069" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1088" name="EarlyPressSurvivesUntilPhysicalLandingOnlyWithinBuffer" fullname="BorrowingSun.Tests.SkywellJumpAssistTests.EarlyPressSurvivesUntilPhysicalLandingOnlyWithinBuffer" methodname="EarlyPressSurvivesUntilPhysicalLandingOnlyWithinBuffer" classname="BorrowingSun.Tests.SkywellJumpAssistTests" runstate="Runnable" seed="50846660" result="Passed" start-time="2026-11-11 10:20:22Z" end-time="2026-11-11 10:20:22Z" duration="0.000170" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1086" name="EdgeGraceAllowsOneJumpButNotAnAirJump" fullname="BorrowingSun.Tests.SkywellJumpAssistTests.EdgeGraceAllowsOneJumpButNotAnAirJump" methodname="EdgeGraceAllowsOneJumpButNotAnAirJump" classname="BorrowingSun.Tests.SkywellJumpAssistTests" runstate="Runnable" seed="1148511234" result="Passed" start-time="2026-11-11 10:20:22Z" end-time="2026-11-11 10:20:22Z" duration="0.000072" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1087" name="LatePressExpiresAndCannotUseOldSupport" fullname="BorrowingSun.Tests.SkywellJumpAssistTests.LatePressExpiresAndCannotUseOldSupport" methodname="LatePressExpiresAndCannotUseOldSupport" classname="BorrowingSun.Tests.SkywellJumpAssistTests" runstate="Runnable" seed="1699133722" result="Passed" start-time="2026-11-11 10:20:22Z" end-time="2026-11-11 10:20:22Z" duration="0.000142" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1090" name="NeutralAirInputRetainsMoreMomentumThanGroundBraking" fullname="BorrowingSun.Tests.SkywellJumpAssistTests.NeutralAirInputRetainsMoreMomentumThanGroundBraking" methodname="NeutralAirInputRetainsMoreMomentumThanGroundBraking" classname="BorrowingSun.Tests.SkywellJumpAssistTests" runstate="Runnable" seed="1639530580" result="Passed" start-time="2026-11-11 10:20:22Z" end-time="2026-11-11 10:20:22Z" duration="0.000473" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1089" name="ResetAndModalCancelClearPendingInput" fullname="BorrowingSun.Tests.SkywellJumpAssistTests.ResetAndModalCancelClearPendingInput" methodname="ResetAndModalCancelClearPendingInput" classname="BorrowingSun.Tests.SkywellJumpAssistTests" runstate="Runnable" seed="1241245937" result="Passed" start-time="2026-11-11 10:20:22Z" end-time="2026-11-11 10:20:22Z" duration="0.000244" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+          </test-suite>
+          <test-suite type="TestFixture" id="1092" name="SkywellSolarRulesTests" fullname="BorrowingSun.Tests.SkywellSolarRulesTests" classname="BorrowingSun.Tests.SkywellSolarRulesTests" runstate="Runnable" testcasecount="12" result="Passed" start-time="2026-11-11 10:20:22Z" end-time="2026-11-11 10:20:22Z" duration="0.027444" total="12" passed="12" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-case id="1096" name="BrokenBeamClearsUnfinishedSpreadButDoesNotRevokeEarnedCargo" fullname="BorrowingSun.Tests.SkywellSolarRulesTests.BrokenBeamClearsUnfinishedSpreadButDoesNotRevokeEarnedCargo" methodname="BrokenBeamClearsUnfinishedSpreadButDoesNotRevokeEarnedCargo" classname="BorrowingSun.Tests.SkywellSolarRulesTests" runstate="Runnable" seed="186740404" result="Passed" start-time="2026-11-11 10:20:22Z" end-time="2026-11-11 10:20:22Z" duration="0.002863" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1095" name="ConfirmedReceiverSpreadsBeforeItAwardsExistingFruit" fullname="BorrowingSun.Tests.SkywellSolarRulesTests.ConfirmedReceiverSpreadsBeforeItAwardsExistingFruit" methodname="ConfirmedReceiverSpreadsBeforeItAwardsExistingFruit" classname="BorrowingSun.Tests.SkywellSolarRulesTests" runstate="Runnable" seed="958860083" result="Passed" start-time="2026-11-11 10:20:22Z" end-time="2026-11-11 10:20:22Z" duration="0.000889" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1105" name="ExplicitWeatherVolumeOverridesRadiusAndDisabledVolumeIsInactive" fullname="BorrowingSun.Tests.SkywellSolarRulesTests.ExplicitWeatherVolumeOverridesRadiusAndDisabledVolumeIsInactive" methodname="ExplicitWeatherVolumeOverridesRadiusAndDisabledVolumeIsInactive" classname="BorrowingSun.Tests.SkywellSolarRulesTests" runstate="Runnable" seed="1110763690" result="Passed" start-time="2026-11-11 10:20:22Z" end-time="2026-11-11 10:20:22Z" duration="0.001139" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1102" name="LocalWindPhysicallyAimsCollectorBeforeSunnyCanLightTheRelay" fullname="BorrowingSun.Tests.SkywellSolarRulesTests.LocalWindPhysicallyAimsCollectorBeforeSunnyCanLightTheRelay" methodname="LocalWindPhysicallyAimsCollectorBeforeSunnyCanLightTheRelay" classname="BorrowingSun.Tests.SkywellSolarRulesTests" runstate="Runnable" seed="1453989032" result="Passed" start-time="2026-11-11 10:20:22Z" end-time="2026-11-11 10:20:22Z" duration="0.003398" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1093" name="MirrorApertureRejectsOutsideParallelAndBehindRays" fullname="BorrowingSun.Tests.SkywellSolarRulesTests.MirrorApertureRejectsOutsideParallelAndBehindRays" methodname="MirrorApertureRejectsOutsideParallelAndBehindRays" classname="BorrowingSun.Tests.SkywellSolarRulesTests" runstate="Runnable" seed="1328059031" result="Passed" start-time="2026-11-11 10:20:22Z" end-time="2026-11-11 10:20:22Z" duration="0.000979" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1094" name="ReceiverRequiresFrontFaceAndFiniteAperture" fullname="BorrowingSun.Tests.SkywellSolarRulesTests.ReceiverRequiresFrontFaceAndFiniteAperture" methodname="ReceiverRequiresFrontFaceAndFiniteAperture" classname="BorrowingSun.Tests.SkywellSolarRulesTests" runstate="Runnable" seed="55996369" result="Passed" start-time="2026-11-11 10:20:22Z" end-time="2026-11-11 10:20:22Z" duration="0.000504" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1103" name="ReturningWindStopsPartialTurnAndSunnyCannotFinishIt" fullname="BorrowingSun.Tests.SkywellSolarRulesTests.ReturningWindStopsPartialTurnAndSunnyCannotFinishIt" methodname="ReturningWindStopsPartialTurnAndSunnyCannotFinishIt" classname="BorrowingSun.Tests.SkywellSolarRulesTests" runstate="Runnable" seed="1257238438" result="Passed" start-time="2026-11-11 10:20:22Z" end-time="2026-11-11 10:20:22Z" duration="0.000998" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1101" name="TerrainAndZoneBoundaryBothRestrictSunnyCollector" fullname="BorrowingSun.Tests.SkywellSolarRulesTests.TerrainAndZoneBoundaryBothRestrictSunnyCollector" methodname="TerrainAndZoneBoundaryBothRestrictSunnyCollector" classname="BorrowingSun.Tests.SkywellSolarRulesTests" runstate="Runnable" seed="1204827805" result="Passed" start-time="2026-11-11 10:20:22Z" end-time="2026-11-11 10:20:22Z" duration="0.001027" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-suite type="ParameterizedMethod" id="1100" name="UnobstructedSunWithoutLocalSunnyCannotPowerCollector" fullname="BorrowingSun.Tests.SkywellSolarRulesTests.UnobstructedSunWithoutLocalSunnyCannotPowerCollector" classname="BorrowingSun.Tests.SkywellSolarRulesTests" runstate="Runnable" testcasecount="3" result="Passed" start-time="2026-11-11 10:20:22Z" end-time="2026-11-11 10:20:22Z" duration="0.008585" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1097" name="UnobstructedSunWithoutLocalSunnyCannotPowerCollector(None)" fullname="BorrowingSun.Tests.SkywellSolarRulesTests.UnobstructedSunWithoutLocalSunnyCannotPowerCollector(None)" methodname="UnobstructedSunWithoutLocalSunnyCannotPowerCollector" classname="BorrowingSun.Tests.SkywellSolarRulesTests" runstate="Runnable" seed="560601212" result="Passed" start-time="2026-11-11 10:20:22Z" end-time="2026-11-11 10:20:22Z" duration="0.000670" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1098" name="UnobstructedSunWithoutLocalSunnyCannotPowerCollector(Rain)" fullname="BorrowingSun.Tests.SkywellSolarRulesTests.UnobstructedSunWithoutLocalSunnyCannotPowerCollector(Rain)" methodname="UnobstructedSunWithoutLocalSunnyCannotPowerCollector" classname="BorrowingSun.Tests.SkywellSolarRulesTests" runstate="Runnable" seed="693731836" result="Passed" start-time="2026-11-11 10:20:22Z" end-time="2026-11-11 10:20:22Z" duration="0.004142" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1099" name="UnobstructedSunWithoutLocalSunnyCannotPowerCollector(Wind)" fullname="BorrowingSun.Tests.SkywellSolarRulesTests.UnobstructedSunWithoutLocalSunnyCannotPowerCollector(Wind)" methodname="UnobstructedSunWithoutLocalSunnyCannotPowerCollector" classname="BorrowingSun.Tests.SkywellSolarRulesTests" runstate="Runnable" seed="833726698" result="Passed" start-time="2026-11-11 10:20:22Z" end-time="2026-11-11 10:20:22Z" duration="0.001578" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+            </test-suite>
+            <test-case id="1104" name="WindOutsideLinkedZoneCannotMoveCollector" fullname="BorrowingSun.Tests.SkywellSolarRulesTests.WindOutsideLinkedZoneCannotMoveCollector" methodname="WindOutsideLinkedZoneCannotMoveCollector" classname="BorrowingSun.Tests.SkywellSolarRulesTests" runstate="Runnable" seed="1331787078" result="Passed" start-time="2026-11-11 10:20:22Z" end-time="2026-11-11 10:20:22Z" duration="0.001735" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+          </test-suite>
+          <test-suite type="TestFixture" id="1106" name="SkywellStoryTests" fullname="BorrowingSun.Tests.SkywellStoryTests" classname="BorrowingSun.Tests.SkywellStoryTests" runstate="Runnable" testcasecount="8" result="Passed" start-time="2026-11-11 10:20:22Z" end-time="2026-11-11 10:20:22Z" duration="0.062165" total="8" passed="8" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-case id="1108" name="CancellingGiftDialogueDoesNotGrantItsPendingItem" fullname="BorrowingSun.Tests.SkywellStoryTests.CancellingGiftDialogueDoesNotGrantItsPendingItem" methodname="CancellingGiftDialogueDoesNotGrantItsPendingItem" classname="BorrowingSun.Tests.SkywellStoryTests" runstate="Runnable" seed="1346343456" result="Passed" start-time="2026-11-11 10:20:22Z" end-time="2026-11-11 10:20:22Z" duration="0.003126" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1112" name="ClosingConversationCancelsGiftAndRestoresCameraDriverAndProjection" fullname="BorrowingSun.Tests.SkywellStoryTests.ClosingConversationCancelsGiftAndRestoresCameraDriverAndProjection" methodname="ClosingConversationCancelsGiftAndRestoresCameraDriverAndProjection" classname="BorrowingSun.Tests.SkywellStoryTests" runstate="Runnable" seed="135423746" result="Passed" start-time="2026-11-11 10:20:22Z" end-time="2026-11-11 10:20:22Z" duration="0.002446" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1113" name="ConversationCannotBeginOutsideItsPhysicalInteractionRange" fullname="BorrowingSun.Tests.SkywellStoryTests.ConversationCannotBeginOutsideItsPhysicalInteractionRange" methodname="ConversationCannotBeginOutsideItsPhysicalInteractionRange" classname="BorrowingSun.Tests.SkywellStoryTests" runstate="Runnable" seed="2020396661" result="Passed" start-time="2026-11-11 10:20:22Z" end-time="2026-11-11 10:20:22Z" duration="0.001613" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1107" name="EastKeeperCannotGiveGemBeforeObservation" fullname="BorrowingSun.Tests.SkywellStoryTests.EastKeeperCannotGiveGemBeforeObservation" methodname="EastKeeperCannotGiveGemBeforeObservation" classname="BorrowingSun.Tests.SkywellStoryTests" runstate="Runnable" seed="243339365" result="Passed" start-time="2026-11-11 10:20:22Z" end-time="2026-11-11 10:20:22Z" duration="0.001873" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1109" name="GiftCommitsOnlyWhenTheFinalSpokenPageIsAcknowledged" fullname="BorrowingSun.Tests.SkywellStoryTests.GiftCommitsOnlyWhenTheFinalSpokenPageIsAcknowledged" methodname="GiftCommitsOnlyWhenTheFinalSpokenPageIsAcknowledged" classname="BorrowingSun.Tests.SkywellStoryTests" runstate="Runnable" seed="1132745841" result="Passed" start-time="2026-11-11 10:20:22Z" end-time="2026-11-11 10:20:22Z" duration="0.001563" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1110" name="InspectionWithoutGemCannotRepairTheCollector" fullname="BorrowingSun.Tests.SkywellStoryTests.InspectionWithoutGemCannotRepairTheCollector" methodname="InspectionWithoutGemCannotRepairTheCollector" classname="BorrowingSun.Tests.SkywellStoryTests" runstate="Runnable" seed="480776435" result="Passed" start-time="2026-11-11 10:20:22Z" end-time="2026-11-11 10:20:22Z" duration="0.001217" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1114" name="RealSunnyAndAlignedMirrorStillNeedARepairedReceivingSurface" fullname="BorrowingSun.Tests.SkywellStoryTests.RealSunnyAndAlignedMirrorStillNeedARepairedReceivingSurface" methodname="RealSunnyAndAlignedMirrorStillNeedARepairedReceivingSurface" classname="BorrowingSun.Tests.SkywellStoryTests" runstate="Runnable" seed="71437600" result="Passed" start-time="2026-11-11 10:20:22Z" end-time="2026-11-11 10:20:22Z" duration="0.003345" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1111" name="RepairedCollectorRejectsAnotherInstallation" fullname="BorrowingSun.Tests.SkywellStoryTests.RepairedCollectorRejectsAnotherInstallation" methodname="RepairedCollectorRejectsAnotherInstallation" classname="BorrowingSun.Tests.SkywellStoryTests" runstate="Runnable" seed="1171770931" result="Passed" start-time="2026-11-11 10:20:22Z" end-time="2026-11-11 10:20:22Z" duration="0.003056" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+          </test-suite>
+          <test-suite type="TestFixture" id="1115" name="SkywellSurfaceFishTests" fullname="BorrowingSun.Tests.SkywellSurfaceFishTests" classname="BorrowingSun.Tests.SkywellSurfaceFishTests" runstate="Runnable" testcasecount="3" result="Passed" start-time="2026-11-11 10:20:22Z" end-time="2026-11-11 10:20:22Z" duration="0.016330" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-case id="1118" name="BellSurfaceResetUsesCourtCoordinatesEvenUnderADifferentVisualParent" fullname="BorrowingSun.Tests.SkywellSurfaceFishTests.BellSurfaceResetUsesCourtCoordinatesEvenUnderADifferentVisualParent" methodname="BellSurfaceResetUsesCourtCoordinatesEvenUnderADifferentVisualParent" classname="BorrowingSun.Tests.SkywellSurfaceFishTests" runstate="Runnable" seed="941201706" result="Passed" start-time="2026-11-11 10:20:22Z" end-time="2026-11-11 10:20:22Z" duration="0.001157" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1116" name="SurfaceConfigurationAndReplayUseTheConfiguredLayerWithoutMovingTheSceneRoot" fullname="BorrowingSun.Tests.SkywellSurfaceFishTests.SurfaceConfigurationAndReplayUseTheConfiguredLayerWithoutMovingTheSceneRoot" methodname="SurfaceConfigurationAndReplayUseTheConfiguredLayerWithoutMovingTheSceneRoot" classname="BorrowingSun.Tests.SkywellSurfaceFishTests" runstate="Runnable" seed="1836502651" result="Passed" start-time="2026-11-11 10:20:22Z" end-time="2026-11-11 10:20:22Z" duration="0.001815" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1117" name="SurfaceFishSightStillUsesActualBlockingCollision" fullname="BorrowingSun.Tests.SkywellSurfaceFishTests.SurfaceFishSightStillUsesActualBlockingCollision" methodname="SurfaceFishSightStillUsesActualBlockingCollision" classname="BorrowingSun.Tests.SkywellSurfaceFishTests" runstate="Runnable" seed="379462543" result="Passed" start-time="2026-11-11 10:20:22Z" end-time="2026-11-11 10:20:22Z" duration="0.000905" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+          </test-suite>
+          <test-suite type="TestFixture" id="1119" name="SkywellWeatherReturnTests" fullname="BorrowingSun.Tests.SkywellWeatherReturnTests" classname="BorrowingSun.Tests.SkywellWeatherReturnTests" runstate="Runnable" testcasecount="10" result="Passed" start-time="2026-11-11 10:20:22Z" end-time="2026-11-11 10:20:22Z" duration="0.007233" total="10" passed="10" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-suite type="ParameterizedMethod" id="1130" name="DepartureDuringSwitchStillReturnsTokenAndHonoursWeatherRule" fullname="BorrowingSun.Tests.SkywellWeatherReturnTests.DepartureDuringSwitchStillReturnsTokenAndHonoursWeatherRule" classname="BorrowingSun.Tests.SkywellWeatherReturnTests" runstate="Runnable" testcasecount="3" result="Passed" start-time="2026-11-11 10:20:22Z" end-time="2026-11-11 10:20:22Z" duration="0.001852" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1127" name="DepartureDuringSwitchStillReturnsTokenAndHonoursWeatherRule(Sun,Sun)" fullname="BorrowingSun.Tests.SkywellWeatherReturnTests.DepartureDuringSwitchStillReturnsTokenAndHonoursWeatherRule(Sun,Sun)" methodname="DepartureDuringSwitchStillReturnsTokenAndHonoursWeatherRule" classname="BorrowingSun.Tests.SkywellWeatherReturnTests" runstate="Runnable" seed="1204697494" result="Passed" start-time="2026-11-11 10:20:22Z" end-time="2026-11-11 10:20:22Z" duration="0.000525" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1128" name="DepartureDuringSwitchStillReturnsTokenAndHonoursWeatherRule(Rain,None)" fullname="BorrowingSun.Tests.SkywellWeatherReturnTests.DepartureDuringSwitchStillReturnsTokenAndHonoursWeatherRule(Rain,None)" methodname="DepartureDuringSwitchStillReturnsTokenAndHonoursWeatherRule" classname="BorrowingSun.Tests.SkywellWeatherReturnTests" runstate="Runnable" seed="2058587091" result="Passed" start-time="2026-11-11 10:20:22Z" end-time="2026-11-11 10:20:22Z" duration="0.000299" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1129" name="DepartureDuringSwitchStillReturnsTokenAndHonoursWeatherRule(Wind,None)" fullname="BorrowingSun.Tests.SkywellWeatherReturnTests.DepartureDuringSwitchStillReturnsTokenAndHonoursWeatherRule(Wind,None)" methodname="DepartureDuringSwitchStillReturnsTokenAndHonoursWeatherRule" classname="BorrowingSun.Tests.SkywellWeatherReturnTests" runstate="Runnable" seed="1937431890" result="Passed" start-time="2026-11-11 10:20:22Z" end-time="2026-11-11 10:20:22Z" duration="0.000145" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+            </test-suite>
+            <test-suite type="ParameterizedMethod" id="1123" name="RainAndWindStopAsSoonAsTheirTokenReturns" fullname="BorrowingSun.Tests.SkywellWeatherReturnTests.RainAndWindStopAsSoonAsTheirTokenReturns" classname="BorrowingSun.Tests.SkywellWeatherReturnTests" runstate="Runnable" testcasecount="2" result="Passed" start-time="2026-11-11 10:20:22Z" end-time="2026-11-11 10:20:22Z" duration="0.000728" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1121" name="RainAndWindStopAsSoonAsTheirTokenReturns(Rain)" fullname="BorrowingSun.Tests.SkywellWeatherReturnTests.RainAndWindStopAsSoonAsTheirTokenReturns(Rain)" methodname="RainAndWindStopAsSoonAsTheirTokenReturns" classname="BorrowingSun.Tests.SkywellWeatherReturnTests" runstate="Runnable" seed="1958714805" result="Passed" start-time="2026-11-11 10:20:22Z" end-time="2026-11-11 10:20:22Z" duration="0.000231" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1122" name="RainAndWindStopAsSoonAsTheirTokenReturns(Wind)" fullname="BorrowingSun.Tests.SkywellWeatherReturnTests.RainAndWindStopAsSoonAsTheirTokenReturns(Wind)" methodname="RainAndWindStopAsSoonAsTheirTokenReturns" classname="BorrowingSun.Tests.SkywellWeatherReturnTests" runstate="Runnable" seed="1797638320" result="Passed" start-time="2026-11-11 10:20:22Z" end-time="2026-11-11 10:20:22Z" duration="0.000124" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+            </test-suite>
+            <test-case id="1131" name="ReinsertingSunnyDoesNotInterruptExistingSunshine" fullname="BorrowingSun.Tests.SkywellWeatherReturnTests.ReinsertingSunnyDoesNotInterruptExistingSunshine" methodname="ReinsertingSunnyDoesNotInterruptExistingSunshine" classname="BorrowingSun.Tests.SkywellWeatherReturnTests" runstate="Runnable" seed="154182596" result="Passed" start-time="2026-11-11 10:20:22Z" end-time="2026-11-11 10:20:22Z" duration="0.000176" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-suite type="ParameterizedMethod" id="1126" name="ReplacingSunnyDoesNotRestoreItWhenNewTokenReturns" fullname="BorrowingSun.Tests.SkywellWeatherReturnTests.ReplacingSunnyDoesNotRestoreItWhenNewTokenReturns" classname="BorrowingSun.Tests.SkywellWeatherReturnTests" runstate="Runnable" testcasecount="2" result="Passed" start-time="2026-11-11 10:20:22Z" end-time="2026-11-11 10:20:22Z" duration="0.001772" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1124" name="ReplacingSunnyDoesNotRestoreItWhenNewTokenReturns(Rain)" fullname="BorrowingSun.Tests.SkywellWeatherReturnTests.ReplacingSunnyDoesNotRestoreItWhenNewTokenReturns(Rain)" methodname="ReplacingSunnyDoesNotRestoreItWhenNewTokenReturns" classname="BorrowingSun.Tests.SkywellWeatherReturnTests" runstate="Runnable" seed="1689766289" result="Passed" start-time="2026-11-11 10:20:22Z" end-time="2026-11-11 10:20:22Z" duration="0.000364" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1125" name="ReplacingSunnyDoesNotRestoreItWhenNewTokenReturns(Wind)" fullname="BorrowingSun.Tests.SkywellWeatherReturnTests.ReplacingSunnyDoesNotRestoreItWhenNewTokenReturns(Wind)" methodname="ReplacingSunnyDoesNotRestoreItWhenNewTokenReturns" classname="BorrowingSun.Tests.SkywellWeatherReturnTests" runstate="Runnable" seed="1600461692" result="Passed" start-time="2026-11-11 10:20:22Z" end-time="2026-11-11 10:20:22Z" duration="0.000381" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+            </test-suite>
+            <test-case id="1132" name="ResetClearsSunnyEvenAfterPhysicalTokenHasReturned" fullname="BorrowingSun.Tests.SkywellWeatherReturnTests.ResetClearsSunnyEvenAfterPhysicalTokenHasReturned" methodname="ResetClearsSunnyEvenAfterPhysicalTokenHasReturned" classname="BorrowingSun.Tests.SkywellWeatherReturnTests" runstate="Runnable" seed="1943862112" result="Passed" start-time="2026-11-11 10:20:22Z" end-time="2026-11-11 10:20:22Z" duration="0.000337" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1120" name="SunnyReturnsToInventoryWhileItsLocalWeatherRemains" fullname="BorrowingSun.Tests.SkywellWeatherReturnTests.SunnyReturnsToInventoryWhileItsLocalWeatherRemains" methodname="SunnyReturnsToInventoryWhileItsLocalWeatherRemains" classname="BorrowingSun.Tests.SkywellWeatherReturnTests" runstate="Runnable" seed="1718947916" result="Passed" start-time="2026-11-11 10:20:22Z" end-time="2026-11-11 10:20:22Z" duration="0.000496" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+          </test-suite>
+          <test-suite type="TestFixture" id="1133" name="SkywellWeatherTargetTests" fullname="BorrowingSun.Tests.SkywellWeatherTargetTests" classname="BorrowingSun.Tests.SkywellWeatherTargetTests" runstate="Runnable" testcasecount="11" result="Passed" start-time="2026-11-11 10:20:22Z" end-time="2026-11-11 10:20:22Z" duration="0.017691" total="11" passed="11" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-case id="1139" name="DisabledRendererOrTargetCannotReceiveClicks" fullname="BorrowingSun.Tests.SkywellWeatherTargetTests.DisabledRendererOrTargetCannotReceiveClicks" methodname="DisabledRendererOrTargetCannotReceiveClicks" classname="BorrowingSun.Tests.SkywellWeatherTargetTests" runstate="Runnable" seed="1674082093" result="Passed" start-time="2026-11-11 10:20:22Z" end-time="2026-11-11 10:20:22Z" duration="0.006206" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1136" name="ExplicitColliderWorksWithoutRendererAndRespectsOcclusionAndEnabledState" fullname="BorrowingSun.Tests.SkywellWeatherTargetTests.ExplicitColliderWorksWithoutRendererAndRespectsOcclusionAndEnabledState" methodname="ExplicitColliderWorksWithoutRendererAndRespectsOcclusionAndEnabledState" classname="BorrowingSun.Tests.SkywellWeatherTargetTests" runstate="Runnable" seed="1263928809" result="Passed" start-time="2026-11-11 10:20:22Z" end-time="2026-11-11 10:20:22Z" duration="0.000953" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-suite type="ParameterizedMethod" id="1144" name="HideOrReconfigureRestoresExistingMaterialSlotBlock" fullname="BorrowingSun.Tests.SkywellWeatherTargetTests.HideOrReconfigureRestoresExistingMaterialSlotBlock" classname="BorrowingSun.Tests.SkywellWeatherTargetTests" runstate="Runnable" testcasecount="2" result="Passed" start-time="2026-11-11 10:20:22Z" end-time="2026-11-11 10:20:22Z" duration="0.002881" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1142" name="HideOrReconfigureRestoresExistingMaterialSlotBlock(False)" fullname="BorrowingSun.Tests.SkywellWeatherTargetTests.HideOrReconfigureRestoresExistingMaterialSlotBlock(False)" methodname="HideOrReconfigureRestoresExistingMaterialSlotBlock" classname="BorrowingSun.Tests.SkywellWeatherTargetTests" runstate="Runnable" seed="2137496579" result="Passed" start-time="2026-11-11 10:20:22Z" end-time="2026-11-11 10:20:22Z" duration="0.001639" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1143" name="HideOrReconfigureRestoresExistingMaterialSlotBlock(True)" fullname="BorrowingSun.Tests.SkywellWeatherTargetTests.HideOrReconfigureRestoresExistingMaterialSlotBlock(True)" methodname="HideOrReconfigureRestoresExistingMaterialSlotBlock" classname="BorrowingSun.Tests.SkywellWeatherTargetTests" runstate="Runnable" seed="1811896588" result="Passed" start-time="2026-11-11 10:20:22Z" end-time="2026-11-11 10:20:22Z" duration="0.000458" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+            </test-suite>
+            <test-case id="1141" name="HighlightDoesNotOverwriteLiveRendererFeedback" fullname="BorrowingSun.Tests.SkywellWeatherTargetTests.HighlightDoesNotOverwriteLiveRendererFeedback" methodname="HighlightDoesNotOverwriteLiveRendererFeedback" classname="BorrowingSun.Tests.SkywellWeatherTargetTests" runstate="Runnable" seed="355912018" result="Passed" start-time="2026-11-11 10:20:22Z" end-time="2026-11-11 10:20:22Z" duration="0.000807" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1134" name="MeshOnlyTargetRequiresAnActualTriangleNotItsEmptyBounds" fullname="BorrowingSun.Tests.SkywellWeatherTargetTests.MeshOnlyTargetRequiresAnActualTriangleNotItsEmptyBounds" methodname="MeshOnlyTargetRequiresAnActualTriangleNotItsEmptyBounds" classname="BorrowingSun.Tests.SkywellWeatherTargetTests" runstate="Runnable" seed="1444700486" result="Passed" start-time="2026-11-11 10:20:22Z" end-time="2026-11-11 10:20:22Z" duration="0.000654" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1145" name="MultipleMaterialSlotsKeepIndependentOriginalOverridesAndSharedMaterials" fullname="BorrowingSun.Tests.SkywellWeatherTargetTests.MultipleMaterialSlotsKeepIndependentOriginalOverridesAndSharedMaterials" methodname="MultipleMaterialSlotsKeepIndependentOriginalOverridesAndSharedMaterials" classname="BorrowingSun.Tests.SkywellWeatherTargetTests" runstate="Runnable" seed="1869071125" result="Passed" start-time="2026-11-11 10:20:22Z" end-time="2026-11-11 10:20:22Z" duration="0.001243" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1135" name="NearerSolidGeometryBlocksClickButATriggerDoesNot" fullname="BorrowingSun.Tests.SkywellWeatherTargetTests.NearerSolidGeometryBlocksClickButATriggerDoesNot" methodname="NearerSolidGeometryBlocksClickButATriggerDoesNot" classname="BorrowingSun.Tests.SkywellWeatherTargetTests" runstate="Runnable" seed="878702841" result="Passed" start-time="2026-11-11 10:20:22Z" end-time="2026-11-11 10:20:22Z" duration="0.000428" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1140" name="ReconfiguringClearsCachedOldPickSurfaces" fullname="BorrowingSun.Tests.SkywellWeatherTargetTests.ReconfiguringClearsCachedOldPickSurfaces" methodname="ReconfiguringClearsCachedOldPickSurfaces" classname="BorrowingSun.Tests.SkywellWeatherTargetTests" runstate="Runnable" seed="566511596" result="Passed" start-time="2026-11-11 10:20:22Z" end-time="2026-11-11 10:20:22Z" duration="0.000317" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1138" name="RemoteEligibilityRequiresRangeViewportAndRealUnoccludedSurface" fullname="BorrowingSun.Tests.SkywellWeatherTargetTests.RemoteEligibilityRequiresRangeViewportAndRealUnoccludedSurface" methodname="RemoteEligibilityRequiresRangeViewportAndRealUnoccludedSurface" classname="BorrowingSun.Tests.SkywellWeatherTargetTests" runstate="Runnable" seed="156053980" result="Passed" start-time="2026-11-11 10:20:22Z" end-time="2026-11-11 10:20:22Z" duration="0.001095" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1137" name="ScaledAndRotatedMeshReportsWorldDistance" fullname="BorrowingSun.Tests.SkywellWeatherTargetTests.ScaledAndRotatedMeshReportsWorldDistance" methodname="ScaledAndRotatedMeshReportsWorldDistance" classname="BorrowingSun.Tests.SkywellWeatherTargetTests" runstate="Runnable" seed="577751322" result="Passed" start-time="2026-11-11 10:20:22Z" end-time="2026-11-11 10:20:22Z" duration="0.000299" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[Saving results to: TestResults.xml
+]]></output>
+            </test-case>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

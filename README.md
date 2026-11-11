@@ -18,6 +18,21 @@ The architecture snapshot includes 29 editable Mermaid class and flow diagrams, 
 
 Download the atlas HTML and open it in a browser to view or export individual SVGs. 下载图册 HTML 后用浏览器打开，可逐张导出 SVG。
 
+## Flower Court market whitebox · 花庭经营白盒
+
+After the original cargo handover, the Flower Court market opens a short loop of gathering, cooking, collecting payments, and carrying cash and ingredients into the next day. Mushrooms grow at the west patch. Dewfruit can be picked in the east patch while the local rain is active.
+
+在花庭完成原货运签收后，可开小铺、采菌菇和雨露果、烹饪两道菜、收款并结转次日。雨露果需要用花庭集雨盆施雨。
+
+1. 已有仓库切到 `unity-skywell` 并拉取。首次下载可用 `git clone --branch unity-skywell https://github.com/buriallsy/coding_team.git`。用 Unity Hub 打开 `unity_prototype/BorrowingSun`，编辑器版本为 **6000.5.4f1**。
+2. 在 Project 窗口打开 `Assets/BorrowingSun/Scenes/05_Skywell_FlowerMarket.unity`，按 **Play**。走完下方原 L5 路线，在花庭签收后，走到西北侧「花庭小铺」，短按 `E` 开店。 [打开白盒场景文件](unity_prototype/BorrowingSun/Assets/BorrowingSun/Scenes/05_Skywell_FlowerMarket.unity)
+3. 用 `Q` 或 `Esc` 回庭院，靠近食材短按 `E` 采集。采雨露果前按住 `Tab` 选雨令，再长按 `E` 左键点击花庭集雨盆。
+4. 回店按 `1` 或 `2` 下锅。完成后按 `E` 交餐收款，按 `N` 进入次日。按 `R` 从原入口重开。
+
+Open the Flower Market scene in **Unity 6000.5.4f1** and press **Play**. Complete the delivery, then tap `E` at the shop on the northwest side of Flower Court. Tap `E` to gather, hold `Tab` to select the Rain token and hold `E` while left-clicking the basin to water the dewfruit patch. At the shop, `1` or `2` starts a recipe, `E` serves it, and `N` advances the day.
+
+调菜价、食材消耗与烹饪时间，在 `FlowerMarketRun.TryGetRecipe` 修改。调采集距离和刷新时间，在场景层级搜索 `Flower_market_prototype`，打开 **Skywell Flower Market** 组件，调整 `Interaction Radius` 和 `Regrow Seconds`。本轮实测菌菇回店 **1.24 秒**，雨露果回店 **2.68 秒**。 [菜谱代码](unity_prototype/BorrowingSun/Assets/BorrowingSun/Runtime/Skywell/Market/FlowerMarketRun.cs) · [实测、试值与截图](docs/04_Iterations/Skywell_Flower_Market_Whitebox.md)
+
 ## Play on macOS
 
 [Download the Skywell 0.1.0 playtest ZIP](https://github.com/buriallsy/coding_team/releases/download/unity-skywell-macos-v0.1.0/Borrowing_Sun_Skywell_macOS_0.1.0.zip) (123 MiB) · [Release notes](https://github.com/buriallsy/coding_team/releases/tag/unity-skywell-macos-v0.1.0)

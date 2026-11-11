@@ -34,7 +34,7 @@ namespace BorrowingSun
         public bool CanTargetWeather(SkywellWeatherTarget target)
         {
             if(!target||!target.isActiveAndEnabled||Array.IndexOf(weatherTargets,target)<0||!player||!CanUseToken(SelectedWeather))return false;
-            if(ObservationInputBlocked||WeatherTravelBlocked)return false;
+            if(ObservationInputBlocked||MarketInputBlocked||WeatherTravelBlocked||!MarketWeatherAllowed(target.StationIndex,SelectedWeather))return false;
             var station=WeatherStation(target.StationIndex);
             if(!station||!station.isActiveAndEnabled||!station.Zone||!station.Zone.isActiveAndEnabled||target.SurfaceDistance(player.FeetPosition)>weatherCastRange)return false;
             if(!station.Zone.Contains(player.FeetPosition)&&!target.HasVisibleSurface(cameraRig?cameraRig.ViewCamera:null,player.FeetPosition,weatherCastRange))return false;
@@ -93,7 +93,7 @@ namespace BorrowingSun
         public void BeginPointerWeatherPicker()=>BeginWeatherPicker(true);
         private void BeginWeatherPicker(bool pointer)
         {
-            if(ObservationInputBlocked||primaryPending||WeatherInputBlocked||WeatherTravelBlocked)return;
+            if(ObservationInputBlocked||MarketInputBlocked||primaryPending||WeatherInputBlocked||WeatherTravelBlocked)return;
             WeatherSelectionHeld=true;pointerPicker=pointer;pickerStarted=Time.unscaledTime;WeatherCandidate=SelectedWeather;
             SyncCameraInteraction();
         }
@@ -119,7 +119,7 @@ namespace BorrowingSun
         private void UpdateWeatherInput()
         {
             var k=Keyboard.current;
-            if(ObservationInputBlocked)
+            if(ObservationInputBlocked||MarketInputBlocked)
             {
                 CancelWeatherTargeting();CancelWeatherPicker();
                 if(ObservationOpen&&k!=null&&k.escapeKey.wasPressedThisFrame)CloseObservation();
@@ -172,10 +172,10 @@ namespace BorrowingSun
         private void SyncCameraInteraction()
         {
             if(!cameraRig)return;
-            bool blocked=WeatherInputBlocked||ObservationInputBlocked;
+            bool blocked=WeatherInputBlocked||ObservationInputBlocked||MarketInputBlocked;
             cameraRig.InputSuppressed=blocked;
             cameraRig.SetPointerInteraction(blocked);
-            bool frameTargets=WeatherTargeting&&cameraRig.IsShoulderView&&!ObservationInputBlocked;
+            bool frameTargets=WeatherTargeting&&cameraRig.IsShoulderView&&!ObservationInputBlocked&&!MarketInputBlocked;
             if(frameTargets&&!cameraRig.InteractionFramingActive)
             {
                 Bounds bounds=new Bounds(player.FeetPosition+Vector3.up,Vector3.one*2);

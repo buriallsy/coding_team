@@ -33,7 +33,8 @@ namespace BorrowingSun.Editor
         private static List<string> report;
         private static string module;
         private static readonly Stack<IEnumerator> stack=new Stack<IEnumerator>();
-        private static string Folder=>Path.GetFullPath(Path.Combine(Application.dataPath,"../../validation/current/skywell"));
+        private static string ValidationFolder=>Path.GetFullPath(Path.Combine(Application.dataPath,"../../validation/current/skywell"));
+        private static string Folder=>module==FlowerMarketModule?FlowerMarketFolder:ValidationFolder;
 
         [MenuItem("Borrowing Sun/Skywell/3 Run Borrowing Sun complete route")]
         public static void Run()=>StartCheck("SKYWELL_BORROWING_SUN_ROUTE",FullRoute());
@@ -50,7 +51,7 @@ namespace BorrowingSun.Editor
                 throw new InvalidOperationException("Enter unpaused Play Mode with no other Skywell checks running.");
             court=UnityEngine.Object.FindAnyObjectByType<SkywellController>();
             if(!court)throw new InvalidOperationException("Open the Skywell scene.");
-            Directory.CreateDirectory(Folder);module=name;
+            module=name;Directory.CreateDirectory(Folder);
             report=new List<string>{DateTime.UtcNow.ToString("O"),name,"Production Input System, CharacterController, local weather and actual gameplay rays. Automated checks do not establish first-player understanding or fun."};
             previousRunInBackground=Application.runInBackground;previousBackgroundBehavior=InputSystem.settings.backgroundBehavior;
             Application.runInBackground=true;InputSystem.settings.backgroundBehavior=InputSettings.BackgroundBehavior.IgnoreFocus;
@@ -69,7 +70,7 @@ namespace BorrowingSun.Editor
             if(keyboard!=null&&keyboard.added){keyboard.MakeCurrent();InputState.Change(keyboard,input);if(keyboard.tabKey.wasPressedThisFrame)TraceWeatherInput("Tab down submitted before production Update");}
             if(pointer!=null&&pointer.added){pointer.MakeCurrent();InputState.Change(pointer,pointerInput);}
         }
-        private static IEnumerator FullRoute(bool shoulder=false)
+        private static IEnumerator FullRoute(bool shoulder=false,bool continueAfterDelivery=false)
         {
             report.Add("CONTINUOUS ROUTE: reset entrance to Delivered; no player placement, state injection, forced fish position or remote token requests.");
             if(shoulder)report.Add("SHOULDER ROUTE: actual Z after entrance reset selects shoulder view; the same continuous route and production input helpers are reused. Dialogue temporarily owns its close camera, while the selected gameplay mode must remain shoulder until the final R reset.");
@@ -129,6 +130,7 @@ namespace BorrowingSun.Editor
             yield return Press(Key.E);Require(!voyage.Delivered,"Arrival aboard the carrier does not skip physical delivery.");
             yield return Walk(voyage.ExitPoint,"Walk off carrier to the actual handover marker");
             yield return Press(Key.E);Require(voyage.Delivered,"Existing Delivered state is reached at the terminal.");
+            if(continueAfterDelivery)yield break;
             yield return Press(Key.E);Require(voyage.Delivered,"Repeated confirmation does not duplicate delivery.");
             if(shoulder)Require(court.CameraRig.IsShoulderView,"Continuous shoulder traversal reaches physical delivery before reset.");
             Capture(Path.Combine(Folder,"borrowing-sun-delivered.png"));
@@ -191,7 +193,10 @@ namespace BorrowingSun.Editor
             Require(j.Travel==SkywellTravel.Docked&&j.BoatDocked&&!j.HasReturnedToTower&&court.Player.enabled,"Boat stops beside the tower; it does not carry the player directly onto the central platform.");
             if(shoulder)Require(court.CameraRig.IsShoulderView,"The real water-surface boat route docks without switching away from shoulder view.");
             Capture(Path.Combine(Folder,"borrowing-sun-boat-docked.png"));
-            yield return Walk(j.LadderBottom.position-j.LadderFacingDirection*1.4f,"Walk from the boat to the front ladder approach");
+            // For the market replay, walk inside the ladder's grab rectangle before holding W.
+            // Otherwise the diagonal fixed view can walk sideways out of the rectangle while approaching.
+            float ladderApproach=module==FlowerMarketModule?.7f:1.4f;
+            yield return Walk(j.LadderBottom.position-j.LadderFacingDirection*ladderApproach,"Walk from the boat to the front ladder approach");
             yield return BeginBottomLadderWithW();
             if(shoulder)Require(court.CameraRig.IsShoulderView,"The actual ladder interaction starts in shoulder gameplay mode.");
             input=new KeyboardState(Key.W);

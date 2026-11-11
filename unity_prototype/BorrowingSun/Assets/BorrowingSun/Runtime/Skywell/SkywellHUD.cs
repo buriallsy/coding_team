@@ -18,7 +18,7 @@ namespace BorrowingSun
         private static Rect WeatherCardRect(float width,float height,int index)=>new Rect(width-350+index*110,height-315,106,117);
         private void Update()
         {
-            if(court&&(court.ObservationInputBlocked||court.WeatherInputBlocked&&!court.WeatherSelectionHeld))return;
+            if(court&&(court.FlowerMarket&&court.FlowerMarket.InputBlocked||court.ObservationInputBlocked||court.WeatherInputBlocked&&!court.WeatherSelectionHeld))return;
             if(Keyboard.current!=null&&Keyboard.current.f2Key.wasPressedThisFrame)DesignerGuidance=!DesignerGuidance;
             if(!court||Mouse.current==null)return;
             float scale=HudScale,w=Screen.width/scale,h=Screen.height/scale;
@@ -47,6 +47,8 @@ namespace BorrowingSun
                 float scale=HudScale,w=Screen.width/scale,h=Screen.height/scale;GUI.matrix=Matrix4x4.Scale(Vector3.one*scale);
                 if(court.Story&&court.Story.DialogueOpen){DrawStory(w,h);return;}
                 if(court.ObservationOpen){DrawObservation(w,h);return;}
+                if(court.FlowerMarket&&court.FlowerMarket.IsShopOpen)
+                {DrawFlowerMarket(court.FlowerMarket,w,h);return;}
                 if(DesignerGuidance){Panel(new Rect(16,16,355,106));GUI.Label(new Rect(30,26,327,30),"策划调试 · F2 关闭",title);GUI.Label(new Rect(30,63,327,58),court.Objective,body);}
                 if(court.Journey&&court.Journey.SunnyTokenObtained&&!court.Journey.HasReturnedToTower)
                 {Panel(new Rect(w-235,16,219,38));GUI.Label(new Rect(w-223,23,195,26),"晴牌已取得 · 划船爬梯返塔",body);}
@@ -303,6 +305,42 @@ private static Texture2D CreateStoryTriangleTexture()
                 {int x=Mathf.RoundToInt(p.x)+dx,y=Mathf.RoundToInt(p.y)+dy;if(x>=0&&x<128&&y>=0&&y<128&&Vector2.Distance(new Vector2(x,y),p)<1.8f)r.SetPixel(x,y,Color.white);}
             }
         }
+        private void DrawFlowerMarket(SkywellFlowerMarket market,float w,float h)
+        {
+            var run=market.Run;
+            float width=Mathf.Min(470,w-36),x=(w-width)/2,y=(h-327)/2;
+            Panel(new Rect(x,y,width,327));
+            x+=18;width-=36;
+            GUI.Label(new Rect(x,y+16,width,32),$"花庭小铺 · 第 {run.Day} 天",title);
+            GUI.Label(new Rect(x,y+53,width,30),
+                $"菌菇 {run.GetStock(FlowerIngredient.Mushroom)}   雨露果 {run.GetStock(FlowerIngredient.WeatherFruit)}   钱箱 {run.Cash}",body);
+            DrawMarketRecipe(market,FlowerRecipe.MushroomBento,"1 · 菌菇便当",new Rect(x,y+86,width,36));
+            DrawMarketRecipe(market,FlowerRecipe.FruitBento,"2 · 雨果菌菇盒",new Rect(x,y+128,width,36));
+            string stage=run.OrderStage switch
+            {
+                FlowerOrderStage.Cooking=>$"烹饪中 · {run.CookTimeRemaining:0.0} 秒",
+                FlowerOrderStage.Ready=>"已出餐 · E 交餐收款",
+                FlowerOrderStage.Served=>"已收款 · 可继续做菜或进入次日",
+                _=>"从上面的菜单选一道菜"
+            };
+            GUI.Label(new Rect(x,y+172,width,30),stage,body);
+            GUI.Label(new Rect(x,y+204,width,33),market.Feedback??"先关店面板，再出门采集。",body);
+
+            float gap=6,buttonWidth=(width-2*gap)/3;
+            if(GUI.Button(new Rect(x,y+248,buttonWidth,34),"E 收款",button))market.Serve();
+            if(GUI.Button(new Rect(x+buttonWidth+gap,y+248,buttonWidth,34),"N 次日",button))market.NextDay();
+            if(GUI.Button(new Rect(x+2*(buttonWidth+gap),y+248,buttonWidth,34),"返回",button))market.CloseShop();
+            GUI.Label(new Rect(x,y+291,width,27),"Q / Esc 回庭院 · R 重开关卡",small);
+        }
+
+        private void DrawMarketRecipe(SkywellFlowerMarket market,FlowerRecipe recipe,string label,Rect rect)
+        {
+            if(!FlowerMarketRun.TryGetRecipe(recipe,out var info))return;
+            string fruit=info.WeatherFruit>0?$" + 雨露果 {info.WeatherFruit}":"";
+            if(GUI.Button(rect,$"{label}   菌菇 {info.Mushrooms}{fruit}   {info.CookSeconds:0.#} 秒 · {info.Price} 元",button))
+                market.Cook(recipe);
+        }
+
         private static void Panel(Rect r){GUI.color=new Color(.025f,.08f,.09f,.96f);GUI.DrawTexture(r,Texture2D.whiteTexture);GUI.color=Color.white;}
     }
 }

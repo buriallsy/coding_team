@@ -20,6 +20,11 @@ namespace BorrowingSun
         [SerializeField] private SkywellObservation observation;
         [SerializeField] private SkywellStory story;
         [SerializeField] private SkywellDeerGrove grove;
+        [SerializeField] private SkywellFlowerMarket flowerMarket;
+        public SkywellFlowerMarket FlowerMarket=>flowerMarket&&flowerMarket.isActiveAndEnabled?flowerMarket:null;
+        private bool MarketInputBlocked=>FlowerMarket&&flowerMarket.InputBlocked;
+        private bool MarketWeatherAllowed(int station,SkywellToken token)=>
+            !FlowerMarket||flowerMarket.AllowsWeather(station,token,voyage&&voyage.Delivered);
         public SkywellDeerGrove Grove=>grove;
         public void ConfigureGrove(SkywellDeerGrove value)=>grove=value;
         public SkywellStory Story=>story;
@@ -84,7 +89,7 @@ namespace BorrowingSun
         public bool BorrowedSunAtVillage=>optics&&optics.Lit;
         public bool Complete=>DockedPort==2&&height>platformHighY-.01f&&ballastAmount>MaxStoredWater-.01f&&BorrowedSunAtVillage&&!cargoPausedForLight
             &&(!optics.SettlementReceiver||optics.SettlementReceiver.RewardAvailable);
-        public bool IsObserving=>ObservationInputBlocked||WeatherInputBlocked||journey&&journey.ControlsMovement||cameraRig!=null&&cameraRig.IsObserving;
+        public bool IsObserving=>MarketInputBlocked||ObservationInputBlocked||WeatherInputBlocked||journey&&journey.ControlsMovement||cameraRig!=null&&cameraRig.IsObserving;
         public static string PortName(int index)=>index==0?"西侧货庭 · 低位":index==1?"北侧采光庭 · 高位":index==2?"东侧跨谷轨 · 高位":"门洞未接平";
         private void Awake()
         {
@@ -108,6 +113,7 @@ namespace BorrowingSun
         {
             if(consoles==null||consoles.Length<2||!optics)return;
             ReturnDepartedTokens();
+            if(FlowerMarket)flowerMarket.Tick(Time.deltaTime);
             UpdateWeatherInput();
             foreach(var station in consoles)if(station)station.Tick(Time.deltaTime);
             bool wasLit=BorrowedSunAtVillage;
@@ -144,6 +150,11 @@ namespace BorrowingSun
             if(grove&&grove.Prompt!=null)return grove.Prompt;
             if(journey&&journey.CurrentPrompt!=null)return journey.CurrentPrompt;
             if(target.kind==InteractionKind.Drain)return controlledDescent?"放水阀 · E 关闭，保留当前水位":"放水阀 · E 打开，回西向低岸下降";
+            if(FlowerMarket&&voyage&&voyage.Delivered)
+            {
+                string marketPrompt=flowerMarket.Prompt(player.FeetPosition);
+                if(marketPrompt!=null)return marketPrompt;
+            }
             if(voyage&&voyage.Prompt!=null)return voyage.Prompt;
             if(WeatherTargeting)return TargetingPrompt;
             if(grove&&grove.Ride&&grove.Ride.FootDriver&&grove.Ride.FootDriver.Prompt!=null)return grove.Ride.FootDriver.Prompt;
@@ -157,6 +168,7 @@ namespace BorrowingSun
         public void InteractPrimary()
         {
             // E is also sent by CourtPlayer while movement is suppressed. Consume it here once.
+            if(MarketInputBlocked){flowerMarket.Serve();return;}
             if(story&&story.DialogueOpen){story.Advance();return;}
             if(story&&story.InputBlocked)return;
             if(observationClosedFrame==Time.frameCount)return;
@@ -170,6 +182,8 @@ namespace BorrowingSun
             if(grove&&grove.Ride&&grove.Ride.TryPrimary())return;
             if(journey&&journey.TryPrimary())return;
             if(target.kind==InteractionKind.Drain){ToggleDrain();return;}
+            if(FlowerMarket&&voyage&&voyage.Delivered&&flowerMarket.TryInteract(player))
+            {SyncCameraInteraction();return;}
             if(voyage&&voyage.TryPrimary())return;
             if(target.kind==InteractionKind.Story){story.TryInteract(target.index);return;}
             if(target.kind==InteractionKind.Observation)
@@ -182,6 +196,7 @@ namespace BorrowingSun
         }
         public void InteractSecondary()
         {
+            if(MarketInputBlocked){flowerMarket.CloseShop();SyncCameraInteraction();return;}
             if(ObservationInputBlocked)return;
             if(WeatherSelectionHeld){CancelWeatherPicker();return;}
             if(WeatherTargeting||primaryPending){CancelWeatherTargeting();return;}
@@ -217,7 +232,7 @@ namespace BorrowingSun
         // This is the authority for token ownership and tower safety. Input only submits intent.
         private bool TryApplyWeather(int station,SkywellToken token,int action)
         {
-            if(!CanUseToken(token)||Array.IndexOf(WeatherActions(token),action)<0)return false;
+            if(!CanUseToken(token)||!MarketWeatherAllowed(station,token)||Array.IndexOf(WeatherActions(token),action)<0)return false;
             var console=WeatherStation(station);
             if(!console||!console.Zone){ShowMessage("天气区域尚未接线，无法施令。");return false;}
             if(station==SkywellDeerGrove.StationIndex&&token==SkywellToken.Sun)
@@ -260,6 +275,7 @@ namespace BorrowingSun
         }
         private void ResetMechanismState()
         {
+            if(FlowerMarket)flowerMarket.ResetMarket();
             if(grove)grove.ResetGrove();
             if(story)story.ResetStory();
             if(observation)observation.ResetProgress();

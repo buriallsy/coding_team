@@ -23,6 +23,12 @@ For batch checks, set `UNITY` to the installed editor executable and run from th
   -quit -logFile "$PWD/references.log"
 ```
 
+## Flower Court market whitebox · November 11, 2026
+
+The graphical Unity Game View replay on macOS passed 312 checks. It started at the original entrance and used keyboard and pointer input through cargo handover, gathering, local rain, both recipes, day rollover, and reset. EditMode passed 122 tests, including five market cases. The serialized reference audit covered five scenes, one prefab, and 12,352 components.
+
+To replay, open `05_Skywell_FlowerMarket.unity`, enter Play Mode, and select **Borrowing Sun → Skywell → Check complete Flower Market route** with the editor in the foreground. The original ladder interaction requires actual window focus. The published EditMode XML omits machine-local paths. [Playtest record and timings](04_Iterations/Skywell_Flower_Market_Whitebox.md) · [Play Mode report](evidence/flower-market/playmode.txt) · [EditMode results](evidence/flower-market/editmode.xml) · [Serialized references](evidence/flower-market/references.txt)
+
 ## Dated L5 evidence
 
 | Date | Scope and result |
