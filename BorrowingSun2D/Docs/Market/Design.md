@@ -1,5 +1,7 @@
 # 借晴 · 谷地外卖店
 
+[后续计划与图表索引](Roadmap.md)
+
 ## 2026-11-11 版本说明
 
 - 运货教学接入白天采集、夜探选择和外卖营业。果实随雨、夜晚和实际受光变化，玩家回店后用库存选菜单。
@@ -75,7 +77,7 @@ class TowerSlice {
 }
 class MarketPlay2D {
   +TickExploration(delta)
-  +TryHarvest()
+  -TryHarvest()
   -AdvanceShuttle(delta)
 }
 class MarketRun {
@@ -143,6 +145,17 @@ stateDiagram-v2
 ```
 
 ## 架构与接口
+
+```mermaid
+flowchart TB
+    Scene["Godot 2D 场景"] -->|按键、落地和受光| Adapter["TowerSlice 与 MarketPlay2D"]
+    Adapter -->|推进时间、采集和扣水| Rules["C# 游戏规则"]
+    Rules -->|水量、阶段和食材| Adapter
+    Adapter -->|更新桥、摆渡车与采集标记| Scene
+    Rules -->|订单、计时和账目| Panel["MarketPanel"]
+    Panel -->|菜单、投料、送餐和升级| Rules
+```
+
 
 | 边界 | 输入与输出 |
 |---|---|
