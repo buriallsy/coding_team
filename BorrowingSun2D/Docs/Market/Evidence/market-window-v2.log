@@ -1,0 +1,89 @@
+Godot Engine v4.7.2.stable.mono.official.ed1daf0bf - https://godotengine.org
+OpenGL API 3.3.0 NVIDIA 581.57 - Compatibility - Using Device: NVIDIA - NVIDIA GeForce RTX 5070 Laptop GPU
+
+PASS walk walk_right to target
+PASS rain raises the existing lift
+PASS north dock
+PASS walk walk_left to target
+PASS walk walk_right to target
+PASS east dock and physical light
+PASS walk walk_right to target
+PASS tutorial loads and fills ballast
+PASS tutorial cargo arrives
+PASS walk walk_right to target
+PASS tutorial receipt
+PASS day one starts at the central shop (Day, (618, 589.983), (618, 590))
+PASS walk walk_right to target
+PASS central patch refreshes
+PASS central patch refreshes
+PASS central patch refreshes
+PASS central patch refreshes
+PASS central patch refreshes
+PASS central patch refreshes
+PASS central patch refreshes
+PASS C harvests seven actual spawned mushrooms
+PASS capture market-day.png
+PASS walk walk_left to target
+PASS rain raises the existing lift
+PASS north dock
+PASS walk walk_left to target
+PASS walk walk_right to target
+PASS east dock and physical light
+PASS foraging rain persists through wind and mirror commands
+PASS mature trees produce rain fruit
+PASS same mature trees change to sunny fruit under the actual light path
+PASS walk walk_right to target
+PASS shuttle crosses to Flower Court
+PASS outbound fare spends tower water
+PASS walk walk_right to target
+PASS player can disembark at Flower Court
+PASS walk walk_left to target
+PASS the deck edge is enough to board for return
+PASS shuttle returns to east after reboarding
+PASS return fare also spends water
+PASS shuttle crosses to Flower Court
+PASS outbound fare spends tower water
+PASS walk walk_right to target
+PASS player can disembark at Flower Court
+PASS walk walk_left to target
+PASS the deck edge is enough to board for return
+PASS shuttle returns to east after reboarding
+PASS return fare also spends water
+PASS shuttle crosses to Flower Court
+PASS outbound fare spends tower water
+PASS walk walk_right to target
+PASS player can disembark at Flower Court
+PASS walk walk_left to target
+PASS the deck edge is enough to board for return
+PASS shuttle returns to east after reboarding
+PASS return fare also spends water
+PASS empty tank cannot depart again
+PASS day ends at the choice screen
+PASS night extinguishes the previous beam
+PASS UI starts half-day night exploration
+PASS same trees change to moon fruit
+PASS walk walk_left to target
+PASS rain gives night-rain fruit without sunlight
+PASS return to shop before orders generate
+PASS the harvested stock enables the mushroom menu option
+PASS capture market-menu.png
+PASS open selected menu with two customers and half shift
+PASS capture market-business.png
+PASS both customer buttons load and cook concurrently
+PASS capture market-dual-cooking.png
+PASS both meals are ready to serve
+PASS payment credits the till and refills only its window
+PASS capture market-receipt.png
+PASS next order is cooked
+PASS three receipts add up to the upgrade price
+PASS close carries stock and payment into a fresh central day
+PASS walk walk_right to target
+PASS central patch refreshes
+PASS second dusk
+PASS UI purchase spends yesterday's earnings and leaves gross sales unchanged
+PASS capture market-kitchen-upgrade.png
+PASS menu shows the improved cook time
+PASS next shift uses the upgraded burner
+PASS upgraded mushroom dish finishes sooner
+PASS earnings resume after the purchase
+MARKET_ROUTE PASSED

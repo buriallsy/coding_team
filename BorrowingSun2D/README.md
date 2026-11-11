@@ -2,7 +2,7 @@
 
 完成运货教学后，玩家从中央外卖店出发，白天采集食材，晚上选择夜探或开店。两个窗口可以同时烹饪，收款后可跨天攒钱升级厨房。
 
-设计、UML 和系统架构见[外卖店设计说明](Docs/Market/Design.md)。2D 冻结条件、3D 接入顺序和已有图表见[后续计划](Docs/Market/Roadmap.md)。
+设计、UML 和系统架构见[外卖店设计说明](Docs/Market/Design.md)。2D 冻结条件、3D 接入顺序和已有图表见[后续计划](Docs/Market/Roadmap.md)。完整分享清单和验证边界见[交接说明](Docs/Market/Handoff.md)，本次逐类变化见[变化图与 CCR](Docs/Market/ChangeMap.md)。
 
 ## 运行
 

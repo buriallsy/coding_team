@@ -1,6 +1,6 @@
 # 谷地外卖店后续计划
 
-当前 2D 经营原型在 `feature/djwcb2333/market-loop` 分支，首个可玩提交为 `77e815a`。已有教学、采集、夜探、付费摆渡、双灶营业和跨天升级。玩法数值、UML、昼夜状态图、系统架构和接口集中在[外卖店设计说明](Design.md)。
+当前 2D 经营原型在 `feature/djwcb2333/market-loop` 分支，首个可玩提交为 `77e815a`。已有教学、采集、夜探、付费摆渡、双灶营业和跨天升级。玩法数值、UML、昼夜状态图、系统架构和接口集中在[外卖店设计说明](Design.md)。本轮实际新增、修改和保留的职责，以及新玩法的 CCR 冻结口径，见[外卖原型变化图](ChangeMap.md)。
 
 ## 1. 收尾并冻结 2D
 
@@ -30,5 +30,6 @@
 ## 已有图和历史资料
 
 - 外卖原型的 UML 类图与昼夜状态图见[UML 与职责](Design.md#uml-与职责)，系统图和接口见[架构与接口](Design.md#架构与接口)。
+- 本轮 2D 扩展的实际变化、保留职责与未来 CCR 候选范围见[外卖原型变化图](ChangeMap.md)。新版外卖 2D→3D 的实测 CCR 尚未产生。
 - 原课程版的 2D 类图与关系图继续作为塔台和运货教学的结构参考。[原 2D Class Map](../2D-to-3D/CLASS_MAPS.md) · [原 2D 关系图](../2D-to-3D/RELATIONSHIP_MAP.svg)
 - 原课程版的 3D 关系图、变化图与 40% CCR 对应原有迁移范围。它们可用来识别现有 3D 场景的接入位置。[原 3D 关系图](../../../BorrowingSun3D/Docs/RELATIONSHIP_MAP.md) · [原变化图与 CCR](../../../BorrowingSun3D/Docs/CHANGE_MAP.md)

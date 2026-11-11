@@ -1,5 +1,9 @@
 # Borrowing Sun (借晴)
 
+> **当前分支：谷地外卖店 2D 扩展。** 新版入口是 `BorrowingSun2D/project.godot`，使用 Godot 4.7.2 .NET。运货成为教学，随后进入采集、夜探、双窗口烹饪和收入升级循环。请先看[本次交接与文件清单](BorrowingSun2D/Docs/Market/Handoff.md)、[策划与 UML](BorrowingSun2D/Docs/Market/Design.md)、[变化图与 CCR 边界](BorrowingSun2D/Docs/Market/ChangeMap.md)、[2D 收尾与 3D 计划](BorrowingSun2D/Docs/Market/Roadmap.md)。[手动上传步骤](MANUAL_UPLOAD.md)
+>
+> 下方保留原课程版说明，记录的是旧运货玩法及其 3D 候选；新的外卖机制目前只在 2D 实现。原课程最终分歧说明和 PDF 已补入本分支，见[最终定案审阅](BorrowingSun3D/Docs/FINAL_DECISIONS_REVIEW.md)。
+
 **AP6412 · Route B · 2D baseline and 3D graybox 05D candidate**
 
 Borrowing Sun is a weather puzzle set around a mountain tower. Rain lifts the tower and wind connects its bridges. Aim the Sun Court mirror, borrow sunlight, and turn the tower east to light the receiver. Sustained light earns one fruit crate. The same rainwater fills the cargo counterweight so you can ride across the valley and deliver the crate.
