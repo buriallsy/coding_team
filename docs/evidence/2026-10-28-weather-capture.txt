@@ -1,0 +1,84 @@
+2026-10-28T17:57:47.0491350Z
+SKYWELL_CURRENT_WEATHER_CAPTURE
+Production Input System, CharacterController, local weather and actual gameplay rays. Automated checks do not establish first-player understanding or fun.
+CAPTURE FIXTURE: current authored L5 scene; explicit player placements isolate three weather mechanisms. Production weather selection + held E + mouse hits; no injected water/height/yaw or optics success. Production observation/dialogue grants and installs gem. Temporary offscreen portfolio camera; no HUD; not a continuous route or player-study result.
+PASS: Explicit placement lies in weather target region 0 with its authored target bound.
+WEATHER INPUT before Tab hold for Rain frame=91 t=0.777 unscaled=7.179 focused=True cursor=None keyboard=24 expected=24 tabHeld=False tabPressed=False pickerHeld=False pickerOpen=False targeting=False weatherBlocked=False observationBlocked=False journey=Walking voyage=Waiting primaryPending=False pointerPicker=False closingFrame=-1 pickerStarted=0
+WEATHER INPUT Tab down submitted before production Update frame=91 t=0.777 unscaled=7.179 focused=True cursor=None keyboard=24 expected=24 tabHeld=True tabPressed=True pickerHeld=False pickerOpen=False targeting=False weatherBlocked=False observationBlocked=False journey=Walking voyage=Waiting primaryPending=False pointerPicker=False closingFrame=-1 pickerStarted=0
+WEATHER INPUT after unchanged .45-second Tab hold frame=162 t=1.242 unscaled=7.644 focused=True cursor=None keyboard=24 expected=24 tabHeld=True tabPressed=False pickerHeld=True pickerOpen=True targeting=False weatherBlocked=True observationBlocked=False journey=Walking voyage=Waiting primaryPending=False pointerPicker=False closingFrame=-1 pickerStarted=7.17922
+PASS: Holding Tab opens weather picker.
+PASS: Release selects Rain without inserting it remotely.
+PASS: Holding E opens object targeting.
+POINTER target=中央升降塔 station=0 pixel=(1035.72, 204.67) camera=(9.53, 37.22, 95.20)
+PASS: The production camera ray hovers the visible 中央升降塔.
+PASS: A real pointer hit applies Rain to 中央升降塔.
+PASS: Releasing E ends targeting without another short-E action.
+PASS: The L5 camera uses its authored fixed/shoulder opt-in profile.
+PASS: Real Z input selects fixed gameplay view.
+PASS: Current Rain fills authored tanks.
+PASS: Rain raises actual lift to its high mechanical latch.
+WEATHER INPUT before Tab hold for Wind frame=1084 t=8.140 unscaled=14.543 focused=True cursor=None keyboard=24 expected=24 tabHeld=False tabPressed=False pickerHeld=False pickerOpen=False targeting=False weatherBlocked=False observationBlocked=False journey=Walking voyage=Waiting primaryPending=False pointerPicker=False closingFrame=488 pickerStarted=7.17922
+WEATHER INPUT Tab down submitted before production Update frame=1084 t=8.140 unscaled=14.543 focused=True cursor=None keyboard=24 expected=24 tabHeld=True tabPressed=True pickerHeld=False pickerOpen=False targeting=False weatherBlocked=False observationBlocked=False journey=Walking voyage=Waiting primaryPending=False pointerPicker=False closingFrame=488 pickerStarted=7.17922
+WEATHER INPUT after unchanged .45-second Tab hold frame=1153 t=8.611 unscaled=15.013 focused=True cursor=None keyboard=24 expected=24 tabHeld=True tabPressed=False pickerHeld=True pickerOpen=True targeting=False weatherBlocked=True observationBlocked=False journey=Walking voyage=Waiting primaryPending=False pointerPicker=False closingFrame=488 pickerStarted=14.54274
+PASS: Holding Tab opens weather picker.
+PASS: Release selects Wind without inserting it remotely.
+PASS: Holding E opens object targeting.
+POINTER target=中央升降塔 station=0 pixel=(1004.80, 116.37) camera=(9.06, 42.35, 95.75)
+PASS: The production camera ray hovers the visible 中央升降塔.
+PASS: A real pointer hit applies Wind to 中央升降塔.
+PASS: The explicit left/clockwise mouse button selects the requested Wind direction on its first hit.
+PASS: Releasing E ends targeting without another short-E action.
+PASS: The L5 camera uses its authored fixed/shoulder opt-in profile.
+PASS: Real Z input selects fixed gameplay view.
+PASS: Current wind acts on central tower.
+PASS: First wind turn settles.
+WEATHER INPUT before Tab hold for Wind frame=1877 t=14.091 unscaled=20.494 focused=True cursor=None keyboard=24 expected=24 tabHeld=False tabPressed=False pickerHeld=False pickerOpen=False targeting=False weatherBlocked=False observationBlocked=False journey=Walking voyage=Waiting primaryPending=False pointerPicker=False closingFrame=1466 pickerStarted=14.54274
+WEATHER INPUT Tab down submitted before production Update frame=1877 t=14.091 unscaled=20.494 focused=True cursor=None keyboard=24 expected=24 tabHeld=True tabPressed=True pickerHeld=False pickerOpen=False targeting=False weatherBlocked=False observationBlocked=False journey=Walking voyage=Waiting primaryPending=False pointerPicker=False closingFrame=1466 pickerStarted=14.54274
+WEATHER INPUT after unchanged .45-second Tab hold frame=1945 t=14.559 unscaled=20.962 focused=True cursor=None keyboard=24 expected=24 tabHeld=True tabPressed=False pickerHeld=True pickerOpen=True targeting=False weatherBlocked=True observationBlocked=False journey=Walking voyage=Waiting primaryPending=False pointerPicker=False closingFrame=1466 pickerStarted=20.49396
+PASS: Holding Tab opens weather picker.
+PASS: Release selects Wind without inserting it remotely.
+PASS: Holding E opens object targeting.
+POINTER target=中央升降塔 station=0 pixel=(956.88, 183.65) camera=(5.86, 42.35, 97.35)
+PASS: The production camera ray hovers the visible 中央升降塔.
+PASS: A real pointer hit applies Wind to 中央升降塔.
+PASS: The explicit left/clockwise mouse button selects the requested Wind direction on its first hit.
+PASS: Releasing E ends targeting without another short-E action.
+PASS: The L5 camera uses its authored fixed/shoulder opt-in profile.
+PASS: Real Z input selects fixed gameplay view.
+PASS: Tower reaches the selected Wind stop
+PASS: Tower reaches heading 90
+PASS: Actual proximity E collects boat Sunny.
+PASS: Authored observation records village need.
+PASS: Current keeper starts production gift dialogue.
+PASS: Finishing keeper dialogue grants gem.
+PASS: Current collector starts repair dialogue.
+PASS: Production repair installs the held gem.
+PASS: Explicit placement lies in weather target region 1 with its authored target bound.
+WEATHER INPUT before Tab hold for Wind frame=2874 t=21.321 unscaled=27.724 focused=True cursor=None keyboard=24 expected=24 tabHeld=False tabPressed=False pickerHeld=False pickerOpen=False targeting=False weatherBlocked=False observationBlocked=False journey=Walking voyage=Waiting primaryPending=False pointerPicker=False closingFrame=-1 pickerStarted=20.49396
+WEATHER INPUT Tab down submitted before production Update frame=2874 t=21.321 unscaled=27.724 focused=True cursor=None keyboard=24 expected=24 tabHeld=True tabPressed=True pickerHeld=False pickerOpen=False targeting=False weatherBlocked=False observationBlocked=False journey=Walking voyage=Waiting primaryPending=False pointerPicker=False closingFrame=-1 pickerStarted=20.49396
+WEATHER INPUT after unchanged .45-second Tab hold frame=2942 t=21.790 unscaled=28.192 focused=True cursor=None keyboard=24 expected=24 tabHeld=True tabPressed=False pickerHeld=True pickerOpen=True targeting=False weatherBlocked=True observationBlocked=False journey=Walking voyage=Waiting primaryPending=False pointerPicker=False closingFrame=-1 pickerStarted=27.7235
+PASS: Holding Tab opens weather picker.
+PASS: Release selects Wind without inserting it remotely.
+PASS: Holding E opens object targeting.
+POINTER target=采日镜 station=1 pixel=(937.66, 253.85) camera=(4.66, 42.35, 119.15)
+PASS: The production camera ray hovers the visible 采日镜.
+PASS: A real pointer hit applies Wind to 采日镜.
+PASS: The explicit left/clockwise mouse button selects the requested Wind direction on its first hit.
+PASS: Releasing E ends targeting without another short-E action.
+PASS: The L5 camera uses its authored fixed/shoulder opt-in profile.
+PASS: Real Z input selects fixed gameplay view.
+PASS: Actual wind aligns current collector.
+WEATHER INPUT before Tab hold for Sun frame=3637 t=26.857 unscaled=33.259 focused=True cursor=None keyboard=24 expected=24 tabHeld=False tabPressed=False pickerHeld=False pickerOpen=False targeting=False weatherBlocked=False observationBlocked=False journey=Walking voyage=Waiting primaryPending=False pointerPicker=False closingFrame=3271 pickerStarted=27.7235
+WEATHER INPUT Tab down submitted before production Update frame=3637 t=26.857 unscaled=33.259 focused=True cursor=None keyboard=24 expected=24 tabHeld=True tabPressed=True pickerHeld=False pickerOpen=False targeting=False weatherBlocked=False observationBlocked=False journey=Walking voyage=Waiting primaryPending=False pointerPicker=False closingFrame=3271 pickerStarted=27.7235
+WEATHER INPUT after unchanged .45-second Tab hold frame=3706 t=27.330 unscaled=33.733 focused=True cursor=None keyboard=24 expected=24 tabHeld=True tabPressed=False pickerHeld=True pickerOpen=True targeting=False weatherBlocked=True observationBlocked=False journey=Walking voyage=Waiting primaryPending=False pointerPicker=False closingFrame=3271 pickerStarted=33.25908
+PASS: Holding Tab opens weather picker.
+PASS: Release selects Sun without inserting it remotely.
+PASS: Holding E opens object targeting.
+POINTER target=采日镜 station=1 pixel=(936.42, 253.71) camera=(4.66, 42.35, 119.15)
+PASS: The production camera ray hovers the visible 采日镜.
+PASS: A real pointer hit applies Sun to 采日镜.
+PASS: Releasing E ends targeting without another short-E action.
+PASS: The L5 camera uses its authored fixed/shoulder opt-in profile.
+PASS: Real Z input selects fixed gameplay view.
+PASS: Actual scene sunlight and geometric reflection reach relay and village.
+SKYWELL_CURRENT_WEATHER_CAPTURE_PASSED
