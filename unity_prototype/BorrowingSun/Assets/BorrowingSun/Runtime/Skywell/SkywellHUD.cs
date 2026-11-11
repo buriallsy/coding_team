@@ -58,7 +58,7 @@ namespace BorrowingSun
                 if(DesignerGuidance){Panel(new Rect(16,16,355,106));GUI.Label(new Rect(30,26,327,30),"策划调试 · F2 关闭",title);GUI.Label(new Rect(30,63,327,58),court.Objective,body);}
                 if(court.Journey&&court.Journey.SunnyTokenObtained&&!court.Journey.HasReturnedToTower)
                 {Panel(new Rect(w-235,16,219,38));GUI.Label(new Rect(w-223,23,195,26),"晴牌已取得 · 划船爬梯返塔",body);}
-                if(DesignerGuidance&&!marketActive&&court.Journey&&!court.Journey.BelowGroundActive&&court.Height>5.8f)
+                if(DesignerGuidance&&!market&&court.Journey&&!court.Journey.BelowGroundActive&&court.Height>5.8f)
                 {
                     Panel(new Rect(16,134,300,109));
                     GUI.Label(new Rect(30,142,272,30),court.BorrowedSunAtVillage?"借来的阳光抵达山阴":"山阴尚未收到阳光",title);
@@ -85,7 +85,7 @@ namespace BorrowingSun
                 var reward=court.Optics?court.Optics.SettlementReceiver:null;
                 if(reward&&reward.State==SettlementSunState.Spreading)
                 {Panel(new Rect(w/2-166,24,332,45));GUI.Label(new Rect(w/2-154,31,308,30),"晴光正在传入村庄",prompt);}
-                if(reward&&reward.RewardToastVisible)
+                if(!market&&reward&&reward.RewardToastVisible)
                 {
                     float y=h-(court.WeatherPickerOpen?420:246);
                     Panel(new Rect(w-276,y,260,84));
@@ -334,7 +334,7 @@ private static Texture2D CreateStoryTriangleTexture()
             Panel(new Rect(x,y,width,214));
             x+=18;width-=36;
             GUI.Label(new Rect(x,y+16,width,30),$"第 {market.Run.Day} 天 · 黄昏",title);
-            GUI.Label(new Rect(x,y+50,width,42),"夜里没有晴果。夜探时，向花庭集雨盆施雨可采雨夜果。",body);
+            GUI.Label(new Rect(x,y+50,width,42),"夜里没有晴果。夜探时，借东岸的雨可采雨夜果。",body);
             if(GUI.Button(new Rect(x,y+105,width,37),
                 $"1 · 直接回店 · 营业 {market.DirectTradingSeconds:0.##} 秒",button))market.ChooseDusk(false,court.Player);
             if(GUI.Button(new Rect(x,y+151,width,37),
@@ -350,7 +350,7 @@ private static Texture2D CreateStoryTriangleTexture()
             width -= 36;
 
             string clock = run.OrdersAccepted ? $" · 剩 {Mathf.CeilToInt(run.RemainingTradingSeconds)} 秒" : "";
-            GUI.Label(new Rect(x, y + 16, width, 32), $"花庭小铺 · 第 {run.Day} 天{clock}", title);
+            GUI.Label(new Rect(x, y + 16, width, 32), $"中央塔小铺 · 第 {run.Day} 天{clock}", title);
             GUI.Label(new Rect(x, y + 55, width, 44),
                 $"钱箱 {run.Cash} 元 · 累计营业额 {run.TotalRevenue} 元\n" +
                 $"菌菇 {run.GetStock(FlowerIngredient.Mushroom)}   晴果 {run.GetStock(FlowerIngredient.SunnyFruit)}   雨露果 {run.GetStock(FlowerIngredient.WeatherFruit)}   雨夜果 {run.GetStock(FlowerIngredient.RainNightFruit)}", body);
@@ -377,9 +377,9 @@ private static Texture2D CreateStoryTriangleTexture()
                 "接单后按窗口编号下锅和交餐。厨房升级在接单前购买。";
             GUI.Label(new Rect(x, y + 235, width, 40), market.Feedback ?? hint, body);
             if (GUI.Button(new Rect(x, y + 287, columnWidth, 36), "N 收摊 · 查看日结", button)) market.EndTrading();
-            if (GUI.Button(new Rect(x + columnWidth + 12, y + 287, columnWidth, 36), "返回庭院", button)) market.HideShop();
+            if (GUI.Button(new Rect(x + columnWidth + 12, y + 287, columnWidth, 36), "离开柜台", button)) market.HideShop();
             GUI.Label(new Rect(x, y + 333, width, 24), run.OrdersAccepted ?
-                "Q / Esc 回庭院 · 营业继续计时" : "Q / Esc 回庭院 · R 重开关卡", small);
+                "Q / Esc 离开柜台 · 营业继续计时" : "Q / Esc 离开柜台 · R 重开关卡", small);
         }
 
         private void DrawFlowerDaySummary(SkywellFlowerMarket market, float w, float h)
@@ -389,7 +389,7 @@ private static Texture2D CreateStoryTriangleTexture()
             Panel(new Rect(x, y, width, 295));
             x += 18;
             width -= 36;
-            GUI.Label(new Rect(x, y + 16, width, 32), $"花庭小铺 · 第 {run.Day} 天日结", title);
+            GUI.Label(new Rect(x, y + 16, width, 32), $"中央塔小铺 · 第 {run.Day} 天日结", title);
             GUI.Label(new Rect(x, y + 54, width, 26), run.ClosedByTimeLimit ? "营业时间到，已收摊" : "已主动收摊", body);
             GUI.Label(new Rect(x, y + 92, width, 30), $"本晚营业额 {run.EveningRevenue} 元", title);
             GUI.Label(new Rect(x, y + 132, width, 30), $"钱箱 {run.Cash} 元 · 累计营业额 {run.TotalRevenue} 元", body);

@@ -2,6 +2,8 @@
 
 2026-11-11 · 续做 `05_Skywell_FlowerMarket.unity`。营业到时或主动收摊都先结算当晚，再由玩家开始次日。经营入口仍在原 L5 签收后的花庭小铺。 [花庭副本](../../unity_prototype/BorrowingSun/Assets/BorrowingSun/Scenes/05_Skywell_FlowerMarket.unity) · [上轮双窗与快灶记录](Skywell_Flower_Market_Kitchen.md)
 
+本页记录中央塔改线前的花庭布局。当前小铺位置和采集路线见中央塔记录。 [中央塔小铺与山头采集](Skywell_Tower_Market.md)
+
 ## 营业时间与操作
 
 | 黄昏选择 | 采集与归店 | 营业默认时间 |

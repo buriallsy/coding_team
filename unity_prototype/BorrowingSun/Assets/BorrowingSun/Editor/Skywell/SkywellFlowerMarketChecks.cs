@@ -90,311 +90,174 @@ namespace BorrowingSun.Editor
         {
             var market = court.GetComponentInChildren<SkywellFlowerMarket>(true);
             Require(market && market.Shop && market.Mushrooms && market.RainFruit && market.RainZone && market.RainTarget,
-                "The Flower Court shop, both resource stops and the local rain mechanism are authored.");
+                "The tower shop and both fixed mountain gathering stops are authored.");
+            Require(market.Shop.IsChildOf(court.Rotor) && !market.Mushrooms.IsChildOf(court.Rotor) &&
+                !market.RainFruit.IsChildOf(court.Rotor),
+                "The shop rides the moving rotor while the north mushroom patch and east orchard stay on their own shores.");
             int stationIndex = market.RainTarget.StationIndex;
-            Require(stationIndex == 5 && court.Consoles.Length == 6 &&
+            Require(stationIndex == 3 && court.Consoles.Length == 5 &&
                 court.Consoles[stationIndex] && court.Consoles[stationIndex].Zone == market.RainZone &&
                 WeatherTargetForStation(stationIndex) == market.RainTarget,
-                "The Flower Court rain station is appended after the five original stations.");
+                "The east orchard reuses the original village rain station and its actual target.");
+            Require(!court.Voyage && !court.GetComponentsInChildren<SkywellVoyage>(true).Any(voyage => voyage.isActiveAndEnabled),
+                "The market variant has no live finale cargo voyage.");
             yield return Wait(.2f);
-            Require(!market.Run.IsStarted && !market.IsShopOpen, "The market starts locked before the voyage.");
+            Require(!market.Run.IsStarted && !market.IsShopOpen, "The market is locked at the original west entrance.");
             Vector3 spawn = court.Player.FeetPosition;
-
-            yield return FullRoute(continueAfterDelivery: true);
-            Require(court.Voyage.Delivered && !market.Run.IsStarted && !market.IsShopOpen,
-                "The original E signature leaves the delivered voyage intact and does not open the market.");
-            Require(court.BorrowedSunAtVillage && court.Optics.SettlementReceiver.RewardAvailable,
-                "The original live collector beam and its earned reward are still present after signing in daylight.");
-            float towerHeight = court.Height;
-            float towerYaw = court.Yaw;
-            float towerWater = court.WaterLevel;
-            float ballast = court.BallastAmount;
-            var originalCargo = court.Optics.SettlementReceiver.fruitCrate;
-
-            Vector3 shop = market.Shop.position;
             Vector3 mushrooms = market.Mushrooms.position;
             Vector3 rainFruit = market.RainFruit.position;
-            Require(Vector3.Distance(shop, mushrooms) > 1.35f && Vector3.Distance(shop, rainFruit) > 1.35f,
-                "Both ingredient stops require leaving the shop.");
-            report.Add($"FLOWER ANCHORS shop={shop} mushrooms={mushrooms} rainFruit={rainFruit}");
+            Vector3 shopLocal = court.Rotor.InverseTransformPoint(market.Shop.position);
+            report.Add($"TOWER MARKET ANCHORS shopLocal={shopLocal} northMushrooms={mushrooms} eastOrchard={rainFruit}");
             SaveProgress();
 
-            yield return Walk(shop, "Flower Court handover to shop");
+            report.Add("CONTINUOUS TOWER MARKET ROUTE: real entrance, surface boat and ladder, rain lift, wind docking, both mountain harvests and trading. No fixture placement or cargo voyage.");
+            yield return SurfaceWaterSequence();
+            Require(court.Journey.HasReturnedToTower && court.Journey.SunnyTokenObtained &&
+                court.OnRotor(court.Player.FeetPosition) && !market.Run.IsStarted,
+                "The existing water route and physical ladder return to the tower without automatically starting the market.");
+            yield return Walk(Local(-2.8f, -3), "Ladder landing to the tower's rear aisle");
+            yield return Walk(Local(2.4f, -3), "Rear aisle around the relay to the shop side");
+            yield return Walk(market.Shop.position, "Reach the actual tower shop");
             yield return Press(Key.E);
-            Require(market.Run.Phase == FlowerMarketPhase.DayGathering && market.Run.Day == 1 &&
-                market.Run.Cash == 0 && market.Run.CanGather && !market.IsDuskOpen && !market.IsShopOpen,
-                "A separate short E starts daylight gathering with no modal and an empty cashbox.");
-            float dayRemaining = market.Run.RemainingGatherSeconds;
-            Require(dayRemaining > 0, "The live daytime gathering countdown starts on day one.");
+            Require(market.Run.Day == 1 && market.Run.Phase == FlowerMarketPhase.DayGathering &&
+                market.Run.CanGather && !market.IsShopOpen && market.Run.Cash == 0,
+                "A separate short E at the central shop opens day one without an end-of-voyage signature.");
+            float dayOpened = Time.time;
+            Capture(Path.Combine(Folder, "tower-market-shop-low.png"));
 
-            float outbound = Time.time;
-            yield return Walk(mushrooms, "Shop to dry mushrooms");
-            float atMushrooms = Time.time;
-            yield return GatherFlowerMushrooms(market, 5);
-            float returning = Time.time;
-            yield return Walk(shop, "Dry mushrooms to shop");
-            RecordFlowerTrip("dry mushrooms", outbound, atMushrooms, returning);
+            yield return Walk(Local(2.4f, -3), "Shop to the tower's rear aisle");
+            yield return Walk(Local(-2.8f, -3), "Cross the rear aisle to the weather side");
+            yield return Walk(Local(-2.4f, -.8f), "Approach the original tower weather station");
+            yield return SetWeather(SkywellToken.Rain, 0);
+            yield return CarryUntil(() => court.Height >= court.PlatformHighY - .01f, 15,
+                "Real tower rain fills the counterweights and carries the player to the high deck.");
+            CheckLiftBase("tower market high");
+            var rain = court.GetComponentInChildren<SkywellRainFeedback>();
+            if (rain) CheckCounterweights(rain, "tower market rain store");
+            float storedWater = court.WaterLevel;
+            Require(court.OnRotor(court.Player.FeetPosition) && court.LiftLatched &&
+                Mathf.Abs(storedWater - court.MaxStoredWater) < .02f && court.BallastAmount < .01f &&
+                Mathf.Abs(market.Shop.position.y - (court.Origin.y + court.Height)) < .05f,
+                "The original rainwater raises and latches the occupied deck, and the shop rises with the same deck.");
+            Capture(Path.Combine(Folder, "tower-market-shop-high.png"));
 
-            outbound = Time.time;
-            yield return Walk(rainFruit, "Shop to the daylight orchard");
-            float atRainFruit = Time.time;
-            Require(market.Run.RemainingGatherSeconds < dayRemaining, "The daytime clock advances during actual gathering and travel.");
-            Require(!market.RainZone.IsRain && market.RainZone.Contains(court.Player.FeetPosition) &&
-                market.RainZone.Contains(rainFruit), "The feet and fruit are inside the inactive local rain volume.");
-            RecordFlowerCrop("daylight arrival", market);
-            Require(market.SunlightAvailable && market.OrchardReceivesSunlight &&
-                market.OrchardProduce == FlowerIngredient.SunnyFruit,
-                "The authored daytime orchard receives actual sunlight and offers SunnyFruit while dry.");
-            yield return Press(Key.E);
-            Require(market.Run.GetStock(FlowerIngredient.SunnyFruit) == 1 &&
-                market.Run.GetStock(FlowerIngredient.WeatherFruit) == 0,
-                "Short E picks one SunnyFruit in the dry daylight orchard.");
-            RecordFlowerCrop("daylight", market);
-            Capture(Path.Combine(Folder, "flower-market-sunny-day.png"));
+            yield return TurnTowerTo(0);
+            Require(court.DockedPort == 1 && Mathf.Abs(court.WaterLevel - storedWater) < .02f,
+                "Wind docks north without spending the stored rainwater.");
+            float northDeparture = Time.time;
+            yield return ToCollectorStation();
+            yield return Walk(court.Origin + new Vector3(-3, 6, 20), "North court clear aisle toward the mushroom patch");
+            yield return Walk(mushrooms, "Walk to the north mountain mushroom patch");
+            float northArrival = Time.time;
+            Require(!court.OnRotor(court.Player.FeetPosition) && court.Consoles[0].Token == SkywellToken.None,
+                "The player crosses the real northern bridge onto fixed ground and the tower's Wind token returns.");
+            yield return GatherFlowerMushrooms(market, 3);
+            Require(market.Run.GetStock(FlowerIngredient.Mushroom) == 3,
+                "Three mushrooms enter the market bag from the actual north mountain patch.");
+            Capture(Path.Combine(Folder, "tower-market-north-harvest.png"));
+            float northReturn = Time.time;
+            yield return Walk(court.Origin + new Vector3(-3, 6, 20), "Return via the north court aisle");
+            yield return ToTowerConsole();
+            RecordFlowerTrip("north mushroom mountain", northDeparture, northArrival, northReturn);
+            Require(court.OnRotor(court.Player.FeetPosition) && court.DockedPort == 1,
+                "The north return walks back onto the same docked tower.");
+
+            yield return TurnTowerTo(90);
+            Require(court.DockedPort == 2 && court.LiftLatched && Mathf.Abs(court.WaterLevel - storedWater) < .02f,
+                "A second actual Wind cast docks east and retains tower height and water.");
+            float eastDeparture = Time.time;
+            yield return ToEasternObservation();
+            yield return Walk(court.Origin + new Vector3(48, 6, 0), "East landing to the orchard aisle");
+            yield return Walk(rainFruit, "Walk from the east landing to the orchard on the fixed mountain");
+            float eastArrival = Time.time;
+            Require(!court.OnRotor(court.Player.FeetPosition) && !market.FruitIsWet &&
+                market.RainZone.Contains(court.Player.FeetPosition) && market.RainZone.Contains(rainFruit),
+                "The actual east crossing reaches a dry orchard and both the player and fruit are inside the village rain zone.");
+            RecordFlowerCrop("east dry arrival", market);
             yield return CastFlowerMarketRain(market);
-            Require(market.OrchardProduce == FlowerIngredient.WeatherFruit,
-                "Actual local rain changes the daytime orchard to WeatherFruit.");
-            Capture(Path.Combine(Folder, "flower-market-local-rain.png"));
+            Require(market.FruitIsWet && market.OrchardProduce == FlowerIngredient.WeatherFruit,
+                "A real pointer cast of Rain at the village station changes this east orchard to rain fruit.");
             yield return Press(Key.E);
             Require(market.Run.GetStock(FlowerIngredient.WeatherFruit) == 1 &&
-                market.Run.GetStock(FlowerIngredient.SunnyFruit) == 1,
-                "Short E picks one WeatherFruit under daytime rain and preserves the earlier SunnyFruit.");
-            RecordFlowerCrop("daytime rain", market);
-            returning = Time.time;
-            yield return Walk(shop, "Daylight orchard to shop");
-            RecordFlowerTrip("weather fruit", outbound, atRainFruit, returning);
-            Require(!market.RainZone.Contains(court.Player.FeetPosition), "The shop is outside the rain operating area.");
+                market.Run.GetStock(FlowerIngredient.SunnyFruit) == 0 && market.Run.GetStock(FlowerIngredient.Mushroom) == 3,
+                "Short E adds the east rain fruit while retaining the mushrooms from the other mountain.");
+            RecordFlowerCrop("east rain harvest", market);
+            Capture(Path.Combine(Folder, "tower-market-east-rain.png"));
+            float eastReturn = Time.time;
+            yield return FromEasternVillageToTower();
+            RecordFlowerTrip("east orchard mountain", eastDeparture, eastArrival, eastReturn);
             yield return WaitForFlowerMarketRainReturn(market);
+            Require(court.OnRotor(court.Player.FeetPosition) && court.DockedPort == 2 && court.BallastAmount < .01f &&
+                Mathf.Abs(court.WaterLevel - storedWater) < .02f,
+                "The east return walks onto the tower with its original rainwater still in the lift and none in cargo ballast.");
 
+            yield return Walk(Local(-2.8f, -3), "Weather side to the rear aisle");
+            yield return Walk(Local(2.4f, -3), "Cross behind the relay to the rotating shop side");
+            yield return Walk(market.Shop.position, "Return to the central shop at the live east-facing pose");
+            Require(court.OnRotor(court.Player.FeetPosition) && market.Run.Phase == FlowerMarketPhase.DayGathering &&
+                market.Run.RemainingGatherSeconds > 0 &&
+                Vector3.Distance(court.Rotor.InverseTransformPoint(market.Shop.position), shopLocal) < .01f,
+                "Both mountain harvests return to the same rotating store before daylight gathering ends.");
+            report.Add(FormattableString.Invariant(
+                $"TOWER MARKET OUTING returnedIn={Time.time - dayOpened:F2}s daylightRemaining={market.Run.RemainingGatherSeconds:F2}s"));
+            SaveProgress();
             yield return EnterFlowerMarketDusk(market);
-            Capture(Path.Combine(Folder, "flower-market-dusk-choice.png"));
+            Capture(Path.Combine(Folder, "tower-market-dusk.png"));
             yield return Press(Key.Digit1);
             Require(market.Run.Day == 1 && market.Run.Phase == FlowerMarketPhase.Trading && market.IsShopOpen &&
-                !market.IsDuskOpen && market.Run.IsNight && !market.Run.CanGather,
-                "Actual 1 chooses direct return at the shop and opens trading without a night outing.");
-            CheckFlowerTradingBudget(market, 120f, "Direct return");
-            yield return WaitUntil(() => !market.SunlightAvailable && !court.Optics.Collector.Active &&
-                !court.BorrowedSunAtVillage, 4, "Nightfall extinguishes the actual collector beam and village ray.");
-            Require(court.Voyage.Delivered && originalCargo.activeSelf && court.Optics.SettlementReceiver.RewardAvailable,
-                "Nightfall preserves the original reward and signed delivery even while the live ray is off.");
-            Capture(Path.Combine(Folder, "flower-market-shop.png"));
-            yield return Press(Key.Q);
-            Require(!market.IsShopOpen && !court.IsObserving && market.Run.Phase == FlowerMarketPhase.Trading,
-                "Q hides trading and restores movement while preserving the trading phase.");
-            yield return Press(Key.E);
-            Require(market.IsShopOpen, "A separate short E reopens trading with the gathered ingredients.");
-            yield return CheckFlowerMarketModal(market, "The trading panel");
-            yield return Press(Key.U);
-            Require(!market.Run.KitchenUpgraded && market.Run.Cash == 0 && !market.Run.OrdersAccepted,
-                "U cannot buy the upgrade before the first day's earnings.");
-            yield return Press(Key.Digit1);
-            Require(!market.Run.OrdersAccepted && market.Run.GetStove(0).Stage == FlowerOrderStage.Idle &&
-                market.Run.GetStock(FlowerIngredient.Mushroom) == 5,
-                "The window key cannot start cooking before the player accepts customer orders.");
+                court.OnRotor(court.Player.FeetPosition),
+                "Direct return opens trading on the central tower instead of boarding a carrier.");
+            CheckFlowerTradingBudget(market, 120f, "Tower direct return");
             yield return AcceptFlowerOrders(market, FlowerIngredient.WeatherFruit);
-            float directTradingRemaining = CheckFlowerTradingStarted(market, 120f, "Direct return");
-            Capture(Path.Combine(Folder, "flower-market-orders-accepted.png"));
-            yield return Press(Key.Q);
-            yield return Walk(Vector3.Lerp(shop, mushrooms, .5f), "Leave the counter while the shop clock is running");
-            Require(!market.IsShopOpen && market.Run.OrdersAccepted &&
-                market.Run.RemainingTradingSeconds < directTradingRemaining && market.Run.RemainingTradingSeconds > 0,
-                "The 120-second trading clock keeps running while the panel is hidden and the player walks away.");
-            float hiddenTradingRemaining = market.Run.RemainingTradingSeconds;
-            yield return Walk(shop, "Return to the counter during active trading");
-            yield return Press(Key.E);
-            Require(market.IsShopOpen && market.Run.OrdersAccepted && market.Run.RemainingTradingSeconds > 0 &&
-                market.Run.RemainingTradingSeconds < hiddenTradingRemaining,
-                "Returning to the panel preserves its outstanding orders and does not restart the trading clock.");
+            CheckFlowerTradingStarted(market, 120f, "Tower direct return");
             yield return StartFlowerStove(market, 0, FlowerRecipe.MushroomBento);
-            float standardCookRemaining = market.Run.GetStove(0).RemainingSeconds;
             yield return StartFlowerStove(market, 1, FlowerRecipe.FruitBento);
-            float standardFruitCookRemaining = market.Run.GetStove(1).RemainingSeconds;
             Require(market.Run.GetStove(0).Stage == FlowerOrderStage.Cooking &&
-                market.Run.GetStock(FlowerIngredient.Mushroom) == 2 &&
-                market.Run.GetStock(FlowerIngredient.WeatherFruit) == 0 &&
-                market.Run.GetStock(FlowerIngredient.SunnyFruit) == 1,
-                "Both stoves cook at the same time and consume the exact day-one ingredients once.");
-            RecordFlowerKitchen("day one parallel", market);
-            Capture(Path.Combine(Folder, "flower-market-dual-stove.png"));
-            yield return Press(Key.Digit1);
-            Require(market.Run.GetStove(0).Stage == FlowerOrderStage.Cooking && market.Run.Cash == 0,
-                "Pressing a busy order key cannot collect an early payment.");
+                market.Run.GetStock(FlowerIngredient.Mushroom) == 0 && market.Run.GetStock(FlowerIngredient.WeatherFruit) == 0,
+                "Both stoves cook at once on the tower using only the ingredients physically gathered on the two mountains.");
+            RecordFlowerKitchen("tower parallel orders", market);
+            Capture(Path.Combine(Folder, "tower-market-dual-stove.png"));
             yield return ServeFlowerStove(market, 0, 12);
             yield return ServeFlowerStove(market, 1, 34);
-            Capture(Path.Combine(Folder, "flower-market-two-orders.png"));
-            Require(market.Run.GetStove(0).Stage == FlowerOrderStage.Waiting &&
-                market.Run.GetStove(0).Recipe == FlowerRecipe.MushroomBento,
-                "The served mushroom window refills with a new affordable order.");
-            yield return StartFlowerStove(market, 0, FlowerRecipe.MushroomBento);
-            yield return ServeFlowerStove(market, 0, 46);
-            yield return Press(Key.Digit1);
-            Require(market.Run.Cash == 46 && market.Run.TotalRevenue == 46,
-                "Pressing the emptied order key cannot collect payment again.");
-            yield return Press(Key.U);
-            Require(!market.Run.KitchenUpgraded && market.Run.Cash == 46,
-                "Even with enough earnings, U cannot upgrade after orders have opened for the evening.");
-            Require(market.Run.EveningRevenue == 46, "The three delivered dishes earn 46 for the first evening.");
             yield return Press(Key.N);
-            Require(market.Run.Day == 1 && market.Run.Phase == FlowerMarketPhase.DaySummary && market.IsSummaryOpen &&
-                !market.IsShopOpen && market.Run.IsNight && !market.Run.ClosedByTimeLimit && !market.Run.HasPendingOrders &&
-                market.Run.EveningRevenue == 46 && market.Run.TotalRevenue == 46 && market.Run.Cash == 46 &&
-                market.Run.GetRefundedStock(FlowerIngredient.Mushroom) == 0,
-                "One actual N closes direct-return trading into the same evening's manual summary without any refund.");
-            RecordFlowerTrading("direct manual summary", market);
-            Capture(Path.Combine(Folder, "flower-market-direct-summary.png"));
-            yield return CheckFlowerMarketModal(market, "The daily summary");
+            Require(market.IsSummaryOpen && market.Run.Day == 1 && !market.Run.ClosedByTimeLimit &&
+                market.Run.EveningRevenue == 34 && market.Run.TotalRevenue == 34 && market.Run.Cash == 34 &&
+                !market.Run.HasPendingOrders && court.OnRotor(court.Player.FeetPosition),
+                "N opens the actual 34-value sales summary on the tower without moving the player or requiring a ferry.");
+            RecordFlowerTrading("tower manual summary", market);
+            Capture(Path.Combine(Folder, "tower-market-summary.png"));
             yield return Press(Key.N);
-            Require(market.Run.Day == 2 && market.Run.Phase == FlowerMarketPhase.DayGathering && !market.IsShopOpen &&
-                !market.IsSummaryOpen && !market.Run.IsNight && market.Run.Cash == 46 && market.Run.TotalRevenue == 46 &&
-                market.Run.EveningRevenue == 0 && !market.Run.OrdersAccepted &&
-                !market.Run.HasPendingOrders && market.Run.GetStock(FlowerIngredient.Mushroom) == 0 &&
-                market.Run.GetStock(FlowerIngredient.SunnyFruit) == 1 && market.SunlightAvailable,
-                "A separate actual N acknowledges the summary and carries cash and unused ingredients into day-two dawn.");
-            Capture(Path.Combine(Folder, "flower-market-day-two.png"));
+            Require(!market.IsSummaryOpen && market.Run.Day == 2 && market.Run.Phase == FlowerMarketPhase.DayGathering &&
+                market.Run.EveningRevenue == 0 && market.Run.Cash == 34 && market.Run.TotalRevenue == 34 &&
+                court.DockedPort == 2 && court.OnRotor(court.Player.FeetPosition) && court.LiftLatched &&
+                Mathf.Abs(court.WaterLevel - storedWater) < .02f && court.BallastAmount < .01f,
+                "Day two retains earnings and the physical east-facing tower state without a cargo stage or relocation.");
 
-            yield return Walk(mushrooms, "Day-two shop to dry mushrooms");
-            yield return GatherFlowerMushrooms(market, 5);
-            yield return Walk(shop, "Day-two mushrooms to shop");
-            yield return EnterFlowerMarketDusk(market);
-            yield return Press(Key.Digit2);
-            Require(market.Run.Day == 2 && market.Run.Phase == FlowerMarketPhase.NightExploration && market.Run.IsNight &&
-                market.Run.CanGather && market.Run.RemainingGatherSeconds > 0 && !market.IsDuskOpen && !market.IsShopOpen,
-                "Actual 2 closes the dusk choice and starts timed night exploration with free movement.");
-            float nightRemaining = market.Run.RemainingGatherSeconds;
-            outbound = Time.time;
-            yield return Walk(rainFruit, "Shop to the night orchard");
-            float atNightOrchard = Time.time;
-            Require(market.Run.RemainingGatherSeconds < nightRemaining, "The night clock advances during actual travel.");
-            Require(!market.SunlightAvailable && !market.OrchardReceivesSunlight &&
-                !market.FruitIsWet && !market.OrchardProduce.HasValue,
-                "The dry orchard has no sunlight or produce at night.");
+            yield return Walk(Local(2.4f, -3), "Leave the shop by the rear aisle");
+            yield return Walk(Local(-2.8f, -3), "Cross the rear aisle to the wind controls");
+            yield return Walk(Local(-2.4f, -.8f), "Reach the tower weather station for the west return");
+            yield return TurnTowerTo(-90);
+            yield return Walk(Local(-2.4f, -3), "Approach the west-facing drain valve");
             yield return Press(Key.E);
-            Require(market.Run.GetStock(FlowerIngredient.RainNightFruit) == 0 &&
-                market.Run.GetStock(FlowerIngredient.SunnyFruit) == 1 &&
-                market.Run.GetStock(FlowerIngredient.WeatherFruit) == 0,
-                "Short E in the dry night orchard leaves all fruit stocks unchanged.");
-            RecordFlowerCrop("dry night", market);
-            Capture(Path.Combine(Folder, "flower-market-night-dry.png"));
-            yield return CastFlowerMarketRain(market);
-            Require(!market.SunlightAvailable && !market.OrchardReceivesSunlight && market.FruitIsWet &&
-                market.OrchardProduce == FlowerIngredient.RainNightFruit,
-                "Actual rain at night makes the orchard produce RainNightFruit without daylight.");
-            yield return Press(Key.E);
-            Require(market.Run.GetStock(FlowerIngredient.RainNightFruit) == 1 &&
-                market.Run.GetStock(FlowerIngredient.SunnyFruit) == 1 &&
-                market.Run.GetStock(FlowerIngredient.WeatherFruit) == 0,
-                "Short E picks one RainNightFruit at night without producing either daylight fruit.");
-            RecordFlowerCrop("night rain", market);
-            Capture(Path.Combine(Folder, "flower-market-night-rain.png"));
-            returning = Time.time;
-            yield return Walk(shop, "Night orchard to the Flower Court shop");
-            RecordFlowerTrip("night orchard", outbound, atNightOrchard, returning);
-            yield return WaitForFlowerMarketRainReturn(market);
-            yield return Press(Key.E);
-            Require(market.Run.Day == 2 && market.Run.Phase == FlowerMarketPhase.Trading && market.IsShopOpen &&
-                market.Run.GetStock(FlowerIngredient.RainNightFruit) == 1,
-                "A separate short E ends night exploration and opens trading with the rain-night crop.");
-            CheckFlowerTradingBudget(market, 60f, "Night exploration");
-            Capture(Path.Combine(Folder, "flower-market-night-trading.png"));
-            Require(market.Run.CanUpgradeKitchen && !market.Run.OrdersAccepted && !market.Run.KitchenUpgraded,
-                "The second day's funded shop offers the kitchen upgrade before accepting orders.");
-            yield return Press(Key.U);
-            int upgradedCash = 46 - market.Run.KitchenUpgradeCost;
-            Require(market.Run.KitchenUpgraded && !market.Run.CanUpgradeKitchen && market.Run.Cash == upgradedCash &&
-                market.Run.TotalRevenue == 46 && !market.Run.OrdersAccepted,
-                "U buys the upgrade for exactly its configured cost and preserves gross revenue.");
-            yield return Press(Key.U);
-            Require(market.Run.Cash == upgradedCash, "Repeated U cannot charge for the same upgrade twice.");
-            RecordFlowerKitchen("kitchen upgrade", market);
-            Capture(Path.Combine(Folder, "flower-market-kitchen-upgraded.png"));
-            yield return AcceptFlowerOrders(market, FlowerIngredient.RainNightFruit);
-            float nightTradingRemaining = CheckFlowerTradingStarted(market, 60f, "Night exploration");
-            float nightTradingSampleTime = Time.time;
-            yield return StartFlowerStove(market, 0, FlowerRecipe.MushroomBento);
-            Require(market.Run.GetStove(0).RemainingSeconds < standardCookRemaining - .4f,
-                "The upgraded mushroom stove has a shorter live timer than the same recipe yesterday.");
-            yield return StartFlowerStove(market, 1, FlowerRecipe.FruitBento);
-            Require(market.Run.GetStove(0).Stage == FlowerOrderStage.Cooking &&
-                market.Run.GetStove(1).RemainingSeconds < standardFruitCookRemaining - .4f &&
-                market.Run.GetStock(FlowerIngredient.Mushroom) == 2 &&
-                market.Run.GetStock(FlowerIngredient.RainNightFruit) == 0 &&
-                market.Run.GetStock(FlowerIngredient.SunnyFruit) == 1,
-                "Both upgraded stoves use shorter live timers and the fruit order consumes the night crop before the sunny crop.");
-            RecordFlowerKitchen("day two upgraded parallel", market);
-            Capture(Path.Combine(Folder, "flower-market-upgraded-dual-stove.png"));
-            yield return ServeFlowerStove(market, 0, upgradedCash + 12);
-            yield return WaitUntil(() => market.Run.GetStove(1).Stage == FlowerOrderStage.Ready, 8,
-                "The second stove finishes independently while its order remains undelivered.");
-            Require(market.Run.GetStove(0).Stage == FlowerOrderStage.Waiting && market.Run.EveningRevenue == 12,
-                "A second mushroom order refills after the only sale of the night, while the fruit dish waits to be delivered.");
-
-            float beforeDeadlineWait = market.Run.RemainingTradingSeconds;
-            Require(beforeDeadlineWait > 2f, "The natural timeout test begins before the last seconds of trading.");
-            yield return WaitUntil(() => market.Run.RemainingTradingSeconds <= 1.5f, beforeDeadlineWait + 3f,
-                "The live 60-second shop clock runs down into the last 1.5 seconds without input.");
-            yield return StartFlowerStove(market, 0, FlowerRecipe.MushroomBento);
-            Require(market.Run.RemainingTradingSeconds > 0 &&
-                market.Run.GetStove(0).RemainingSeconds > market.Run.RemainingTradingSeconds &&
-                market.Run.GetStove(1).Stage == FlowerOrderStage.Ready &&
-                market.Run.GetStock(FlowerIngredient.Mushroom) == 0 && market.Run.GetStock(FlowerIngredient.RainNightFruit) == 0,
-                "At the deadline window A is still cooking, window B is already ready, and both dishes have debited their ingredients.");
-            RecordFlowerTrading("night deadline pending", market);
-            Capture(Path.Combine(Folder, "flower-market-trading-deadline.png"));
-            yield return Press(Key.Q);
-            Require(!market.IsShopOpen && !market.IsSummaryOpen && market.Run.RemainingTradingSeconds > 0 &&
-                market.Run.GetStove(0).Stage == FlowerOrderStage.Cooking && market.Run.GetStove(1).Stage == FlowerOrderStage.Ready,
-                "Q hides the panel before the deadline while both undelivered dishes remain in their own windows.");
-            yield return WaitUntil(() => market.Run.Phase == FlowerMarketPhase.DaySummary && market.IsSummaryOpen, 4,
-                "The real shop timer reaches zero and opens the daily summary from the hidden panel without a closing key.");
-            float nightTradingElapsed = Time.time - nightTradingSampleTime;
-            Require(Mathf.Abs(nightTradingElapsed - nightTradingRemaining) < .5f,
-                FormattableString.Invariant($"Observed {nightTradingElapsed:F2}s of live trading after sampling {nightTradingRemaining:F2}s left."));
-            Require(market.Run.Day == 2 && market.Run.IsNight && !market.IsShopOpen && market.Run.ClosedByTimeLimit &&
-                market.Run.RemainingTradingSeconds == 0 && !market.Run.OrdersAccepted && !market.Run.HasPendingOrders &&
-                market.Run.EveningRevenue == 12 && market.Run.TotalRevenue == 58 && market.Run.Cash == upgradedCash + 12 &&
-                market.Run.KitchenUpgraded && market.Run.GetRefundedStock(FlowerIngredient.Mushroom) == 3 &&
-                market.Run.GetRefundedStock(FlowerIngredient.RainNightFruit) == 1 &&
-                market.Run.GetRefundedStock(FlowerIngredient.WeatherFruit) == 0 &&
-                market.Run.GetRefundedStock(FlowerIngredient.SunnyFruit) == 0 &&
-                market.Run.GetStock(FlowerIngredient.Mushroom) == 3 && market.Run.GetStock(FlowerIngredient.RainNightFruit) == 1 &&
-                market.Run.GetStock(FlowerIngredient.SunnyFruit) == 1 && market.Run.GetStock(FlowerIngredient.WeatherFruit) == 0,
-                "Automatic closing refunds both unpaid dishes exactly once and settles 12 of evening revenue, without paying for either refunded dish.");
-            RecordFlowerTrading("night timeout summary", market);
-            Capture(Path.Combine(Folder, "flower-market-timeout-summary.png"));
-            yield return Press(Key.N);
-            Require(market.Run.Day == 3 && market.Run.Phase == FlowerMarketPhase.DayGathering && !market.IsShopOpen &&
-                !market.IsSummaryOpen && !market.Run.IsNight && market.Run.Cash == upgradedCash + 12 && market.Run.TotalRevenue == 58 &&
-                market.Run.KitchenUpgraded && !market.Run.OrdersAccepted && !market.Run.HasPendingOrders && market.Run.EveningRevenue == 0 &&
-                market.Run.GetStock(FlowerIngredient.RainNightFruit) == 1 && market.Run.GetStock(FlowerIngredient.SunnyFruit) == 1 &&
-                market.Run.GetStock(FlowerIngredient.Mushroom) == 3 && market.Run.GetStock(FlowerIngredient.WeatherFruit) == 0,
-                "N acknowledges the timed settlement and retains the exact refunded stock, cash, revenue and upgrade into day-three dawn.");
-            RecordFlowerKitchen("day three carryover", market);
-            yield return WaitUntil(() => market.SunlightAvailable && market.OrchardReceivesSunlight &&
-                court.BorrowedSunAtVillage, 4, "Dawn restores actual orchard sunlight and the original village light path.");
-            RecordFlowerCrop("dawn after night", market);
-            Capture(Path.Combine(Folder, "flower-market-dawn-after-night.png"));
-            Require(court.Voyage.Delivered && originalCargo.activeSelf && court.LiftLatched &&
-                Mathf.Abs(court.Height - towerHeight) < .01f && Mathf.Abs(court.Yaw - towerYaw) < .01f &&
-                Mathf.Abs(court.WaterLevel - towerWater) < .01f && Mathf.Abs(court.BallastAmount - ballast) < .01f,
-                "Both dusk branches, local rain, trading and dawn preserve the signed cargo, tower, water and ballast.");
-
-            yield return EnterFlowerMarketDusk(market);
-            yield return Press(Key.Digit1);
-            yield return Press(Key.N);
-            Require(market.IsSummaryOpen && market.Run.Day == 3 && market.Run.IsNight && !market.SunlightAvailable &&
-                !market.Run.ClosedByTimeLimit && market.Run.EveningRevenue == 0,
-                "Manual close before E produces a zero-sale summary without an active trading clock.");
+            Require(court.DrainOpen, "Actual E opens the original west-facing drain valve.");
+            yield return CarryUntil(() => court.DockedPort == 0, 14, "The occupied tower descends and docks at the low west bridge.");
+            Require(court.OnRotor(court.Player.FeetPosition) && court.WaterLevel < .02f &&
+                market.Run.Day == 2 && market.Run.Cash == 34,
+                "The physical descent retains the shop and the next day's carried earnings.");
+            Capture(Path.Combine(Folder, "tower-market-west-low.png"));
             yield return Press(Key.R);
             yield return Wait(.4f);
-            CheckReset();
-            Require(!market.IsShopOpen && !market.IsDuskOpen && !market.IsSummaryOpen && market.Run.Phase == FlowerMarketPhase.Locked &&
-                market.Run.Day == 0 && market.Run.Cash == 0 && !market.Run.IsNight && market.SunlightAvailable &&
-                Enum.GetValues(typeof(FlowerIngredient)).Cast<FlowerIngredient>().All(ingredient =>
-                    market.Run.GetStock(ingredient) == 0 && market.Run.GetRefundedStock(ingredient) == 0) &&
-                market.Run.TotalRevenue == 0 && !market.Run.KitchenUpgraded && !market.Run.OrdersAccepted &&
-                market.Run.EveningRevenue == 0 && market.Run.RemainingTradingSeconds == 0 &&
-                !market.Run.ClosedByTimeLimit && !market.Run.HasPendingOrders && Vector3.Distance(court.Player.FeetPosition, spawn) < .5f,
-                "Actual R from the daily summary clears the market and restores the original entrance and daylight.");
+            Require(court.DockedPort == 0 && Mathf.Abs(court.Height - court.PlatformLowY) < .01f &&
+                court.WaterLevel < .01f && court.BallastAmount < .01f &&
+                court.Consoles.All(slot => slot.Token == SkywellToken.None),
+                "R restores the empty west-facing low deck and returns all weather tokens.");
+            Require(!court.Journey.HasReturnedToTower && !court.Journey.SunnyTokenObtained && !court.Journey.PaddleObtained &&
+                Vector3.Distance(court.Player.FeetPosition, spawn) < .5f &&
+                !market.IsShopOpen && !market.IsDuskOpen && !market.IsSummaryOpen &&
+                market.Run.Phase == FlowerMarketPhase.Locked && market.Run.Cash == 0 && market.Run.TotalRevenue == 0 &&
+                !market.Run.OrdersAccepted && !market.Run.HasPendingOrders &&
+                Enum.GetValues(typeof(FlowerIngredient)).Cast<FlowerIngredient>().All(ingredient => market.Run.GetStock(ingredient) == 0),
+                "R returns to the original entrance and resets the lower route, tower shop and ingredient bag.");
         }
 
         private static IEnumerator EnterFlowerMarketDusk(SkywellFlowerMarket market)
@@ -427,11 +290,12 @@ namespace BorrowingSun.Editor
             yield return BeginTargeting(market.RainTarget);
             yield return ClickWeatherPointer(market.RainTarget, requireHover: true);
             Require(court.Consoles[stationIndex].Token == SkywellToken.Rain,
-                "A real pointer hit on the Flower Court mechanism inserts the rain token.");
+                "A real pointer hit on the east village mechanism inserts the rain token.");
             yield return WaitUntil(() => market.RainZone.IsRain, 4,
                 "The local rain zone becomes active after the weather transition.");
-            Require(court.Consoles.Take(stationIndex).All(slot => slot.Token != SkywellToken.Rain && !slot.Zone.IsRain),
-                "No original station receives Flower Court rain.");
+            Require(court.Consoles.Where((_, index) => index != stationIndex)
+                .All(slot => slot.Token != SkywellToken.Rain && !slot.Zone.IsRain),
+                "Rain remains local to the east village station and no other station receives it.");
             yield return ReleaseTargeting();
             yield return EnsureCameraMode(wasShoulder);
         }

@@ -45,6 +45,10 @@ In focused Play Mode on the Flower Market scene, run **Borrowing Sun → Skywell
 
 The macOS Unity Game View replay passed 393 checks. It verified 120-second direct-return trading and 60-second post-outing trading. The night route reached the deadline with one stove cooking and the other ready. Closing refunded three mushrooms and one rain-night fruit and kept 22 in cash, 58 in gross revenue and the upgrade. A separate confirmation started the next day. EditMode passed 138 tests, including 21 market cases. The reference audit checked 12,358 components across five scenes and one prefab. [Playtest notes](04_Iterations/Skywell_Flower_Market_Settlement.md) · [Play Mode report](evidence/flower-market-settlement/playmode.txt) · [EditMode](evidence/flower-market-settlement/editmode.xml) · [References](evidence/flower-market-settlement/references.txt)
 
+## Tower market layout · November 11, 2026
+
+The macOS Unity Game View replay passed 236 checks. It started at the original entrance and used the actual lift and wind targets, traversed both bridges, gathered mushrooms and rain fruit, cooked and settled 34 in sales, then lowered the deck to the west landing. The revised 105-second gathering window left 21.20 seconds after the two-shore outing. EditMode passed 138 tests and the scene reference audit passed across 12,358 components. [Route and timing](04_Iterations/Skywell_Tower_Market.md) · [Play Mode report](evidence/tower-market/playmode.txt) · [EditMode](evidence/tower-market/editmode.xml) · [References](evidence/tower-market/references.txt)
+
 ## Dated L5 evidence
 
 | Date | Scope and result |

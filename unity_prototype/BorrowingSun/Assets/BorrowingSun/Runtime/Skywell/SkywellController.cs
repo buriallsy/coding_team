@@ -22,9 +22,10 @@ namespace BorrowingSun
         [SerializeField] private SkywellDeerGrove grove;
         [SerializeField] private SkywellFlowerMarket flowerMarket;
         public SkywellFlowerMarket FlowerMarket=>flowerMarket&&flowerMarket.isActiveAndEnabled?flowerMarket:null;
+        public bool MarketAvailable=>FlowerMarket&&(!journey||journey.HasReturnedToTower);
         private bool MarketInputBlocked=>FlowerMarket&&flowerMarket.InputBlocked;
         private bool MarketWeatherAllowed(int station,SkywellToken token)=>
-            !FlowerMarket||flowerMarket.AllowsWeather(station,token,voyage&&voyage.Delivered);
+            !FlowerMarket||flowerMarket.AllowsWeather(station,token,MarketAvailable);
         public SkywellDeerGrove Grove=>grove;
         public void ConfigureGrove(SkywellDeerGrove value)=>grove=value;
         public SkywellStory Story=>story;
@@ -114,7 +115,7 @@ namespace BorrowingSun
             if(consoles==null||consoles.Length<2||!optics)return;
             ReturnDepartedTokens();
             if(FlowerMarket)
-                flowerMarket.Tick(Time.deltaTime,player,!ObservationInputBlocked&&!WeatherInputBlocked&&!WeatherTravelBlocked&&!primaryPending);
+                flowerMarket.Tick(Time.deltaTime,player,!ObservationInputBlocked&&!WeatherInputBlocked&&!WeatherTravelBlocked&&!primaryPending&&!IsMoving);
             UpdateWeatherInput();
             foreach(var station in consoles)if(station)station.Tick(Time.deltaTime);
             bool wasLit=BorrowedSunAtVillage;
@@ -151,11 +152,12 @@ namespace BorrowingSun
             if(grove&&grove.Prompt!=null)return grove.Prompt;
             if(journey&&journey.CurrentPrompt!=null)return journey.CurrentPrompt;
             if(target.kind==InteractionKind.Drain)return controlledDescent?"放水阀 · E 关闭，保留当前水位":"放水阀 · E 打开，回西向低岸下降";
-            if(FlowerMarket&&voyage&&voyage.Delivered)
+            if(MarketAvailable)
             {
                 string marketPrompt=flowerMarket.Prompt(player.FeetPosition);
                 if(marketPrompt!=null)return marketPrompt;
             }
+            else if(FlowerMarket&&OnRotor(player.FeetPosition))return journey.Objective;
             if(voyage&&voyage.Prompt!=null)return voyage.Prompt;
             if(WeatherTargeting)return TargetingPrompt;
             if(grove&&grove.Ride&&grove.Ride.FootDriver&&grove.Ride.FootDriver.Prompt!=null)return grove.Ride.FootDriver.Prompt;
@@ -164,8 +166,22 @@ namespace BorrowingSun
             if(target.kind==InteractionKind.Recall)return "绞盘 · E 回接";
             return "长按 E 高亮目标 · 点击施令";
         }
-        public string Objective=>voyage&&voyage.Delivered?"完成：水果货车已抵达花庭。":voyage&&voyage.Phase==SkywellVoyagePhase.Arrived?"走上花庭前站，在接驳标记按 E 交付。":voyage&&voyage.Phase==SkywellVoyagePhase.Riding?"越过空谷，回望借晴的山城。":
-            journey&&(!journey.SunnyTokenObtained||!journey.HasReturnedToTower)?journey.Objective:Complete?"山阴已得晴光；带上水果，登乘跨谷。":cargoPausedForLight?"恢复通向山阴的光路，可继续货运。":WaterTransferring?"雨水正自动转入跨谷配重。":height<platformHighY-.1f?"借雨注满外围水箱，让配重下降、平台升高。":!BorrowedSunAtVillage?"到向阳山取得阳光，再用中央中继镜把光送往山阴。":"山阴村落正在迎来晴光。";
+        public string Objective
+        {
+            get
+            {
+                if(FlowerMarket)
+                {
+                    if(!MarketAvailable)return journey.Objective;
+                    if(!flowerMarket.Run.IsStarted)return "到中央塔小铺，短按 E 开始第一天。";
+                    return flowerMarket.Run.CanGather
+                        ?"借雨升塔、借风接桥，到各处山头采集，再回中央塔小铺。"
+                        :"回中央塔小铺继续经营。";
+                }
+                return voyage&&voyage.Delivered?"完成：水果货车已抵达花庭。":voyage&&voyage.Phase==SkywellVoyagePhase.Arrived?"走上花庭前站，在接驳标记按 E 交付。":voyage&&voyage.Phase==SkywellVoyagePhase.Riding?"越过空谷，回望借晴的山城。":
+                    journey&&(!journey.SunnyTokenObtained||!journey.HasReturnedToTower)?journey.Objective:Complete?"山阴已得晴光；带上水果，登乘跨谷。":cargoPausedForLight?"恢复通向山阴的光路，可继续货运。":WaterTransferring?"雨水正自动转入跨谷配重。":height<platformHighY-.1f?"借雨注满外围水箱，让配重下降、平台升高。":!BorrowedSunAtVillage?"到向阳山取得阳光，再用中央中继镜把光送往山阴。":"山阴村落正在迎来晴光。";
+            }
+        }
         public void InteractPrimary()
         {
             // E is also sent by CourtPlayer while movement is suppressed. Consume it here once.
@@ -183,7 +199,7 @@ namespace BorrowingSun
             if(grove&&grove.Ride&&grove.Ride.TryPrimary())return;
             if(journey&&journey.TryPrimary())return;
             if(target.kind==InteractionKind.Drain){ToggleDrain();return;}
-            if(FlowerMarket&&voyage&&voyage.Delivered&&flowerMarket.TryInteract(player))
+            if(MarketAvailable&&flowerMarket.TryInteract(player,IsMoving))
             {SyncCameraInteraction();return;}
             if(voyage&&voyage.TryPrimary())return;
             if(target.kind==InteractionKind.Story){story.TryInteract(target.index);return;}

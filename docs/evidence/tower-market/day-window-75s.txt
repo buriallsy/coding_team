@@ -1,0 +1,5 @@
+Before tuning: Day Gather Seconds was 75. Selected lines from the macOS Game View replay.
+NAV Reach the actual tower shop t=62.2 feet=(3.00, 20.03, 110.13) velocity=(0.00, 0.00, 0.00) viewForward=(-0.41, -0.77, 0.49) facing=(0.09, 0.00, 1.00) viewFacing=False carriedYaw=0.00 shoulder=False cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=None keyboard=4 W=False A=False S=False D=False
+NAV Walk back along the eastern freight bridge t=138.3 feet=(10.53, 26.03, 108.06) velocity=(0.00, 0.00, 0.00) viewForward=(-0.41, -0.77, 0.49) facing=(-1.00, 0.00, 0.09) viewFacing=False carriedYaw=180.00 shoulder=False cameraSuppressed=True autoPositioning=False pushing=False focused=True cursor=None keyboard=4 W=True A=True S=False D=False
+FLOOR Long_freight_bridge at (10.53, 26.00, 108.06)
+SKYWELL_FLOWER_MARKET_FAILED: Walk blocked: Walk back along the eastern freight bridge; position=(10.53, 26.03, 108.06); target=(10.00, 26.00, 108.00)

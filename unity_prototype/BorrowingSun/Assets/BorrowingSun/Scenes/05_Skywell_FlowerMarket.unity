@@ -340,7 +340,7 @@ TextMesh:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7038545}
-  m_Text: "\u82B1\u5EAD\u5C0F\u94FA"
+  m_Text: "\u4E2D\u592E\u5C0F\u94FA"
   m_OffsetZ: 0
   m_CharacterSize: 0.075
   m_LineSpacing: 1
@@ -5249,9 +5249,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1609896289}
-  - {fileID: 1583899062}
-  - {fileID: 128344449}
   - {fileID: 1135972873}
   - {fileID: 151890671}
   - {fileID: 1074146971}
@@ -5272,9 +5269,8 @@ MonoBehaviour:
   shop: {fileID: 1609896289}
   mushrooms: {fileID: 1583899062}
   rainFruit: {fileID: 128344449}
-  rainZone: {fileID: 1135972872}
-  rainTarget: {fileID: 151890672}
-  courtFloor: {fileID: 885355236}
+  rainZone: {fileID: 56299163}
+  rainTarget: {fileID: 1523795302}
   lighting: {fileID: 2022318579}
   orchardSunSample: {fileID: 227439468}
   orchardLabel: {fileID: 2110910802}
@@ -5282,7 +5278,7 @@ MonoBehaviour:
   shopLamp: {fileID: 1949355131}
   interactionRadius: 1.35
   regrowSeconds: 1
-  dayGatherSeconds: 75
+  dayGatherSeconds: 105
   nightGatherSeconds: 45
   directTradingSeconds: 120
   nightTradingSeconds: 60
@@ -7750,6 +7746,7 @@ Transform:
   - {fileID: 508824904}
   - {fileID: 845564127}
   - {fileID: 735669632}
+  - {fileID: 1583899062}
   m_Father: {fileID: 1433135094}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &128344448
@@ -7776,8 +7773,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 128344448}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 2.4500008, y: 0, z: 4.550003}
+  m_LocalRotation: {x: 0, y: -0.7071068, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: 2, y: 0, z: 49}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -7785,7 +7782,7 @@ Transform:
   - {fileID: 206729871}
   - {fileID: 2110910801}
   - {fileID: 227439468}
-  m_Father: {fileID: 83344674}
+  m_Father: {fileID: 749136292}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &129178680
 GameObject:
@@ -9099,7 +9096,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &151890671
 Transform:
   m_ObjectHideFlags: 0
@@ -41942,6 +41939,7 @@ Transform:
   - {fileID: 1557788701}
   - {fileID: 882940510}
   - {fileID: 679323160}
+  - {fileID: 128344449}
   m_Father: {fileID: 1433135094}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &749243267
@@ -50571,7 +50569,6 @@ MonoBehaviour:
   - {fileID: 1851121261}
   - {fileID: 171701744}
   - {fileID: 1572645701}
-  - {fileID: 151890673}
   optics: {fileID: 421391179}
   mirrorControl: {fileID: 0}
   ballast: {fileID: 780628947}
@@ -50579,7 +50576,7 @@ MonoBehaviour:
   - {fileID: 2032367397}
   - {fileID: 598369601}
   journey: {fileID: 887768189}
-  voyage: {fileID: 887768191}
+  voyage: {fileID: 0}
   observation: {fileID: 1306425345}
   story: {fileID: 887768196}
   grove: {fileID: 887768197}
@@ -50613,7 +50610,6 @@ MonoBehaviour:
   - {fileID: 735058025}
   - {fileID: 1523795302}
   - {fileID: 1743546598}
-  - {fileID: 151890672}
 --- !u!4 &887768188
 Transform:
   m_ObjectHideFlags: 0
@@ -50758,7 +50754,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 887768185}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8dcd5be79c71e47f8b19cd8b7644cd09, type: 3}
   m_Name: 
@@ -58857,6 +58853,7 @@ Transform:
   - {fileID: 1479292603}
   - {fileID: 1237643410}
   - {fileID: 805892752}
+  - {fileID: 1609896289}
   m_Father: {fileID: 150633955}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1049395850
@@ -60391,7 +60388,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1074146971
 Transform:
   m_ObjectHideFlags: 0
@@ -64426,7 +64423,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1135972872
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -88097,7 +88094,7 @@ MonoBehaviour:
   - {fileID: 1276719226}
   - {fileID: 1520536383}
   - {fileID: 541464408}
-  fruitCrate: {fileID: 398276521}
+  fruitCrate: {fileID: 0}
   settlementFill: {fileID: 1877182482}
   villageNetwork: {fileID: 639211822}
   receivingWarmth: 1.5
@@ -91885,7 +91882,7 @@ Transform:
   m_GameObject: {fileID: 1583899061}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -3.75, y: 0, z: 4.6500015}
+  m_LocalPosition: {x: -3, y: 0, z: 22}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -91893,7 +91890,7 @@ Transform:
   - {fileID: 1697389170}
   - {fileID: 1792446841}
   - {fileID: 1963936598}
-  m_Father: {fileID: 83344674}
+  m_Father: {fileID: 127609680}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1585123646
 GameObject:
@@ -93215,7 +93212,7 @@ Transform:
   m_GameObject: {fileID: 1609896288}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -4.1499996, y: 0, z: 9.150002}
+  m_LocalPosition: {x: 3, y: 0, z: -1.8}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -93224,7 +93221,7 @@ Transform:
   - {fileID: 7038546}
   - {fileID: 217143265}
   - {fileID: 1949355130}
-  m_Father: {fileID: 83344674}
+  m_Father: {fileID: 1048067189}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1610891357
 GameObject:

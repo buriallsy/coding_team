@@ -281,7 +281,7 @@ namespace BorrowingSun.Editor
                 +" focused="+Application.isFocused+" cursor="+Cursor.lockState+" keyboard="+(current==null?-1:current.deviceId)+" expected="+(keyboard==null?-1:keyboard.deviceId)
                 +" tabHeld="+(current!=null&&current.tabKey.isPressed)+" tabPressed="+(current!=null&&current.tabKey.wasPressedThisFrame)
                 +" pickerHeld="+court.WeatherSelectionHeld+" pickerOpen="+court.WeatherPickerOpen+" targeting="+court.WeatherTargeting
-                +" weatherBlocked="+court.WeatherInputBlocked+" observationBlocked="+court.ObservationInputBlocked+" journey="+court.Journey.Travel+" voyage="+court.Voyage.Phase
+                +" weatherBlocked="+court.WeatherInputBlocked+" observationBlocked="+court.ObservationInputBlocked+" journey="+court.Journey.Travel+" voyage="+(court.Voyage?court.Voyage.Phase.ToString():"none")
                 +" primaryPending="+Field("primaryPending")+" pointerPicker="+Field("pointerPicker")+" closingFrame="+Field("weatherClosedFrame")+" pickerStarted="+Field("pickerStarted"));
             SaveProgress();
         }

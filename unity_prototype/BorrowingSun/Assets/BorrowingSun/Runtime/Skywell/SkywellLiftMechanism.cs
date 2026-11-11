@@ -78,7 +78,7 @@ namespace BorrowingSun
 
         private void TickMechanisms(float dt)
         {
-            cargoPausedForLight=liftLatched&&!controlledDescent&&ballastAmount>.001f&&!BorrowedSunAtVillage;
+            cargoPausedForLight=!FlowerMarket&&liftLatched&&!controlledDescent&&ballastAmount>.001f&&!BorrowedSunAtVillage;
             rainElapsed=RainActive?rainElapsed+dt:0;
             ApplyWeatherAction();
             bool riding=OnRotor(player.FeetPosition);Vector3 local=rotor.InverseTransformPoint(player.FeetPosition);float previousYaw=yaw;
@@ -101,7 +101,7 @@ namespace BorrowingSun
             // A direction is captured once per use; wind does not repeat turns at a mechanical stop.
             if(!recalling)targetYaw=TowerWeatherZone&&TowerWeatherZone.IsWind&&TowerWeatherZone.Contains(rotor.position)?requestedWindYaw:yaw;
             bool aligned=height>platformHighY-.01f&&Mathf.Abs(yaw-90)<.1f&&Mathf.Abs(yaw-targetYaw)<.1f;
-            bool canTransfer=aligned&&BorrowedSunAtVillage&&!controlledDescent&&(!voyage||voyage.Phase==SkywellVoyagePhase.Waiting);
+            bool canTransfer=!FlowerMarket&&aligned&&BorrowedSunAtVillage&&!controlledDescent&&(!voyage||voyage.Phase==SkywellVoyagePhase.Waiting);
             waterFlow=controlledDescent?WaterFlow.Draining:
                 canTransfer&&waterLevel>.001f&&ballastAmount<MaxStoredWater-.001f?WaterFlow.Transferring:
                 RainActive&&rainElapsed>=rainCollectionDelay&&CollectorCoverage>0?WaterFlow.Collecting:WaterFlow.Idle;

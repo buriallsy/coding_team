@@ -1,0 +1,451 @@
+2026-11-11T15:40:49.8696320Z
+SKYWELL_FLOWER_MARKET
+Production Input System, CharacterController, local weather and actual gameplay rays. Automated checks do not establish first-player understanding or fun.
+PASS: The tower shop and both fixed mountain gathering stops are authored.
+PASS: The shop rides the moving rotor while the north mushroom patch and east orchard stay on their own shores.
+PASS: The east orchard reuses the original village rain station and its actual target.
+PASS: The market variant has no live finale cargo voyage.
+PASS: The market is locked at the original west entrance.
+TOWER MARKET ANCHORS shopLocal=(3.00, 0.00, -1.80) northMushrooms=(-3.00, 26.00, 130.00) eastOrchard=(49.00, 26.00, 106.00)
+CONTINUOUS TOWER MARKET ROUTE: real entrance, surface boat and ladder, rain lift, wind docking, both mountain harvests and trading. No fixture placement or cargo voyage.
+PASS: Surface paddle and boat Sunny start separately unowned.
+PASS: Player starts on the ground entrance.
+START WALK: West bridge to the surface approach
+NAV West bridge to the surface approach t=1.2 feet=(-29.00, 20.03, 108.00) velocity=(0.00, 0.00, 0.00) viewForward=(-0.41, -0.77, 0.49) facing=(0.00, 0.00, 1.00) viewFacing=False carriedYaw=0.00 shoulder=False cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=None keyboard=4 W=False A=False S=False D=False
+NAV West bridge to the surface approach t=2.2 feet=(-25.13, 20.03, 107.96) velocity=(3.98, 0.00, -0.35) viewForward=(-0.41, -0.77, 0.49) facing=(1.00, 0.00, -0.09) viewFacing=False carriedYaw=0.00 shoulder=False cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=None keyboard=4 W=False A=False S=True D=True
+NAV West bridge to the surface approach t=3.2 feet=(-21.22, 20.03, 107.96) velocity=(3.98, 0.00, -0.35) viewForward=(-0.41, -0.77, 0.49) facing=(1.00, 0.00, -0.09) viewFacing=False carriedYaw=0.00 shoulder=False cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=None keyboard=4 W=False A=False S=True D=True
+PASS: WALK West bridge to the surface approach reaches its authored height through collision
+START WALK: Static shoreline ramp / Route_00
+NAV Static shoreline ramp / Route_00 t=4.2 feet=(-18.26, 20.03, 107.97) velocity=(0.00, 0.00, 0.00) viewForward=(-0.41, -0.77, 0.49) facing=(1.00, 0.00, -0.09) viewFacing=False carriedYaw=0.00 shoulder=False cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=None keyboard=4 W=False A=False S=False D=False
+PASS: WALK Static shoreline ramp / Route_00 reaches its authored height through collision
+START WALK: Static shoreline ramp / Route_01
+NAV Static shoreline ramp / Route_01 t=5.4 feet=(-18.03, 20.03, 104.23) velocity=(0.00, 0.00, 0.00) viewForward=(-0.41, -0.77, 0.49) facing=(-0.09, 0.00, -1.00) viewFacing=False carriedYaw=0.00 shoulder=False cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=None keyboard=4 W=False A=False S=False D=False
+PASS: WALK Static shoreline ramp / Route_01 reaches its authored height through collision
+START WALK: Static shoreline ramp / Route_02
+NAV Static shoreline ramp / Route_02 t=6.2 feet=(-17.97, 20.03, 102.26) velocity=(0.00, 0.00, 0.00) viewForward=(-0.41, -0.77, 0.49) facing=(0.64, 0.00, -0.77) viewFacing=False carriedYaw=0.00 shoulder=False cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=None keyboard=4 W=False A=False S=False D=False
+PASS: WALK Static shoreline ramp / Route_02 reaches its authored height through collision
+START WALK: Static shoreline ramp / Route_03
+NAV Static shoreline ramp / Route_03 t=6.8 feet=(-19.27, 20.03, 102.06) velocity=(0.00, 0.00, 0.00) viewForward=(-0.41, -0.77, 0.49) facing=(-1.00, 0.00, 0.09) viewFacing=False carriedYaw=0.00 shoulder=False cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=None keyboard=4 W=False A=False S=False D=False
+PASS: WALK Static shoreline ramp / Route_03 reaches its authored height through collision
+START WALK: Static shoreline ramp / Route_04
+NAV Static shoreline ramp / Route_04 t=7.9 feet=(-22.54, 18.25, 101.99) velocity=(0.00, 0.00, 0.00) viewForward=(-0.41, -0.77, 0.49) facing=(-0.77, 0.00, -0.64) viewFacing=False carriedYaw=0.00 shoulder=False cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=None keyboard=4 W=False A=False S=False D=False
+PASS: WALK Static shoreline ramp / Route_04 reaches its authored height through collision
+START WALK: Static shoreline ramp / Route_05
+NAV Static shoreline ramp / Route_05 t=8.4 feet=(-23.72, 18.03, 101.98) velocity=(0.00, 0.00, 0.00) viewForward=(-0.41, -0.77, 0.49) facing=(-0.77, 0.00, -0.64) viewFacing=False carriedYaw=0.00 shoulder=False cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=None keyboard=4 W=False A=False S=False D=False
+PASS: WALK Static shoreline ramp / Route_05 reaches its authored height through collision
+START WALK: Static shoreline ramp / Route_06
+NAV Static shoreline ramp / Route_06 t=8.9 feet=(-23.94, 18.03, 101.04) velocity=(0.00, 0.00, 0.00) viewForward=(-0.41, -0.77, 0.49) facing=(-0.09, 0.00, -1.00) viewFacing=False carriedYaw=0.00 shoulder=False cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=None keyboard=4 W=False A=False S=False D=False
+NAV Static shoreline ramp / Route_06 t=9.9 feet=(-24.02, 15.81, 97.11) velocity=(-0.35, 0.00, -3.98) viewForward=(-0.41, -0.77, 0.49) facing=(-0.09, 0.00, -1.00) viewFacing=False carriedYaw=0.00 shoulder=False cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=None keyboard=4 W=False A=True S=True D=False
+PASS: WALK Static shoreline ramp / Route_06 reaches its authored height through collision
+START WALK: Static shoreline ramp / Route_07
+NAV Static shoreline ramp / Route_07 t=10.6 feet=(-23.99, 14.78, 95.42) velocity=(0.00, 0.00, 0.00) viewForward=(-0.41, -0.77, 0.49) facing=(-0.09, 0.00, -1.00) viewFacing=False carriedYaw=0.00 shoulder=False cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=None keyboard=4 W=False A=False S=False D=False
+PASS: WALK Static shoreline ramp / Route_07 reaches its authored height through collision
+START WALK: Static shoreline ramp / Route_08
+NAV Static shoreline ramp / Route_08 t=11.1 feet=(-24.00, 14.58, 94.26) velocity=(0.00, 0.00, 0.00) viewForward=(-0.41, -0.77, 0.49) facing=(-0.09, 0.00, -1.00) viewFacing=False carriedYaw=0.00 shoulder=False cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=None keyboard=4 W=False A=False S=False D=False
+PASS: WALK Static shoreline ramp / Route_08 reaches its authored height through collision
+START WALK: Static shoreline ramp / Route_09
+NAV Static shoreline ramp / Route_09 t=12.0 feet=(-21.26, 14.58, 94.02) velocity=(0.00, 0.00, 0.00) viewForward=(-0.41, -0.77, 0.49) facing=(1.00, 0.00, -0.09) viewFacing=False carriedYaw=0.00 shoulder=False cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=None keyboard=4 W=False A=False S=False D=False
+PASS: WALK Static shoreline ramp / Route_09 reaches its authored height through collision
+START WALK: Open water-edge dock
+PASS: WALK Open water-edge dock reaches its authored height through collision
+PASS: Actual static ramp reaches the open dock; no moving entry lift or tower movement.
+START WALK: Local wind target at the open dock
+NAV Local wind target at the open dock t=13.3 feet=(-18.22, 14.58, 93.99) velocity=(0.00, 0.00, 0.00) viewForward=(-0.41, -0.77, 0.49) facing=(1.00, 0.00, -0.09) viewFacing=False carriedYaw=0.00 shoulder=False cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=None keyboard=4 W=False A=False S=False D=False
+PASS: WALK Local wind target at the open dock reaches its authored height through collision
+WEATHER INPUT before Tab hold for Wind frame=665 t=14.040 unscaled=22.916 focused=True cursor=None keyboard=4 expected=4 tabHeld=False tabPressed=False pickerHeld=False pickerOpen=False targeting=False weatherBlocked=False observationBlocked=False journey=Walking voyage=none primaryPending=False pointerPicker=False closingFrame=-1 pickerStarted=0
+WEATHER INPUT Tab down submitted before production Update frame=665 t=14.040 unscaled=22.916 focused=True cursor=None keyboard=4 expected=4 tabHeld=True tabPressed=True pickerHeld=False pickerOpen=False targeting=False weatherBlocked=False observationBlocked=False journey=Walking voyage=none primaryPending=False pointerPicker=False closingFrame=-1 pickerStarted=0
+WEATHER INPUT after unchanged .45-second Tab hold frame=686 t=14.554 unscaled=23.431 focused=True cursor=None keyboard=4 expected=4 tabHeld=True tabPressed=False pickerHeld=True pickerOpen=True targeting=False weatherBlocked=True observationBlocked=False journey=Walking voyage=none primaryPending=False pointerPicker=False closingFrame=-1 pickerStarted=22.91624
+PASS: Holding Tab opens weather picker.
+PASS: Release selects Wind without inserting it remotely.
+PASS: Holding E opens object targeting.
+POINTER target=避难装置 station=2 pixel=(1219.48, 619.01) camera=(-11.00, 27.99, 87.58)
+PASS: The production camera ray hovers the visible 避难装置.
+PASS: A real pointer hit applies Wind to 避难装置.
+PASS: The explicit left/clockwise mouse button selects the requested Wind direction on its first hit.
+PASS: Releasing E ends targeting without another short-E action.
+PASS: The L5 camera uses its authored fixed/shoulder opt-in profile.
+PASS: Real Z input selects fixed gameplay view.
+PASS: Left wind physically moves the bell east
+PASS: Moving sound source rings on arrival and attracts the live fish.
+WEATHER INPUT before Tab hold for Wind frame=962 t=20.441 unscaled=29.318 focused=True cursor=None keyboard=4 expected=4 tabHeld=False tabPressed=False pickerHeld=False pickerOpen=False targeting=False weatherBlocked=False observationBlocked=False journey=Walking voyage=none primaryPending=False pointerPicker=False closingFrame=825 pickerStarted=22.91624
+WEATHER INPUT Tab down submitted before production Update frame=962 t=20.441 unscaled=29.318 focused=True cursor=None keyboard=4 expected=4 tabHeld=True tabPressed=True pickerHeld=False pickerOpen=False targeting=False weatherBlocked=False observationBlocked=False journey=Walking voyage=none primaryPending=False pointerPicker=False closingFrame=825 pickerStarted=22.91624
+WEATHER INPUT after unchanged .45-second Tab hold frame=987 t=20.929 unscaled=29.805 focused=True cursor=None keyboard=4 expected=4 tabHeld=True tabPressed=False pickerHeld=True pickerOpen=True targeting=False weatherBlocked=True observationBlocked=False journey=Walking voyage=none primaryPending=False pointerPicker=False closingFrame=825 pickerStarted=29.31757
+PASS: Holding Tab opens weather picker.
+PASS: Release selects Wind without inserting it remotely.
+PASS: Holding E opens object targeting.
+POINTER target=避难装置 station=2 pixel=(1265.72, 1131.98) camera=(-3.07, 31.24, 78.18)
+PASS: The production camera ray hovers the visible 避难装置.
+PASS: A real pointer hit applies Wind to 避难装置.
+PASS: The explicit right/counterclockwise mouse button selects the requested Wind direction on its first hit.
+PASS: Releasing E ends targeting without another short-E action.
+PASS: The L5 camera uses its authored fixed/shoulder opt-in profile.
+PASS: Real Z input selects fixed gameplay view.
+PASS: Right wind moves the bell west to open the eastern route
+START WALK: Reach manual bell at dock
+NAV Reach manual bell at dock t=25.6 feet=(-17.69, 14.58, 95.55) velocity=(0.00, 0.00, 0.00) viewForward=(-0.41, -0.77, 0.49) facing=(0.09, 0.00, 1.00) viewFacing=False carriedYaw=0.00 shoulder=False cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=None keyboard=4 W=False A=False S=False D=False
+PASS: WALK Reach manual bell at dock reaches its authored height through collision
+PASS: Manual bell refreshes attraction at its physically positioned source.
+START WALK: Return to open dock exit aisle
+NAV Return to open dock exit aisle t=27.0 feet=(-18.86, 14.58, 93.26) velocity=(0.00, 0.00, 0.00) viewForward=(-0.41, -0.77, 0.49) facing=(-0.09, 0.00, -1.00) viewFacing=False carriedYaw=0.00 shoulder=False cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=None keyboard=4 W=False A=False S=False D=False
+PASS: WALK Return to open dock exit aisle reaches its authored height through collision
+START WALK: WASD leaves the open dock onto the water surface
+NAV WASD leaves the open dock onto the water surface t=27.4 feet=(-18.18, 14.58, 93.84) velocity=(0.00, 0.00, 0.00) viewForward=(-0.41, -0.77, 0.49) facing=(0.77, 0.00, 0.64) viewFacing=False carriedYaw=0.00 shoulder=False cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=None keyboard=4 W=False A=False S=False D=False
+NAV WASD leaves the open dock onto the water surface t=28.5 feet=(-14.28, 14.58, 93.88) velocity=(3.98, 0.00, -0.35) viewForward=(-0.41, -0.77, 0.49) facing=(1.00, 0.00, -0.09) viewFacing=False carriedYaw=0.00 shoulder=False cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=None keyboard=4 W=False A=False S=True D=True
+PASS: WALK WASD leaves the open dock onto the water surface reaches its authored height through collision
+PASS: Leaving the dock starts horizontal surface movement without diving.
+START WALK: Surface route behind the physical cover column
+NAV Surface route behind the physical cover column t=29.3 feet=(-12.26, 14.40, 93.97) velocity=(0.00, 0.00, 0.00) viewForward=(-0.41, -0.77, 0.49) facing=(1.00, 0.00, -0.09) viewFacing=False carriedYaw=0.00 shoulder=False cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=None keyboard=4 W=False A=False S=False D=False
+NAV Surface route behind the physical cover column t=30.3 feet=(-10.60, 14.40, 91.34) velocity=(2.06, 0.00, -2.45) viewForward=(-0.41, -0.77, 0.49) facing=(0.64, 0.00, -0.77) viewFacing=False carriedYaw=0.00 shoulder=False cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=None keyboard=4 W=False A=False S=True D=False
+NAV Surface route behind the physical cover column t=31.3 feet=(-9.01, 14.40, 88.75) velocity=(2.06, 0.00, -2.45) viewForward=(-0.41, -0.77, 0.49) facing=(0.64, 0.00, -0.77) viewFacing=False carriedYaw=0.00 shoulder=False cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=None keyboard=4 W=False A=False S=True D=False
+PASS: WALK Surface route behind the physical cover column reaches its authored height through collision
+START WALK: Reach the floating paddle
+NAV Reach the floating paddle t=32.2 feet=(-8.13, 14.40, 87.21) velocity=(0.00, 0.00, 0.00) viewForward=(-0.41, -0.77, 0.49) facing=(0.64, 0.00, -0.77) viewFacing=False carriedYaw=0.00 shoulder=False cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=None keyboard=4 W=False A=False S=False D=False
+NAV Reach the floating paddle t=33.2 feet=(-5.49, 14.40, 85.81) velocity=(3.19, 0.00, -0.28) viewForward=(-0.41, -0.77, 0.49) facing=(1.00, 0.00, -0.09) viewFacing=False carriedYaw=0.00 shoulder=False cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=None keyboard=4 W=False A=False S=True D=True
+NAV Reach the floating paddle t=34.2 feet=(-2.84, 14.40, 84.41) velocity=(3.19, 0.00, -0.28) viewForward=(-0.41, -0.77, 0.49) facing=(1.00, 0.00, -0.09) viewFacing=False carriedYaw=0.00 shoulder=False cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=None keyboard=4 W=False A=False S=True D=True
+PASS: WALK Reach the floating paddle reaches its authored height through collision
+PASS: Surface E takes only the paddle; Sunny still waits on the boat.
+PASS: Continuous bell and cover route reaches the paddle without forced recovery.
+PASS: Swimming out of the dock zone returns Wind and stops local wind.
+PASS: The bell retains its physical position after automatic Wind return.
+START WALK: Surface swim near the boat without aligning to its opening
+NAV Surface swim near the boat without aligning to its opening t=35.3 feet=(-2.25, 14.40, 84.12) velocity=(0.00, 0.00, 0.00) viewForward=(-0.41, -0.77, 0.49) facing=(1.00, 0.00, -0.09) viewFacing=False carriedYaw=0.00 shoulder=False cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=None keyboard=4 W=False A=False S=False D=False
+NAV Surface swim near the boat without aligning to its opening t=36.3 feet=(0.70, 14.40, 82.29) velocity=(3.19, 0.00, -0.28) viewForward=(-0.41, -0.77, 0.49) facing=(1.00, 0.00, -0.09) viewFacing=False carriedYaw=0.00 shoulder=False cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=None keyboard=4 W=False A=False S=True D=True
+NAV Surface swim near the boat without aligning to its opening t=37.3 feet=(3.32, 14.40, 80.84) velocity=(3.19, 0.00, -0.28) viewForward=(-0.41, -0.77, 0.49) facing=(1.00, 0.00, -0.09) viewFacing=False carriedYaw=0.00 shoulder=False cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=None keyboard=4 W=False A=False S=True D=True
+NAV Surface swim near the boat without aligning to its opening t=38.3 feet=(5.91, 14.40, 79.36) velocity=(3.19, 0.00, -0.28) viewForward=(-0.41, -0.77, 0.49) facing=(1.00, 0.00, -0.09) viewFacing=False carriedYaw=0.00 shoulder=False cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=None keyboard=4 W=False A=False S=True D=True
+NAV Surface swim near the boat without aligning to its opening t=39.4 feet=(8.52, 14.40, 77.85) velocity=(2.06, 0.00, -2.45) viewForward=(-0.41, -0.77, 0.49) facing=(0.64, 0.00, -0.77) viewFacing=False carriedYaw=0.00 shoulder=False cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=None keyboard=4 W=False A=False S=True D=False
+PASS: WALK Surface swim near the boat without aligning to its opening reaches its authored height through collision
+PASS: Surface approach remains outside the boat hull.
+PASS: Nearby E boards through the production collision-checked motion: start outside the actual boat interior without assisted travel.
+PASS: Nearby E boards through the production collision-checked motion: actual E completes the physical boarding arc and returns deck walking.
+PASS: Nearby E boards through the production collision-checked motion: measured frame displacement stays within configured boarding speed plus collision tolerance; no destination snap (excess=0.0000).
+PASS: Boarding reaches the real deck without silently collecting Sunny.
+PASS: Separate E aboard the boat takes Sunny without starting the ride.
+PASS: Both paddle and Sunny allow E to start the water route.
+PASS: Boat remains at its original water-surface height.
+PASS: Boat remains at its original water-surface height.
+PASS: Boat remains at its original water-surface height.
+PASS: Boat remains at its original water-surface height.
+PASS: Boat remains at its original water-surface height.
+PASS: Boat remains at its original water-surface height.
+PASS: Boat remains at its original water-surface height.
+PASS: Boat remains at its original water-surface height.
+PASS: Boat remains at its original water-surface height.
+PASS: Boat remains at its original water-surface height.
+PASS: Boat remains at its original water-surface height.
+PASS: Boat remains at its original water-surface height.
+PASS: Boat stops beside the tower; it does not carry the player directly onto the central platform.
+START WALK: Walk from the boat to the front ladder approach
+NAV Walk from the boat to the front ladder approach t=50.2 feet=(-0.22, 14.58, 99.75) velocity=(0.00, 0.00, 0.00) viewForward=(-0.41, -0.77, 0.49) facing=(1.00, 0.00, -0.09) viewFacing=False carriedYaw=0.00 shoulder=False cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=None keyboard=4 W=False A=False S=False D=False
+PASS: WALK Walk from the boat to the front ladder approach reaches its authored height through collision
+PASS: Actual forward W automatically takes the front ladder without E
+PASS: Automatic grab starts at the actual ladder foot without skipping climb height.
+PASS: Automatic approach reaches the real ladder foot through CharacterController collision
+PASS: Held W climbs the physical ladder and steps onto the central platform
+PASS: Climbing completes the return while both acquired items remain owned.
+PASS: The existing water route and physical ladder return to the tower without automatically starting the market.
+START WALK: Ladder landing to the tower's rear aisle
+NAV Ladder landing to the tower's rear aisle t=58.8 feet=(-0.05, 20.03, 103.11) velocity=(0.00, 0.00, 0.00) viewForward=(-0.41, -0.77, 0.49) facing=(-0.64, 0.00, 0.77) viewFacing=False carriedYaw=0.00 shoulder=False cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=None keyboard=4 W=False A=False S=False D=False
+PASS: WALK Ladder landing to the tower's rear aisle reaches its authored height through collision
+START WALK: Rear aisle around the relay to the shop side
+NAV Rear aisle around the relay to the shop side t=59.9 feet=(2.77, 20.03, 105.03) velocity=(0.00, 0.00, 0.00) viewForward=(-0.41, -0.77, 0.49) facing=(0.77, 0.00, 0.64) viewFacing=False carriedYaw=0.00 shoulder=False cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=None keyboard=4 W=False A=False S=False D=False
+NAV Rear aisle around the relay to the shop side t=60.9 feet=(2.95, 20.03, 109.02) velocity=(0.35, 0.00, 3.98) viewForward=(-0.41, -0.77, 0.49) facing=(0.09, 0.00, 1.00) viewFacing=False carriedYaw=0.00 shoulder=False cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=None keyboard=4 W=True A=False S=False D=True
+PASS: WALK Rear aisle around the relay to the shop side reaches its authored height through collision
+START WALK: Reach the actual tower shop
+NAV Reach the actual tower shop t=61.5 feet=(2.99, 20.03, 110.17) velocity=(0.00, 0.00, 0.00) viewForward=(-0.41, -0.77, 0.49) facing=(0.09, 0.00, 1.00) viewFacing=False carriedYaw=0.00 shoulder=False cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=None keyboard=4 W=False A=False S=False D=False
+PASS: WALK Reach the actual tower shop reaches its authored height through collision
+PASS: A separate short E at the central shop opens day one without an end-of-voyage signature.
+START WALK: Shop to the tower's rear aisle
+NAV Shop to the tower's rear aisle t=62.7 feet=(2.04, 20.03, 110.84) velocity=(0.00, 0.00, 0.00) viewForward=(-0.41, -0.77, 0.49) facing=(-0.64, 0.00, 0.77) viewFacing=False carriedYaw=0.00 shoulder=False cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=None keyboard=4 W=False A=False S=False D=False
+PASS: WALK Shop to the tower's rear aisle reaches its authored height through collision
+START WALK: Cross the rear aisle to the weather side
+NAV Cross the rear aisle to the weather side t=62.9 feet=(2.84, 20.03, 110.64) velocity=(0.00, 0.00, 0.00) viewForward=(-0.41, -0.77, 0.49) facing=(0.64, 0.00, -0.77) viewFacing=False carriedYaw=0.00 shoulder=False cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=None keyboard=4 W=False A=False S=False D=False
+NAV Cross the rear aisle to the weather side t=64.0 feet=(2.93, 20.03, 106.75) velocity=(-0.35, 0.00, -3.98) viewForward=(-0.41, -0.77, 0.49) facing=(-0.09, 0.00, -1.00) viewFacing=False carriedYaw=0.00 shoulder=False cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=None keyboard=4 W=False A=True S=True D=False
+PASS: WALK Cross the rear aisle to the weather side reaches its authored height through collision
+START WALK: Approach the original tower weather station
+NAV Approach the original tower weather station t=64.5 feet=(2.97, 20.03, 105.44) velocity=(0.00, 0.00, 0.00) viewForward=(-0.41, -0.77, 0.49) facing=(-0.09, 0.00, -1.00) viewFacing=False carriedYaw=0.00 shoulder=False cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=None keyboard=4 W=False A=False S=False D=False
+PASS: WALK Approach the original tower weather station reaches its authored height through collision
+WEATHER INPUT before Tab hold for Rain frame=3023 t=65.306 unscaled=74.183 focused=True cursor=None keyboard=4 expected=4 tabHeld=False tabPressed=False pickerHeld=False pickerOpen=False targeting=False weatherBlocked=False observationBlocked=False journey=Walking voyage=none primaryPending=False pointerPicker=False closingFrame=-1 pickerStarted=29.31757
+WEATHER INPUT Tab down submitted before production Update frame=3023 t=65.306 unscaled=74.183 focused=True cursor=None keyboard=4 expected=4 tabHeld=True tabPressed=True pickerHeld=False pickerOpen=False targeting=False weatherBlocked=False observationBlocked=False journey=Walking voyage=none primaryPending=False pointerPicker=False closingFrame=-1 pickerStarted=29.31757
+WEATHER INPUT after unchanged .45-second Tab hold frame=3046 t=65.817 unscaled=74.693 focused=True cursor=None keyboard=4 expected=4 tabHeld=True tabPressed=False pickerHeld=True pickerOpen=True targeting=False weatherBlocked=True observationBlocked=False journey=Walking voyage=none primaryPending=False pointerPicker=False closingFrame=-1 pickerStarted=74.18271
+PASS: Holding Tab opens weather picker.
+PASS: Release selects Rain without inserting it remotely.
+PASS: Holding E opens object targeting.
+POINTER target=中央升降塔 station=0 pixel=(1400.04, 857.82) camera=(9.29, 36.35, 95.75)
+PASS: The production camera ray hovers the visible 中央升降塔.
+PASS: A real pointer hit applies Rain to 中央升降塔.
+PASS: Releasing E ends targeting without another short-E action.
+PASS: The L5 camera uses its authored fixed/shoulder opt-in profile.
+PASS: Real Z input selects fixed gameplay view.
+PASS: Real tower rain fills the counterweights and carries the player to the high deck.
+PASS: Fixed lift house stays on its foundation: tower market high
+PASS: Lift piston meets the deck underside: tower market high
+PASS: Deck follows stored water or its mechanical latch: tower market rain store
+PASS: Counterweight descends opposite actual lift travel: 0 / tower market rain store
+PASS: Tank water display follows stored water: 0 / tower market rain store
+PASS: Cable remains on the nonrotating outer lift: 0 / tower market rain store
+PASS: Counterweight descends opposite actual lift travel: 1 / tower market rain store
+PASS: Tank water display follows stored water: 1 / tower market rain store
+PASS: Cable remains on the nonrotating outer lift: 1 / tower market rain store
+PASS: Counterweight descends opposite actual lift travel: 2 / tower market rain store
+PASS: Tank water display follows stored water: 2 / tower market rain store
+PASS: Cable remains on the nonrotating outer lift: 2 / tower market rain store
+PASS: Counterweight descends opposite actual lift travel: 3 / tower market rain store
+PASS: Tank water display follows stored water: 3 / tower market rain store
+PASS: Cable remains on the nonrotating outer lift: 3 / tower market rain store
+PASS: The original rainwater raises and latches the occupied deck, and the shop rises with the same deck.
+WEATHER INPUT before Tab hold for Wind frame=3383 t=72.967 unscaled=81.843 focused=True cursor=None keyboard=4 expected=4 tabHeld=False tabPressed=False pickerHeld=False pickerOpen=False targeting=False weatherBlocked=False observationBlocked=False journey=Walking voyage=none primaryPending=False pointerPicker=False closingFrame=3185 pickerStarted=74.18271
+WEATHER INPUT Tab down submitted before production Update frame=3383 t=72.967 unscaled=81.843 focused=True cursor=None keyboard=4 expected=4 tabHeld=True tabPressed=True pickerHeld=False pickerOpen=False targeting=False weatherBlocked=False observationBlocked=False journey=Walking voyage=none primaryPending=False pointerPicker=False closingFrame=3185 pickerStarted=74.18271
+WEATHER INPUT after unchanged .45-second Tab hold frame=3409 t=73.453 unscaled=82.329 focused=True cursor=None keyboard=4 expected=4 tabHeld=True tabPressed=False pickerHeld=True pickerOpen=True targeting=False weatherBlocked=True observationBlocked=False journey=Walking voyage=none primaryPending=False pointerPicker=False closingFrame=3185 pickerStarted=81.84308
+PASS: Holding Tab opens weather picker.
+PASS: Release selects Wind without inserting it remotely.
+PASS: Holding E opens object targeting.
+POINTER target=中央升降塔 station=0 pixel=(1266.55, 492.31) camera=(9.29, 42.35, 95.75)
+PASS: The production camera ray hovers the visible 中央升降塔.
+PASS: A real pointer hit applies Wind to 中央升降塔.
+PASS: The explicit left/clockwise mouse button selects the requested Wind direction on its first hit.
+PASS: Releasing E ends targeting without another short-E action.
+PASS: The L5 camera uses its authored fixed/shoulder opt-in profile.
+PASS: Real Z input selects fixed gameplay view.
+PASS: Tower reaches the selected Wind stop
+PASS: Tower reaches heading 0
+PASS: Wind docks north without spending the stored rainwater.
+START WALK: Tower weather aisle
+NAV Tower weather aisle t=79.0 feet=(-2.40, 26.03, 106.98) velocity=(0.00, 0.00, 0.00) viewForward=(-0.41, -0.77, 0.49) facing=(0.09, 0.00, 1.00) viewFacing=False carriedYaw=90.00 shoulder=False cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=None keyboard=4 W=False A=False S=False D=False
+PASS: WALK Tower weather aisle reaches its authored height through collision
+START WALK: Pass cart-side clearance
+NAV Pass cart-side clearance t=79.7 feet=(-2.42, 26.03, 108.74) velocity=(0.00, 0.00, 0.00) viewForward=(-0.41, -0.77, 0.49) facing=(-0.64, 0.00, 0.77) viewFacing=False carriedYaw=90.00 shoulder=False cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=None keyboard=4 W=False A=False S=False D=False
+PASS: WALK Pass cart-side clearance reaches its authored height through collision
+START WALK: North doorway
+NAV North doorway t=80.7 feet=(-2.38, 26.03, 111.65) velocity=(0.00, 0.00, 0.00) viewForward=(-0.41, -0.77, 0.49) facing=(0.09, 0.00, 1.00) viewFacing=False carriedYaw=90.00 shoulder=False cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=None keyboard=4 W=False A=False S=False D=False
+PASS: WALK North doorway reaches its authored height through collision
+START WALK: North docking seam
+NAV North docking seam t=81.6 feet=(-0.23, 26.03, 112.69) velocity=(0.00, 0.00, 0.00) viewForward=(-0.41, -0.77, 0.49) facing=(0.77, 0.00, 0.64) viewFacing=False carriedYaw=90.00 shoulder=False cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=None keyboard=4 W=False A=False S=False D=False
+NAV North docking seam t=82.6 feet=(-0.08, 26.03, 116.60) velocity=(0.35, 0.00, 3.98) viewForward=(-0.41, -0.77, 0.49) facing=(0.09, 0.00, 1.00) viewFacing=False carriedYaw=90.00 shoulder=False cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=None keyboard=4 W=True A=False S=False D=True
+PASS: WALK North docking seam reaches its authored height through collision
+START WALK: North bridge to collector spur
+NAV North bridge to collector spur t=83.2 feet=(-0.03, 26.03, 117.76) velocity=(0.00, 0.00, 0.00) viewForward=(-0.41, -0.77, 0.49) facing=(0.09, 0.00, 1.00) viewFacing=False carriedYaw=90.00 shoulder=False cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=None keyboard=4 W=False A=False S=False D=False
+NAV North bridge to collector spur t=84.2 feet=(0.01, 26.03, 121.69) velocity=(0.35, 0.00, 3.98) viewForward=(-0.41, -0.77, 0.49) facing=(0.09, 0.00, 1.00) viewFacing=False carriedYaw=90.00 shoulder=False cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=None keyboard=4 W=True A=False S=False D=True
+NAV North bridge to collector spur t=85.2 feet=(0.01, 26.03, 125.60) velocity=(-2.57, 0.00, 3.06) viewForward=(-0.41, -0.77, 0.49) facing=(-0.64, 0.00, 0.77) viewFacing=False carriedYaw=90.00 shoulder=False cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=None keyboard=4 W=True A=False S=False D=False
+PASS: WALK North bridge to collector spur reaches its authored height through collision
+START WALK: Collector spur entrance
+NAV Collector spur entrance t=86.0 feet=(0.00, 26.03, 127.72) velocity=(0.00, 0.00, 0.00) viewForward=(-0.41, -0.77, 0.49) facing=(-0.64, 0.00, 0.77) viewFacing=False carriedYaw=90.00 shoulder=False cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=None keyboard=4 W=False A=False S=False D=False
+PASS: WALK Collector spur entrance reaches its authored height through collision
+START WALK: Collector local weather station
+NAV Collector local weather station t=86.9 feet=(-2.71, 26.03, 127.96) velocity=(0.00, 0.00, 0.00) viewForward=(-0.41, -0.77, 0.49) facing=(-1.00, 0.00, 0.09) viewFacing=False carriedYaw=90.00 shoulder=False cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=None keyboard=4 W=False A=False S=False D=False
+PASS: WALK Collector local weather station reaches its authored height through collision
+START WALK: North court clear aisle toward the mushroom patch
+NAV North court clear aisle toward the mushroom patch t=87.7 feet=(-4.71, 26.03, 127.73) velocity=(0.00, 0.00, 0.00) viewForward=(-0.41, -0.77, 0.49) facing=(-1.00, 0.00, 0.09) viewFacing=False carriedYaw=90.00 shoulder=False cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=None keyboard=4 W=False A=False S=False D=False
+PASS: WALK North court clear aisle toward the mushroom patch reaches its authored height through collision
+START WALK: Walk to the north mountain mushroom patch
+NAV Walk to the north mountain mushroom patch t=88.3 feet=(-3.28, 26.03, 127.94) velocity=(0.00, 0.00, 0.00) viewForward=(-0.41, -0.77, 0.49) facing=(1.00, 0.00, -0.09) viewFacing=False carriedYaw=90.00 shoulder=False cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=None keyboard=4 W=False A=False S=False D=False
+PASS: WALK Walk to the north mountain mushroom patch reaches its authored height through collision
+PASS: The player crosses the real northern bridge onto fixed ground and the tower's Wind token returns.
+PASS: Short E collects mushroom 1 from the authored patch.
+PASS: Short E collects mushroom 2 from the authored patch.
+PASS: Short E collects mushroom 3 from the authored patch.
+PASS: Three mushrooms enter the market bag from the actual north mountain patch.
+START WALK: Return via the north court aisle
+NAV Return via the north court aisle t=93.1 feet=(-3.02, 26.03, 129.72) velocity=(0.00, 0.00, 0.00) viewForward=(-0.41, -0.77, 0.49) facing=(0.09, 0.00, 1.00) viewFacing=False carriedYaw=90.00 shoulder=False cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=None keyboard=4 W=False A=False S=False D=False
+PASS: WALK Return via the north court aisle reaches its authored height through collision
+START WALK: Return from collector spur to bridge
+NAV Return from collector spur to bridge t=93.6 feet=(-3.04, 26.03, 128.25) velocity=(0.00, 0.00, 0.00) viewForward=(-0.41, -0.77, 0.49) facing=(-0.09, 0.00, -1.00) viewFacing=False carriedYaw=90.00 shoulder=False cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=None keyboard=4 W=False A=False S=False D=False
+PASS: WALK Return from collector spur to bridge reaches its authored height through collision
+START WALK: Return along north freight bridge
+NAV Return along north freight bridge t=94.6 feet=(-0.25, 26.03, 128.07) velocity=(0.00, 0.00, 0.00) viewForward=(-0.41, -0.77, 0.49) facing=(0.77, 0.00, 0.64) viewFacing=False carriedYaw=90.00 shoulder=False cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=None keyboard=4 W=False A=False S=False D=False
+NAV Return along north freight bridge t=95.6 feet=(-0.20, 26.03, 124.12) velocity=(-0.35, 0.00, -3.98) viewForward=(-0.41, -0.77, 0.49) facing=(-0.09, 0.00, -1.00) viewFacing=False carriedYaw=90.00 shoulder=False cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=None keyboard=4 W=False A=True S=True D=False
+NAV Return along north freight bridge t=96.6 feet=(-0.12, 26.03, 120.28) velocity=(-0.35, 0.00, -3.98) viewForward=(-0.41, -0.77, 0.49) facing=(-0.09, 0.00, -1.00) viewFacing=False carriedYaw=90.00 shoulder=False cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=None keyboard=4 W=False A=True S=True D=False
+PASS: WALK Return along north freight bridge reaches its authored height through collision
+START WALK: Return through tower doorway
+NAV Return through tower doorway t=97.4 feet=(-0.01, 26.03, 118.29) velocity=(0.00, 0.00, 0.00) viewForward=(-0.41, -0.77, 0.49) facing=(-0.09, 0.00, -1.00) viewFacing=False carriedYaw=90.00 shoulder=False cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=None keyboard=4 W=False A=False S=False D=False
+NAV Return through tower doorway t=98.4 feet=(-0.03, 26.03, 114.39) velocity=(-0.35, 0.00, -3.98) viewForward=(-0.41, -0.77, 0.49) facing=(-0.09, 0.00, -1.00) viewFacing=False carriedYaw=90.00 shoulder=False cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=None keyboard=4 W=False A=True S=True D=False
+PASS: WALK Return through tower doorway reaches its authored height through collision
+START WALK: Return along cart aisle
+NAV Return along cart aisle t=99.0 feet=(-0.03, 26.03, 113.06) velocity=(0.00, 0.00, 0.00) viewForward=(-0.41, -0.77, 0.49) facing=(-0.09, 0.00, -1.00) viewFacing=False carriedYaw=90.00 shoulder=False cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=None keyboard=4 W=False A=False S=False D=False
+PASS: WALK Return along cart aisle reaches its authored height through collision
+START WALK: Return to tower station
+NAV Return to tower station t=100.0 feet=(-2.60, 26.03, 111.96) velocity=(0.00, 0.00, 0.00) viewForward=(-0.41, -0.77, 0.49) facing=(-0.77, 0.00, -0.64) viewFacing=False carriedYaw=90.00 shoulder=False cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=None keyboard=4 W=False A=False S=False D=False
+NAV Return to tower station t=101.0 feet=(-2.45, 26.03, 108.06) velocity=(-0.35, 0.00, -3.98) viewForward=(-0.41, -0.77, 0.49) facing=(-0.09, 0.00, -1.00) viewFacing=False carriedYaw=90.00 shoulder=False cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=None keyboard=4 W=False A=True S=True D=False
+PASS: WALK Return to tower station reaches its authored height through collision
+FLOWER TRIP north mushroom mountain: out 10.01s, action 3.97s, back 8.42s, total 22.40s
+PASS: The north return walks back onto the same docked tower.
+WEATHER INPUT before Tab hold for Wind frame=4773 t=101.460 unscaled=110.336 focused=True cursor=None keyboard=4 expected=4 tabHeld=False tabPressed=False pickerHeld=False pickerOpen=False targeting=False weatherBlocked=False observationBlocked=False journey=Walking voyage=none primaryPending=False pointerPicker=False closingFrame=-1 pickerStarted=81.84308
+WEATHER INPUT Tab down submitted before production Update frame=4773 t=101.460 unscaled=110.336 focused=True cursor=None keyboard=4 expected=4 tabHeld=True tabPressed=True pickerHeld=False pickerOpen=False targeting=False weatherBlocked=False observationBlocked=False journey=Walking voyage=none primaryPending=False pointerPicker=False closingFrame=-1 pickerStarted=81.84308
+WEATHER INPUT after unchanged .45-second Tab hold frame=4797 t=101.962 unscaled=110.838 focused=True cursor=None keyboard=4 expected=4 tabHeld=True tabPressed=False pickerHeld=True pickerOpen=True targeting=False weatherBlocked=True observationBlocked=False journey=Walking voyage=none primaryPending=False pointerPicker=False closingFrame=-1 pickerStarted=110.3364
+PASS: Holding Tab opens weather picker.
+PASS: Release selects Wind without inserting it remotely.
+PASS: Holding E opens object targeting.
+POINTER target=中央升降塔 station=0 pixel=(1073.04, 747.15) camera=(5.82, 42.35, 97.57)
+PASS: The production camera ray hovers the visible 中央升降塔.
+PASS: A real pointer hit applies Wind to 中央升降塔.
+PASS: The explicit left/clockwise mouse button selects the requested Wind direction on its first hit.
+PASS: Releasing E ends targeting without another short-E action.
+PASS: The L5 camera uses its authored fixed/shoulder opt-in profile.
+PASS: Real Z input selects fixed gameplay view.
+PASS: Tower reaches the selected Wind stop
+PASS: Tower reaches heading 90
+PASS: A second actual Wind cast docks east and retains tower height and water.
+START WALK: Tower weather aisle toward eastern village
+NAV Tower weather aisle toward eastern village t=107.8 feet=(-0.58, 26.03, 110.44) velocity=(0.00, 0.00, 0.00) viewForward=(-0.41, -0.77, 0.49) facing=(-1.00, 0.00, 0.09) viewFacing=False carriedYaw=180.00 shoulder=False cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=None keyboard=4 W=False A=False S=False D=False
+PASS: WALK Tower weather aisle toward eastern village reaches its authored height through collision
+START WALK: Pass the cart-side clearance toward eastern bridge
+NAV Pass the cart-side clearance toward eastern bridge t=108.3 feet=(0.73, 26.03, 110.39) velocity=(0.00, 0.00, 0.00) viewForward=(-0.41, -0.77, 0.49) facing=(1.00, 0.00, -0.09) viewFacing=False carriedYaw=180.00 shoulder=False cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=None keyboard=4 W=False A=False S=False D=False
+PASS: WALK Pass the cart-side clearance toward eastern bridge reaches its authored height through collision
+START WALK: Eastern tower doorway
+NAV Eastern tower doorway t=109.3 feet=(3.64, 26.03, 110.37) velocity=(0.00, 0.00, 0.00) viewForward=(-0.41, -0.77, 0.49) facing=(1.00, 0.00, -0.09) viewFacing=False carriedYaw=180.00 shoulder=False cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=None keyboard=4 W=False A=False S=False D=False
+PASS: WALK Eastern tower doorway reaches its authored height through collision
+START WALK: Cross the connected eastern docking seam
+NAV Cross the connected eastern docking seam t=110.3 feet=(4.69, 26.03, 108.22) velocity=(0.00, 0.00, 0.00) viewForward=(-0.41, -0.77, 0.49) facing=(-0.09, 0.00, -1.00) viewFacing=False carriedYaw=180.00 shoulder=False cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=None keyboard=4 W=False A=False S=False D=False
+NAV Cross the connected eastern docking seam t=111.3 feet=(8.64, 26.03, 108.05) velocity=(3.98, 0.00, -0.35) viewForward=(-0.41, -0.77, 0.49) facing=(1.00, 0.00, -0.09) viewFacing=False carriedYaw=180.00 shoulder=False cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=None keyboard=4 W=False A=False S=True D=True
+PASS: WALK Cross the connected eastern docking seam reaches its authored height through collision
+START WALK: Walk the eastern freight bridge to the village
+NAV Walk the eastern freight bridge to the village t=111.8 feet=(9.76, 26.03, 108.03) velocity=(0.00, 0.00, 0.00) viewForward=(-0.41, -0.77, 0.49) facing=(1.00, 0.00, -0.09) viewFacing=False carriedYaw=180.00 shoulder=False cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=None keyboard=4 W=False A=False S=False D=False
+NAV Walk the eastern freight bridge to the village t=112.8 feet=(13.69, 26.03, 108.00) velocity=(3.98, 0.00, -0.35) viewForward=(-0.41, -0.77, 0.49) facing=(1.00, 0.00, -0.09) viewFacing=False carriedYaw=180.00 shoulder=False cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=None keyboard=4 W=False A=False S=True D=True
+NAV Walk the eastern freight bridge to the village t=113.8 feet=(17.58, 26.03, 107.96) velocity=(3.98, 0.00, -0.35) viewForward=(-0.41, -0.77, 0.49) facing=(1.00, 0.00, -0.09) viewFacing=False carriedYaw=180.00 shoulder=False cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=None keyboard=4 W=False A=False S=True D=True
+NAV Walk the eastern freight bridge to the village t=114.8 feet=(21.50, 26.03, 107.96) velocity=(3.98, 0.00, -0.35) viewForward=(-0.41, -0.77, 0.49) facing=(1.00, 0.00, -0.09) viewFacing=False carriedYaw=180.00 shoulder=False cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=None keyboard=4 W=False A=False S=True D=True
+NAV Walk the eastern freight bridge to the village t=115.8 feet=(25.45, 26.03, 107.90) velocity=(3.98, 0.00, -0.35) viewForward=(-0.41, -0.77, 0.49) facing=(1.00, 0.00, -0.09) viewFacing=False carriedYaw=180.00 shoulder=False cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=None keyboard=4 W=False A=False S=True D=True
+NAV Walk the eastern freight bridge to the village t=116.8 feet=(29.37, 26.03, 107.85) velocity=(3.98, 0.00, -0.35) viewForward=(-0.41, -0.77, 0.49) facing=(1.00, 0.00, -0.09) viewFacing=False carriedYaw=180.00 shoulder=False cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=None keyboard=4 W=False A=False S=True D=True
+NAV Walk the eastern freight bridge to the village t=117.9 feet=(33.30, 26.03, 107.84) velocity=(3.98, 0.00, -0.35) viewForward=(-0.41, -0.77, 0.49) facing=(1.00, 0.00, -0.09) viewFacing=False carriedYaw=180.00 shoulder=False cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=None keyboard=4 W=False A=False S=True D=True
+NAV Walk the eastern freight bridge to the village t=118.9 feet=(37.25, 26.03, 107.83) velocity=(3.98, 0.00, -0.35) viewForward=(-0.41, -0.77, 0.49) facing=(1.00, 0.00, -0.09) viewFacing=False carriedYaw=180.00 shoulder=False cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=None keyboard=4 W=False A=False S=True D=True
+NAV Walk the eastern freight bridge to the village t=119.9 feet=(41.14, 26.03, 107.82) velocity=(3.98, 0.00, -0.35) viewForward=(-0.41, -0.77, 0.49) facing=(1.00, 0.00, -0.09) viewFacing=False carriedYaw=180.00 shoulder=False cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=None keyboard=4 W=False A=False S=True D=True
+NAV Walk the eastern freight bridge to the village t=120.9 feet=(44.99, 26.03, 107.96) velocity=(3.98, 0.00, -0.35) viewForward=(-0.41, -0.77, 0.49) facing=(1.00, 0.00, -0.09) viewFacing=False carriedYaw=180.00 shoulder=False cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=None keyboard=4 W=False A=False S=True D=True
+PASS: WALK Walk the eastern freight bridge to the village reaches its authored height through collision
+START WALK: Eastern observation landing
+NAV Eastern observation landing t=121.3 feet=(45.76, 26.03, 107.96) velocity=(0.00, 0.00, 0.00) viewForward=(-0.41, -0.77, 0.49) facing=(1.00, 0.00, -0.09) viewFacing=False carriedYaw=180.00 shoulder=False cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=None keyboard=4 W=False A=False S=False D=False
+PASS: WALK Eastern observation landing reaches its authored height through collision
+START WALK: Approach the shaded-village observation marker
+NAV Approach the shaded-village observation marker t=122.1 feet=(47.79, 26.03, 107.98) velocity=(0.00, 0.00, 0.00) viewForward=(-0.41, -0.77, 0.49) facing=(1.00, 0.00, -0.09) viewFacing=False carriedYaw=180.00 shoulder=False cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=None keyboard=4 W=False A=False S=False D=False
+PASS: WALK Approach the shaded-village observation marker reaches its authored height through collision
+START WALK: East landing to the orchard aisle
+NAV East landing to the orchard aisle t=122.6 feet=(48.00, 26.03, 108.94) velocity=(0.00, 0.00, 0.00) viewForward=(-0.41, -0.77, 0.49) facing=(0.77, 0.00, 0.64) viewFacing=False carriedYaw=180.00 shoulder=False cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=None keyboard=4 W=False A=False S=False D=False
+PASS: WALK East landing to the orchard aisle reaches its authored height through collision
+START WALK: Walk from the east landing to the orchard on the fixed mountain
+NAV Walk from the east landing to the orchard on the fixed mountain t=123.1 feet=(48.01, 26.03, 108.27) velocity=(0.00, 0.00, 0.00) viewForward=(-0.41, -0.77, 0.49) facing=(-0.09, 0.00, -1.00) viewFacing=False carriedYaw=180.00 shoulder=False cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=None keyboard=4 W=False A=False S=False D=False
+PASS: WALK Walk from the east landing to the orchard on the fixed mountain reaches its authored height through collision
+PASS: The actual east crossing reaches a dry orchard and both the player and fruit are inside the village rain zone.
+FLOWER CROP east dry arrival: day=1 phase=DayGathering sunlight=True orchardRay=False localRain=False offer=None sunny=0 rain=0 nightRain=0 villageRay=False
+WEATHER INPUT before Tab hold for Rain frame=5816 t=123.928 unscaled=132.805 focused=True cursor=None keyboard=4 expected=4 tabHeld=False tabPressed=False pickerHeld=False pickerOpen=False targeting=False weatherBlocked=False observationBlocked=False journey=Walking voyage=none primaryPending=False pointerPicker=False closingFrame=4929 pickerStarted=110.3364
+WEATHER INPUT Tab down submitted before production Update frame=5816 t=123.928 unscaled=132.805 focused=True cursor=None keyboard=4 expected=4 tabHeld=True tabPressed=True pickerHeld=False pickerOpen=False targeting=False weatherBlocked=False observationBlocked=False journey=Walking voyage=none primaryPending=False pointerPicker=False closingFrame=4929 pickerStarted=110.3364
+WEATHER INPUT after unchanged .45-second Tab hold frame=5838 t=124.442 unscaled=133.318 focused=True cursor=None keyboard=4 expected=4 tabHeld=True tabPressed=False pickerHeld=True pickerOpen=True targeting=False weatherBlocked=True observationBlocked=False journey=Walking voyage=none primaryPending=False pointerPicker=False closingFrame=4929 pickerStarted=132.8046
+PASS: Holding Tab opens weather picker.
+PASS: Release selects Rain without inserting it remotely.
+PASS: Holding E opens object targeting.
+POINTER target=村庄接光盘 station=3 pixel=(1253.77, 1320.90) camera=(57.17, 42.35, 96.39)
+PASS: The production camera ray hovers the visible 村庄接光盘.
+PASS: A real pointer hit on the east village mechanism inserts the rain token.
+PASS: The local rain zone becomes active after the weather transition.
+PASS: Rain remains local to the east village station and no other station receives it.
+PASS: The L5 camera uses its authored fixed/shoulder opt-in profile.
+PASS: Real Z input selects fixed gameplay view.
+PASS: A real pointer cast of Rain at the village station changes this east orchard to rain fruit.
+PASS: Short E adds the east rain fruit while retaining the mushrooms from the other mountain.
+FLOWER CROP east rain harvest: day=1 phase=DayGathering sunlight=True orchardRay=False localRain=True offer=WeatherFruit sunny=0 rain=1 nightRain=0 villageRay=False
+START WALK: Return from the eastern villager to the bridge landing
+NAV Return from the eastern villager to the bridge landing t=128.3 feet=(48.90, 26.03, 106.23) velocity=(0.00, 0.00, 0.00) viewForward=(-0.41, -0.77, 0.49) facing=(0.64, 0.00, -0.77) viewFacing=False carriedYaw=180.00 shoulder=False cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=None keyboard=4 W=False A=False S=False D=False
+PASS: WALK Return from the eastern villager to the bridge landing reaches its authored height through collision
+START WALK: Walk back along the eastern freight bridge
+NAV Walk back along the eastern freight bridge t=129.1 feet=(48.09, 26.03, 107.79) velocity=(0.00, 0.00, 0.00) viewForward=(-0.41, -0.77, 0.49) facing=(-0.64, 0.00, 0.77) viewFacing=False carriedYaw=180.00 shoulder=False cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=None keyboard=4 W=False A=False S=False D=False
+NAV Walk back along the eastern freight bridge t=130.1 feet=(44.20, 26.03, 107.85) velocity=(-3.98, 0.00, 0.35) viewForward=(-0.41, -0.77, 0.49) facing=(-1.00, 0.00, 0.09) viewFacing=False carriedYaw=180.00 shoulder=False cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=None keyboard=4 W=True A=True S=False D=False
+NAV Walk back along the eastern freight bridge t=131.1 feet=(40.26, 26.03, 107.90) velocity=(-3.98, 0.00, 0.35) viewForward=(-0.41, -0.77, 0.49) facing=(-1.00, 0.00, 0.09) viewFacing=False carriedYaw=180.00 shoulder=False cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=None keyboard=4 W=True A=True S=False D=False
+NAV Walk back along the eastern freight bridge t=132.1 feet=(36.25, 26.03, 108.03) velocity=(-3.98, 0.00, 0.35) viewForward=(-0.41, -0.77, 0.49) facing=(-1.00, 0.00, 0.09) viewFacing=False carriedYaw=180.00 shoulder=False cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=None keyboard=4 W=True A=True S=False D=False
+NAV Walk back along the eastern freight bridge t=133.1 feet=(32.36, 26.03, 108.03) velocity=(-3.98, 0.00, 0.35) viewForward=(-0.41, -0.77, 0.49) facing=(-1.00, 0.00, 0.09) viewFacing=False carriedYaw=180.00 shoulder=False cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=None keyboard=4 W=True A=True S=False D=False
+NAV Walk back along the eastern freight bridge t=134.1 feet=(28.48, 26.03, 108.06) velocity=(-3.98, 0.00, 0.35) viewForward=(-0.41, -0.77, 0.49) facing=(-1.00, 0.00, 0.09) viewFacing=False carriedYaw=180.00 shoulder=False cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=None keyboard=4 W=True A=True S=False D=False
+NAV Walk back along the eastern freight bridge t=135.1 feet=(24.53, 26.03, 108.09) velocity=(-3.98, 0.00, 0.35) viewForward=(-0.41, -0.77, 0.49) facing=(-1.00, 0.00, 0.09) viewFacing=False carriedYaw=180.00 shoulder=False cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=None keyboard=4 W=True A=True S=False D=False
+NAV Walk back along the eastern freight bridge t=136.1 feet=(20.63, 26.03, 108.05) velocity=(-3.98, 0.00, 0.35) viewForward=(-0.41, -0.77, 0.49) facing=(-1.00, 0.00, 0.09) viewFacing=False carriedYaw=180.00 shoulder=False cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=None keyboard=4 W=True A=True S=False D=False
+NAV Walk back along the eastern freight bridge t=137.1 feet=(16.75, 26.03, 108.07) velocity=(-3.98, 0.00, 0.35) viewForward=(-0.41, -0.77, 0.49) facing=(-1.00, 0.00, 0.09) viewFacing=False carriedYaw=180.00 shoulder=False cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=None keyboard=4 W=True A=True S=False D=False
+NAV Walk back along the eastern freight bridge t=138.1 feet=(12.82, 26.03, 108.01) velocity=(-3.98, 0.00, 0.35) viewForward=(-0.41, -0.77, 0.49) facing=(-1.00, 0.00, 0.09) viewFacing=False carriedYaw=180.00 shoulder=False cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=None keyboard=4 W=True A=True S=False D=False
+PASS: WALK Walk back along the eastern freight bridge reaches its authored height through collision
+START WALK: Re-enter the tower from the eastern docking seam
+NAV Re-enter the tower from the eastern docking seam t=139.1 feet=(10.26, 26.03, 108.01) velocity=(0.00, 0.00, 0.00) viewForward=(-0.41, -0.77, 0.49) facing=(-1.00, 0.00, 0.09) viewFacing=False carriedYaw=180.00 shoulder=False cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=None keyboard=4 W=False A=False S=False D=False
+NAV Re-enter the tower from the eastern docking seam t=140.1 feet=(6.33, 26.03, 108.01) velocity=(-3.98, 0.00, 0.35) viewForward=(-0.41, -0.77, 0.49) facing=(-1.00, 0.00, 0.09) viewFacing=False carriedYaw=180.00 shoulder=False cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=None keyboard=4 W=True A=True S=False D=False
+PASS: WALK Re-enter the tower from the eastern docking seam reaches its authored height through collision
+START WALK: Return along the tower cart aisle
+NAV Return along the tower cart aisle t=140.7 feet=(5.05, 26.03, 108.00) velocity=(0.00, 0.00, 0.00) viewForward=(-0.41, -0.77, 0.49) facing=(-1.00, 0.00, 0.09) viewFacing=False carriedYaw=180.00 shoulder=False cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=None keyboard=4 W=False A=False S=False D=False
+PASS: WALK Return along the tower cart aisle reaches its authored height through collision
+START WALK: Reach the tower weather console for the northern return
+NAV Reach the tower weather console for the northern return t=141.7 feet=(4.01, 26.03, 110.62) velocity=(0.00, 0.00, 0.00) viewForward=(-0.41, -0.77, 0.49) facing=(0.09, 0.00, 1.00) viewFacing=False carriedYaw=180.00 shoulder=False cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=None keyboard=4 W=False A=False S=False D=False
+NAV Reach the tower weather console for the northern return t=142.7 feet=(0.15, 26.03, 110.47) velocity=(-3.98, 0.00, 0.35) viewForward=(-0.41, -0.77, 0.49) facing=(-1.00, 0.00, 0.09) viewFacing=False carriedYaw=180.00 shoulder=False cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=None keyboard=4 W=True A=True S=False D=False
+PASS: WALK Reach the tower weather console for the northern return reaches its authored height through collision
+FLOWER TRIP east orchard mountain: out 16.18s, action 4.28s, back 14.94s, total 35.39s
+PASS: Leaving the patch automatically returns the local rain token.
+PASS: The east return walks onto the tower with its original rainwater still in the lift and none in cargo ballast.
+START WALK: Weather side to the rear aisle
+NAV Weather side to the rear aisle t=143.2 feet=(-0.57, 26.03, 110.42) velocity=(0.00, 0.00, 0.00) viewForward=(-0.41, -0.77, 0.49) facing=(-1.00, 0.00, 0.09) viewFacing=False carriedYaw=180.00 shoulder=False cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=None keyboard=4 W=False A=False S=False D=False
+PASS: WALK Weather side to the rear aisle reaches its authored height through collision
+START WALK: Cross behind the relay to the rotating shop side
+NAV Cross behind the relay to the rotating shop side t=144.0 feet=(-2.76, 26.03, 110.80) velocity=(0.00, 0.00, 0.00) viewForward=(-0.41, -0.77, 0.49) facing=(-0.64, 0.00, 0.77) viewFacing=False carriedYaw=180.00 shoulder=False cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=None keyboard=4 W=False A=False S=False D=False
+NAV Cross behind the relay to the rotating shop side t=145.1 feet=(-2.93, 26.03, 106.82) velocity=(-0.35, 0.00, -3.98) viewForward=(-0.41, -0.77, 0.49) facing=(-0.09, 0.00, -1.00) viewFacing=False carriedYaw=180.00 shoulder=False cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=None keyboard=4 W=False A=True S=True D=False
+PASS: WALK Cross behind the relay to the rotating shop side reaches its authored height through collision
+START WALK: Return to the central shop at the live east-facing pose
+NAV Return to the central shop at the live east-facing pose t=145.5 feet=(-3.01, 26.03, 105.87) velocity=(0.00, 0.00, 0.00) viewForward=(-0.41, -0.77, 0.49) facing=(-0.09, 0.00, -1.00) viewFacing=False carriedYaw=180.00 shoulder=False cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=None keyboard=4 W=False A=False S=False D=False
+PASS: WALK Return to the central shop at the live east-facing pose reaches its authored height through collision
+PASS: Both mountain harvests return to the same rotating store before daylight gathering ends.
+TOWER MARKET OUTING returnedIn=83.59s daylightRemaining=21.20s
+PASS: Short E at the shop opens the separate dusk choice on day 1.
+WEATHER INPUT Tab down submitted before production Update frame=6871 t=146.586 unscaled=155.462 focused=True cursor=None keyboard=4 expected=4 tabHeld=True tabPressed=True pickerHeld=False pickerOpen=False targeting=False weatherBlocked=False observationBlocked=False journey=Walking voyage=none primaryPending=False pointerPicker=False closingFrame=-1 pickerStarted=132.8046
+PASS: The dusk choice suppresses both the weather selector and movement while open.
+PASS: Direct return opens trading on the central tower instead of boarding a carrier.
+PASS: Tower direct return offers the authored 120-second budget before E accepts orders.
+FLOWER TRADING Tower direct return before accepting: day=1 phase=Trading budget=120.00s remaining=0.00s timeout=False evening=0 cash=0 revenue=0 upgraded=False A=Idle B=Idle refundedMushrooms=0 refundedRainNight=0 refundedRain=0 refundedSunny=0
+PASS: E accepts a waiting mushroom order at window A and a waiting fruit order at window B.
+PASS: Accepted orders reserve three mushrooms and exactly one WeatherFruit, even after repeated E.
+PASS: Accepting orders on the tower direct return route starts the live 120-second clock.
+FLOWER TRADING Tower direct return clock started: day=1 phase=Trading budget=120.00s remaining=119.13s timeout=False evening=0 cash=0 revenue=0 upgraded=False A=Waiting B=Waiting refundedMushrooms=0 refundedRainNight=0 refundedRain=0 refundedSunny=0
+PASS: Actual 1 starts MushroomBento at its own stove.
+PASS: Actual 2 starts FruitBento at its own stove.
+PASS: Both stoves cook at once on the tower using only the ingredients physically gathered on the two mountains.
+FLOWER KITCHEN tower parallel orders: day=1 upgraded=False cash=0 revenue=0 A=Cooking/MushroomBento/2.12s B=Cooking/FruitBento/3.58s
+PASS: Stove 1 becomes ready through its live cooking timer.
+PASS: Actual 1 delivers its dish and raises cash to 12 exactly once.
+PASS: Stove 2 becomes ready through its live cooking timer.
+PASS: Actual 2 delivers its dish and raises cash to 34 exactly once.
+PASS: N opens the actual 34-value sales summary on the tower without moving the player or requiring a ferry.
+FLOWER TRADING tower manual summary: day=1 phase=DaySummary budget=120.00s remaining=0.00s timeout=False evening=34 cash=34 revenue=34 upgraded=False A=Idle B=Idle refundedMushrooms=0 refundedRainNight=0 refundedRain=0 refundedSunny=0
+PASS: Day two retains earnings and the physical east-facing tower state without a cargo stage or relocation.
+START WALK: Leave the shop by the rear aisle
+NAV Leave the shop by the rear aisle t=154.9 feet=(-2.03, 26.03, 105.16) velocity=(0.00, 0.00, 0.00) viewForward=(-0.41, -0.77, 0.49) facing=(0.64, 0.00, -0.77) viewFacing=False carriedYaw=180.00 shoulder=False cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=None keyboard=4 W=False A=False S=False D=False
+PASS: WALK Leave the shop by the rear aisle reaches its authored height through collision
+START WALK: Cross the rear aisle to the wind controls
+NAV Cross the rear aisle to the wind controls t=155.4 feet=(-2.74, 26.03, 105.46) velocity=(0.00, 0.00, 0.00) viewForward=(-0.41, -0.77, 0.49) facing=(-1.00, 0.00, 0.09) viewFacing=False carriedYaw=180.00 shoulder=False cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=None keyboard=4 W=False A=False S=False D=False
+NAV Cross the rear aisle to the wind controls t=156.4 feet=(-2.92, 26.03, 109.36) velocity=(0.35, 0.00, 3.98) viewForward=(-0.41, -0.77, 0.49) facing=(0.09, 0.00, 1.00) viewFacing=False carriedYaw=180.00 shoulder=False cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=None keyboard=4 W=True A=False S=False D=True
+PASS: WALK Cross the rear aisle to the wind controls reaches its authored height through collision
+START WALK: Reach the tower weather station for the west return
+NAV Reach the tower weather station for the west return t=157.0 feet=(-2.96, 26.03, 110.55) velocity=(0.00, 0.00, 0.00) viewForward=(-0.41, -0.77, 0.49) facing=(0.09, 0.00, 1.00) viewFacing=False carriedYaw=180.00 shoulder=False cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=None keyboard=4 W=False A=False S=False D=False
+PASS: WALK Reach the tower weather station for the west return reaches its authored height through collision
+WEATHER INPUT before Tab hold for Wind frame=7411 t=157.741 unscaled=166.617 focused=True cursor=None keyboard=4 expected=4 tabHeld=False tabPressed=False pickerHeld=False pickerOpen=False targeting=False weatherBlocked=False observationBlocked=False journey=Walking voyage=none primaryPending=False pointerPicker=False closingFrame=-1 pickerStarted=132.8046
+WEATHER INPUT Tab down submitted before production Update frame=7411 t=157.741 unscaled=166.617 focused=True cursor=None keyboard=4 expected=4 tabHeld=True tabPressed=True pickerHeld=False pickerOpen=False targeting=False weatherBlocked=False observationBlocked=False journey=Walking voyage=none primaryPending=False pointerPicker=False closingFrame=-1 pickerStarted=132.8046
+WEATHER INPUT after unchanged .45-second Tab hold frame=7434 t=158.238 unscaled=167.114 focused=True cursor=None keyboard=4 expected=4 tabHeld=True tabPressed=False pickerHeld=True pickerOpen=True targeting=False weatherBlocked=True observationBlocked=False journey=Walking voyage=none primaryPending=False pointerPicker=False closingFrame=-1 pickerStarted=166.617
+PASS: Holding Tab opens weather picker.
+PASS: Release selects Wind without inserting it remotely.
+PASS: Holding E opens object targeting.
+POINTER target=中央升降塔 station=0 pixel=(1410.78, 896.19) camera=(7.18, 42.35, 100.56)
+PASS: The production camera ray hovers the visible 中央升降塔.
+PASS: A real pointer hit applies Wind to 中央升降塔.
+PASS: The explicit right/counterclockwise mouse button selects the requested Wind direction on its first hit.
+PASS: Releasing E ends targeting without another short-E action.
+PASS: The L5 camera uses its authored fixed/shoulder opt-in profile.
+PASS: Real Z input selects fixed gameplay view.
+PASS: Tower reaches the selected Wind stop
+WEATHER INPUT before Tab hold for Wind frame=7692 t=163.843 unscaled=172.719 focused=True cursor=None keyboard=4 expected=4 tabHeld=False tabPressed=False pickerHeld=False pickerOpen=False targeting=False weatherBlocked=False observationBlocked=False journey=Walking voyage=none primaryPending=False pointerPicker=False closingFrame=7570 pickerStarted=166.617
+WEATHER INPUT Tab down submitted before production Update frame=7692 t=163.843 unscaled=172.719 focused=True cursor=None keyboard=4 expected=4 tabHeld=True tabPressed=True pickerHeld=False pickerOpen=False targeting=False weatherBlocked=False observationBlocked=False journey=Walking voyage=none primaryPending=False pointerPicker=False closingFrame=7570 pickerStarted=166.617
+WEATHER INPUT after unchanged .45-second Tab hold frame=7714 t=164.342 unscaled=173.219 focused=True cursor=None keyboard=4 expected=4 tabHeld=True tabPressed=False pickerHeld=True pickerOpen=True targeting=False weatherBlocked=True observationBlocked=False journey=Walking voyage=none primaryPending=False pointerPicker=False closingFrame=7570 pickerStarted=172.7193
+PASS: Holding Tab opens weather picker.
+PASS: Release selects Wind without inserting it remotely.
+PASS: Holding E opens object targeting.
+POINTER target=中央升降塔 station=0 pixel=(1099.68, 771.70) camera=(5.85, 42.35, 97.07)
+PASS: The production camera ray hovers the visible 中央升降塔.
+PASS: A real pointer hit applies Wind to 中央升降塔.
+PASS: The explicit right/counterclockwise mouse button selects the requested Wind direction on its first hit.
+PASS: Releasing E ends targeting without another short-E action.
+PASS: The L5 camera uses its authored fixed/shoulder opt-in profile.
+PASS: Real Z input selects fixed gameplay view.
+PASS: Tower reaches the selected Wind stop
+PASS: Tower reaches heading -90
+START WALK: Approach the west-facing drain valve
+NAV Approach the west-facing drain valve t=168.9 feet=(1.09, 26.03, 105.59) velocity=(0.00, 0.00, 0.00) viewForward=(-0.41, -0.77, 0.49) facing=(-1.00, 0.00, 0.09) viewFacing=False carriedYaw=360.00 shoulder=False cameraSuppressed=False autoPositioning=False pushing=False focused=True cursor=None keyboard=4 W=False A=False S=False D=False
+PASS: WALK Approach the west-facing drain valve reaches its authored height through collision
+PASS: Actual E opens the original west-facing drain valve.
+PASS: The occupied tower descends and docks at the low west bridge.
+PASS: The physical descent retains the shop and the next day's carried earnings.
+PASS: R restores the empty west-facing low deck and returns all weather tokens.
+PASS: R returns to the original entrance and resets the lower route, tower shop and ingredient bag.
+SKYWELL_FLOWER_MARKET_PASSED

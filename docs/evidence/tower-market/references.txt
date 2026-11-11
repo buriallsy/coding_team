@@ -1,0 +1,10 @@
+2026-11-11T15:44:16.1337350Z
+Serialized reference audit; scenes opened additively and closed without saving.
+PASS: Assets/BorrowingSun/Scenes/01_WaterCourt.unity
+PASS: Assets/BorrowingSun/Scenes/03_BorrowedRain.unity
+PASS: Assets/BorrowingSun/Scenes/03_RainCargoStreet.unity
+PASS: Assets/BorrowingSun/Scenes/05_Skywell.unity
+PASS: Assets/BorrowingSun/Scenes/05_Skywell_FlowerMarket.unity
+PASS: Assets/BorrowingSun/Prefabs/WeatherPavilion.prefab
+Components checked: 12358
+PROJECT_REFERENCES_PASSED

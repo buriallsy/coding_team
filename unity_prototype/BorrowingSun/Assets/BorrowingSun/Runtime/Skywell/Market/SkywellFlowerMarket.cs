@@ -8,7 +8,6 @@ namespace BorrowingSun
         [SerializeField] private Transform shop, mushrooms, rainFruit;
         [SerializeField] private SkywellWeatherZone rainZone;
         [SerializeField] private SkywellWeatherTarget rainTarget;
-        [SerializeField] private Collider courtFloor;
         [SerializeField] private SkywellSceneLighting lighting;
         [SerializeField] private Transform orchardSunSample;
         [SerializeField] private TextMesh orchardLabel;
@@ -65,17 +64,17 @@ namespace BorrowingSun
             Run.CanGather && !Run.IsNight && !FruitIsWet && OrchardReceivesSunlight);
         public string Feedback => Time.time < feedbackUntil ? feedback : null;
 
-        internal bool AllowsWeather(int station, SkywellToken token, bool delivered) =>
+        internal bool AllowsWeather(int station, SkywellToken token, bool unlocked) =>
             !rainTarget || station != rainTarget.StationIndex ||
-            delivered && Run.CanGather && token == SkywellToken.Rain;
+            token != SkywellToken.Rain || unlocked && Run.CanGather;
 
-        internal bool TryInteract(CourtPlayer actor)
+        internal bool TryInteract(CourtPlayer actor, bool towerMoving)
         {
             Point point = FindPoint(actor.FeetPosition);
             if (point == Point.None) return false;
-            if (!CanStandInCourt(actor))
+            if (!CanStandOnGround(actor) || point == Point.Shop && towerMoving)
             {
-                Say("站稳后再交互。");
+                Say("站稳并等塔停下后再操作。");
                 return true;
             }
 
@@ -99,17 +98,16 @@ namespace BorrowingSun
 
             var produce = OrchardProduce;
             if (produce.HasValue) Harvest(produce.Value, ref fruitReadyAt);
-            else Say(Run.IsNight ? "夜里无晴果。对花庭集雨盆施雨可采雨夜果。" : "果树没有直射日光。可对花庭集雨盆施雨。");
+            else Say(Run.IsNight ? "夜里无晴果。借东岸的雨可采雨夜果。" : "果树没有直射日光。借东岸的雨可采雨露果。");
             return true;
         }
 
         internal string Prompt(Vector3 feet)
         {
-            if (!shop || Mathf.Abs(feet.y - shop.position.y) > .65f ||
-                (feet - shop.position).sqrMagnitude > 225f) return null;
+            var point = FindPoint(feet);
+            if (point == Point.None) return null;
             if (Feedback != null) return Feedback;
 
-            var point = FindPoint(feet);
             if (point == Point.Shop)
             {
                 return Run.Phase switch
@@ -122,9 +120,9 @@ namespace BorrowingSun
                 };
             }
 
-            if (Run.Phase == FlowerMarketPhase.DuskChoice) return "黄昏到了 · 到庭院地面选择行程";
-            if (Run.Phase == FlowerMarketPhase.ReturningToShop) return "采集结束 · 回花庭小铺按 E 营业";
-            if (Run.Phase == FlowerMarketPhase.Trading) return "回花庭小铺按 E 打开柜台";
+            if (Run.Phase == FlowerMarketPhase.DuskChoice) return "黄昏到了 · 站稳后选择行程";
+            if (Run.Phase == FlowerMarketPhase.ReturningToShop) return "采集结束 · 回中央塔按 E 营业";
+            if (Run.Phase == FlowerMarketPhase.Trading) return "回中央塔按 E 打开柜台";
             if (Run.CanGather && point == Point.Mushrooms) return "E 采菌菇";
             if (Run.CanGather && point == Point.Orchard)
             {
@@ -133,7 +131,7 @@ namespace BorrowingSun
                 return Run.IsNight ? "夜间无晴果 · 施雨可采雨夜果" : "此处无直射日光 · 施雨可采雨露果";
             }
 
-            return Run.IsStarted ? "花庭小铺 · 采集后回店" : "货已签收 · 到花庭小铺按 E 开始经营";
+            return Run.IsStarted ? "采集后回中央塔小铺" : "到中央塔小铺按 E 开始经营";
         }
 
         internal void Tick(float deltaSeconds, CourtPlayer actor, bool canOpenDusk)
@@ -142,7 +140,7 @@ namespace BorrowingSun
             bool wasTrading = Run.Phase == FlowerMarketPhase.Trading;
             Run.Tick(deltaSeconds);
             if (wasTrading && IsSummaryOpen) OpenSummary();
-            if (Run.Phase == FlowerMarketPhase.DuskChoice && !IsDuskOpen && canOpenDusk && CanStandInCourt(actor))
+            if (Run.Phase == FlowerMarketPhase.DuskChoice && !IsDuskOpen && canOpenDusk && CanStandOnGround(actor))
                 OpenDusk();
             RefreshLighting();
             RefreshOrchard();
@@ -175,7 +173,7 @@ namespace BorrowingSun
             closedFrame = Time.frameCount;
             if (explore) Say("夜探开始。夜里无晴果，借雨可采雨夜果。");
             else if (Near(actor.FeetPosition, shop)) OpenTrading();
-            else Say("回花庭小铺按 E 营业。");
+            else Say("回中央塔小铺按 E 营业。");
             RefreshLighting();
             RefreshOrchard();
         }
@@ -281,7 +279,7 @@ namespace BorrowingSun
             {
                 case FlowerMarketPhase.Locked:
                     Run.TryStart();
-                    Say("第一天 · 采菌菇，看看果树在日光和雨下的变化。");
+                    Say("第一天 · 借雨升塔，借风接桥。北庭采菌菇，东岸采果。");
                     break;
                 case FlowerMarketPhase.DayGathering:
                     Run.TryEndDay();
@@ -375,14 +373,9 @@ namespace BorrowingSun
             orchardCanopy.SetPropertyBlock(canopyTint);
         }
 
-        private bool CanStandInCourt(CourtPlayer actor)
-        {
-            if (!actor || actor.IsSwimming || actor.IsExternallyDriven || actor.IsAutoPositioning ||
-                !actor.TryGetComponent<CharacterController>(out var body) || !body.isGrounded || !courtFloor)
-                return false;
-            var down = new Ray(actor.FeetPosition + Vector3.up * .15f, Vector3.down);
-            return courtFloor.Raycast(down, out _, .35f);
-        }
+        private static bool CanStandOnGround(CourtPlayer actor) =>
+            actor && !actor.IsSwimming && !actor.IsExternallyDriven && !actor.IsAutoPositioning &&
+            actor.TryGetComponent<CharacterController>(out var body) && body.isGrounded;
 
         private Point FindPoint(Vector3 feet)
         {
