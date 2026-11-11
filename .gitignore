@@ -6,6 +6,7 @@ Thumbs.db
 __pycache__/
 *.pyc
 *.csproj
+!Tools/MarketChecks/*.csproj
 *.sln
 *.slnx
 *.user
@@ -34,3 +35,6 @@ __pycache__/
 /editmode-results.xml
 /editmode.log
 /references.log
+/.local/
+/Tools/MarketChecks/bin/
+/Tools/MarketChecks/obj/

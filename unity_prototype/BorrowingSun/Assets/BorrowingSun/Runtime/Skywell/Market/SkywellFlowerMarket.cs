@@ -3,8 +3,17 @@ using UnityEngine.InputSystem;
 
 namespace BorrowingSun
 {
-    public sealed class SkywellFlowerMarket : MonoBehaviour
+    public sealed class SkywellFlowerMarket : MonoBehaviour, ISkywellMarketInteraction
     {
+        bool ISkywellMarketInteraction.AllowsSunlight => true;
+        bool ISkywellMarketInteraction.AllowsWeather(int station,SkywellToken token,bool delivered)=>AllowsWeather(station,token,delivered);
+        bool ISkywellMarketInteraction.TryInteract(CourtPlayer actor)=>TryInteract(actor);
+        string ISkywellMarketInteraction.Prompt(Vector3 feet)=>Prompt(feet);
+        void ISkywellMarketInteraction.Tick(float seconds)=>Tick(seconds);
+        void ISkywellMarketInteraction.AfterWorldTick(float seconds) { }
+        void ISkywellMarketInteraction.PrimaryCommand()=>Serve();
+        void ISkywellMarketInteraction.CloseShop()=>CloseShop();
+        void ISkywellMarketInteraction.ResetMarket()=>ResetMarket();
         [SerializeField] private Transform shop, mushrooms, rainFruit;
         [SerializeField] private SkywellWeatherZone rainZone;
         [SerializeField] private SkywellWeatherTarget rainTarget;

@@ -34,13 +34,13 @@ namespace BorrowingSun
         public float MaxRayDistance=>maxRayDistance;
         public void ResetSettlement(){SettlementLit=false;if(settlementReceiver)settlementReceiver.ResetReceiver();}
         public void ResetOptics(){if(collector)collector.ResetCollector();Evaluate(false);ResetSettlement();}
-        public void Evaluate(bool enabled)
+        public void Evaluate(bool enabled,bool allowsSunlight=true)
         {
             Lit=false;Reflections=0;UsesFixedMirror=false;SettlementLit=false;HitsMovingMirror=HitsFixedMirror=false;LastObstruction=null;
             if(beams!=null)foreach(var line in beams)if(line)line.enabled=false;
             float dt=Application.isPlaying?Time.deltaTime:0;
-            if(collector)collector.Tick(dt);
-            if(enabled&&collector&&collector.Active&&settlementReceiver&&beams!=null)
+            if(collector)collector.Tick(dt,allowsSunlight);
+            if(enabled&&allowsSunlight&&collector&&collector.Active&&settlementReceiver&&beams!=null)
             {
                 Vector3 p=collector.OutputOrigin,d=collector.OutputDirection;
                 Transform previous=null;

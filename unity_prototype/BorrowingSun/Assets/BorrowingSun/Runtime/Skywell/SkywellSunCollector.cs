@@ -57,7 +57,7 @@ namespace BorrowingSun
             if(TryFocusRotation(out var rotation))collectorPlate.rotation=rotation;
             RefreshVisuals();
         }
-        public void Tick(float deltaTime)
+        public void Tick(float deltaTime,bool allowsSunlight=true)
         {
             Active=false;HasDirectSunlight=false;IsLocked=false;SunObstruction=null;
             bool windDrive=collectorPlate&&weatherZone&&weatherZone.IsWind&&weatherZone.Contains(OutputOrigin)
@@ -74,7 +74,7 @@ namespace BorrowingSun
             IsLocked=Quaternion.Angle(collectorPlate.rotation,target)<=lockTolerance;
             if(IsLocked&&!wasLocked)LockCount++;
             wasLocked=IsLocked;
-            HasDirectSunlight=CheckSunVisibility();
+            HasDirectSunlight=allowsSunlight&&CheckSunVisibility();
             // The exposed -Z face must physically receive the incident sun ray.
             Active=IsRepaired&&weatherZone&&weatherZone.IsSunny&&weatherZone.Contains(OutputOrigin)&&HasDirectSunlight&&IsLocked&&Vector3.Dot(sunLight.transform.forward,collectorPlate.forward)>.001f;
             RefreshVisuals();

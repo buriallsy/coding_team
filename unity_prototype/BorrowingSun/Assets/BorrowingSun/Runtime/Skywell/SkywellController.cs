@@ -22,9 +22,12 @@ namespace BorrowingSun
         [SerializeField] private SkywellDeerGrove grove;
         [SerializeField] private SkywellFlowerMarket flowerMarket;
         public SkywellFlowerMarket FlowerMarket=>flowerMarket&&flowerMarket.isActiveAndEnabled?flowerMarket:null;
-        private bool MarketInputBlocked=>FlowerMarket&&flowerMarket.InputBlocked;
+        private SkywellMarketModule marketModule;
+        public SkywellMarketModule MarketModule=>marketModule&&marketModule.isActiveAndEnabled?marketModule:null;
+        private ISkywellMarketInteraction ActiveMarket=>MarketModule?(ISkywellMarketInteraction)marketModule:FlowerMarket;
+        public bool MarketInputBlocked=>ActiveMarket!=null&&ActiveMarket.InputBlocked;
         private bool MarketWeatherAllowed(int station,SkywellToken token)=>
-            !FlowerMarket||flowerMarket.AllowsWeather(station,token,voyage&&voyage.Delivered);
+            ActiveMarket==null||ActiveMarket.AllowsWeather(station,token,voyage&&voyage.Delivered);
         public SkywellDeerGrove Grove=>grove;
         public void ConfigureGrove(SkywellDeerGrove value)=>grove=value;
         public SkywellStory Story=>story;
@@ -94,6 +97,7 @@ namespace BorrowingSun
         private void Awake()
         {
             windBell=GetComponent<SkywellWindBell>();
+            marketModule=GetComponent<SkywellMarketModule>();
             if(TowerWeatherZone)TowerWeatherZone.RegisterResponder(this);
         }
         private void Start()=>ResetCourt();
@@ -113,15 +117,17 @@ namespace BorrowingSun
         {
             if(consoles==null||consoles.Length<2||!optics)return;
             ReturnDepartedTokens();
-            if(FlowerMarket)flowerMarket.Tick(Time.deltaTime);
+            var activeMarket=ActiveMarket;
+            activeMarket?.Tick(Time.deltaTime);
             UpdateWeatherInput();
             foreach(var station in consoles)if(station)station.Tick(Time.deltaTime);
             bool wasLit=BorrowedSunAtVillage;
             // The collector validates its own local weather, real sun access and mechanical focus.
-            optics.Evaluate(true);
+            optics.Evaluate(true,activeMarket==null||activeMarket.AllowsSunlight);
             if(wasLit&&!BorrowedSunAtVillage&&Mathf.Abs(yaw-targetYaw)>.1f)
             {ShowMessage("中继镜随平台转走，山阴暂时断光；已存的雨水与机械位置保留。",5);}
             TickMechanisms(Time.deltaTime);
+            activeMarket?.AfterWorldTick(Time.deltaTime);
         }
 
         private enum InteractionKind { None, Recall, Drain, Observation, Story }
@@ -150,9 +156,9 @@ namespace BorrowingSun
             if(grove&&grove.Prompt!=null)return grove.Prompt;
             if(journey&&journey.CurrentPrompt!=null)return journey.CurrentPrompt;
             if(target.kind==InteractionKind.Drain)return controlledDescent?"放水阀 · E 关闭，保留当前水位":"放水阀 · E 打开，回西向低岸下降";
-            if(FlowerMarket&&voyage&&voyage.Delivered)
+            if(ActiveMarket!=null&&voyage&&voyage.Delivered)
             {
-                string marketPrompt=flowerMarket.Prompt(player.FeetPosition);
+                string marketPrompt=ActiveMarket.Prompt(player.FeetPosition);
                 if(marketPrompt!=null)return marketPrompt;
             }
             if(voyage&&voyage.Prompt!=null)return voyage.Prompt;
@@ -168,7 +174,7 @@ namespace BorrowingSun
         public void InteractPrimary()
         {
             // E is also sent by CourtPlayer while movement is suppressed. Consume it here once.
-            if(MarketInputBlocked){flowerMarket.Serve();return;}
+            if(MarketInputBlocked){ActiveMarket?.PrimaryCommand();return;}
             if(story&&story.DialogueOpen){story.Advance();return;}
             if(story&&story.InputBlocked)return;
             if(observationClosedFrame==Time.frameCount)return;
@@ -182,7 +188,7 @@ namespace BorrowingSun
             if(grove&&grove.Ride&&grove.Ride.TryPrimary())return;
             if(journey&&journey.TryPrimary())return;
             if(target.kind==InteractionKind.Drain){ToggleDrain();return;}
-            if(FlowerMarket&&voyage&&voyage.Delivered&&flowerMarket.TryInteract(player))
+            if(ActiveMarket!=null&&voyage&&voyage.Delivered&&ActiveMarket.TryInteract(player))
             {SyncCameraInteraction();return;}
             if(voyage&&voyage.TryPrimary())return;
             if(target.kind==InteractionKind.Story){story.TryInteract(target.index);return;}
@@ -196,7 +202,7 @@ namespace BorrowingSun
         }
         public void InteractSecondary()
         {
-            if(MarketInputBlocked){flowerMarket.CloseShop();SyncCameraInteraction();return;}
+            if(MarketInputBlocked){ActiveMarket?.CloseShop();SyncCameraInteraction();return;}
             if(ObservationInputBlocked)return;
             if(WeatherSelectionHeld){CancelWeatherPicker();return;}
             if(WeatherTargeting||primaryPending){CancelWeatherTargeting();return;}
@@ -219,12 +225,13 @@ namespace BorrowingSun
             var returned=station.ReturnToken();
             if(index==TowerStation&&(returned==SkywellToken.Rain||returned==SkywellToken.Wind))StopTowerDrive();
         }
-        public bool CanUseToken(SkywellToken token)=>token==SkywellToken.Rain||token==SkywellToken.Wind||token==SkywellToken.Sun&&journey&&journey.SunnyTokenObtained;
+        public bool CanUseToken(SkywellToken token)=>token==SkywellToken.Rain||token==SkywellToken.Wind||token==SkywellToken.Sun&&journey&&journey.SunnyTokenObtained&&(ActiveMarket==null||ActiveMarket.AllowsSunlight);
         private static readonly int[] SingleAction={0},TwoActions={0,1};
         private static int[] WeatherActions(SkywellToken token)=>token==SkywellToken.Wind?TwoActions:SingleAction;
         private static string[] WeatherActionLabels(int station,SkywellToken token)=>station==SkywellDeerGrove.StationIndex?token==SkywellToken.Rain?new[]{"滋养苹果树"}:token==SkywellToken.Wind?new[]{"摇落苹果","摇落苹果"}:new[]{"尝试引入阳光"}:token==SkywellToken.Rain?new[]{"当地降雨"}:token==SkywellToken.Wind?station==TowerStation?new[]{"↶ 逆时针 90°","↷ 顺时针 90°"}:station==CollectorStation?new[]{"转向校光位","转向中央接力镜"}:new[]{"向西","向东"}:new[]{"当地放晴"};
         public string TokenLocation(SkywellToken token)
         {
+            if(token==SkywellToken.Sun&&ActiveMarket!=null&&!ActiveMarket.AllowsSunlight)return "夜晚没有阳光";
             if(!CanUseToken(token))return "尚未取得 · 船上";
             if(consoles!=null)for(int i=0;i<consoles.Length;i++)if(consoles[i]&&consoles[i].Token==token)return i==TowerStation?"在塔台":i==CollectorStation?"在采光庭":i==RefugeStation?"在水边码头":i==VillageStation?"在山阴村":i==SkywellDeerGrove.StationIndex?"在苹果树":"正在作用";
             return "在手中";
@@ -275,7 +282,7 @@ namespace BorrowingSun
         }
         private void ResetMechanismState()
         {
-            if(FlowerMarket)flowerMarket.ResetMarket();
+            ActiveMarket?.ResetMarket();
             if(grove)grove.ResetGrove();
             if(story)story.ResetStory();
             if(observation)observation.ResetProgress();

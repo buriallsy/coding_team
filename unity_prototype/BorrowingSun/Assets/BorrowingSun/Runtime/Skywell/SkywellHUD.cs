@@ -18,7 +18,7 @@ namespace BorrowingSun
         private static Rect WeatherCardRect(float width,float height,int index)=>new Rect(width-350+index*110,height-315,106,117);
         private void Update()
         {
-            if(court&&(court.FlowerMarket&&court.FlowerMarket.InputBlocked||court.ObservationInputBlocked||court.WeatherInputBlocked&&!court.WeatherSelectionHeld))return;
+            if(court&&(court.MarketInputBlocked||court.ObservationInputBlocked||court.WeatherInputBlocked&&!court.WeatherSelectionHeld))return;
             if(Keyboard.current!=null&&Keyboard.current.f2Key.wasPressedThisFrame)DesignerGuidance=!DesignerGuidance;
             if(!court||Mouse.current==null)return;
             float scale=HudScale,w=Screen.width/scale,h=Screen.height/scale;
@@ -32,6 +32,7 @@ namespace BorrowingSun
         private void OnGUI()
         {
             if(!court||court.Consoles==null||court.Consoles.Length<2)return;
+            if(court.MarketModule&&court.MarketModule.IsShopOpen)return;
             if(body==null)
             {
                 var font=Resources.Load<Font>("Fonts/NotoSansCJKsc-Regular");if(!font){enabled=false;return;}
@@ -47,7 +48,7 @@ namespace BorrowingSun
                 float scale=HudScale,w=Screen.width/scale,h=Screen.height/scale;GUI.matrix=Matrix4x4.Scale(Vector3.one*scale);
                 if(court.Story&&court.Story.DialogueOpen){DrawStory(w,h);return;}
                 if(court.ObservationOpen){DrawObservation(w,h);return;}
-                if(court.FlowerMarket&&court.FlowerMarket.IsShopOpen)
+                if(!court.MarketModule&&court.FlowerMarket&&court.FlowerMarket.IsShopOpen)
                 {DrawFlowerMarket(court.FlowerMarket,w,h);return;}
                 if(DesignerGuidance){Panel(new Rect(16,16,355,106));GUI.Label(new Rect(30,26,327,30),"策划调试 · F2 关闭",title);GUI.Label(new Rect(30,63,327,58),court.Objective,body);}
                 if(court.Journey&&court.Journey.SunnyTokenObtained&&!court.Journey.HasReturnedToTower)

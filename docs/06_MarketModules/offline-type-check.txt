@@ -1,0 +1,23 @@
+Unity Market Modules: offline C# type checks
+Project: m_EditorVersion: 6000.5.4f1
+Compiler: C:\Program Files\dotnet\sdk\10.0.400\Roslyn\bincore\csc.dll
+Language/framework: C# 9.0; /nostdlib+; .NET Standard 2.1 reference assemblies.
+This script does not launch Unity. No import, Unity 6000 compilation or PlayMode result is claimed.
+PASS Market.Domain: 8 C# files; 0 errors; 0 warnings.
+Domain was compiled with zero Unity or Godot references.
+Engine/editor references: E:\Unity\2022.3.39f1\Editor\Data\Managed
+These installed Unity 2022 references differ from the project Unity version.
+InputSystem: minimal handwritten compile-only stub. InputSystem API/package compatibility and input behavior are NOT validated.
+PASS InputSystem.CompileOnly: 1 C# files; 0 errors; 0 warnings.
+FAIL BorrowingSun.Runtime: 60 C# files; 2 errors; 35 warnings.
+unity_prototype\BorrowingSun\Assets\BorrowingSun\Runtime\Skywell\SkywellWeatherZone.cs(216,23): error CS1501: No overload for method 'FindObjectsByType' takes 0 arguments
+unity_prototype\BorrowingSun\Assets\BorrowingSun\Runtime\Skywell\SkywellWeatherZone.cs(233,34): error CS1501: No overload for method 'FindObjectsByType' takes 0 arguments
+Warning summary: CS0649 x 35. Full diagnostic log: .local/offline-type-check/BorrowingSun.Runtime.log
+COMPATIBILITY COPY: the unmodified Runtime compilation above failed on two existing overload calls absent from the installed Unity 2022 references.
+Retry replaces those two calls only in a .local copy of SkywellWeatherZone.cs with an explicit FindObjectsSortMode.None argument. Production sources remain untouched.
+PASS BorrowingSun.Runtime.CompatibilityCopy: 60 C# files; 0 errors; 35 warnings.
+Warning summary: CS0649 x 35. Full diagnostic log: .local/offline-type-check/BorrowingSun.Runtime.CompatibilityCopy.log
+PASS Market.Editor: 1 C# files; 0 errors; 0 warnings.
+PASS Offline type checks completed. Generated assemblies are compile artifacts only and must not be run or imported into Unity.
+Limits: does not prove Unity 6000/package compatibility, scene loading, lifecycle, input, physics, UI or gameplay behavior.
+Reproduce: powershell -NoProfile -File Tools/check-unity-runtime-compile.ps1 -AllowUnity2022CompatibilityCopy (override reference paths as needed).

@@ -1,0 +1,30 @@
+Unity Market Modules: static asset validation
+Baseline: 5b83325204060e1312c46f36f61e5489f6a9cf70
+Scope: Git blobs, YAML fileIDs, script references and asset GUIDs.
+Unity was not launched. This report is not compilation, PlayMode, collision or manual play evidence.
+PASS Protected asset matches baseline Git blob: unity_prototype/BorrowingSun/Assets/BorrowingSun/Scenes/05_Skywell.unity
+PASS Protected asset matches baseline Git blob: unity_prototype/BorrowingSun/Assets/BorrowingSun/Scenes/05_Skywell.unity.meta
+PASS Protected asset matches baseline Git blob: unity_prototype/BorrowingSun/Assets/BorrowingSun/Scenes/05_Skywell_FlowerMarket.unity
+PASS Protected asset matches baseline Git blob: unity_prototype/BorrowingSun/Assets/BorrowingSun/Scenes/05_Skywell_FlowerMarket.unity.meta
+PASS Protected asset matches baseline Git blob: unity_prototype/BorrowingSun/Assets/BorrowingSun/Runtime/Skywell/SkywellVoyage.cs
+PASS Protected asset matches baseline Git blob: unity_prototype/BorrowingSun/Assets/BorrowingSun/Runtime/Skywell/SkywellVoyage.cs.meta
+PASS Baseline scene parsed: 5536 objects/components
+PASS All baseline fileIDs retained; missing:
+PASS Only module/HUD component fileIDs added: 9000000000001
+PASS New market module component is present
+PASS Legacy Flower Market component is only disabled
+PASS Controller GameObject only gains module/HUD component references
+PASS New component is attached exactly once: 9000000000001
+PASS Other original YAML blocks unchanged: 5534; unexpected changes:
+PASS No newly duplicated asset GUIDs across 334 meta files:
+PASS Added fileID is a MonoBehaviour: 9000000000001
+PASS Added component uses the existing Controller object: 9000000000001
+PASS Added component has a serialized script GUID: 9000000000001
+PASS Added script GUID resolves to exactly one C# meta: ee7688313447403d93b140a2ea5b6128
+PASS Market module uses its declared GUID
+PASS Added C# script exists: unity_prototype/BorrowingSun/Assets/BorrowingSun/Runtime/Market/Unity/SkywellMarketModule.cs
+PASS New scene has its own meta file
+PASS New scene GUID is distinct and unique
+Baseline GUID duplicate groups retained: 0
+Static checks passed: 23; failures: 0
+Limits: does not prove Unity import, compilation, PlayMode, visual layout, walking routes or gameplay correctness.

@@ -8,6 +8,16 @@ The Unity prototype supplied the level and mechanic concepts for the separately 
 
 ![Skywell in Unity Play Mode. The repaired collector and the central relay mirror carry sunlight toward the village.](docs/evidence/skywell-sun.png)
 
+## Unity market modules / Unity 独立经营模块
+
+The new market is implemented independently in Unity. Godot remains a gameplay prototype. Open `Assets/BorrowingSun/Scenes/05_Skywell_MarketModules.unity` in Unity **6000.5.4f1** for the new phase cycle, environment-based fruit, two cooking orders, menu selection, income and kitchen upgrade. The original L5 and Flower Market scenes remain as baselines.
+
+本轮新增独立 Unity 经营模块：白天探索、可选夜采、回店菜单、双订单同时备菜、收款与跨天升级。原始关卡与花庭白盒保留；代码没有引用 Godot。
+
+[Open new scene / 新场景](unity_prototype/BorrowingSun/Assets/BorrowingSun/Scenes/05_Skywell_MarketModules.unity) · [Play instructions / 试玩步骤](docs/06_MarketModules/README.md) · [Class Map, boundaries and values / 架构与数值](docs/06_MarketModules/ARCHITECTURE.md) · [Validation status / 验证状态](docs/06_MarketModules/VALIDATION.md)
+
+This source change does not include a newly verified standalone build. Read the module validation record separately from the historical whitebox and macOS release results below.
+
 ## Architecture · 工程结构
 
 The architecture snapshot includes 29 editable Mermaid class and flow diagrams, a source index for 112 C# files, and a proposal for a small Flower Court shop after the existing cargo delivery. The proposal documents how gameplay, terrain, input, weather, and the one-way cargo route constrain the experiment.
