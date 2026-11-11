@@ -20,6 +20,7 @@ namespace BorrowingSun.Tests
             Assert.IsFalse(run.TryReturnToShop());
             Assert.IsFalse(run.TryOpenShop());
             Assert.IsFalse(run.TryCloseShop());
+            Assert.IsFalse(run.TryStartNextDay());
             Assert.IsTrue(run.TryStart());
             Assert.That(run.Day, Is.EqualTo(1));
             Assert.That(run.Phase, Is.EqualTo(FlowerMarketPhase.DayGathering));
@@ -165,11 +166,19 @@ namespace BorrowingSun.Tests
             Assert.IsTrue(run.TryServe(0));
 
             Assert.IsTrue(run.TryCloseShop());
+            Assert.That(run.Day, Is.EqualTo(1));
+            Assert.That(run.Phase, Is.EqualTo(FlowerMarketPhase.DaySummary));
+            Assert.That(run.EveningRevenue, Is.EqualTo(12));
+            Assert.IsFalse(run.ClosedByTimeLimit);
+            Assert.IsTrue(run.IsNight);
+            Assert.IsTrue(run.TryStartNextDay());
+            Assert.IsFalse(run.TryStartNextDay());
             Assert.That(run.Day, Is.EqualTo(2));
             Assert.That(run.Phase, Is.EqualTo(FlowerMarketPhase.DayGathering));
             Assert.That(run.RemainingGatherSeconds, Is.EqualTo(75f));
             Assert.IsFalse(run.IsNight);
             Assert.That(run.Cash, Is.EqualTo(12));
+            Assert.That(run.EveningRevenue, Is.Zero);
             Assert.That(run.GetStock(FlowerIngredient.Mushroom), Is.EqualTo(1));
             Assert.That(run.GetStock(FlowerIngredient.WeatherFruit), Is.EqualTo(1));
             Assert.IsFalse(run.OrdersAccepted);
@@ -227,6 +236,10 @@ namespace BorrowingSun.Tests
             Assert.That(run.GetStock(FlowerIngredient.WeatherFruit), Is.EqualTo(1));
             Assert.That(run.GetStock(FlowerIngredient.SunnyFruit), Is.EqualTo(1));
             Assert.That(run.GetStock(FlowerIngredient.RainNightFruit), Is.EqualTo(1));
+            Assert.That(run.GetRefundedStock(FlowerIngredient.Mushroom), Is.EqualTo(1));
+            Assert.That(run.GetRefundedStock(FlowerIngredient.RainNightFruit), Is.EqualTo(1));
+            Assert.That(run.GetRefundedStock(FlowerIngredient.WeatherFruit), Is.Zero);
+            Assert.That(run.GetRefundedStock(FlowerIngredient.SunnyFruit), Is.Zero);
         }
 
         [Test]
@@ -251,6 +264,7 @@ namespace BorrowingSun.Tests
             Assert.IsTrue(run.TryCloseShop());
             Assert.That(run.GetStock(FlowerIngredient.Mushroom), Is.EqualTo(2));
             Assert.That(run.GetReserved(FlowerIngredient.Mushroom), Is.Zero);
+            Assert.That(run.GetRefundedStock(FlowerIngredient.Mushroom), Is.Zero);
         }
 
         [Test]
@@ -318,6 +332,8 @@ namespace BorrowingSun.Tests
             Assert.That(run.GetStock(FlowerIngredient.Mushroom), Is.EqualTo(3));
             Assert.That(run.GetStock(FlowerIngredient.WeatherFruit), Is.EqualTo(1));
             Assert.That(run.GetReserved(FlowerIngredient.Mushroom), Is.Zero);
+            Assert.That(run.GetRefundedStock(FlowerIngredient.Mushroom), Is.EqualTo(3));
+            Assert.That(run.GetRefundedStock(FlowerIngredient.WeatherFruit), Is.EqualTo(1));
             Assert.That(run.Cash, Is.Zero);
             Assert.That(run.TotalRevenue, Is.Zero);
             Assert.IsFalse(run.HasPendingOrders);
@@ -350,6 +366,7 @@ namespace BorrowingSun.Tests
             Assert.IsFalse(run.TryUpgradeKitchen());
             Assert.IsTrue(run.TryCloseShop());
             Assert.IsFalse(run.TryUpgradeKitchen());
+            Assert.IsTrue(run.TryStartNextDay());
 
             GatherMushrooms(run, 3);
             Assert.IsTrue(run.TryHarvest(FlowerIngredient.WeatherFruit));
@@ -367,9 +384,12 @@ namespace BorrowingSun.Tests
             Assert.That(run.GetStove(1).RemainingSeconds, Is.EqualTo(2.75f));
             Assert.IsTrue(run.TryCloseShop());
             Assert.IsTrue(run.KitchenUpgraded);
-            Assert.That(run.Day, Is.EqualTo(3));
+            Assert.That(run.Day, Is.EqualTo(2));
             Assert.That(run.GetStock(FlowerIngredient.Mushroom), Is.EqualTo(3));
             Assert.That(run.GetStock(FlowerIngredient.WeatherFruit), Is.EqualTo(1));
+            Assert.IsTrue(run.TryStartNextDay());
+            Assert.That(run.Day, Is.EqualTo(3));
+            Assert.IsTrue(run.KitchenUpgraded);
 
             run.Reset();
             Assert.IsFalse(run.KitchenUpgraded);
@@ -380,6 +400,144 @@ namespace BorrowingSun.Tests
             Assert.That(resetFruit.CookSeconds, Is.EqualTo(7f));
         }
 
+        [TestCase(false, 120f)]
+        [TestCase(true, 60f)]
+        public void EveningChoiceSetsDurationButOnlyAcceptingOrdersStartsTheClock(bool explore, float duration)
+        {
+            var run = new FlowerMarketRun();
+            Assert.IsTrue(run.TryStart());
+            GatherMushrooms(run, 2);
+            Assert.IsTrue(run.TryEndDay());
+            Assert.IsTrue(run.TryChooseDusk(explore));
+            if (explore) Assert.IsTrue(run.TryReturnToShop());
+            Assert.That(run.TradingDurationSeconds, Is.EqualTo(duration));
+            run.Tick(duration + 1f);
+            Assert.That(run.Phase, Is.EqualTo(FlowerMarketPhase.ReturningToShop));
+            Assert.That(run.RemainingTradingSeconds, Is.Zero);
+
+            Assert.IsTrue(run.TryOpenShop());
+            run.Tick(duration + 1f);
+            Assert.That(run.Phase, Is.EqualTo(FlowerMarketPhase.Trading));
+            Assert.That(run.RemainingTradingSeconds, Is.Zero);
+            Assert.IsFalse(run.TryStartNextDay());
+            Assert.IsTrue(run.TryAcceptOrders());
+            Assert.That(run.RemainingTradingSeconds, Is.EqualTo(duration));
+            run.Tick(1f);
+            Assert.IsFalse(run.TryAcceptOrders());
+            Assert.That(run.RemainingTradingSeconds, Is.EqualTo(duration - 1f));
+        }
+
+        [Test]
+        public void DeadlineWinsOverCookingCompletionAndRefundsTheExactFruit()
+        {
+            var run = new FlowerMarketRun(nightTradingSeconds: 4f);
+            Assert.IsTrue(run.TryStart());
+            GatherMushrooms(run, 3);
+            Assert.IsTrue(run.TryHarvest(FlowerIngredient.WeatherFruit));
+            Assert.IsTrue(run.TryHarvest(FlowerIngredient.SunnyFruit));
+            Assert.IsTrue(run.TryEndDay());
+            Assert.IsTrue(run.TryChooseDusk(true));
+            Assert.IsTrue(run.TryHarvest(FlowerIngredient.RainNightFruit));
+            Assert.IsTrue(run.TryReturnToShop());
+            Assert.IsTrue(run.TryOpenShop());
+            Assert.IsTrue(run.TryAcceptOrders());
+            Assert.IsTrue(run.TryCook(0));
+            Assert.IsTrue(run.TryCook(1));
+
+            run.Tick(3f);
+            Assert.That(run.GetStove(0).Stage, Is.EqualTo(FlowerOrderStage.Ready));
+            Assert.That(run.GetStove(1).RemainingSeconds, Is.EqualTo(1f));
+            Assert.That(run.RemainingTradingSeconds, Is.EqualTo(1f));
+            Assert.IsTrue(run.TryServe(0));
+            Assert.That(run.GetStock(FlowerIngredient.RainNightFruit), Is.Zero);
+
+            run.Tick(1f);
+            Assert.That(run.Phase, Is.EqualTo(FlowerMarketPhase.DaySummary));
+            Assert.That(run.Day, Is.EqualTo(1));
+            Assert.IsTrue(run.ClosedByTimeLimit);
+            Assert.IsFalse(run.OrdersAccepted);
+            Assert.IsFalse(run.HasPendingOrders);
+            Assert.That(run.RemainingTradingSeconds, Is.Zero);
+            Assert.That(run.GetStove(1).Stage, Is.EqualTo(FlowerOrderStage.Idle));
+            Assert.IsFalse(run.TryServe(1));
+            Assert.IsFalse(run.TryCook(0));
+            Assert.IsFalse(run.TryCloseShop());
+            run.Tick(100f);
+            Assert.That(run.Day, Is.EqualTo(1));
+            Assert.That(run.EveningRevenue, Is.EqualTo(12));
+            Assert.That(run.TotalRevenue, Is.EqualTo(12));
+            Assert.That(run.Cash, Is.EqualTo(12));
+            Assert.That(run.GetRefundedStock(FlowerIngredient.Mushroom), Is.EqualTo(1));
+            Assert.That(run.GetRefundedStock(FlowerIngredient.RainNightFruit), Is.EqualTo(1));
+            Assert.That(run.GetRefundedStock(FlowerIngredient.WeatherFruit), Is.Zero);
+            Assert.That(run.GetRefundedStock(FlowerIngredient.SunnyFruit), Is.Zero);
+            Assert.That(run.GetStock(FlowerIngredient.Mushroom), Is.EqualTo(1));
+            Assert.That(run.GetStock(FlowerIngredient.RainNightFruit), Is.EqualTo(1));
+            Assert.That(run.GetStock(FlowerIngredient.WeatherFruit), Is.EqualTo(1));
+            Assert.That(run.GetStock(FlowerIngredient.SunnyFruit), Is.EqualTo(1));
+
+            Assert.IsTrue(run.TryStartNextDay());
+            Assert.That(run.Day, Is.EqualTo(2));
+            Assert.That(run.EveningRevenue, Is.Zero);
+            Assert.That(run.GetRefundedStock(FlowerIngredient.RainNightFruit), Is.Zero);
+            Assert.IsFalse(run.ClosedByTimeLimit);
+            Assert.That(run.GetStock(FlowerIngredient.RainNightFruit), Is.EqualTo(1));
+            Assert.That(run.Cash, Is.EqualTo(12));
+            Assert.That(run.TotalRevenue, Is.EqualTo(12));
+        }
+
+        [Test]
+        public void DeadlineRefundsReadyOrderAndOnlyReleasesTheWaitingReservation()
+        {
+            var run = new FlowerMarketRun(directTradingSeconds: 5f);
+            Assert.IsTrue(run.TryStart());
+            GatherMushrooms(run, 3);
+            Assert.IsTrue(run.TryHarvest(FlowerIngredient.WeatherFruit));
+            OpenShopDirectly(run);
+            Assert.IsTrue(run.TryAcceptOrders());
+            Assert.IsTrue(run.TryCook(0));
+            run.Tick(3f);
+            Assert.That(run.GetStove(0).Stage, Is.EqualTo(FlowerOrderStage.Ready));
+            Assert.That(run.GetStove(1).Stage, Is.EqualTo(FlowerOrderStage.Waiting));
+            Assert.That(run.GetReserved(FlowerIngredient.WeatherFruit), Is.EqualTo(1));
+
+            run.Tick(2f);
+            Assert.That(run.Phase, Is.EqualTo(FlowerMarketPhase.DaySummary));
+            Assert.That(run.GetRefundedStock(FlowerIngredient.Mushroom), Is.EqualTo(2));
+            Assert.That(run.GetRefundedStock(FlowerIngredient.WeatherFruit), Is.Zero);
+            Assert.That(run.GetStock(FlowerIngredient.Mushroom), Is.EqualTo(3));
+            Assert.That(run.GetStock(FlowerIngredient.WeatherFruit), Is.EqualTo(1));
+            Assert.That(run.GetReserved(FlowerIngredient.WeatherFruit), Is.Zero);
+            Assert.That(run.Cash, Is.Zero);
+
+            run.Reset();
+            Assert.That(run.Phase, Is.EqualTo(FlowerMarketPhase.Locked));
+            Assert.That(run.RemainingTradingSeconds, Is.Zero);
+            Assert.That(run.GetRefundedStock(FlowerIngredient.Mushroom), Is.Zero);
+            Assert.IsFalse(run.ClosedByTimeLimit);
+        }
+
+        [Test]
+        public void ShopCanCloseBeforeOrdersAndWaitInSummaryUntilNextDay()
+        {
+            var run = new FlowerMarketRun();
+            Assert.IsTrue(run.TryStart());
+            OpenShopDirectly(run);
+            Assert.IsFalse(run.TryAcceptOrders());
+            Assert.That(run.RemainingTradingSeconds, Is.Zero);
+            Assert.IsTrue(run.TryCloseShop());
+            Assert.That(run.Phase, Is.EqualTo(FlowerMarketPhase.DaySummary));
+            Assert.That(run.EveningRevenue, Is.Zero);
+            Assert.IsFalse(run.ClosedByTimeLimit);
+            Assert.IsTrue(run.IsNight);
+            run.Tick(500f);
+            Assert.That(run.Day, Is.EqualTo(1));
+            Assert.IsFalse(run.TryAcceptOrders());
+            Assert.IsTrue(run.TryStartNextDay());
+            Assert.That(run.Day, Is.EqualTo(2));
+            Assert.That(run.Phase, Is.EqualTo(FlowerMarketPhase.DayGathering));
+        }
+
         [Test]
         public void InvalidCookingDurationsAndUpgradeFeeAreRejected()
         {
@@ -387,6 +545,8 @@ namespace BorrowingSun.Tests
             Assert.Throws<ArgumentOutOfRangeException>(() => new FlowerMarketRun(fruitCookSeconds: float.PositiveInfinity));
             Assert.Throws<ArgumentOutOfRangeException>(() => new FlowerMarketRun(upgradedFruitCookSeconds: float.NaN));
             Assert.Throws<ArgumentOutOfRangeException>(() => new FlowerMarketRun(kitchenUpgradeCost: 0));
+            Assert.Throws<ArgumentOutOfRangeException>(() => new FlowerMarketRun(directTradingSeconds: float.NaN));
+            Assert.Throws<ArgumentOutOfRangeException>(() => new FlowerMarketRun(nightTradingSeconds: 0f));
         }
 
         private static void GatherMushrooms(FlowerMarketRun run, int count)

@@ -41,6 +41,10 @@ The macOS Unity Game View replay passed 372 checks from the original entrance th
 
 In focused Play Mode on the Flower Market scene, run **Borrowing Sun → Skywell → Check complete Flower Market route**. [Playtest and tuning notes](04_Iterations/Skywell_Flower_Market_Kitchen.md) · [Play Mode report](evidence/flower-market-kitchen/playmode.txt) · [EditMode results](evidence/flower-market-kitchen/editmode.xml) · [Serialized references](evidence/flower-market-kitchen/references.txt)
 
+## Flower Court trading timer and evening summary · November 11, 2026
+
+The macOS Unity Game View replay passed 393 checks. It verified 120-second direct-return trading and 60-second post-outing trading. The night route reached the deadline with one stove cooking and the other ready. Closing refunded three mushrooms and one rain-night fruit and kept 22 in cash, 58 in gross revenue and the upgrade. A separate confirmation started the next day. EditMode passed 138 tests, including 21 market cases. The reference audit checked 12,358 components across five scenes and one prefab. [Playtest notes](04_Iterations/Skywell_Flower_Market_Settlement.md) · [Play Mode report](evidence/flower-market-settlement/playmode.txt) · [EditMode](evidence/flower-market-settlement/editmode.xml) · [References](evidence/flower-market-settlement/references.txt)
+
 ## Dated L5 evidence
 
 | Date | Scope and result |

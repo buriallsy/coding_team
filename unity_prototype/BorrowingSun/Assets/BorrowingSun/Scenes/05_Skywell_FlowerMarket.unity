@@ -5284,6 +5284,8 @@ MonoBehaviour:
   regrowSeconds: 1
   dayGatherSeconds: 75
   nightGatherSeconds: 45
+  directTradingSeconds: 120
+  nightTradingSeconds: 60
   kitchenUpgradeCost: 36
   mushroomCookSeconds: 3
   fruitCookSeconds: 4

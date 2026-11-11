@@ -10,6 +10,8 @@ namespace BorrowingSun
         private SkywellFish fish;
         private Texture2D[] weatherIcons;
         private Material observationImageMaterial;
+        private static readonly FlowerIngredient[] FlowerIngredients =
+            (FlowerIngredient[])System.Enum.GetValues(typeof(FlowerIngredient));
         public bool DesignerGuidance {get;private set;}
         private static float HudScale=>Mathf.Clamp(Screen.height/900f,.65f,1.6f);
         private static Rect WeatherSelectorRect(float width,float height)=>new Rect(width-140,height-146,124,130);
@@ -45,9 +47,10 @@ namespace BorrowingSun
             try
             {
                 float scale=HudScale,w=Screen.width/scale,h=Screen.height/scale;GUI.matrix=Matrix4x4.Scale(Vector3.one*scale);
+                var market=court.FlowerMarket;
+                if(market&&market.IsSummaryOpen){DrawFlowerDaySummary(market,w,h);return;}
                 if(court.Story&&court.Story.DialogueOpen){DrawStory(w,h);return;}
                 if(court.ObservationOpen){DrawObservation(w,h);return;}
-                var market=court.FlowerMarket;
                 if(market&&market.IsDuskOpen){DrawFlowerDusk(market,w,h);return;}
                 if(market&&market.IsShopOpen){DrawFlowerMarket(market,w,h);return;}
                 bool marketActive=market&&market.Run.IsStarted;
@@ -316,9 +319,10 @@ private static Texture2D CreateStoryTriangleTexture()
                 FlowerMarketPhase.DuskChoice=>"黄昏",
                 FlowerMarketPhase.NightExploration=>"夜探",
                 FlowerMarketPhase.ReturningToShop=>"回小铺营业",
-                _=>"营业中"
+                _=>run.OrdersAccepted?"营业中":"准备接单"
             };
-            string remaining=run.CanGather?$" · {Mathf.CeilToInt(run.RemainingGatherSeconds)} 秒":"";
+            string remaining = run.CanGather ? $" · {Mathf.CeilToInt(run.RemainingGatherSeconds)} 秒" :
+                run.OrdersAccepted ? $" · {Mathf.CeilToInt(run.RemainingTradingSeconds)} 秒" : "";
             float width=Mathf.Min(310,w-32),x=w-width-16;
             Panel(new Rect(x,16,width,43));
             GUI.Label(new Rect(x+12,22,width-24,33),$"第 {run.Day} 天 · {phase}{remaining}",body);
@@ -331,8 +335,10 @@ private static Texture2D CreateStoryTriangleTexture()
             x+=18;width-=36;
             GUI.Label(new Rect(x,y+16,width,30),$"第 {market.Run.Day} 天 · 黄昏",title);
             GUI.Label(new Rect(x,y+50,width,42),"夜里没有晴果。夜探时，向花庭集雨盆施雨可采雨夜果。",body);
-            if(GUI.Button(new Rect(x,y+105,width,37),"1 · 直接回店营业",button))market.ChooseDusk(false,court.Player);
-            if(GUI.Button(new Rect(x,y+151,width,37),"2 · 去夜探",button))market.ChooseDusk(true,court.Player);
+            if(GUI.Button(new Rect(x,y+105,width,37),
+                $"1 · 直接回店 · 营业 {market.DirectTradingSeconds:0.##} 秒",button))market.ChooseDusk(false,court.Player);
+            if(GUI.Button(new Rect(x,y+151,width,37),
+                $"2 · 去夜探 · 回店营业 {market.NightTradingSeconds:0.##} 秒",button))market.ChooseDusk(true,court.Player);
         }
 
         private void DrawFlowerMarket(SkywellFlowerMarket market,float w,float h)
@@ -343,7 +349,8 @@ private static Texture2D CreateStoryTriangleTexture()
             x += 18;
             width -= 36;
 
-            GUI.Label(new Rect(x, y + 16, width, 32), $"花庭小铺 · 第 {run.Day} 天", title);
+            string clock = run.OrdersAccepted ? $" · 剩 {Mathf.CeilToInt(run.RemainingTradingSeconds)} 秒" : "";
+            GUI.Label(new Rect(x, y + 16, width, 32), $"花庭小铺 · 第 {run.Day} 天{clock}", title);
             GUI.Label(new Rect(x, y + 55, width, 44),
                 $"钱箱 {run.Cash} 元 · 累计营业额 {run.TotalRevenue} 元\n" +
                 $"菌菇 {run.GetStock(FlowerIngredient.Mushroom)}   晴果 {run.GetStock(FlowerIngredient.SunnyFruit)}   雨露果 {run.GetStock(FlowerIngredient.WeatherFruit)}   雨夜果 {run.GetStock(FlowerIngredient.RainNightFruit)}", body);
@@ -358,7 +365,8 @@ private static Texture2D CreateStoryTriangleTexture()
             {
                 DrawFlowerRecipe(run, FlowerRecipe.MushroomBento, new Rect(x, y + 110, width, 27));
                 DrawFlowerRecipe(run, FlowerRecipe.FruitBento, new Rect(x, y + 140, width, 27));
-                if (GUI.Button(new Rect(x, y + 182, columnWidth, 36), "E 接单", button)) market.AcceptOrders();
+                if (GUI.Button(new Rect(x, y + 182, columnWidth, 36),
+                    $"E 接单 · 开始 {run.TradingDurationSeconds:0.##} 秒营业", button)) market.AcceptOrders();
                 if (run.KitchenUpgraded)
                     GUI.Label(new Rect(x + columnWidth + 12, y + 189, columnWidth, 28), "厨房已升级 · 双灶提速", small);
                 else if (GUI.Button(new Rect(x + columnWidth + 12, y + 182, columnWidth, 36),
@@ -368,9 +376,33 @@ private static Texture2D CreateStoryTriangleTexture()
             string hint = run.OrdersAccepted ? "收摊会取消未交付订单，并退回已下锅的食材。" :
                 "接单后按窗口编号下锅和交餐。厨房升级在接单前购买。";
             GUI.Label(new Rect(x, y + 235, width, 40), market.Feedback ?? hint, body);
-            if (GUI.Button(new Rect(x, y + 287, columnWidth, 36), "N 收摊 · 进入次日", button)) market.EndTrading();
+            if (GUI.Button(new Rect(x, y + 287, columnWidth, 36), "N 收摊 · 查看日结", button)) market.EndTrading();
             if (GUI.Button(new Rect(x + columnWidth + 12, y + 287, columnWidth, 36), "返回庭院", button)) market.HideShop();
-            GUI.Label(new Rect(x, y + 333, width, 24), "Q / Esc 回庭院 · R 重开关卡", small);
+            GUI.Label(new Rect(x, y + 333, width, 24), run.OrdersAccepted ?
+                "Q / Esc 回庭院 · 营业继续计时" : "Q / Esc 回庭院 · R 重开关卡", small);
+        }
+
+        private void DrawFlowerDaySummary(SkywellFlowerMarket market, float w, float h)
+        {
+            var run = market.Run;
+            float width = Mathf.Min(468, w - 36), x = (w - width) / 2, y = (h - 295) / 2;
+            Panel(new Rect(x, y, width, 295));
+            x += 18;
+            width -= 36;
+            GUI.Label(new Rect(x, y + 16, width, 32), $"花庭小铺 · 第 {run.Day} 天日结", title);
+            GUI.Label(new Rect(x, y + 54, width, 26), run.ClosedByTimeLimit ? "营业时间到，已收摊" : "已主动收摊", body);
+            GUI.Label(new Rect(x, y + 92, width, 30), $"本晚营业额 {run.EveningRevenue} 元", title);
+            GUI.Label(new Rect(x, y + 132, width, 30), $"钱箱 {run.Cash} 元 · 累计营业额 {run.TotalRevenue} 元", body);
+            GUI.Label(new Rect(x, y + 162, width, 25), run.KitchenUpgraded ? "快灶已结转" : "厨房 · 基础灶台", body);
+
+            string refund = "";
+            foreach (var ingredient in FlowerIngredients)
+            {
+                int count = run.GetRefundedStock(ingredient);
+                if (count > 0) refund += $"  {SkywellFlowerMarket.IngredientName(ingredient)} ×{count}";
+            }
+            GUI.Label(new Rect(x, y + 193, width, 44), refund.Length > 0 ? "退回食材" + refund : "本晚无退料", body);
+            if (GUI.Button(new Rect(x, y + 240, width, 36), $"N 开始第 {run.Day + 1} 天", button)) market.StartNextDay();
         }
 
         private void DrawFlowerRecipe(FlowerMarketRun run, FlowerRecipe recipe, Rect rect)

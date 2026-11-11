@@ -2,6 +2,8 @@
 
 2026-11-11 · 续做 `05_Skywell_FlowerMarket.unity`。柜台现在要先接客，再为两扇窗口分别下锅和交餐。营业所得可留到下一晚，开单前换快灶。 [花庭副本](../../unity_prototype/BorrowingSun/Assets/BorrowingSun/Scenes/05_Skywell_FlowerMarket.unity) · [上轮昼夜回路](Skywell_Flower_Market_Day_Night.md)
 
+当前版本的营业倒计时、到点收摊和日结操作见后续迭代。 [营业限时与日结](Skywell_Flower_Market_Settlement.md)
+
 ## 柜台流程
 
 1. 完成原 L5 跨谷并签收，走到花庭小铺，短按 `E` 开始第 1 天。白天采集 75 秒，黄昏可直接回店，或先夜探 45 秒。沿用局部降雨和真实受光判定，白天可采晴果或雨露果，夜雨可采雨夜果，干夜无果。

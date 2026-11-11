@@ -18,6 +18,9 @@ namespace BorrowingSun
         [SerializeField, Min(0f)] private float regrowSeconds = 1f;
         [SerializeField, Min(1f)] private float dayGatherSeconds = 75f;
         [SerializeField, Min(1f)] private float nightGatherSeconds = 45f;
+        [Header("Trading")]
+        [SerializeField, Min(1f)] private float directTradingSeconds = 120f;
+        [SerializeField, Min(1f)] private float nightTradingSeconds = 60f;
         [Header("Kitchen")]
         [SerializeField, Min(1)] private int kitchenUpgradeCost = 36;
         [SerializeField, Min(.1f)] private float mushroomCookSeconds = 3f;
@@ -42,7 +45,7 @@ namespace BorrowingSun
 
         public FlowerMarketRun Run => run ??= new FlowerMarketRun(dayGatherSeconds, nightGatherSeconds,
             mushroomCookSeconds, fruitCookSeconds, upgradedMushroomCookSeconds,
-            upgradedFruitCookSeconds, kitchenUpgradeCost);
+            upgradedFruitCookSeconds, kitchenUpgradeCost, directTradingSeconds, nightTradingSeconds);
         public Transform Shop => shop;
         public Transform Mushrooms => mushrooms;
         public Transform RainFruit => rainFruit;
@@ -50,7 +53,10 @@ namespace BorrowingSun
         public SkywellWeatherTarget RainTarget => rainTarget;
         public bool IsShopOpen { get; private set; }
         public bool IsDuskOpen { get; private set; }
-        public bool InputBlocked => IsShopOpen || IsDuskOpen || closedFrame == Time.frameCount;
+        public bool IsSummaryOpen => Run.Phase == FlowerMarketPhase.DaySummary;
+        public bool InputBlocked => IsShopOpen || IsDuskOpen || IsSummaryOpen || closedFrame == Time.frameCount;
+        public float DirectTradingSeconds => directTradingSeconds;
+        public float NightTradingSeconds => nightTradingSeconds;
         public bool FruitIsWet => rainFruit && rainZone && rainZone.IsRain && rainZone.Contains(rainFruit.position);
         public bool SunlightAvailable => !Run.IsNight && lighting && lighting.sunLight &&
             lighting.sunLight.enabled && lighting.sunLight.intensity > 0f;
@@ -111,12 +117,14 @@ namespace BorrowingSun
                     FlowerMarketPhase.Locked => "E 开始第一天",
                     FlowerMarketPhase.DayGathering => "E 提前结束白天采集",
                     FlowerMarketPhase.DuskChoice => "E 选择黄昏行程",
+                    FlowerMarketPhase.Trading when Run.OrdersAccepted => "E 返回柜台处理订单",
                     _ => "E 回店营业"
                 };
             }
 
             if (Run.Phase == FlowerMarketPhase.DuskChoice) return "黄昏到了 · 到庭院地面选择行程";
             if (Run.Phase == FlowerMarketPhase.ReturningToShop) return "采集结束 · 回花庭小铺按 E 营业";
+            if (Run.Phase == FlowerMarketPhase.Trading) return "回花庭小铺按 E 打开柜台";
             if (Run.CanGather && point == Point.Mushrooms) return "E 采菌菇";
             if (Run.CanGather && point == Point.Orchard)
             {
@@ -131,7 +139,9 @@ namespace BorrowingSun
         internal void Tick(float deltaSeconds, CourtPlayer actor, bool canOpenDusk)
         {
             player = actor;
+            bool wasTrading = Run.Phase == FlowerMarketPhase.Trading;
             Run.Tick(deltaSeconds);
+            if (wasTrading && IsSummaryOpen) OpenSummary();
             if (Run.Phase == FlowerMarketPhase.DuskChoice && !IsDuskOpen && canOpenDusk && CanStandInCourt(actor))
                 OpenDusk();
             RefreshLighting();
@@ -139,6 +149,11 @@ namespace BorrowingSun
 
             var keyboard = Keyboard.current;
             if (keyboard == null) return;
+            if (IsSummaryOpen)
+            {
+                if (keyboard.nKey.wasPressedThisFrame) StartNextDay();
+                return;
+            }
             if (IsDuskOpen)
             {
                 if (keyboard.digit1Key.wasPressedThisFrame) ChooseDusk(false, actor);
@@ -173,7 +188,7 @@ namespace BorrowingSun
                 Say("按窗口的数字键下锅或交餐。");
                 return;
             }
-            Say(Run.TryAcceptOrders() ? "已接单，按 1 或 2 给对应窗口下锅。" : "食材不足，按 N 收摊进入次日。");
+            Say(Run.TryAcceptOrders() ? "已接单，按 1 或 2 给对应窗口下锅。" : "食材不足，按 N 收摊查看日结。");
         }
 
         internal void UpgradeKitchen()
@@ -208,15 +223,25 @@ namespace BorrowingSun
 
         internal void EndTrading()
         {
-            if (!IsShopOpen || !BeginCommand()) return;
-            bool refund = Run.HasPendingOrders;
-            if (!Run.TryCloseShop()) return;
-            HideShop();
+            if (!IsShopOpen || !BeginCommand() || !Run.TryCloseShop()) return;
+            OpenSummary();
+        }
+
+        internal void StartNextDay()
+        {
+            if (!IsSummaryOpen || !BeginCommand() || !Run.TryStartNextDay()) return;
+            closedFrame = Time.frameCount;
             mushroomsReadyAt = fruitReadyAt = Time.time;
             RefreshLighting();
             RefreshOrchard();
-            Say(refund ? $"第 {Run.Day} 天 · 已取消未交付订单，结转钱箱和食材。" :
-                $"第 {Run.Day} 天 · 钱箱与食材已结转。");
+            Say($"第 {Run.Day} 天 · 钱箱、食材和厨房状态已结转。");
+        }
+
+        private void OpenSummary()
+        {
+            HideShop();
+            commandFrame = Time.frameCount;
+            feedbackUntil = 0f;
         }
 
         internal void HideShop()
@@ -383,7 +408,7 @@ namespace BorrowingSun
             Say($"采到{IngredientName(ingredient)} ×1。");
         }
 
-        private static string IngredientName(FlowerIngredient ingredient) => ingredient switch
+        internal static string IngredientName(FlowerIngredient ingredient) => ingredient switch
         {
             FlowerIngredient.Mushroom => "菌菇",
             FlowerIngredient.SunnyFruit => "晴果",

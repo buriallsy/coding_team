@@ -5,7 +5,7 @@ namespace BorrowingSun
     public enum FlowerIngredient { Mushroom, WeatherFruit, SunnyFruit, RainNightFruit }
     public enum FlowerRecipe { MushroomBento, FruitBento }
     public enum FlowerOrderStage { Idle, Waiting, Cooking, Ready }
-    public enum FlowerMarketPhase { Locked, DayGathering, DuskChoice, NightExploration, ReturningToShop, Trading }
+    public enum FlowerMarketPhase { Locked, DayGathering, DuskChoice, NightExploration, ReturningToShop, Trading, DaySummary }
 
     public readonly struct FlowerRecipeInfo
     {
@@ -53,6 +53,7 @@ namespace BorrowingSun
             { FlowerIngredient.RainNightFruit, FlowerIngredient.WeatherFruit, FlowerIngredient.SunnyFruit };
 
         private readonly int[] stock = new int[(int)FlowerIngredient.RainNightFruit + 1];
+        private readonly int[] refundedStock = new int[(int)FlowerIngredient.RainNightFruit + 1];
         private readonly Order[] orders = new Order[StoveCount];
         private readonly float dayGatherSeconds;
         private readonly float nightGatherSeconds;
@@ -60,16 +61,24 @@ namespace BorrowingSun
         private readonly float fruitCookSeconds;
         private readonly float upgradedMushroomCookSeconds;
         private readonly float upgradedFruitCookSeconds;
+        private readonly float directTradingSeconds;
+        private readonly float nightTradingSeconds;
+        private bool choseNightExploration;
 
         public bool IsStarted => Phase != FlowerMarketPhase.Locked;
         public FlowerMarketPhase Phase { get; private set; }
         public bool CanGather => Phase == FlowerMarketPhase.DayGathering || Phase == FlowerMarketPhase.NightExploration;
         public bool IsNight => Phase == FlowerMarketPhase.NightExploration ||
-            Phase == FlowerMarketPhase.ReturningToShop || Phase == FlowerMarketPhase.Trading;
+            Phase == FlowerMarketPhase.ReturningToShop || Phase == FlowerMarketPhase.Trading ||
+            Phase == FlowerMarketPhase.DaySummary;
         public float RemainingGatherSeconds { get; private set; }
+        public float TradingDurationSeconds => choseNightExploration ? nightTradingSeconds : directTradingSeconds;
+        public float RemainingTradingSeconds { get; private set; }
         public int Day { get; private set; }
         public int Cash { get; private set; }
         public int TotalRevenue { get; private set; }
+        public int EveningRevenue { get; private set; }
+        public bool ClosedByTimeLimit { get; private set; }
         public bool KitchenUpgraded { get; private set; }
         public int KitchenUpgradeCost { get; }
         public bool OrdersAccepted { get; private set; }
@@ -89,7 +98,7 @@ namespace BorrowingSun
         public FlowerMarketRun(float dayGatherSeconds = 75f, float nightGatherSeconds = 45f,
             float mushroomCookSeconds = 3f, float fruitCookSeconds = 4f,
             float upgradedMushroomCookSeconds = 2.1f, float upgradedFruitCookSeconds = 2.8f,
-            int kitchenUpgradeCost = 36)
+            int kitchenUpgradeCost = 36, float directTradingSeconds = 120f, float nightTradingSeconds = 60f)
         {
             ValidateSeconds(dayGatherSeconds, nameof(dayGatherSeconds));
             ValidateSeconds(nightGatherSeconds, nameof(nightGatherSeconds));
@@ -97,6 +106,8 @@ namespace BorrowingSun
             ValidateSeconds(fruitCookSeconds, nameof(fruitCookSeconds));
             ValidateSeconds(upgradedMushroomCookSeconds, nameof(upgradedMushroomCookSeconds));
             ValidateSeconds(upgradedFruitCookSeconds, nameof(upgradedFruitCookSeconds));
+            ValidateSeconds(directTradingSeconds, nameof(directTradingSeconds));
+            ValidateSeconds(nightTradingSeconds, nameof(nightTradingSeconds));
             if (kitchenUpgradeCost <= 0) throw new ArgumentOutOfRangeException(nameof(kitchenUpgradeCost));
 
             this.dayGatherSeconds = dayGatherSeconds;
@@ -105,6 +116,8 @@ namespace BorrowingSun
             this.fruitCookSeconds = fruitCookSeconds;
             this.upgradedMushroomCookSeconds = upgradedMushroomCookSeconds;
             this.upgradedFruitCookSeconds = upgradedFruitCookSeconds;
+            this.directTradingSeconds = directTradingSeconds;
+            this.nightTradingSeconds = nightTradingSeconds;
             KitchenUpgradeCost = kitchenUpgradeCost;
         }
 
@@ -126,6 +139,7 @@ namespace BorrowingSun
         public bool TryChooseDusk(bool explore)
         {
             if (Phase != FlowerMarketPhase.DuskChoice) return false;
+            choseNightExploration = explore;
             Phase = explore ? FlowerMarketPhase.NightExploration : FlowerMarketPhase.ReturningToShop;
             RemainingGatherSeconds = explore ? nightGatherSeconds : 0f;
             return true;
@@ -157,6 +171,12 @@ namespace BorrowingSun
         {
             int index = (int)ingredient;
             return index >= 0 && index < stock.Length ? stock[index] : 0;
+        }
+
+        public int GetRefundedStock(FlowerIngredient ingredient)
+        {
+            int index = (int)ingredient;
+            return index >= 0 && index < refundedStock.Length ? refundedStock[index] : 0;
         }
 
         public int GetReserved(FlowerIngredient ingredient)
@@ -229,6 +249,7 @@ namespace BorrowingSun
             if (Phase != FlowerMarketPhase.Trading || OrdersAccepted) return false;
             for (int slot = 0; slot < StoveCount; slot++) FillStove(slot);
             OrdersAccepted = HasPendingOrders;
+            if (OrdersAccepted) RemainingTradingSeconds = TradingDurationSeconds;
             return OrdersAccepted;
         }
 
@@ -258,6 +279,15 @@ namespace BorrowingSun
                 return;
             }
 
+            if (Phase != FlowerMarketPhase.Trading || !OrdersAccepted) return;
+            RemainingTradingSeconds = Math.Max(0f, RemainingTradingSeconds - deltaSeconds);
+            // At closing time, even an order that would finish on this tick remains unserved.
+            if (RemainingTradingSeconds == 0f)
+            {
+                FinishEvening(closedByTimeLimit: true);
+                return;
+            }
+
             for (int slot = 0; slot < StoveCount; slot++)
             {
                 ref var order = ref orders[slot];
@@ -276,6 +306,7 @@ namespace BorrowingSun
 
             Cash += info.Price;
             TotalRevenue += info.Price;
+            EveningRevenue += info.Price;
             orders[slot] = default;
             FillStove(slot);
             return true;
@@ -284,18 +315,37 @@ namespace BorrowingSun
         public bool TryCloseShop()
         {
             if (Phase != FlowerMarketPhase.Trading) return false;
+            FinishEvening(closedByTimeLimit: false);
+            return true;
+        }
 
+        public bool TryStartNextDay()
+        {
+            if (Phase != FlowerMarketPhase.DaySummary) return false;
+            BeginDay();
+            return true;
+        }
+
+        private void FinishEvening(bool closedByTimeLimit)
+        {
             foreach (var order in orders)
             {
                 // Waiting orders reserve stock without debiting it.
                 if (order.Stage != FlowerOrderStage.Cooking && order.Stage != FlowerOrderStage.Ready) continue;
                 TryGetRecipe(order.Recipe, out var info);
-                stock[(int)FlowerIngredient.Mushroom] += info.Mushrooms;
-                if (order.Fruit.HasValue) stock[(int)order.Fruit.Value] += info.WeatherFruit;
+                Refund(FlowerIngredient.Mushroom, info.Mushrooms);
+                if (order.Fruit.HasValue) Refund(order.Fruit.Value, info.WeatherFruit);
             }
             ClearOrders();
-            BeginDay();
-            return true;
+            ClosedByTimeLimit = closedByTimeLimit;
+            RemainingTradingSeconds = 0f;
+            Phase = FlowerMarketPhase.DaySummary;
+        }
+
+        private void Refund(FlowerIngredient ingredient, int quantity)
+        {
+            stock[(int)ingredient] += quantity;
+            refundedStock[(int)ingredient] += quantity;
         }
 
         public void Reset()
@@ -306,6 +356,7 @@ namespace BorrowingSun
             KitchenUpgraded = false;
             Array.Clear(stock, 0, stock.Length);
             ClearOrders();
+            ClearEvening();
         }
 
         private void FillStove(int slot)
@@ -339,6 +390,7 @@ namespace BorrowingSun
 
         private void BeginDay()
         {
+            ClearEvening();
             Day++;
             Phase = FlowerMarketPhase.DayGathering;
             RemainingGatherSeconds = dayGatherSeconds;
@@ -348,6 +400,14 @@ namespace BorrowingSun
         {
             Array.Clear(orders, 0, orders.Length);
             OrdersAccepted = false;
+        }
+
+        private void ClearEvening()
+        {
+            choseNightExploration = ClosedByTimeLimit = false;
+            RemainingTradingSeconds = 0f;
+            EveningRevenue = 0;
+            Array.Clear(refundedStock, 0, refundedStock.Length);
         }
 
         private static bool ValidSlot(int slot) => slot >= 0 && slot < StoveCount;
