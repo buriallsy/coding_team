@@ -4,6 +4,7 @@
 
 | 阅读入口 | 包含内容 |
 | --- | --- |
+| [AP6412 提交版 Class Maps](07_AP6412_MARKET_CLASS_MAPS.md) | Godot 2D 经营基线、Unity 06 正式版、类职责变化及冻结提交 |
 | [图册](DIAGRAMS.html) | 浏览器打开即可看图，可跳到对应的可编辑 Markdown |
 | [脚本类型索引](01_TYPE_INDEX.md) | `Assets/` 的 112 个 C# 文件和 145 个唯一类型，附源码链接和直接序列化挂载 |
 | [Shared、L1、L3、旧借雨双院](02_SHARED_AND_EARLY_LEVELS.md) | 共用角色、相机、交互接口和三套独立玩法的类图与路线 |
