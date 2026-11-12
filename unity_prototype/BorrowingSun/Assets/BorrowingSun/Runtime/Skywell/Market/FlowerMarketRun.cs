@@ -63,6 +63,7 @@ namespace BorrowingSun
         private readonly float upgradedFruitCookSeconds;
         private readonly float directTradingSeconds;
         private readonly float nightTradingSeconds;
+        private readonly bool skipDuskChoice;
         private bool choseNightExploration;
 
         public bool IsStarted => Phase != FlowerMarketPhase.Locked;
@@ -98,7 +99,8 @@ namespace BorrowingSun
         public FlowerMarketRun(float dayGatherSeconds = 75f, float nightGatherSeconds = 45f,
             float mushroomCookSeconds = 3f, float fruitCookSeconds = 4f,
             float upgradedMushroomCookSeconds = 2.1f, float upgradedFruitCookSeconds = 2.8f,
-            int kitchenUpgradeCost = 36, float directTradingSeconds = 120f, float nightTradingSeconds = 60f)
+            int kitchenUpgradeCost = 36, float directTradingSeconds = 120f, float nightTradingSeconds = 60f,
+            bool skipDuskChoice = false)
         {
             ValidateSeconds(dayGatherSeconds, nameof(dayGatherSeconds));
             ValidateSeconds(nightGatherSeconds, nameof(nightGatherSeconds));
@@ -118,6 +120,7 @@ namespace BorrowingSun
             this.upgradedFruitCookSeconds = upgradedFruitCookSeconds;
             this.directTradingSeconds = directTradingSeconds;
             this.nightTradingSeconds = nightTradingSeconds;
+            this.skipDuskChoice = skipDuskChoice;
             KitchenUpgradeCost = kitchenUpgradeCost;
         }
 
@@ -125,6 +128,7 @@ namespace BorrowingSun
         {
             if (IsStarted) return false;
             BeginDay();
+            if (skipDuskChoice) stock[(int)FlowerIngredient.Mushroom] = StoveCount * 2;
             return true;
         }
 
@@ -133,6 +137,7 @@ namespace BorrowingSun
             if (Phase != FlowerMarketPhase.DayGathering) return false;
             Phase = FlowerMarketPhase.DuskChoice;
             RemainingGatherSeconds = 0f;
+            if (skipDuskChoice) TryChooseDusk(explore: true);
             return true;
         }
 

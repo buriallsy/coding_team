@@ -6,6 +6,38 @@ namespace BorrowingSun.Tests
     public sealed class FlowerMarketRunTests
     {
         [Test]
+        public void CentralMarketMovesStraightIntoNightAndCanServeBothStoves()
+        {
+            var run = new FlowerMarketRun(dayGatherSeconds: 180f, nightGatherSeconds: 45f,
+                nightTradingSeconds: 60f, skipDuskChoice: true);
+
+            Assert.IsTrue(run.TryStart());
+            run.Tick(179f);
+            Assert.That(run.RemainingGatherSeconds, Is.EqualTo(1f));
+            run.Tick(1f);
+            Assert.That(run.Phase, Is.EqualTo(FlowerMarketPhase.NightExploration));
+            Assert.That(run.RemainingGatherSeconds, Is.EqualTo(45f));
+            Assert.That(run.GetOrchardProduce(false, false), Is.Null);
+            Assert.That(run.GetOrchardProduce(true, false), Is.EqualTo(FlowerIngredient.RainNightFruit));
+            Assert.IsTrue(run.TryHarvest(FlowerIngredient.RainNightFruit));
+            Assert.IsTrue(run.TryReturnToShop());
+            Assert.IsTrue(run.TryOpenShop());
+            Assert.IsTrue(run.TryAcceptOrders());
+            Assert.That(run.RemainingTradingSeconds, Is.EqualTo(60f));
+            Assert.IsTrue(run.TryCook(0));
+            Assert.IsTrue(run.TryCook(1));
+            run.Tick(4f);
+            Assert.IsTrue(run.TryServe(0));
+            Assert.IsTrue(run.TryServe(1));
+            Assert.That(run.EveningRevenue, Is.EqualTo(34));
+            run.Tick(56f);
+            Assert.That(run.Phase, Is.EqualTo(FlowerMarketPhase.DaySummary));
+            Assert.IsTrue(run.TryStartNextDay());
+            Assert.That(run.RemainingGatherSeconds, Is.EqualTo(180f));
+            Assert.That(run.GetStock(FlowerIngredient.Mushroom), Is.EqualTo(1));
+        }
+
+        [Test]
         public void CommandsRequireStartAndRepeatedStartKeepsStock()
         {
             var run = new FlowerMarketRun();

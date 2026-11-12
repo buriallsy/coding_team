@@ -503,11 +503,13 @@ namespace BorrowingSun
             court.ShowMessage(reason,6);court.Player.OxygenUrgency=0;court.CameraRig.SetJourneyView(true,new Vector3(9,10,-12),9);
             climbApproaching=climbSteppingOff=false;climbAlignVelocity=boardingVelocity=Vector3.zero;climbBlockedTime=boardingBlockedTime=boatVelocity=ClimbVelocity=0;
         }
-        public void ResetJourney()
+        public void ResetJourney(bool startAtTower = false)
         {
-            SunnyTokenObtained=PaddleObtained=BoatDocked=HasReturnedToTower=climbNeedsRelease=false;Recoveries=0;Travel=SkywellTravel.Walking;
+            SunnyTokenObtained=HasReturnedToTower=startAtTower;
+            PaddleObtained=startAtTower;
+            BoatDocked=climbNeedsRelease=false;Recoveries=0;Travel=SkywellTravel.Walking;
             RestoreEdgeProtection();court.Player.OxygenUrgency=0;
-            if(sunnyToken)sunnyToken.gameObject.SetActive(true);if(paddlePickup)paddlePickup.gameObject.SetActive(true);
+            if(sunnyToken)sunnyToken.gameObject.SetActive(!startAtTower);if(paddlePickup)paddlePickup.gameObject.SetActive(!startAtTower);
             if(returnShuttle)returnShuttle.position=shuttleStart;
             climbApproaching=climbSteppingOff=boatBlocked=surfaceView=false;
             climbAlignVelocity=boardingVelocity=Vector3.zero;climbBlockedTime=boardingBlockedTime=boatVelocity=ClimbVelocity=0;

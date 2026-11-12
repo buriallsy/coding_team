@@ -281,7 +281,7 @@ namespace BorrowingSun
             if(voyage)voyage.ResetVoyage();
             // Journey restores movement and the spawn before notifying fish/feedback listeners.
             // Without Journey the controller owns that final player reset.
-            if(journey){journey.ResetJourney();ShowMessage("",0);}
+            if(journey){journey.ResetJourney(FlowerMarket && flowerMarket.StartsWithoutIntroduction);ShowMessage("",0);}
             else player.ResetPlayer();
             if(cameraRig&&openingLandmarkView)cameraRig.ShowPhysicalFeedback(origin+new Vector3(18,9,5),openingLandmarkDuration,.75f,5f);
         }
@@ -294,7 +294,7 @@ namespace BorrowingSun
         {
             if(FlowerMarket)flowerMarket.ResetMarket();
             if(grove)grove.ResetGrove();
-            if(story)story.ResetStory();
+            if(story)story.ResetStory(FlowerMarket && flowerMarket.StartsWithoutIntroduction);
             if(observation)observation.ResetProgress();
             CloseObservation();
             ResetWeatherInput();

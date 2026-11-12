@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -6,6 +7,8 @@ namespace BorrowingSun
     public sealed class SkywellHUD : MonoBehaviour
     {
         [SerializeField] private SkywellController court;
+        [SerializeField] private bool showHarvestMarkers;
+        private readonly List<Rect> harvestMarkerRects = new List<Rect>(6);
         private GUIStyle body,title,prompt,small,button;
         private SkywellFish fish;
         private Texture2D[] weatherIcons;
@@ -54,6 +57,9 @@ namespace BorrowingSun
                 if(market&&market.IsDuskOpen){DrawFlowerDusk(market,w,h);return;}
                 if(market&&market.IsShopOpen){DrawFlowerMarket(market,w,h);return;}
                 bool marketActive=market&&market.Run.IsStarted;
+                if(showHarvestMarkers&&marketActive&&market.Run.CanGather&&
+                    !court.WeatherTargeting&&!court.WeatherSelectionHeld&&Event.current.type==EventType.Repaint)
+                    DrawHarvestMarkers(market,w,h);
                 if(marketActive)DrawFlowerStatus(market.Run,w);
                 if(DesignerGuidance){Panel(new Rect(16,16,355,106));GUI.Label(new Rect(30,26,327,30),"策划调试 · F2 关闭",title);GUI.Label(new Rect(30,63,327,58),court.Objective,body);}
                 if(court.Journey&&court.Journey.SunnyTokenObtained&&!court.Journey.HasReturnedToTower)
@@ -97,6 +103,108 @@ namespace BorrowingSun
             finally{GUI.matrix=matrix;GUI.color=color;}
         }
 
+        private void DrawHarvestMarkers(SkywellFlowerMarket market, float width, float height)
+        {
+            var camera = court.CameraRig ? court.CameraRig.ViewCamera : null;
+            if (!camera) return;
+
+            harvestMarkerRects.Clear();
+            if (market.Mushrooms && market.MushroomsReady)
+                DrawHarvestMarker(camera, market.Mushrooms.position + Vector3.up * .8f,
+                    FlowerIngredient.Mushroom, market.MushroomsJustRegrew, width, height);
+
+            var fruit = market.ReadyOrchardProduce;
+            if (market.RainFruit)
+                DrawHarvestMarker(camera, market.RainFruit.position + Vector3.up * 1.9f,
+                    fruit, market.OrchardJustRegrew, width, height,
+                    market.DistantOrchardRequiresSunToken ? "果树 · 需晴令" : "果树 · 未结果");
+
+            foreach (var spot in market.TowerHarvestSpots)
+            {
+                if (!spot.Ready && !spot.IsOrchard) continue;
+                float markerHeight = spot.IsOrchard ? 1.9f : .8f;
+                DrawHarvestMarker(camera, spot.Root.position + Vector3.up * markerHeight,
+                    spot.Ready ? spot.Produce : null, spot.JustRegrew, width, height);
+            }
+        }
+
+        private void DrawHarvestMarker(Camera camera, Vector3 position, FlowerIngredient? ingredient,
+            bool justRegrew, float width, float height, string unavailableCaption = "果树 · 未结果")
+        {
+            Vector3 viewport = camera.WorldToViewportPoint(position);
+            Vector2 screen = new Vector2(viewport.x * width, (1f - viewport.y) * height);
+            Vector2 direction = screen - new Vector2(width * .5f, height * .5f);
+            bool inView = viewport.z >= camera.nearClipPlane &&
+                viewport.x >= 0f && viewport.x <= 1f && viewport.y >= 0f && viewport.y <= 1f;
+            var bounds = Rect.MinMaxRect(78f, 76f, width - 78f, height - 130f);
+            if (bounds.width <= 0f || bounds.height <= 0f) return;
+
+            Vector2 marker;
+            if (inView)
+            {
+                marker = screen - Vector2.up * 16f;
+                direction = Vector2.up;
+            }
+            else
+            {
+                // A perspective camera mirrors the projected coordinates behind it.
+                if (viewport.z < 0f && !camera.orthographic) direction = -direction;
+                if (direction.sqrMagnitude < .01f) direction = Vector2.up;
+                direction.Normalize();
+                Vector2 center = bounds.center;
+                Vector2 edge = new Vector2(direction.x < 0f ? bounds.xMin : bounds.xMax,
+                    direction.y < 0f ? bounds.yMin : bounds.yMax);
+                float horizontal = direction.x == 0f ? float.PositiveInfinity : (edge.x - center.x) / direction.x;
+                float vertical = direction.y == 0f ? float.PositiveInfinity : (edge.y - center.y) / direction.y;
+                marker = center + direction * Mathf.Min(horizontal, vertical);
+            }
+
+            marker.x = Mathf.Clamp(marker.x, bounds.xMin, bounds.xMax);
+            marker.y = Mathf.Clamp(marker.y, bounds.yMin, bounds.yMax);
+            const float labelWidth = 132f, labelHeight = 28f;
+            var label = new Rect(marker.x - labelWidth * .5f, marker.y - labelHeight * .5f, labelWidth, labelHeight);
+            label = PlaceHarvestMarker(label, bounds, direction);
+
+            if (!storyTriangleTexture) storyTriangleTexture = CreateStoryTriangleTexture();
+            Panel(label);
+            GUI.color = justRegrew ? new Color(1f, .84f, .43f) :
+                ingredient.HasValue ? Color.white : new Color(.69f, .83f, .70f);
+            string caption = ingredient.HasValue
+                ? SkywellFlowerMarket.IngredientName(ingredient.Value) + (justRegrew ? "已刷新" : "可采集")
+                : unavailableCaption;
+            GUI.Label(new Rect(label.x + 23f, label.y, label.width - 27f, label.height),
+                caption, small);
+            Vector2 arrow = new Vector2(label.x + 14f, label.center.y);
+            var previousMatrix = GUI.matrix;
+            GUIUtility.RotateAroundPivot(Vector2.SignedAngle(Vector2.up, direction), arrow);
+            GUI.DrawTexture(new Rect(arrow.x - 7f, arrow.y - 5f, 14f, 10f), storyTriangleTexture);
+            GUI.matrix = previousMatrix;
+            GUI.color = Color.white;
+            harvestMarkerRects.Add(label);
+        }
+
+        private Rect PlaceHarvestMarker(Rect label, Rect bounds, Vector2 direction)
+        {
+            if (!OverlapsHarvestMarker(label)) return label;
+            bool vertical = Mathf.Abs(direction.x) > Mathf.Abs(direction.y);
+            for (int step = 1; step < 6; step++)
+            {
+                float offset = (step % 2 == 0 ? 1f : -1f) * ((step + 1) / 2);
+                Rect candidate = label;
+                if (vertical) candidate.y += offset * (label.height + 4f);
+                else candidate.x += offset * (label.width + 4f);
+                if (bounds.Contains(candidate.center) && !OverlapsHarvestMarker(candidate)) return candidate;
+            }
+            return label;
+        }
+
+        private bool OverlapsHarvestMarker(Rect label)
+        {
+            foreach (var placed in harvestMarkerRects)
+                if (label.Overlaps(placed)) return true;
+            return false;
+        }
+
 // OnGUI already applies HudScale to GUI.matrix, and passes logical width/height.
 
 private GUIStyle storyBody,storySpeaker,storyHint,storyPanel;
@@ -110,7 +218,7 @@ private void EnsureStoryVisuals()
     // Invoked only from OnGUI, after body/font initialization. Never allocate textures per repaint.
     if(storyPanel!=null)return;
     storyPanelTexture=CreateStoryPanelTexture();
-    storyTriangleTexture=CreateStoryTriangleTexture();
+    if(!storyTriangleTexture)storyTriangleTexture=CreateStoryTriangleTexture();
     storyPanel=new GUIStyle{border=new RectOffset(16,16,16,16)};
     storyPanel.normal.background=storyPanelTexture;
     storyBody=new GUIStyle(body){font=body.font,fontSize=25,alignment=TextAnchor.UpperLeft,wordWrap=true,richText=false};

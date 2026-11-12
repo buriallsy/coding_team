@@ -195,9 +195,9 @@ namespace BorrowingSun
             if (wasOpen) closedFrame = Time.frameCount;
         }
 
-        public void ResetStory()
+        public void ResetStory(bool startWithGem = false)
         {
-            Close(); HasGem = GemGiven = Inspected = false;
+            Close(); HasGem = GemGiven = startWithGem; Inspected = false;
         }
 
         private void Update()

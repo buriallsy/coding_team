@@ -3,7 +3,7 @@ using UnityEngine.InputSystem;
 
 namespace BorrowingSun
 {
-    public sealed class SkywellFlowerMarket : MonoBehaviour
+    public sealed partial class SkywellFlowerMarket : MonoBehaviour
     {
         [SerializeField] private Transform shop, mushrooms, rainFruit;
         [SerializeField] private SkywellWeatherZone rainZone;
@@ -13,10 +13,16 @@ namespace BorrowingSun
         [SerializeField] private TextMesh orchardLabel;
         [SerializeField] private Renderer orchardCanopy;
         [SerializeField] private Light shopLamp;
+        [SerializeField] private MeshFilter[] mushroomModels;
+        [SerializeField] private Material harvestParticleMaterial;
+        [SerializeField] private SkywellWeatherZone connectionWeather;
+        [SerializeField] private Transform[] connectionMushrooms, connectionOrchards;
+        [SerializeField] private bool distantOrchardRequiresSunToken;
         [SerializeField, Min(.25f)] private float interactionRadius = 1.35f;
         [SerializeField, Min(0f)] private float regrowSeconds = 1f;
         [SerializeField, Min(1f)] private float dayGatherSeconds = 75f;
         [SerializeField, Min(1f)] private float nightGatherSeconds = 45f;
+        [SerializeField] private bool startWithoutIntroduction;
         [Header("Trading")]
         [SerializeField, Min(1f)] private float directTradingSeconds = 120f;
         [SerializeField, Min(1f)] private float nightTradingSeconds = 60f;
@@ -35,6 +41,7 @@ namespace BorrowingSun
         private FlowerMarketRun run;
         private CourtPlayer player;
         private MaterialPropertyBlock canopyTint;
+        private FlowerHarvestVisuals harvestVisuals;
         private FlowerIngredient? lastProduce;
         private LightPeriod lightPeriod;
         private float mushroomsReadyAt, fruitReadyAt;
@@ -44,7 +51,9 @@ namespace BorrowingSun
 
         public FlowerMarketRun Run => run ??= new FlowerMarketRun(dayGatherSeconds, nightGatherSeconds,
             mushroomCookSeconds, fruitCookSeconds, upgradedMushroomCookSeconds,
-            upgradedFruitCookSeconds, kitchenUpgradeCost, directTradingSeconds, nightTradingSeconds);
+            upgradedFruitCookSeconds, kitchenUpgradeCost, directTradingSeconds, nightTradingSeconds,
+            skipDuskChoice: startWithoutIntroduction);
+        internal bool StartsWithoutIntroduction => startWithoutIntroduction;
         public Transform Shop => shop;
         public Transform Mushrooms => mushrooms;
         public Transform RainFruit => rainFruit;
@@ -60,9 +69,19 @@ namespace BorrowingSun
         public bool SunlightAvailable => !Run.IsNight && lighting && lighting.sunLight &&
             lighting.sunLight.enabled && lighting.sunLight.intensity > 0f;
         public bool OrchardReceivesSunlight => SunlightAvailable && IsOrchardUnoccluded();
-        public FlowerIngredient? OrchardProduce => Run.GetOrchardProduce(FruitIsWet,
-            Run.CanGather && !Run.IsNight && !FruitIsWet && OrchardReceivesSunlight);
+        public FlowerIngredient? OrchardProduce => distantOrchardRequiresSunToken
+            ? Run.GetOrchardProduce(false, rainZone && rainZone.IsSunny && rainFruit &&
+                rainZone.Contains(rainFruit.position) && SunlightAvailable)
+            : Run.GetOrchardProduce(FruitIsWet, !FruitIsWet && OrchardReceivesSunlight);
+        internal bool DistantOrchardRequiresSunToken => distantOrchardRequiresSunToken;
+        internal bool MushroomsReady => Run.CanGather && Time.time >= mushroomsReadyAt;
+        internal FlowerIngredient? ReadyOrchardProduce => Time.time >= fruitReadyAt ? OrchardProduce : null;
+        internal bool MushroomsJustRegrew => JustRegrew(mushroomsReadyAt);
+        internal bool OrchardJustRegrew => JustRegrew(fruitReadyAt);
         public string Feedback => Time.time < feedbackUntil ? feedback : null;
+
+        private static bool JustRegrew(float readyAt) => readyAt > 0f &&
+            Time.time >= readyAt && Time.time - readyAt < 3f;
 
         internal bool AllowsWeather(int station, SkywellToken token, bool unlocked) =>
             !rainTarget || station != rainTarget.StationIndex ||
@@ -71,7 +90,7 @@ namespace BorrowingSun
         internal bool TryInteract(CourtPlayer actor, bool towerMoving)
         {
             Point point = FindPoint(actor.FeetPosition);
-            if (point == Point.None) return false;
+            if (point == Point.None) return TryHarvestTowerSpot(actor);
             if (!CanStandOnGround(actor) || point == Point.Shop && towerMoving)
             {
                 Say("站稳并等塔停下后再操作。");
@@ -98,6 +117,7 @@ namespace BorrowingSun
 
             var produce = OrchardProduce;
             if (produce.HasValue) Harvest(produce.Value, ref fruitReadyAt);
+            else if (distantOrchardRequiresSunToken) Say("远处果树需要白天对村庄区域施晴。");
             else Say(Run.IsNight ? "夜里无晴果。借东岸的雨可采雨夜果。" : "果树没有直射日光。借东岸的雨可采雨露果。");
             return true;
         }
@@ -105,7 +125,7 @@ namespace BorrowingSun
         internal string Prompt(Vector3 feet)
         {
             var point = FindPoint(feet);
-            if (point == Point.None) return null;
+            if (point == Point.None) return TowerHarvestPrompt(feet);
             if (Feedback != null) return Feedback;
 
             if (point == Point.Shop)
@@ -113,7 +133,7 @@ namespace BorrowingSun
                 return Run.Phase switch
                 {
                     FlowerMarketPhase.Locked => "E 开始第一天",
-                    FlowerMarketPhase.DayGathering => "E 提前结束白天采集",
+                    FlowerMarketPhase.DayGathering => startWithoutIntroduction ? "E 提前入夜" : "E 提前结束白天采集",
                     FlowerMarketPhase.DuskChoice => "E 选择黄昏行程",
                     FlowerMarketPhase.Trading when Run.OrdersAccepted => "E 返回柜台处理订单",
                     _ => "E 回店营业"
@@ -128,6 +148,7 @@ namespace BorrowingSun
             {
                 var produce = OrchardProduce;
                 if (produce.HasValue) return "E 采" + IngredientName(produce.Value);
+                if (distantOrchardRequiresSunToken) return "果树待结果 · 白天对村庄区域施晴";
                 return Run.IsNight ? "夜间无晴果 · 施雨可采雨夜果" : "此处无直射日光 · 施雨可采雨露果";
             }
 
@@ -137,6 +158,7 @@ namespace BorrowingSun
         internal void Tick(float deltaSeconds, CourtPlayer actor, bool canOpenDusk)
         {
             player = actor;
+            EnsureTowerHarvestSpots();
             bool wasTrading = Run.Phase == FlowerMarketPhase.Trading;
             Run.Tick(deltaSeconds);
             if (wasTrading && IsSummaryOpen) OpenSummary();
@@ -144,6 +166,14 @@ namespace BorrowingSun
                 OpenDusk();
             RefreshLighting();
             RefreshOrchard();
+            if (harvestParticleMaterial && mushrooms && rainFruit && orchardCanopy &&
+                mushroomModels != null && mushroomModels.Length > 0 && mushroomModels[0])
+            {
+                harvestVisuals ??= new FlowerHarvestVisuals(mushrooms, rainFruit, mushroomModels,
+                    orchardCanopy.sharedMaterial, harvestParticleMaterial);
+                harvestVisuals.Refresh(MushroomsReady, Time.time >= fruitReadyAt ? lastProduce : null);
+            }
+            RefreshTowerHarvestSpots();
 
             var keyboard = Keyboard.current;
             if (keyboard == null) return;
@@ -229,7 +259,8 @@ namespace BorrowingSun
         {
             if (!IsSummaryOpen || !BeginCommand() || !Run.TryStartNextDay()) return;
             closedFrame = Time.frameCount;
-            mushroomsReadyAt = fruitReadyAt = Time.time;
+            mushroomsReadyAt = fruitReadyAt = 0f;
+            ResetTowerHarvestSpots();
             RefreshLighting();
             RefreshOrchard();
             Say($"第 {Run.Day} 天 · 钱箱、食材和厨房状态已结转。");
@@ -255,7 +286,9 @@ namespace BorrowingSun
             IsDuskOpen = false;
             closedFrame = Time.frameCount;
             Run.Reset();
+            if (startWithoutIntroduction) Run.TryStart();
             mushroomsReadyAt = fruitReadyAt = feedbackUntil = 0f;
+            ResetTowerHarvestSpots();
             feedback = null;
             RefreshLighting();
             RefreshOrchard();
@@ -263,6 +296,8 @@ namespace BorrowingSun
 
         private void OnDisable()
         {
+            harvestVisuals?.Refresh(false, null);
+            HideTowerHarvestSpots();
             HideShop();
             IsDuskOpen = false;
             if (Application.isPlaying)
@@ -283,7 +318,7 @@ namespace BorrowingSun
                     break;
                 case FlowerMarketPhase.DayGathering:
                     Run.TryEndDay();
-                    OpenDusk();
+                    if (Run.Phase == FlowerMarketPhase.DuskChoice) OpenDusk();
                     break;
                 case FlowerMarketPhase.DuskChoice:
                     OpenDusk();
@@ -340,12 +375,14 @@ namespace BorrowingSun
             }
         }
 
-        private bool IsOrchardUnoccluded()
+        private bool IsOrchardUnoccluded() => orchardSunSample && IsOrchardUnoccluded(orchardSunSample.position);
+
+        private bool IsOrchardUnoccluded(Vector3 sample)
         {
-            if (!orchardSunSample || lighting.sunLight.type != LightType.Directional) return false;
+            if (lighting.sunLight.type != LightType.Directional) return false;
             Vector3 towardSun = -lighting.sunLight.transform.forward;
             if (towardSun.y <= .01f) return false;
-            int count = Physics.RaycastNonAlloc(orchardSunSample.position + towardSun * .08f, towardSun,
+            int count = Physics.RaycastNonAlloc(sample + towardSun * .08f, towardSun,
                 sunHits, 250f, Physics.DefaultRaycastLayers, QueryTriggerInteraction.Ignore);
             if (count == sunHits.Length) return false;
             for (int i = 0; i < count; i++)
